@@ -1,0 +1,128 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Solicitudes{% endblock %}
+
+{% block content %}
+<script src="../../../static/login/js/paginado.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        function buscar(id){
+            var btnFolio = document.getElementById(id);
+            var Folio = document.getElementById('folioBuscar');
+            if(Folio.value == ''){
+                btnFolio.href = 'G';
+            }else{
+                btnFolio.href = Folio.value;
+            }
+        }
+    //{{ user.id }}
+    </script>
+
+    <nav class=" navbar navbar-expand navbar-light fixed m-2">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link ml-4" href="{% url 'notificacionUsuario' %}">Notificaciones {{total}}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
+              </li>
+            </ul>
+        </div>
+        <div class="m-2">
+            <a class="float-right mr-2">{{ user.first_name }} {{ user.last_name }}</a>
+          </div>
+    </nav>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-8 mx-auto p-2">
+                <input class="ml-5" type="text" id="folioBuscar" placeholder="Introduzca un folio">
+                <a class="btn btn-secondary" id="btnBuscar" onclick="buscar(this.id);">Buscar</a>
+                <a class="mr-2 float-right btn btn-secondary" href="{% url 'validacion' %}">Nueva Solicitud</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-10 mx-auto mt-3">
+                <table id="example" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Folio</th>
+                            <th>Modalidad</th>
+                            <th>Nivel</th>
+                            <th>Estatus</th>
+                            <th>Rev. de Planes y Programas de Estudio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if solicitudes %}
+                            {% for element in solicitudes %}
+                            <tr class="text-center">
+                                <td><a href="{% url 'historial' user.id element.id %}">{{element.id}}</a></td>
+                                <td>{% if element.modalidad == '2' %}
+                                        Escolarizada
+                                    {% endif %}
+                                    {% if element.modalidad == '1' %}
+                                        Mixta
+                                    {% endif %}
+                                    {% if element.modalidad == '3' %}
+                                        No escolarizada
+                                    {% endif %}
+                                </td>
+                                <td>{% if element.nivel == '1' %}
+                                        Media Superior
+                                    {% endif %}
+                                    {% if element.nivel == '2' %}
+                                        Superior
+                                    {% endif %}
+                                </td>
+                                <td>{% if element.completado == -1 %}
+                                        Rechazado
+                                    {% else %}
+                                        {% if element.completado == 10 %}
+                                            {% if element.estatus.id == 1 %}
+                                                Entregar documentos en físico a Control Escolar
+                                            {% else %}
+                                                Pendiente de visita de revisión
+                                            {% endif %}
+                                        {% else %}
+                                            {% if element.completado == 11 %}
+                                                Proceso digital completo
+                                            {% else %}
+                                                {{element.estatus.nombre}}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>{% if element.estatus.id == 3 or element.estatus.id == 4 or element.completado == 10 or element.completado == 11 %}
+                                    <a href="{% url 'generate_pdf' element.id %}">Descargar</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr class="text-center">
+                                <td>No hay solicitudes registradas</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-4 mx-auto text-center">
+                <a class=" btn btn-secondary" href="{% url 'inicio' %}">Regresar</a>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+{% endblock %}

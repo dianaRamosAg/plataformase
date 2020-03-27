@@ -1,0 +1,284 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro visitante</title>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="{% static '/css/formulario.css' %}" type='text/css' media='all' >
+    
+</head>
+<body>
+    <div class="head">
+        <h3>Solicitud de cuenta - Registro</h3>
+    </div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="board">
+                <ul class="nav nav-tabs">
+                    <div class="liner"></div>
+                    <li rel-index="0" class="active">
+                        <a href="#step-1" class="btn" aria-controls="step-1" role="tab" data-toggle="tab">
+                            <span><i class="glyphicon glyphicon-user"></i></span>
+                        </a>
+                    </li>
+                    <li rel-index="1">
+                        <a href="#step-2" class="btn disabled" aria-controls="step-2" role="tab" data-toggle="tab">
+                            <span><i class="glyphicon glyphicon-plus"></i></span>
+                        </a>
+                    </li>
+                    <li rel-index="2">
+                        <a href="#step-3" class="btn disabled" aria-controls="step-3" role="tab" data-toggle="tab">
+                            <span><i class="glyphicon glyphicon-ok"></i></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+<form class="tab-content form-group" method="POST" action="../solicitudcuenta/" onsubmit="return validar()">
+                {% csrf_token %}
+                <div role="tabpanel" class="tab-pane active" id="step-1">
+                    
+                    <div class="col-md-12">
+                        <h3>Complete los siguientes campos </h3>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" name="username" required id="id_username" hidden>
+                                <label class="mr-2" for="id_email">Correo: </label>
+                                <input class="form-control col"  type="text" name="email" required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();"  pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                            
+                            </div>
+                        </div><br>
+
+                            <div class="m-2 col-12 text-center">
+                                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
+                                <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                                    <option value="1" selected >Institución</option>
+                                    <option value="2">Jefe de departamento</option>
+                                    <option value="3">Subordinados de departamento</option>
+                                    <option value="4">Administrtador de la página</option>
+                                </select>
+                            </div>
+                
+                            <div class="m-2 col-12 text-center">
+                                <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
+                                <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
+                                    <option value="1" selected>Persona física</option>
+                                    <option value="2">Persona moral</option>
+                                </select>
+                                <br>
+                                <div id="dep" >
+                                <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
+                                <select class="custom-select col-3" name="departamento" id="id_departamento" >
+                                    <option value="1">Control Escolar</option>
+                                    <option value="2">Dirección</option>
+                                    <option value="3">Superior</option>
+                                    <option value="4">Media Superior</option>
+                                </select></div>
+                            </div>
+                    
+                        <button id="step-1-next" class="btn btn-lg btn-primary nextBtn pull-right">Siguiente</button>
+                        <br><br><br>
+                    </div>
+                    
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step-2">
+                    <div class="col-md-12"><br>
+                        <h3>Datos personales</h3>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
+                                <input class="form-control ml-1 col-2" pattern ="[a-zA-Z]{1,40}" type="text" name="first_name" required id="id_first_name">
+                            </div>
+                            <div class="form-group">
+                                <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                                <input class="form-control ml-1 col-2" pattern ="[a-zA-Z]{1,40}" type="text" name="last_name" required id="id_last_name">
+                             </div>
+                             <div class="form-group">
+                                <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
+                                <input class="form-control ml-1 col-3" type="text" minlength="10" maxlength="18"  name="curp_rfc" required id="id_curp_rfc">
+                                <a class="btn btn-secondary ml-1" href="http://consultas.curp.gob.mx" id="acurp" target="_blank">Consulta CURP</a>
+                            </div>
+                            <div class="form-group">
+                                <label class="ml-2 mr-2" for="id_celular">Teléfono celular:</label>
+                                <input class="form-control col-2" required type="tel" name="celular" id="id_celular"><br>
+                                </div>
+                           </div> 
+                    
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <label class="ml-2" for="id_calle">Calle:</label>
+                                   <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle"><br>
+                             </div>
+                             <div class="form-group">
+                                <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
+                                <input class="form-control col-2" required type="text" name="colonia" id="id_colonia"><br>
+                            </div>
+                            <div class="form-group">
+                                <label class="ml-2 mr-2" for="id_municipio">Municipio:</label>
+                                <input class="form-control col-2" required type="text" name="municipio" id="id_municipio"><br>
+                            </div>
+                           <div class="col-md-3">
+                               <div class="form-group">
+                                   <label class="ml-2" for="id_noexterior">No. Exterior:</label>
+                                   <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0"><br>
+                               </div>
+                           </div>
+                           <div class="col-md-3">
+                               <div class="form-group">
+                                   <label class="ml-2" for="id_nointerior">No. Interior:</label>
+                                   <input class="form-control ml-2 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="0"><br>
+                               </div>
+                           </div>
+                           <div class="col-md-3">
+                               <div class="form-group">
+                                   <label class="ml-2" for="id_codigopostal">Código postal:</label>
+                                   <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"><br>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               
+                           </div>
+                           </div>
+                     
+                        <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right">Siguiente</button>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="step-3">
+                    <div class="col-md-12"><br><br>
+                        <h4>Envia tu solicitud de registro a los administradores</h4>
+                         </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+
+    <script type="text/javascript">
+    $(function() {
+        // Nav Tab stuff
+        $('.nav-tabs > li > a').click(function() {
+            if($(this).hasClass('disabled')) {
+                return false;
+            } else {
+                var linkIndex = $(this).parent().index() - 1;
+                $('.nav-tabs > li').each(function(index, item) {
+                    $(this).attr('rel-index', index - linkIndex);
+                });
+            }
+        });
+        $('#step-1-next').click(function() {
+            // Check values here
+            var isValid = true;
+            
+            if(isValid) {
+                $('.nav-tabs > li:nth-of-type(2) > a').removeClass('disabled').click();
+            }
+        });
+        $('#step-2-next').click(function() {
+            // Check values here
+            var isValid = true;
+            
+            if(isValid) {
+                $('.nav-tabs > li:nth-of-type(3) > a').removeClass('disabled').click();
+            }
+        });
+        $('#step-3-next').click(function() {
+            // Check values here
+            var isValid = true;
+            
+            if(isValid) {
+                $('.nav-tabs > li:nth-of-type(4) > a').removeClass('disabled').click();
+            }
+        });
+    });
+        function PasarValor(){
+            document.getElementById("id_username").value = document.getElementById("id_email").value;
+        }
+        var ap = " ";
+        var borrado = 0;
+        function pmoral(){
+            var per = document.getElementById('id_tipo_persona');
+            if (per.value == '2'){
+                document.getElementById('id_last_name').style.display = 'none';
+                document.getElementById("id_last_name").setAttribute("required", "false");
+                ap = document.getElementById('id_last_name').value;
+                document.getElementById("id_last_name").setAttribute("value", " ");
+                document.getElementById('lblapellidos').style.display = 'none';
+                document.getElementById('lblnombres').innerHTML= 'Nombre de la institución:';
+                document.getElementById('lblcurp').innerHTML= 'RFC:';
+                document.getElementById('acurp').innerHTML= 'Consulta RFC';
+                document.getElementById("lblnombres").setAttribute("class", "ml-2 col-2");
+                document.getElementById("id_first_name").setAttribute("class", "form-control col-3 ml-2");
+                document.getElementById("acurp").setAttribute("href", "https://www.sat.gob.mx/tramites/operacion/28753/obten-tu-rfc-con-la-clave-unica-de-registro-de-poblacion-(curp)");
+            }else {
+                document.getElementById('id_last_name').style.display = 'inline';
+                document.getElementById("id_last_name").setAttribute("required", "required");
+                document.getElementById("id_last_name").setAttribute("value", ap);
+                document.getElementById('lblapellidos').style.display = '';
+                document.getElementById('lblnombres').innerHTML= 'Nombres:';
+                document.getElementById('lblcurp').innerHTML= 'CURP:';
+                document.getElementById('acurp').innerHTML= 'Consulta CURP';
+                document.getElementById("lblnombres").setAttribute("class", "ml-2 col-1");
+                document.getElementById("id_first_name").setAttribute("class", "form-control ml-1 col-2");
+                document.getElementById("acurp").setAttribute("href", "http://consultas.curp.gob.mx");
+            }
+        }
+    
+        function funcion(){
+            var user = document.getElementById("id_tipo_usuario");
+            var per = document.getElementById("id_tipo_persona");
+            if (user.value != '1'){
+                if(borrado == 0){
+                    aBorrar = per.options[per.length-1];
+                    aBorrar.parentNode.removeChild(aBorrar);
+                    borrado = 1;
+                }
+            }else{
+                if(borrado == 1){
+                    option = document.createElement("OPTION");
+                    option.value = "2";
+                    option.text = "Persona moral";
+                    per.add(option);
+                    borrado = 0;
+                }
+            }
+            // if(user.value == '2'){
+            //     verificarJefes();
+            // }else{
+            //     document.getElementById("alertJefe").style.display = 'none';
+            // }
+            pmoral();
+            departamento();
+        }
+    
+        departamento();
+        function departamento(){
+            var sel = document.getElementById("id_departamento");
+            var lbl = document.getElementById("lbl_departamento");
+            var user = document.getElementById("id_tipo_usuario");
+            if (user.value == '2' || user.value == '3'){
+                sel.style.display = 'inline';
+                lbl.style.display = 'inline';
+            }else{
+                sel.style.display = 'none';
+                lbl.style.display = 'none';
+            }
+        }
+    
+
+
+    </script>
+</body>
+</html>
+
+ 
+<!------ Include the above in your HEAD tag ---------->
+
+

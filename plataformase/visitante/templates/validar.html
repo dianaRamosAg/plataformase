@@ -1,0 +1,321 @@
+<!-- templates/signup.html -->
+{% extends 'base5.html' %}
+{% load static %}
+{% block title %}Validar cuenta{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="container">
+        <h3 class="text-center" id="title">Información del solicitante '{{VisitanteSC.first_name}} {{VisitanteSC.last_name}}'</h3>
+         <p class="text-center">
+            <small id="passwordHelpInline" class="text-muted">Valide la siguiente información</small>
+        </p>
+         <hr>
+         <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-5">
+                        
+<form action="../signuprv/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+    {% csrf_token %}
+    <fieldset>							
+        <p class="text-uppercase pull-center">Información de usuario</p>	
+         <div class="form-group">
+            <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
+            <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                <option value="{{VisitanteSC.tipo_usuario}}">{{VisitanteSC.tipo_usuario}}</option>
+            </select>
+            <a class="btn btn-light col-2 mx-auto" data-target="#myModal4" data-toggle="modal"><img src="{% static 'img/info.png'%}"/></a> 
+               
+             </div>
+
+        <div class="form-group">
+            <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
+            <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
+                <option value="{{VisitanteSC.tipo_persona}}">{{VisitanteSC.tipo_persona}}</option>
+            </select>
+            <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
+            <select class="custom-select col-3" name="departamento" id="id_departamento" ">
+                <option value="{{VisitanteSC.tipo_persona}}">{{VisitanteSC.departamento_id}} </option>
+            </select>
+            </div>
+        <div class="form-group" style="text-align: left;">
+            <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombres:</label>
+                <input readonly class="form-control ml-1 col-2" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}">
+
+                <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                <input  readonly class="form-control ml-1 col-2" type="text" name="last_name" required id="id_last_name" value="{{VisitanteSC.last_name}}">
+
+                <label class="ml-2 mr-2" for="id_celular">Celular:</label>
+                <input readonly  class="form-control col-2" required type="text" name="celular" id="id_celular" value="{{VisitanteSC.celular}}">
+
+                <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
+                <input readonly  class="form-control ml-1 col-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{VisitanteSC.curp_rfc}}">
+                <br>
+                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
+                    <label class="ml-2" for="id_calle">Calle:</label>
+                    <input readonly class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle" placeholder="Calle" value="{{VisitanteSC.calle}}"><br>
+    
+                    <label class="ml-2" for="id_codigopostal">Código postal:</label>
+                    <input readonly class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"value="{{VisitanteSC.codigopostal}}"><br>
+               
+                </div>
+                 <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
+                    <label class="ml-2" for="id_nointerior">No. Interior:</label>
+                    <input readonly class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="{{VisitanteSC.nointerior}}"><br>
+                    
+                    <label class="ml-2 " for="id_municipio">Municipio:</label>
+                    <input readonly class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" value="{{VisitanteSC.municipio}}"><br>
+    
+                </div>
+    
+                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
+                    
+                    <label class="ml-2" for="id_noexterior">No. Exterior:</label>
+                    <input readonly class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="{{VisitanteSC.noexterior}}"><br>
+                   
+                    <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
+                    <input  readonly class="form-control col-2" required type="text" name="colonia" id="id_colonia" value="{{VisitanteSC.colonia}}"><br>
+                </div>
+    
+            </div>
+        </fieldset>
+    </div>
+        <div class="col-md-2">
+            <!-------null------>
+        </div>
+        <div class="col-md-5" style="float: right;">
+        <fieldset>							
+            <p class="text-uppercase"> Información de inicio de sesión </p>	
+                 
+            <div class="form-group" style="text-align: left;">
+                <div class="container-fluid form-group row " style="width: 100%; float:right;">
+                <br>
+                <label style="text-align: left;">Correo electronico:</label>
+                <input  readonly class="form-control col"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
+                <br>
+                <label>Asigne contraseña</label>
+                <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" >
+               <br><br>
+                <div class="text-center">
+                    <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-2 mx-auto">Regresar</a> 
+                    <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar usuario</button>
+                    <br><br>
+                    <a class="btn btn-danger col-2 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a> 
+                </div>
+               </div>
+               
+            </div>
+         </fieldset>
+        </div>
+
+</form>
+</div>
+
+</div>
+</div>
+
+    </div>
+    <!-- <div class="container-fluid">
+        <div class="row m-2">
+            <div class="col-12 text-center"><br>
+                <h2 class="text-center" >Información de usuario {{VisitanteSC.first_name}} {{VisitanteSC.last_name}}</h2>
+                <p class="text-center">
+                <small id="passwordHelpInline" class="text-muted">Valide la información</a>.</small>
+                </p>
+                <hr>
+            </div>
+        </div>
+        <div class="row m-2 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mx-auto" style="float: left;">
+            <div class="col-12 text-center mt-2">
+                <h3>Información de usuario</h3>
+            </div>
+
+            <div class="m-2 col-12 ">
+                <br><br><br>
+                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
+                <input name="tipo_usuario" value="{{VisitanteSC.tipo_usuario}}" id="id_tipo_usuario"> 
+            </div>
+            <br>
+            <div class="m-2 col-12 ">
+                <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
+                <input name="tipo_persona" id="id_tipo_persona" value="{{VisitanteSC.tipo_persona}}">
+
+                <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
+                <input name="departamento" id="id_departamento" value="{{VisitanteSC.departamento_id}}">
+                
+            </div>
+
+            <div class="col-12 m-3  row d-flex ">
+                <br>
+                <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombres:</label>
+                <input class="form-control ml-1 col-2" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}">
+
+                <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                <input class="form-control ml-1 col-2" type="text" name="last_name" required id="id_last_name" value="{{VisitanteSC.last_name}}">
+
+                <label class="ml-2 mr-2" for="id_celular">Celular:</label>
+                <input class="form-control col-2" required type="text" name="celular" id="id_celular" value="{{VisitanteSC.celular}}"><br>
+
+                <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
+                <input class="form-control ml-1 col-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{VisitanteSC.curp_rfc}}">
+               </div>
+
+            <br>
+            <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
+                <label class="ml-2" for="id_calle">Calle:</label>
+                <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle" placeholder="Calle" value="{{VisitanteSC.calle}}"><br>
+
+                <label class="ml-2" for="id_codigopostal">Código postal:</label>
+                <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"value="{{VisitanteSC.codigopostal}}"><br>
+           
+            </div>
+             <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
+                <label class="ml-2" for="id_nointerior">No. Interior:</label>
+                <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="{{VisitanteSC.nointerior}}"><br>
+                
+                <label class="ml-2 " for="id_municipio">Municipio:</label>
+                <input class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" value="{{VisitanteSC.municipio}}"><br>
+
+            </div>
+
+            <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
+                
+                <label class="ml-2" for="id_noexterior">No. Exterior:</label>
+                <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="{{VisitanteSC.noexterior}}"><br>
+               
+                <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
+                <input class="form-control col-2" required type="text" name="colonia" id="id_colonia" value="{{VisitanteSC.colonia}}"><br>
+            </div>
+
+        </div>
+
+
+        <div class="row m-2 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mx-auto">
+            <div class="col-12 text-center mt-2">
+                <h3>Información para inicio de sesión</h3>
+            </div>
+            <div class="container-fluid form-group row align-items-center" style="width: 100%; float:right;">
+               
+            <br>
+                <input class="form-control col"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
+                <br>
+                <label>Asigne contraseña</label>
+                    <input class="form-control col" type="password" name="password2"  value="{{VisitanteSC.password}}">
+            </div>
+            
+        </div>
+        <div class="text-center">
+            <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-2 mx-auto">Regresar</a> 
+            <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar usuario</button>
+            <br><br>
+            <a class="btn btn-danger col-2 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a> 
+        </div>
+
+    </div> -->
+    <!-- onclick="femail()"  -->
+    <!--{{ form.as_p }}-->
+
+
+<div id="myModal3" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Cancelar solicitud</h4>
+        </div>
+        <div class="modal-body">
+          <p>¡Cuidado!,Si cancela ya no aparecera en la lista de solicitudes</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger"  onclick="femail()"  data-dismiss="modal">Cancelar</button>
+          <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-2 mx-auto">Regresar</a> 
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  <div id="myModal4" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Verifique bien los datos</h4>
+        </div>
+        <div class="modal-body">
+          <p>Tipo de usuarios = [ 1 = Institución,2 = Jefe dpto,3 = Subornidado,4 = Admón ]
+              <br> Tipo persona = [ 1 = Física, 2 = Moral ]
+              <br> Departamentos = [ 1 = Control Escolar,2 = Dirección,3 = Superior,4 = Media Superior ]
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"   data-dismiss="modal">Aceptar</button>
+          
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+<script type="text/javascript">
+function femail(){
+    var email = document.getElementById('id_email').value;
+ 
+    window.location="cancelarsolicitud/"+email;
+}
+
+
+
+    function PasarValor(){
+        document.getElementById("id_username").value = document.getElementById("id_email").value;
+    }
+    var ap = " ";
+    var borrado = 0;
+    function pmoral(){
+        var per = document.getElementById('id_tipo_persona');
+        if (per.value == '2'){
+            document.getElementById('id_last_name').style.display = 'none';
+            document.getElementById("id_last_name").setAttribute("required", "false");
+            ap = document.getElementById('id_last_name').value;
+            document.getElementById("id_last_name").setAttribute("value", " ");
+            document.getElementById('lblapellidos').style.display = 'none';
+            document.getElementById('lblnombres').innerHTML= 'Nombre de la institución:';
+            document.getElementById('lblcurp').innerHTML= 'RFC:';
+            document.getElementById('acurp').innerHTML= 'Consulta RFC';
+            document.getElementById("lblnombres").setAttribute("class", "ml-2 col-2");
+            document.getElementById("id_first_name").setAttribute("class", "form-control col-3 ml-2");
+            document.getElementById("acurp").setAttribute("href", "https://www.sat.gob.mx/tramites/operacion/28753/obten-tu-rfc-con-la-clave-unica-de-registro-de-poblacion-(curp)");
+        }else {
+            document.getElementById('id_last_name').style.display = 'inline';
+            document.getElementById("id_last_name").setAttribute("required", "required");
+            document.getElementById("id_last_name").setAttribute("value", ap);
+            document.getElementById('lblapellidos').style.display = '';
+            document.getElementById('lblnombres').innerHTML= 'Nombres:';
+            document.getElementById('lblcurp').innerHTML= 'CURP:';
+            document.getElementById('acurp').innerHTML= 'Consulta CURP';
+            document.getElementById("lblnombres").setAttribute("class", "ml-2 col-1");
+            document.getElementById("id_first_name").setAttribute("class", "form-control ml-1 col-2");
+            document.getElementById("acurp").setAttribute("href", "http://consultas.curp.gob.mx");
+        }
+    }
+    document.getElementById("alertJefe").style.display = 'none';
+    function verificarJefes(){
+        var a = {{ jefes | safe  }};
+        var dep = document.getElementById("id_departamento");
+        var sel = document.getElementById("alertJefe");
+        for(var i=0; i<a.length+1; i++){
+            if(dep.value == a[i]){
+                sel.style.display = 'inline';
+                i = a.length+1;
+            }else{
+                sel.style.display = 'none';
+            }
+        }
+    }
+
+</script>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Solicitud{% endblock %}
+
+{% block content %}
+<script>
+    function salir(){
+        var opcion = confirm("Podrás continuar con la solicitud actual posteriormente, "+
+                            "pero no se guardarán los documentos que has subido en este apartado. "+
+                            "¿Deseas salir?");
+        if (opcion == true) {
+            window.location.replace("{% url 'inicio' %}");
+        }
+    }
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body" >
+                <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                    <h2 class="cover-heading" style="text-align: center;">Carpeta Curricular</h2>
+                    <h4 class="">Solo son validos los archivos PDF</h4>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_estudio">Estudio de factibilidad</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="estudio" id="id_estudio">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'estudio' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_plan">Plan de estudios</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="plan" id="id_plan">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'plan' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" >
+                            <label class="font-weight-bold" for="id_mapa">Mapa curricular</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="mapa" id="id_mapa">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'mapa' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_programa">Programas de estudios</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="programa" id="id_programa">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'programa' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" id="div_metodologia">
+                            <label class="font-weight-bold" for="id_metodologia">Metodología de modalidad</label>
+                            <input type="file" class="form-control-file w-50 p-3" name="metodologia" id="id_metodologia">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'metodologia' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" id="div_salud">
+                            <label class="font-weight-bold" for="id_cifrhs">Opinión favorable de CIFRHS</label>
+                            <input type="file" class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'cifrhs' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" id="div_salud2">
+                            <label class="font-weight-bold" for="id_carta">Carta de intención</label>
+                            <input type="file" class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'carta' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <input type="text" hidden name="id_solicitud" id="id_id_solicitud" value="{{ id_solicitud }}">
+
+                        <div class="text-center p-3 mt-2">
+                            <button onclick="salir()" class="btn btn-danger">Salir</button>
+                            <button type="submit" class="btn btn-primary">Guardar y continuar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    if ({{ mod }} == '1'){
+        document.getElementById('div_metodologia').style.display = 'inline';
+        document.getElementById("id_metodologia").setAttribute("required", "required");
+    }else{
+        document.getElementById('div_metodologia').style.display = 'none';
+    }
+
+    if ({{ salud }} == '1'){
+        document.getElementById('div_salud').style.display = 'inline';
+        document.getElementById('div_salud2').style.display = 'inline';
+        document.getElementById("id_cifrhs").setAttribute("required", "required");
+        document.getElementById("id_carta").setAttribute("required", "required");
+    }else{
+        document.getElementById('div_salud').style.display = 'none';
+        document.getElementById('div_salud2').style.display = 'none';
+    }
+</script>
+{% endblock %}

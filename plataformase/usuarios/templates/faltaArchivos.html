@@ -1,0 +1,50 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Solicitu pendiente{% endblock %}
+
+{% block content %}
+
+<body class="text-center">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 mx-auto mt-5">
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                            <h2 class="cover-heading">Solicitud pendiente</h2>
+                            <p>Encontramos en nuestros registros que tienes una solicitud pendiente
+                                con el folio <b>{{ folio }}</b> en la carpeta <b id="carpeta"></b>.</p>
+                            <p>¿Desea continuar con esta solicitd o comenzar con una nueva?</p>
+                            <div class="text-center">
+                                <a class="btn btn-primary" id="continuar" href="#">Continuar con la solicitud</a>
+                                <a class="btn btn-secondary" href="{% url 'solicitud' %}">Empezar una nueva solicitud</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+
+<script type="text/javascript">
+    switch ({{ carpeta }}) {
+        case 1:
+            document.getElementById('carpeta').innerHTML= 'Carpeta Institucional';
+            document.getElementById("continuar").setAttribute("href", "{% url 'institucionalSup' %}");
+            break;
+        case 2:
+            document.getElementById('carpeta').innerHTML= 'Carpeta Curricular';
+            document.getElementById("continuar").setAttribute("href", "{% url 'curricularSup' %}");
+            break;
+        case 3:
+            document.getElementById('carpeta').innerHTML= 'Carpeta Academica';
+            document.getElementById("continuar").setAttribute("href", "{% url 'academicaSup' %}");
+            break;
+        case 4:
+            document.getElementById('carpeta').innerHTML= 'Carpeta Media Superior';
+            document.getElementById("continuar").setAttribute("href", "{% url 'medSuperior' %}");
+            break;
+    }
+</script>
+{% endblock %}

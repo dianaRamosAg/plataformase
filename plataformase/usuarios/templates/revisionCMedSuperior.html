@@ -1,0 +1,356 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Administración{% endblock %}
+
+{% block content %}
+{% if user.jefe == '1' %}
+<nav class=" navbar navbar-expand navbar-light fixed m-2">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link ml-4" href="{% url 'notificacionAdmin' %}">Notificaciones {{total}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
+            </li>
+        </ul>
+    </div>
+    <div class="m-2">
+        <a class="text-dark"> {{ NombreDepartamento }} </a>
+        <a class="float-right mr-2"> - {{ user.first_name }} {{ user.last_name }}</a>
+    </div>
+</nav>
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-12 text-center mt-2 mb-1">
+            <h3>Folio: {{solicitud.id}} -  Institución: {{solicitud.customuser.first_name}}
+                {{solicitud.customuser.last_name}}</h3>
+            <h3> {{ nombre }}</h3>
+        </div>
+        <div class="col-12 text-center mb-3">
+            <h3>
+                    Modalidad:
+                    {%if solicitud.modalidad == '2' %}
+                        Escolarizada
+                    {%endif%}
+                    {%if solicitud.modalidad == '1' %}
+                        Mixta
+                    {%endif%}
+                    {%if solicitud.modalidad == '3' %}
+                        No escolarizada
+                    {%endif%}
+                    - Nivel: Media Superior
+            </h3>
+        </div>
+
+        {% for archivo in archivos %}
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_1" action="../comentarios/1_1/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_1" in comentarios and noHaPasadoPorTodasLasAreas %}
+                        <p class="card-text text-danger" >Formato de solicitud<br>
+                                <small>*Este archivo tiene observaciones</small>
+                        </p>
+                    {% else %}
+                        <p class="card-text" >Formato de solicitud</p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <textarea placeholder="Comentario..." id="solicitud" name="descripcion"></textarea>
+                    {% endif %}
+
+                    <button onclick="mostrarPDF('{{ archivo.solicitud.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_2" action="../comentarios/1_2/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_2" in comentarios and noHaPasadoPorTodasLasAreas %}
+                        <p class="card-text text-danger" >Recibo de pago<br>
+                                <small>*Este archivo tiene observaciones</small>
+                        </p>
+                    {% else %}
+                        <p class="card-text" >Recibo de pago</p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <textarea placeholder="Comentario..." id="pago" name="descripcion"></textarea>
+                    {% endif %}
+
+                    <button onclick="mostrarPDF('{{ archivo.pago.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_3" action="../comentarios/1_3/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_3" in comentarios and noHaPasadoPorTodasLasAreas %}
+                        <p class="card-text text-danger" >Identificación oficial con fotografía<br>
+                                <small>*Este archivo tiene observaciones</small>
+                        </p>
+                    {% else %}
+                        <p class="card-text" >Identificación oficial con fotografía</p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                    <textarea placeholder="Comentario..." id="identificacion" name="descripcion"></textarea>
+                    {% endif %}
+
+                    <button onclick="mostrarPDF('{{ archivo.identificacion.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_4" action="../comentarios/1_4/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_4" in comentarios and noHaPasadoPorTodasLasAreas %}
+                        <p class="card-text text-danger" >Manifiesto de compromiso  de incorporar al personal docente<br>
+                                <small>*Este archivo tiene observaciones</small>
+                        </p>
+                    {% else %}
+                        <p class="card-text" >Manifiesto de compromiso  de incorporar al personal docente</p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <textarea placeholder="Comentario..." id="perDocente" name="descripcion"></textarea>
+                    {% endif %}
+
+                    <button onclick="mostrarPDF('{{ archivo.perDocente.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_5" action="../comentarios/1_5/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_5" in comentarios and noHaPasadoPorTodasLasAreas %}
+                        <p class="card-text text-danger" >Formato No. 6 "Instalaciones"<br>
+                        {% if not archivo.progEstuio %}
+                            <small>Formato No. 6 "Instalaciones"</small>
+                        {% endif %}
+                        <small>*Formato No. 6 "Instalaciones"</small><br>
+
+                    </p>
+                    {% else %}
+                    <p class="card-text" >Formato No. 6 "Instalaciones"<br>
+                        {% if not archivo.instalaciones %}
+                            <small>Formato No. 6 "Instalaciones"</small>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <textarea placeholder="Comentario..." id="instalaciones" name="descripcion" ></textarea>
+                    {% endif %}
+
+                    <button onclick="mostrarPDF('{{ archivo.instalaciones.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        {% if archivo.equipamiento %}
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_6" action="../comentarios/1_6/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_6" in comentarios and noHaPasadoPorTodasLasAreas %}
+                        <p class="card-text text-danger" >Tecnología y equipamiento para la opción educativa virtual<br>
+                                <small>*Este archivo tiene observaciones</small>
+                        </p>
+                    {% else %}
+                        <p class="card-text" >Tecnología y equipamiento para la opción educativa virtual</p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <textarea placeholder="Comentario..." id="equipamiento" name="descripcion"></textarea>
+                    {% endif %}
+
+                    <button onclick="mostrarPDF('{{ archivo.equipamiento.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="1_7" action="../comentarios/1_7/medSuperior">
+                    {% csrf_token %}
+                    {% if "1_7" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    <p class="card-text text-danger" >Planes y Programas de Estudio<br>
+                        {% if not archivo.progEstuio %}
+                            <small>Plan y programa de estudios federal</small>
+                        {% endif %}
+                        <small>*Este archivo tiene observaciones</small><br>
+
+                    </p>
+                    {% else %}
+                    <p class="card-text" >Planes y Programas de Estudio<br>
+                        {% if not archivo.progEstuio %}
+                            <small>Plan y programa de estudios federal</small>
+                        {% endif %}
+                    </p>
+                    {% endif %}
+
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <textarea placeholder="Comentario..." id="progEstudio" name="descripcion" ></textarea>
+                    {% endif %}
+                    {% if archivo.progEstuio %}
+                        <button onclick="mostrarPDF('{{ archivo.progEstuio.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% endif %}
+                    {% if noHaPasadoPorTodasLasAreas %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <table class="table table-striped mt-3">
+            <tr class="text-center thead-light">
+                <th>CONSTANCIA DE SEGURIDAD ESTRUCTURAL</th>
+                <th>DICTAMEN PROTECCIÓN CIVIL</th>
+                <th>CONSTANCIA DE USO DE SUELO</th>
+                <th>DICTAMEN INIFE</th>
+                <th>FECHA DE PAGO DE DERECHOS</th>
+            </tr>
+            <tr class="text-center">
+                <td>{{ archivo.dictamen_estructural }} {{ archivo.fecha_estructural }}
+                    {{ archivo.arqui_dictamen_estructural}} Registro D.R.O
+                    {{ archivo.DRO_dictamen_estructural }} Cedula Profesional:
+                    {{ archivo.noCedula_dictamen_estructural }} </td>
+                <td>{{ archivo.dictamen_proteccion }} {{ archivo.fecha_dictamen_proteccion }}
+                    Firmado por: {{ archivo.firma_dictamen_proteccion }} </td>
+                <td>Dictamen: {{ archivo.dictamen_suelo}} Expediente: {{ archivo.expediente_suelo }}
+                    {{ archivo.fecha_suelo }} Firmado por: {{ archivo.firma_suelo }}</td>
+                <td>{{ archivo.folio_inife }} {{ archivo.fecha_inife }} Firmado por:
+                    {{ archivo.firma_inife }}</td>
+                <td>Recibo oficial: {{ archivo.folio_pago }} {{ archivo.fecha_pago }} ${{ archivo.monto_pago }}</td>
+            </tr>
+        </table>
+
+        {% endfor %}
+
+        <embed src="" type="application/pdf" id="pdf" name="pdf" width="100%" height="600px" />
+
+    </div>
+    <div class="col mt-3 mb-3 text-center">
+        <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+        {% if noHaPasadoPorTodasLasAreas and estadoComentario == '0' or estadoComentario == '2' %}
+            {% if comentarios == "" %}
+                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+            {% else %}
+                {% if comentarioMostrado %}
+                    {% if comentarioNoMostrado %}
+                        <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                    {% else %}
+                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                    {% endif %}
+                {% else %}
+                    <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% if solicitud.completado == 10 %}
+            {% if solicitud.estatus.id == 1 %}
+                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+            {% endif %}
+        {% endif %}
+        {% if solicitud.estatus_id == 2 and solicitud.completado == 10 %}
+            <a class="btn btn-primary" href="{% url 'finProceso' solicitud.id %}">Se realizó revisión</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function terminar(estado){
+        var btnTerminar = document.getElementById("TRevision")
+        switch(estado){
+            case 0:
+                var opcion = confirm("Esta solicitud pasará a ser revisada por la siguiente área ¿Desea terminar la revisión?")
+                if (opcion == true) {
+                    btnTerminar.href = "../terminado"
+                }
+                break
+            case 1:
+                var opcion = confirm("Se le notificarán los comentarios introducidos al usuario de la institución correspondiente y estos ya no podrán modificarse o eliminarse ¿Desea terminar la revisión?")
+                if (opcion == true) {
+                    btnTerminar.href = "../terminado"
+                }
+                break
+            case 2:
+                var opcion = confirm("Se le introdujeron nuevos comentarios a esta solicitud, la misma será cancelada ¿Desea terminar la revisión?")
+                if (opcion == true) {
+                    btnTerminar.href = "../terminado"
+                    //window.location.replace("../terminado");
+                }
+                break
+        }
+
+    }
+
+    document.getElementById('pdf').style.display = 'none';
+    function mostrarPDF(ruta){
+        document.getElementById('pdf').style.display = 'inline';
+        document.getElementById("pdf").setAttribute("src", ruta+"#toolbar=0&navpanes=0&scrollbar=0");
+
+        document.getElementById("pdf").oncontextmenu = function(){return false}
+
+        $('content').on("contextmenu",function(e){
+            return false;
+        });
+
+        //Disable part of page
+        $("#content").on("contextmenu",function(e){
+            return false;
+        });
+    }
+</script>
+{% else %}
+<div class="d-flex justify-content-center m-3">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Acceso denegado</h4>
+            <p class="card-text">
+                No tiene permitido acceder a esta solicitud.
+            </p>
+            <p>
+                Solo el jefe del departamento puede acceder a esta solicitud.
+            </p>
+            <a href="{% url 'admin' %}" class="card-link">Regresar</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

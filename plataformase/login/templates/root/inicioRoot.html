@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+   <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
+{% else %}
+<nav class=" navbar navbar-expand navbar-light fixed m-2">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
+            </li>
+        </ul>
+    </div>
+    <div class="m-2">
+        <a class="float-right mr-2"> Administrador del sistema - {{ user.first_name }} {{ user.last_name }}</a>
+    </div>
+</nav>
+
+<div class="row align-items-center">
+    <div class="col-6">
+        <div class="card m-5">
+            <div class="card-body">
+                <h4 class="card-title text-center">Añadir usuarios</h4>
+                <p class="card-text">
+                    En este apartado podrás generar la cuenta de usuario el personal de los departamentos
+                    y de las instituciones.
+                </p>
+                <a href="{% url 'signup' %}" class="btn btn-primary text-center">Ir</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-6">
+        <div class="card m-5">
+            <div class="card-body">
+                <h4 class="card-title text-center">Añadir documentos anexos</h4>
+                <p class="card-text">
+                    En este apartado podrás subir los documentos
+                </p>
+                <a href="{% url 'docAnexos' %}" class="btn btn-primary text-center">Ir</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card m-5">
+            <div class="card-body">
+                <h4 class="card-title text-center">Ver usuarios</h4>
+                <p class="card-text">
+                    En este apartado podrá ver una lista de los usuarios registrados y además podrá actualizar su estatus y definir si es jefe o no.
+                </p>
+                <a href="{% url 'usuarios' %}" class="btn btn-primary text-center">Ir</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

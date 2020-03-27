@@ -1,0 +1,324 @@
+{% load static %}
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+            <title>plataformse &#8211; servicios digitales se</title>
+        <link rel='dns-prefetch' href='//fonts.googleapis.com' />
+        <link rel='dns-prefetch' href='//s.w.org' />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel='stylesheet' id='wp-block-library-css'  href='../static/css/style.min.css?ver=5.3.2' type='text/css' media='all' />
+        <link rel='stylesheet' id='illdy-pace-css'  href='../static/css/pace.min.css?ver=5.3.2' type='text/css' media='all' />
+        <link rel='stylesheet' id='illdy-google-fonts-css'  href='../static/css/css.css?family=Source+Sans+Pro:400,900,700,300,300italic|Lato:300,400,700,900|Poppins:300,400,500,600,700' type='text/css' media='all' />
+        <link rel='stylesheet' id='bootstrap-css'  href='../static/css/bootstrap.min.css?ver=3.3.6' type='text/css' media='all' />
+        <link rel='stylesheet' id='bootstrap-theme-css'  href='../static/css/bootstrap-theme.min.css?ver=3.3.6' type='text/css' media='all' />
+        <link rel='stylesheet' id='font-awesome-css'  href="{% static '/css/font-awesome.min.css' %}" type='text/css' media='all' />
+        <link rel='stylesheet' id='owl-carousel-css'  href='../static/css/owl-carousel.min.css?ver=2.0.0' type='text/css' media='all' />
+        <link rel='stylesheet' id='illdy-main-css'  href='../static/css/main.css?ver=5.3.2' type='text/css' media='all' />
+        <style id='illdy-main-inline-css' type='text/css'>
+                        #header .top-header .header-logo:hover,
+                        #header .top-header .header-navigation ul li.menu-item-has-children .sub-menu li:hover > a,
+                        #latest-news .section-content .post .post-title:hover,
+                        #latest-news .section-content .post .post-button,
+                        #contact-us .section-content .contact-us-box .box-left,
+                        .recentcomments > a,
+                        #blog .blog-post .blog-post-title:hover,
+                        #blog .blog-post .blog-post-meta .post-meta-author,
+                        #blog .blog-post .blog-post-meta .post-meta-author .fa,
+                        #blog .blog-post .blog-post-meta .post-meta-time .fa,
+                        #blog .blog-post .blog-post-meta .post-meta-categories .fa,
+                        #blog .blog-post .blog-post-meta .post-meta-comments .fa,
+                        #blog .blog-post .blog-post-author h4,
+                        .widget table td#prev a,
+                        .widget table td#next a,
+                        .widget .widget-recent-post .recent-post-button,
+                        span.rss-date:before,
+                        .post-date:before,
+                        .blog-post-related-articles .related-post:hover .related-post-title,
+                        #comments #comments-list ul.comments .comment .url,
+                        #comments #comments-list ul.comments .comment .comment-reply-link,
+                        #header .bottom-header span.span-dot,
+                        #header .top-header .header-navigation ul li:hover a,
+                        input[type=submit] { color: #6ebbdc; }
+                        #header .top-header .header-navigation ul li.menu-item-has-children .sub-menu li:hover > a { border-color: #6ebbdc; }
+                        #header .bottom-header .header-button-two,
+                        #comments #respond .comment-form #input-submit,
+                        #latest-news .latest-news-button,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-submit,
+                        #blog .blog-post .blog-post-button,
+                        .widget table caption,
+                        .widget table#wp-calendar tbody tr td a { background-color: #6ebbdc; }
+                        @media only screen and (max-width: 992px) { .header-front-page nav ul.sub-menu { background-color: #6ebbdc; } }
+                        a:hover,
+                        a:focus,
+                        #latest-news .section-content .post .post-button:hover,
+                        #latest-news .section-content .post .post-button:focus,
+                        .recentcomments a:hover,
+                        .widget:not(.widget_rss):not(.widget_recent_comments):not(.widget_recent_entries) ul li:hover:before,
+                        .widget:not(.widget_recent_comments) ul li:hover > a,
+                        .widget.widget_recent_comments ul li a:hover,
+                        .widget table td#prev a:hover:before,
+                        .widget table td#next a:hover:before,
+                        .widget table td#prev a:focus:before,
+                        .widget table td#next a:focus:before,
+                        .widget_categories ul li:hover,
+                        .widget_archive ul li:hover { color: #2e3d51; }
+                        #testimonials .section-content .testimonials-carousel .carousel-testimonial .testimonial-content,
+                        .widget table#wp-calendar tbody tr td a:hover,
+                        #comments #respond .comment-form #input-submit:hover,
+                        input[type=submit]:hover,
+                        #latest-news .latest-news-button:hover,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-submit:hover,
+                        #header .bottom-header .header-button-two:hover,
+                        #blog .blog-post .blog-post-button:hover { background-color: #2e3d51; }
+                        #testimonials .section-content .testimonials-carousel .carousel-testimonial .testimonial-content:after  { border-color: #2e3d51 transparent transparent transparent; }
+                        input:focus,
+                        input:hover,
+                        textarea:focus,
+                        textarea:hover { border-color: #2e3d51; }
+                        .front-page-section .section-header .section-description,
+                        #header .top-header .header-navigation ul li.menu-item-has-children .sub-menu li a,
+                        #services .section-content .service .service-entry,
+                        #latest-news .section-content .post .post-entry,
+                        #team .section-content .person .person-content p,
+                        #contact-us .section-content .contact-us-box .box-right span,
+                        #contact-us .section-content .contact-us-box .box-right span a,
+                        #contact-us .section-content .contact-us-social a,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-text,
+                        #footer .copyright,
+                        #footer .copyright a,
+                        .widget table tbody,
+                        input,
+                        textarea,
+                        .markup-format h1, 
+                        .markup-format h2, 
+                        .markup-format h3, 
+                        .markup-format h4, 
+                        .markup-format h5, 
+                        .markup-format h6,
+                        body { color: #8c9597; }
+                        #contact-us .section-content .wpcf7-form p .wpcf7-text::-webkit-input-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-text::-moz-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-text:-ms-input-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-text:-moz-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-textarea,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-textarea::-webkit-input-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-textarea::-moz-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-textarea:-ms-input-placeholder,
+                        #contact-us .section-content .wpcf7-form p .wpcf7-textarea:-moz-placeholder{ color: #8c9597; }
+                        .front-page-section .section-header h3,
+                        #latest-news .section-content .post .post-button:active,
+                        #blog .blog-post .blog-post-title,
+                        .widget table thead th,
+                        #team .section-content .person .person-content h6,
+                        .widget_rss cite,
+                        .illdy_home_parallax h3 { color: #545454; }
+                    
+        </style>
+        <link rel='stylesheet'   href="{% static '/css/logincss.css' %}" type='text/css' media='all' />
+        <link rel='stylesheet' id='illdy-custom-css'  href='../static/css/custom.min.css?ver=5.3.2' type='text/css' media='all' />
+        <link rel='stylesheet' id='illdy-style-css'  href='../static/css/style.css?ver=1.0.16' type='text/css' media='all' />
+        <link rel='stylesheet' id='elementor-icons-css'  href='../static/css/elementor-icons.min.css?ver=5.6.2' type='text/css' media='all' />
+        <link rel='stylesheet' id='elementor-animations-css'  href='../static/css/animations.min.css?ver=2.9.2' type='text/css' media='all' />
+        <link rel='stylesheet' id='elementor-frontend-css'  href="{%  static '/css/frontend.min.css'%}" type='text/css' media='all' />
+        <link rel='stylesheet' id='elementor-global-css'  href='../static/css/global.css?ver=1582138348' type='text/css' media='all' />
+        <link rel='stylesheet' id='elementor-post-148-css'  href='../static/css/post-148.css?ver=1582146736' type='text/css' media='all' />
+        <script type='text/javascript' src='../static/js/jquery/jquery.js?ver=1.12.4-wp'></script>
+        <script type='text/javascript' src='../static/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+        <script type='text/javascript' src='../static/wp-content/themes/illdy/layout/js/pace/pace.min.js?ver=5.3.2'></script>
+        <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../static/css/wlwmanifest.xml" /> 
+        <link rel="alternate" type="application/json+oembed" href="http://localhost/plataforma2/wp-json/oembed/1.0/embed?url=http%3A%2F%2Flocalhost%2Fplataforma2%2F" />
+        <link rel="icon" href=../static/wp-content/uploads/2020/02/cropped-se-2-192x192.png" sizes="192x192" />
+        <link rel="apple-touch-icon-precomposed" href="../static/wp-content/uploads/2020/02/cropped-se-2-180x180.png" />
+        <meta name="msapplication-TileImage" content="../static/wp-content/uploads/2020/02/cropped-se-2-270x270.png" />
+        
+                <style type="text/css" id="illdy-about-section-css">#header.header-front-page {background-image: url(/static/img/portada.jpg) !important;}#header.header-front-page {background-position-y: center;}#header.header-front-page {background-position-x: center;}#header.header-front-page {background-size: cover !important;}#header.header-front-page .bottom-header .header-button-one {border-color: #ffffff;}#header.header-front-page .bottom-header .header-button-two {color: #ffffff;}</style>
+                <style type="text/css" id="illdy-latestnews-section-css"></style>
+                <style type="text/css" id="illdy-fullwidth-section-css"></style>
+                <style type="text/css" id="illdy-about-section-css"></style>
+                <style type="text/css" id="illdy-projects-section-css">#projects {background-image: url(/static/img/pattern.png) !important;}#projects {background-size: auto !important;}#projects {background-repeat: repeat !important;}</style>
+                <style type="text/css" id="illdy-services-section-css"></style>
+                <style type="text/css" id="illdy-team-section-css">#team {background-image: url(/static/img/pattern.png) !important;}#team {background-size: auto !important;}#team {background-repeat: repeat !important;}</style>
+        
+
+    </head>
+    <body class="home page-template-default page page-id-12 wp-custom-logo elementor-default elementor-kit-148 elementor-page elementor-page-12">
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        
+      </main>
+      
+      <section id="team" class="front-page-section">
+        <div class="section-header">
+        <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                        <h3>Acerca</h3>
+                    </div><!--/.col-sm-12-->
+                 <div class="col-sm-10 col-sm-offset-1">
+                <div class="section-description"><b>Secretaría de Educación Media Superior, Superior e Investigación Científica y Tecnológica de Nayarit.</b><br><br>
+<b>SEMSSICYT </b>es la Dependencia competente para establecer la normativa, requisitos, trámites y procedimientos administrativos a los que deberá sujetarse el otorgamiento, revocación, suspensión o retiro de la autorización o del reconocimiento de validez oficial de estudios a los planes y programas de estudio a los particulares que participen en el proceso educativo estatal de educación medio superior y superior, de conformidad a lo establecido a la legislación en la materia.</div>
+                    </div><!--/.col-sm-10.col-sm-offset-1-->
+                    </div><!--/.row-->
+        </div><!--/.container-->
+    </div><!--/.section-header-->
+    <div class="section-content">
+    <div class="container">
+        <div class="row inline-columns">
+            <div id="illdy_person-3" class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1 widget_illdy_person"><div class="person clearfix" data-person-color="#2052c9"><div class="person-image"><img src="../static/img/dos.jpg" alt="Departamento 1" title="Departamento 1" /></div><!--/.person-image--><div class="person-content"><h6>Departamento 1</h6><p class="person-position"></p><p></p><ul class="person-content-social clearfix"></ul><!--/.person-content-social.clearfix--></div><!--/.person-content--></div><!--/.person.clearfix--></div><div id="illdy_person-5" class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1 widget_illdy_person"><div class="person clearfix" data-person-color="#000000"><div class="person-image"><img src="http://localhost/plataforma2/wp-content/themes/illdy/layout/images/front-page/front-page-project-1.jpg" alt="Departamento 2" title="Departamento 2" /></div><!--/.person-image--><div class="person-content"><h6>Departamento 2</h6><p class="person-position"></p><p></p><ul class="person-content-social clearfix"></ul><!--/.person-content-social.clearfix--></div><!--/.person-content--></div><!--/.person.clearfix--></div><div id="illdy_person-6" class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1 widget_illdy_person"><div class="person clearfix" data-person-color="#000000"><div class="person-image"><img src="http://localhost/plataforma2/wp-content/themes/illdy/layout/images/front-page/front-page-project-1.jpg" alt="Departamento 3" title="Departamento 3" /></div><!--/.person-image--><div class="person-content"><h6>Departamento 3</h6><p class="person-position"></p><p></p><ul class="person-content-social clearfix"></ul><!--/.person-content-social.clearfix--></div><!--/.person-content--></div><!--/.person.clearfix--></div><div id="illdy_person-7" class="col-sm-4 col-sm-offset-0 col-xs-10 col-xs-offset-1 widget_illdy_person"><div class="person clearfix" data-person-color="#000000"><div class="person-image"><img src="http://localhost/plataforma2/wp-content/themes/illdy/layout/images/front-page/front-page-project-1.jpg" alt="Departamento 4" title="Departamento 4" /></div><!--/.person-image--><div class="person-content"><h6>Departamento 4</h6><p class="person-position"></p><p></p><ul class="person-content-social clearfix"></ul><!--/.person-content-social.clearfix--></div><!--/.person-content--></div><!--/.person.clearfix--></div>			</div><!--/.row-->
+    </div><!--/.container-->
+</div><!--/.section-content-->
+</section><!--/#team.front-page-section-->
+
+
+<section id="testimonials" class="front-page-section" style="background-image: url(../static/wp-content/themes/illdy/layout/images/testiomnials-background.jpg)">
+        <div class="section-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1 no-padding">
+                    <div class="testimonials-carousel owl-carousel-enabled">
+                        
+                    </div><!--/.testimonials-carousel.owl-carousel-enabled-->
+                </div><!--/.col-sm-10.col-sm-offset-1.no-padding-->
+            </div><!--/.row-->
+        </div><!--/.container-->
+    </div><!--/.section-content-->
+</section><!--/#testimonials.front-page-section-->
+
+
+<section id="projects" class="front-page-section" >
+ <div class="section-header">
+     <div class="container">
+        <div class="row">
+        <div class="col-sm-12">
+        <h3>Servicios</h3>
+        </div><!--/.col-sm-12-->
+<div class="col-sm-10 col-sm-offset-1">
+    <div class="section-description">
+Actualmente SEMSSICyT se encuentra desarrollando sistemas digitales para la optimización de tiempo en respuesta a ciertos servicios proveídos por esta institución
+<br><i><b>SIG,SIG App,RVOE,Autorización de exámenes a tíulos y sinodales</i></b></div>
+    </div><!--/.col-sm-10.col-sm-offset-1-->
+     </div><!--/.row-->
+    </div><!--/.container-->
+    </div><!--/.section-header-->
+<div class="section-content">
+    <div class="container-fluid">
+        <div class="row inline-columns">
+            <div id="illdy_project-3" class="col-sm-3 col-xs-6 no-padding widget_illdy_project">
+                <a href="#" title="RVOE" class="project no-url" data-fancybox="gallery" style="background-image: url(http://localhost/plataforma2/wp-content/uploads/2020/02/startup-planning-notes-mac-book-7357-scaled.jpg);"><span class="project-overlay"></span>
+                </a></div><div id="illdy_project-4" class="col-sm-3 col-xs-6 no-padding widget_illdy_project">
+                    <a href="https://www.gob.mx/" title="Sistema de información geográfica" class="project  data-fancybox="gallery" style="background-image: url(http://localhost/plataforma2/wp-content/uploads/2020/02/sitio-web-1080x630-1-476x476.jpg);"><span class="project-overlay"></span></a>
+                </div><div id="illdy_project-5" class="col-sm-3 col-xs-6 no-padding widget_illdy_project">
+                    <a href="" title="SIG App" class="project" data-fancybox="gallery" style="background-image: url(http://localhost/plataforma2/wp-content/uploads/2020/02/architect-composition-data-demonstration-313691-scaled.jpg);"><span class="project-overlay"></span></a>
+                </div><div id="illdy_project-6" class="col-sm-3 col-xs-6 no-padding widget_illdy_project">
+                    <a href="" title="Exámenes a títulos y sinodales" class="project no-url" data-fancybox="gallery" style="background-image: url(http://localhost/plataforma2/wp-content/uploads/2020/02/working-woman-technology-computer-7374-scaled.jpg);"><span class="project-overlay"></span></a></div>		
+                    </div><!--/.row-->
+    </div><!--/.container-fluid-->
+</div><!--/.section-content-->
+</section><!--/#projects.front-page-section-->
+
+
+
+
+
+<section id="counter" class="front-page-section" >
+<div class="counter-overlay"></div>
+<div class="container3">
+    <div class="row inline-columns">
+        <div id="illdy_counter-3" class="col-sm-4 col-xs-12 widget_illdy_counter"">
+        <h3 style="text-align: center;  color: whitesmoke;">Plataforma SE</h3></div>	
+    	</div><!--/.row-->
+</div><!--/.container-->
+</section><!--/#counter.front-page-section-->
+
+<section id="contact-us" class="front-page-section">
+                <div class="section-header">
+            <div class="container">
+                <div class="row">
+                                                <div class="col-sm-12">
+                            <h3>Contactanos</h3>
+                        </div><!--/.col-sm-12-->
+                                                                </div><!--/.row-->
+            </div><!--/.container-->
+        </div><!--/.section-header-->
+            <div class="section-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row" style="margin-bottom: 45px;">
+                        <div class="col-sm-4">
+                            <div class="contact-us-box">
+                                                                        <div class="box-left" data-customizer="box-left-address-title">
+                                        Domicilio										</div><!--/.box-left-->
+                                                                    <div class="box-right">
+                                                                                <span class="box-right-row" data-customizer="contact-us-address-1">Av. del Parque y España, Fraccionamiento Cd. Del Valle</span>
+                                                                                                                        <span class="box-right-row" data-customizer="contact-us-address-2">Horario: 9am-3pm</span>
+                                                                        </div><!--/.box-right-->
+                            </div><!--/.contact-us-box-->
+                        </div><!--/.col-sm-4-->
+                        <div class="col-sm-5">
+                            <div class="contact-us-box">
+                                                                        <div class="box-left" data-customizer="box-left-customer-support-title">
+                                        Atención										</div><!--/.box-left-->
+                                                                    <div class="box-right">
+                                                                                                                        <span class="box-right-row" data-customizer="contact-us-phone">Teléfono: 311 133 3484</span>
+                                                                        </div><!--/.box-right-->
+                            </div><!--/.contact-us-box-->
+                        </div><!--/.col-sm-5-->
+                        <div class="col-sm-3">
+                                                                <div class="contact-us-social">
+                                                                                                                        <a href="https://www.facebook.com/pg/ssemssicytnay/about/?ref=page_internal" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                                                                                                                                                                                                                                                                                                                        </div><!--/.contact-us-social-->
+                                                        </div><!--/.col-sm-3-->
+                    </div><!--/.row-->
+                </div><!--/.col-sm-12-->
+            </div><!--/.row-->
+            <div class="row">
+                <div class="col-sm-12">
+                                        </div><!--/.col-sm-12-->
+            </div><!--/.row-->
+        </div><!--/.container-->
+    </div><!--/.section-content-->
+</section><!--/#contact-us.front-page-section-->
+
+<footer id="footer">
+<div class="container">
+    <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        </div><!--/.col-sm-3-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+                        </div><!--/.col-sm-3-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+                        </div><!--/.col-sm-3-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+                        </div><!--/.col-sm-3-->
+    </div><!--/.row-->
+</div><!--/.container-->
+<div class="bottom-footer">
+    <div class="container">
+        <p class="copyright">
+            <span><a href="http://colorlib.com/wp/themes/illdy" title="Illdy" target="_blank"></a></span>
+            <span class="bottom-copyright" data-customizer="copyright-credit">SSEMSSICyT</span>
+        </p>
+    </div>
+</div>
+</footer><!--/#footer-->
+
+<script>
+    function mostrarContrasena(){
+                     var tipo = document.getElementById("id_password");
+                     if(tipo.type == "password"){
+                         tipo.type = "text";
+                     }else{
+                         tipo.type = "password";
+                     }
+                 }             
+ </script>
+    </body>
+</html>

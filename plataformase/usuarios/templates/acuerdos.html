@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Añadir acuerdos{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+   <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
+{% else %}
+<div class="text-center m-5">
+    <h2>Acuerdos de nivel media superior</h2>
+    <div class="m-5 col-10 mx-auto">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="w-75">Nombre</th>
+                    <th class="w-25">Ver</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for element in docsMS %}
+                    <tr>
+                        <td class="w-75">{{ element.nombre }}</td>
+                        <td class="w-25"><a class="btn btn-secondary" target="_blank" href="{{ element.archivo.url }}">Ver</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Acuerdos de nivel superior</h2>
+    <div class="m-5 col-10 mx-auto">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="w-75">Nombre</th>
+                    <th class="w-25">Ver</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for element in docsS %}
+                    <tr>
+                        <td class="w-75">{{ element.nombre }}</td>
+                        <td class="w-25"><a class="btn btn-secondary" target="_blank" href="{{ element.archivo.url }}">Ver</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a class="btn btn-primary" href="{% url 'inicio' %}">Regresar</a>
+</div>
+{% endif %}
+
+{% endblock %}

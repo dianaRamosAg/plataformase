@@ -1,0 +1,172 @@
+{% load staticfiles  %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Admición de trámite</title>
+    <style>
+        @page {
+            size: letter portrait;
+            background-image: url('login/static/login/fondo.png');
+            margin:25px;
+            margin-top: 105px;
+            
+        }
+        .header {
+            -moz-column-count: 3;
+            -moz-column-gap: undefinedpx;
+            -webkit-column-count: 3;
+            -webkit-column-gap: undefinedpx;
+            column-count: 3;
+            column-gap: undefinedpx;
+        }
+        .encabezado{
+            text-align: center;
+            margin-left: 15px;
+            color: gray;            
+        }
+
+        .fecha{
+            text-align: right;
+        }
+
+        .cuerpo{
+            padding-right:50px;
+            padding-left:50px;
+            font-size:15px;
+        }
+
+        .despedida{
+            padding-top:35px;
+        }
+
+        .contenido{
+            text-align: justify;
+        }
+        
+        .tabla{
+            font-size: 12px;           
+            border: black 1px solid;
+        }
+
+        .centrado{
+            text-align: center;
+        }
+
+        .fila{ 
+            width:100px; 
+        }
+
+        .columna{
+            width: 50px;
+        }
+
+    </style>
+</head>
+
+<body>       
+    <div class="cuerpo">
+        <div class="encabezado">
+            <br><br>
+        </div>
+        <div class="fecha">
+            <p><strong>Oficio:</strong> {{ solicitud.id }}<br>
+                Tepic, Nayarit, a {{ today }}<br>
+                <strong>Asunto:</strong> Revisión de Planes y Programas de Estudio
+            </p>        
+        </div>
+
+        <div>           
+            <p><strong>C. {{ jefe.first_name }} {{ jefe.last_name }}<br>
+                    ENCARGADO(A) DEL DEPARTAMENTO DE EDUCACIÓN {{ departamento.nombre }}<br>
+                    P R E S E N T E.</strong>
+            </p>               
+        </div>
+
+        <div>
+            <p class="contenido">Por medio de la presente hago entrego del plan y programa de estudio para revisión, análisis y dictamen
+                        de evaluación técnica pedagógica del <strong>{{ request.user.first_name }}</strong> presentado a
+                        través de su Representante Legal <strong>C. {{ solicitud.nombreRepresentante }},</strong> según escritura pública
+                        No. {{ solicitud.noInstrumentoNotarial }} ante el Notario Público Número {{ solicitud.noNotario }}, <strong>C.
+                        {{ solicitud.nombreRepresentante }}</strong> y con Domicilio de impartición de
+                        acuerdo a su solicitud en calle <strong>{{ request.user.calle }} # {{ request.user.noexterior}} {{request.user.noiterior}},
+                        Col. {{ request.user.colonia }},</strong> teléfono {{request.user.celular}}, correo
+                        electrónico para recibir notificaciones <u style="color:blue">{{request.user.email}}</u> a la solicitud de Reconocimiento de
+                        Validez Oficial (RVOE) de <strong>{{ solicitud.nombreSolicitud }}, MODALIDAD {{ mod }}, ALUMNADO
+                        {{ opc }},</strong> recibida a través de ventanilla única el {{ solicitud.fechaRegistro }} y remitida a esta Dirección el
+                        <strong>{{ fecha }}</strong> con Oficio No. {{ solicitud.id }} del Departamento de Control Escolar y Estadística, para
+                        la revisión de las formalidades jurídicas, mismas que detallo a continuación:
+            </p>
+        </div>
+            <table class="tabla">
+                        <tr class="centrado">
+                            <th>CONSTANCIA DE SEGURIDAD ESTRUCTURAL</th>
+                            <th>DICTAMEN PROTECCIÓN CIVIL</th>
+                            <th>CONSTANCIA DE USO DE SUELO</th>
+                            <th>DICTAMEN INIFE</th>
+                            <th>FECHA DE PAGO DE DERECHOS</th>
+                        </tr>
+                        <tr class="centrado">
+                            <td>{{ datos.dictamen_estructural }} {{ datos.fecha_estructural }}
+                                {{ datos.arqui_dictamen_estructural}} Registro D.R.O
+                                {{ datos.DRO_dictamen_estructural }} Cedula Profesional:
+                                {{ datos.noCedula_dictamen_estructural }} </td>
+                            <td>{{ datos.dictamen_proteccion }} {{ datos.fecha_dictamen_proteccion }}
+                                Firmado por: {{ datos.firma_dictamen_proteccion }} </td>
+                            <td>Dictamen: {{ datos.dictamen_suelo}} Expediente: {{ datos.expediente_suelo }}
+                                {{ datos.fecha_suelo }} Firmado por: {{ datos.firma_suelo }}</td>
+                            <td>{{ datos.folio_inife }} {{ datos.fecha_inife }} Firmado por:
+                                {{ datos.firma_inife }}</td>
+                            <td>Recibo oficial: {{ datos.folio_pago }} {{ datos.fecha_pago }} ${{ datos.monto_pago }}</td>
+                        </tr>
+                </table>           
+
+        <div>
+            <div >
+            <p class="contenido">Los cuales quedan a su resguardo durante el proceso de Análisis y Evaluación del mismo, no omito hacer
+                    de su conocimiento que este producto intelectual está bajo el derecho de autor de la Institución
+                    Educativa que lo produjo, por lo que la REPRODUCCIÓN PARCIAL O TOTAL SE CONSIDERA UN DELITO; de
+                    tal manera que al termino de los trabajos realizados por el grupo técnico deberá remitirlos a esta
+                    Dirección para su resguardo.
+            </p>
+        
+            <p class="contenido">Dando cumplimento a lo que indica la Convocatoria 2019 para la Autorización de RVOE de Nivel Superior
+                    en su numeral IV inciso f, se le turna copia del presente al Representante Legal del <strong>{{ request.user.first_name }}
+                    {{ request.user.last_name }}</strong> y se le notifica la ADMISIÓN DE SU TRÁMITE.
+            </p>
+            <p>Sin otro particular aprovecho la ocasión para enviarle un cordial saludo.</p>
+            </div>
+            
+            <div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>               
+                <p class="centrado despedida"><strong>A T E N T A M E N T E</strong><br>
+                    <strong>EL DIRECTOR DE EDUCACIÓN MEDIA SUPERIOR Y SUPERIOR</strong></p>
+                <p class="centrado"><strong>LIC. VÍCTOR MANUEL ALVARADO JIMÉNEZ</strong></p>
+            </div>            
+      
+            <div style="font-size: 12px;">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <ul>
+                    <li><small><em><strong>c.c.p. Mtro. Martin Isaac Pérez Gómez. - Subsecretario de Educación Media Superior, Superior e Investigación Científica y Tecnológica. Para su conocimiento.</strong></em></small></li>
+                    <li><small><em><strong>c.c.p. Lic. Osvaldo Antonio Valencia Barragán.- Jefe de Departamento de Control escolar y Estadísticas. Para su conocimiento.</strong></em></small></li>
+                    <li><small><em><strong>Representante Legal de la Institución Solicitante. Para su conocimiento.</strong></em></small></li>
+                    <li><small><em><strong>c.c.p. Archivo.</strong></em></small></li>
+                </ul>
+            </div>                      
+        </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+
+{% extends 'base2.html' %}
+
+{% block title %}Registrarse{% endblock %}
+{% block content %}
+
+<form action="../signupvr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row m-2">
+            <div class="col-12 text-center">
+                <h2>Registro de visitante</h2>
+            </div>
+        </div>
+
+        <div class="row m-2 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mx-auto">
+            <div class="col-12 text-center mt-2">
+                <h3>Información para inicio de sesión</h3>
+            </div>
+
+            <div class="container-fluid form-group row align-items-center col-8 mx-auto p-1">
+              
+                <label class="mr-2" for="id_email">Correo: </label>
+                <input class="form-control col"  type="text" name="email"
+                    required id="id_email" placeholder="correo@dominio.com">
+            </div>
+
+            <div class="container-fluid form-group row align-items-center col-8 mx-auto p-1 ">
+                <label class="mr-2" for="id_password1">Contraseña: </label>
+                <input class="form-control col" type="password" name="password1" required id="id_password1">
+            </div>
+            <div class="container-fluid form-group row align-items-center col-8 mx-auto p-1">
+                <label  class="mr-2" for="id_password2">Confirmar contraseña:</label>
+                <input class="form-control col" type="password" name="contrasena" required id="id_password2">
+            </div>
+            <div class="container-fluid form-group row align-items-center col-8 mx-auto p-1">
+                <button class="btn btn-primary col-2 mx-auto" type="submit">Registrarse</button>
+            </div>
+          
+            <div class="col-md-12 mt-2">
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            {% if field.name == 'username' %}
+                            {% else %}
+                                <div class="alert alert-danger">
+                                    <label>{{ error }}</label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+
+</form>
+
+<script type="text/javascript">
+    function PasarValor(){
+        document.getElementById("id_username").value = document.getElementById("id_email").value;
+    }
+    var ap = " ";
+    var borrado = 0;
+    function pmoral(){
+        var per = document.getElementById('id_tipo_persona');
+        if (per.value == '2'){
+            document.getElementById('id_last_name').style.display = 'none';
+            document.getElementById("id_last_name").setAttribute("required", "false");
+            ap = document.getElementById('id_last_name').value;
+            document.getElementById("id_last_name").setAttribute("value", " ");
+            document.getElementById('lblapellidos').style.display = 'none';
+            document.getElementById('lblnombres').innerHTML= 'Nombre de la institución:';
+            document.getElementById('lblcurp').innerHTML= 'RFC:';
+            document.getElementById('acurp').innerHTML= 'Consulta RFC';
+            document.getElementById("lblnombres").setAttribute("class", "ml-2 col-2");
+            document.getElementById("id_first_name").setAttribute("class", "form-control col-3 ml-2");
+            document.getElementById("acurp").setAttribute("href", "https://www.sat.gob.mx/tramites/operacion/28753/obten-tu-rfc-con-la-clave-unica-de-registro-de-poblacion-(curp)");
+        }else {
+            document.getElementById('id_last_name').style.display = 'inline';
+            document.getElementById("id_last_name").setAttribute("required", "required");
+            document.getElementById("id_last_name").setAttribute("value", ap);
+            document.getElementById('lblapellidos').style.display = '';
+            document.getElementById('lblnombres').innerHTML= 'Nombres:';
+            document.getElementById('lblcurp').innerHTML= 'CURP:';
+            document.getElementById('acurp').innerHTML= 'Consulta CURP';
+            document.getElementById("lblnombres").setAttribute("class", "ml-2 col-1");
+            document.getElementById("id_first_name").setAttribute("class", "form-control ml-1 col-2");
+            document.getElementById("acurp").setAttribute("href", "http://consultas.curp.gob.mx");
+        }
+    }
+
+    function funcion(){
+        var user = document.getElementById("id_tipo_usuario");
+        var per = document.getElementById("id_tipo_persona");
+        if (user.value != '1'){
+            if(borrado == 0){
+                aBorrar = per.options[per.length-1];
+                aBorrar.parentNode.removeChild(aBorrar);
+                borrado = 1;
+            }
+        }else{
+            if(borrado == 1){
+                option = document.createElement("OPTION");
+                option.value = "2";
+                option.text = "Persona moral";
+                per.add(option);
+                borrado = 0;
+            }
+        }
+        if(user.value == '2'){
+            verificarJefes();
+        }else{
+            document.getElementById("alertJefe").style.display = 'none';
+        }
+        pmoral();
+        departamento();
+    }
+
+    departamento();
+    function departamento(){
+        var sel = document.getElementById("id_departamento");
+        var lbl = document.getElementById("lbl_departamento");
+        var user = document.getElementById("id_tipo_usuario");
+        if (user.value == '2' || user.value == '3'){
+            sel.style.display = 'inline';
+            lbl.style.display = 'inline';
+        }else{
+            sel.style.display = 'none';
+            lbl.style.display = 'none';
+        }
+    }
+
+</script>
+{% endblock %}

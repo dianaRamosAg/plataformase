@@ -1,0 +1,55 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+    <nav class=" navbar navbar-expand navbar-light fixed m-2">
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link ml-4" href="{% url 'notificacionUsuario' %}">Notificaciones {{total}}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
+              </li>
+            </ul>
+        </div>  
+        <div class="m-2">
+            <a class="float-right mr-2">{{ user.first_name }} {{ user.last_name }}</a>
+          </div>      
+    </nav>
+
+  
+  <body>
+
+    <section id="contenido" style="text-align: center; padding-right: 10%; padding-left: 10%; padding-top: 5%">
+
+            El Particular no estará obligado a llenar formatos o anexos distintos a los establecidos en el presente Acuerdo, ni a proporcionar datos o documentos que el presente Acuerdo no prevea de manera expresa. Por su parte, la Autoridad Educativa Federal deberá abstenerse de requerir documentos o solicitar datos que se encuentren en sus archivos, siempre y cuando, el Particular en su solicitud de RVOE haga referencia al escrito en el que se citaron o con el que se acompañaron y el nuevo trámite lo realice ante la misma Autoridad Educativa Federal, salvo aquellos documentos que no sigan vigentes.
+            La recepción de las solicitudes se efectuará los días y horas hábiles de los meses de marzo, junio y noviembre de cada año calendario, en las ventanillas o medios de comunicación electrónica determinados en el aviso que la Autoridad Educativa Federal publique en el Diario Oficial de la Federación, el cual también difundirá en su portal institucional.
+            
+            <div class="text-center" style="padding-top: 1%">
+                <button type="button" class=" btn btn-secondary  align-center" data-toggle="modal" data-target="#articulos">Leer mas</button>
+                <!-- Modal -->
+                <div class="modal fade" id="articulos" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Articulos</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Doloremque nesciunt ipsa vel veritatis, ullam adipisci ex amet vitae. Exercitationem molestiae numquam, sed dolorem ratione eligendi. Voluptate temporibus inventore soluta exercitationem.</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <div class="text-center mb-5" style="padding-top: 2%">
+        <a class="btn btn-primary" href="{% url 'validacion' %}">Realizar Solicitud</a>
+        <a class="btn btn-secondary" href="{% url 'estado' user.id 'G' %}">Estatus de Solicitudes</a>
+        <a class="btn btn-secondary" href="{% url 'acuerdos' %}">Ver Acuerdos</a>
+        <!--<a class="btn btn-secondary" href="estadoSolicitud/{{user.id}}/G">Estatus de Solicitudes</a>-->
+    </div>
+{% endblock %}

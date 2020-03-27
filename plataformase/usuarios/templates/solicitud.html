@@ -1,0 +1,274 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Solicitud{% endblock %}
+
+{% block content %}
+
+<body class="text-center">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 mx-auto mt-5">
+                <form action="crear/" method="post" id="form">
+                    {% csrf_token %}
+                    <div class="card card-primary">
+                        <div class="card-body">
+                            <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                                <main role="main" class="inner cover">
+                                    <h2 class="cover-heading">Registro de Nueva Solicitud</h2>
+                                    <label class="my-1 mr-2 lead" for="id_nivel">Nivel:</label>
+                                    <select required class="custom-select mr-sm-2" name="nivel" id="id_nivel" onchange="activaModalidades();">
+                                        <option selected>Seleccionar...</option>
+                                        <option value="1">Media Superior</option>
+                                        <option value="2">Superior</option>
+                                    </select>
+
+                                    <label class="my-1 mr-2 lead" for="id_modalidad">Modalidad:</label>
+                                    <select required class="custom-select mr-sm-2" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
+                                        <option selected>Seleccionar...</option>
+                                        <option value="1">Mixta</option>
+                                        <option value="2">Escolarizada</option>
+                                        <option value="3">No escolarizada</option>
+                                    </select>
+
+                                    <label class="my-1 mr-2 lead" for="id_opcion">Opción:</label>
+                                    <select required class="custom-select mr-sm-2" disabled="true" name="opcion" id="id_opcion">
+                                        <option selected>Seleccionar...</option>
+                                    </select>
+
+                                    <div class="custom-control custom-checkbox">
+                                      <input type="checkbox" class="custom-control-input" id="idcheckbox">
+                                      <label class="custom-control-label" for="idcheckbox" id="lblidcheckbox">Es área de la salud</label>
+                                    </div>
+
+                                    <input type="text" hidden name="salud" id="id_salud" value="0">
+                                    <input type="text" hidden name="customuser_id" required id="id_customuser_id" value="{{ user.id }}">
+
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-primary mt-2">
+                        <div class="card-body">
+                            <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                                <main role="main" class="inner cover">
+                                    <h2 class="cover-heading">Información legal</h2>
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
+                                        <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_noInstrumentoNotarial">Número de instrumento notarial: </label>
+                                        <input class="form-control col-6 mx-auto" type="number" required name="noInstrumentoNotarial" id="id_noInstrumentoNotarial">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_nombreNotario">Nombre de notario: </label>
+                                        <input class="form-control" type="text" required name="nombreNotario" id="id_nombreNotario">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_noNotario">Número de notario: </label>
+                                        <input class="form-control col-6 mx-auto" type="number" required name="noNotario" id="id_noNotario">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_nombreRepresentante">Nombre de representante legal: </label>
+                                        <input class="form-control" type="text" required name="nombreRepresentante" id="id_nombreRepresentante">
+                                    </div>
+                                </main>
+                            </div>
+                        </div>
+                    </div>
+
+                        <div class="text-center m-3">
+                            <a class="btn btn-secondary" href="{% url 'inicio'  %}">Regresar</a>
+                            <button type="submit" class="btn btn-primary" name="button">Subir documentos</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    
+    document.getElementById("id_modalidad").disabled = true;
+    document.getElementById("id_opcion").disabled = true;
+
+    function opciones () {
+        mod = document.getElementById("id_modalidad");
+        opc = document.getElementById("id_opcion");
+        niv = document.getElementById("id_nivel");
+        if ( opc.length > 0 ){
+            var i = opc.length;
+            while ( i > 0 ) {
+                opc.remove(opc.length-1);
+                i--;
+            }
+        }
+        if ( niv.value == '1' ){//nivel media superior
+            if ( mod.value == '1' ) {//modalidad mixta
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '1';
+                combo.options[0].innerText = 'Mixta';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '2';
+                combo.options[0].innerText = 'Auto-planeada';
+
+            } else if ( mod.value == '2' ) {//modalidad escolarizada
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '1';
+                combo.options[0].innerText = 'Intensiva';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '2';
+                combo.options[0].innerText = 'Presencial';
+
+            } else if ( mod.value == '3' ) { //modalidad no escolarizada
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '1';
+                combo.options[0].innerText = 'Certificación por evaluaciones parciales';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '2';
+                combo.options[0].innerText = 'Virtual';
+
+            }else{
+                document.getElementById("id_opcion").disabled = true;
+            }
+        } else{//nivel superior
+            if ( mod.value == '1' ) {//modalidad mixta
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '1';
+                combo.options[0].innerText = 'Dual';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '2';
+                combo.options[0].innerText = 'Abierta / Distancia';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '3';
+                combo.options[0].innerText = 'En linea / virtual';
+
+            } else if ( mod.value == '2' ) {//modalidad escolarizada
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '1';
+                combo.options[0].innerText = 'Presencial';
+                
+            } else if ( mod.value == '3' ) { //modalidad no escolarizada
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '1';
+                combo.options[0].innerText = 'Certificación por examen';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '2';
+                combo.options[0].innerText = 'Abierta / Distancia';
+
+                var combo = document.getElementById("id_opcion");
+                var option = document.createElement("option");
+                combo.options.add(option, 0);
+                combo.options[0].value = '3';
+                combo.options[0].innerText = 'En linea / virtual';
+
+            }else{
+                document.getElementById("id_opcion").disabled = true;
+            }
+        }
+        var combo = document.getElementById("id_opcion");
+        var option = document.createElement("option");
+        combo.options.add(option, 0);
+        combo.options[0].value = '0';
+        combo.options[0].innerText = 'Seleccionar...';
+    }
+    
+    function activaModalidades(){
+        niv = document.getElementById("id_nivel");
+        mod = document.getElementById("id_modalidad");
+        opc = document.getElementById("id_opcion");
+        if( niv.value == 'Seleccionar...' ){
+            document.getElementById("id_modalidad").disabled = true;
+            document.getElementById("id_opcion").disabled = true;
+            if ( opc.length > 1 ){
+                var i = opc.length;
+                while ( i > 1 ) {
+                    opc.remove(opc.length-1);
+                    i--;
+                }
+            }
+            mod.value = 'Seleccionar...';
+        }else{
+            document.getElementById("id_modalidad").disabled = false;
+        }
+    }
+
+    function activaOpciones(){
+        document.getElementById("id_opcion").disabled = false;
+        opciones();
+    }
+
+    document.getElementById("form").addEventListener("submit", function(event){
+        if (validar() == false){ 
+                event.preventDefault();
+            return false; 
+        }
+    });
+    function validar(){
+        var nivel = document.getElementById("id_nivel");
+        var mod = document.getElementById("id_modalidad");
+        var opc = document.getElementById("id_opcion");
+        //Validación de select de nivel
+        if (nivel.value == 'Seleccionar...'){
+            alert('Favor de seleccionar un nivel de estudios.');
+            return false; 
+        }else
+        //Validación de select de modalidad
+        if (mod.value == 'Seleccionar...'){
+            alert('Favor de seleccionar una modalidad.');
+            return false; 
+        }else
+        //Validación de select de opcion
+        if(opc.value == 'Seleccionar...' ){
+            alert('Favor de seleccionar una opción.');
+            return false; 
+        }else{    
+            //Acomodo de campo salud
+            var checkBox = document.getElementById("idcheckbox");
+            var input = document.getElementById("id_salud");
+            if (checkBox.checked == true){
+                input.value = '1';
+            } else {
+                input.value = '0';
+            }
+        }
+    }
+
+  </script>
+{% endblock %}

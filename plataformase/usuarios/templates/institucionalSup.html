@@ -1,0 +1,369 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Solicitud{% endblock %}
+
+{% block content %}
+<script>
+    function salir(){
+        var opcion = confirm("Podrás continuar con la solicitud actual posteriormente, "+
+                            "pero no se guardarán los documentos que has subido en este apartado. "+
+                            "¿Deseas salir?");
+        if (opcion == true) {
+            window.location.replace("{% url 'inicio' %}");
+        }
+    }
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body" >
+                <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                    <h2 class="cover-heading">Carpeta Institucional</h2>
+                    <h4 class="">Solo son validos los archivos PDF</h4>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group custom-file p-3 mt-2" >
+                            <label class="font-weight-bold" for="id_solicitud">Solicitud de RVOE</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
+                            ¿No tiene el formato? descarguelo <a href="https://dipes.sep.gob.mx/work/models/DIPES/Resource/17/1/images/Formato%201_%20Solicitud%20de%20RVOE.pdf">aqui</a>
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'solicitud' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_pago">Comprobante de pago</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_folio_pago">
+                                    Folio de pago:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="folio_pago" id="id_folio_pago">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_monto_pago">
+                                    Monto de pago:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="monto_pago" id="id_monto_pago">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_pago">
+                                    Fecha en que se realizó el pago:
+                                </label>
+                                <input type="date" class="form-control col-2" id="id_fecha_pago" required name="fecha_pago"
+                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
+                            </div>
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'pago' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if field.name == 'folio_pago' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>Este folio ya se encuentra registrado junto con una solicitud.</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_acredita_personalidad">Documento que acredita la personalidad juridica</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="acredita_personalidad" id="id_acredita_personalidad">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'acredita_personalidad' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold"  for="id_acredita_inmueble">Documento que acredita la ocupacion legal del inmueble</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="acredita_inmueble" id="id_acredita_inmueble">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'acredita_inmueble' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_licencia_suelo">Licencia de uso de suelo</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="licencia_suelo" id="id_licencia_suelo">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_dictamen_suelo">
+                                    Dictamen constancia de uso de suelo:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="dictamen_suelo" id="id_dictamen_suelo">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_expediente_suelo">
+                                    Expediente constancia de uso de suelo:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="expediente_suelo" id="id_expediente_suelo">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_suelo">
+                                    Fecha de constancia:
+                                </label>
+                                <input type="date" class="form-control col-2" id="id_fecha_suelo" required name="fecha_suelo"
+                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_firma_suelo">
+                                    Nombre de quien firma:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="firma_suelo" id="id_firma_suelo">
+                            </div>
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'licencia_suelo' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_constancia_estructural">Constancia de seguridad estructural</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="constancia_estructural" id="id_constancia_estructural">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_dictamen_estructural">
+                                    Nombre de constancia:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="dictamen_estructural" id="id_dictamen_estructural">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_estructural">
+                                    Fecha de constancia:
+                                </label>
+                                <input type="date" class="form-control col-2" id="id_fecha_estructural" required name="fecha_estructural"
+                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_arqui_dictamen_estructural">
+                                    Nombre del arquitecto:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="arqui_dictamen_estructural" id="id_arqui_dictamen_estructural">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_noCedula_dictamen_estructural">
+                                    No. de Cedula Profesional:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="noCedula_dictamen_estructural" id="id_noCedula_dictamen_estructural">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_DRO_dictamen_estructural">
+                                    Registro de D.R.O. (Directores Responsables de Obra)l:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="DRO_dictamen_estructural" id="id_DRO_dictamen_estructural">
+                            </div>
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'constancia_estructural' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_constancia_proteccion">Constancia de protección civil</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="constancia_proteccion" id="id_constancia_proteccion">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_dictamen_proteccion">
+                                    Folio de dictamen:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="dictamen_proteccion" id="id_dictamen_proteccion">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_dictamen_proteccion">
+                                    Fecha de dictamen:
+                                </label>
+                                <input type="date" class="form-control col-2" id="id_fecha_dictamen_proteccion" required name="fecha_dictamen_proteccion"
+                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_firma_dictamen_proteccion">
+                                    Nombre de quien firma el dictamen:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="firma_dictamen_proteccion" id="id_firma_dictamen_proteccion">
+
+                            </div>
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'constancia_proteccion' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_inife">INIFE</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="inife" id="id_inife">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_folio_inife">
+                                    Folio dictamen de INIFE:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="folio_inife" id="id_folio_inife">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_inife">
+                                    Introduce fecha de INIFE:
+                                </label>
+                                <input type="date" class="form-control col-2" id="id_fecha_inife" required name="fecha_inife"
+                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_firma_inife">
+                                    Nombre de quien firma el dictamen de INIFE:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="firma_inife" id="id_firma_inife">
+                            </div>
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'inife' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_des_instalacion">Descripcion de las instalaciones</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="des_instalacion" id="id_des_instalacion">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'des_instalacion' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_planos">Planos estructurales y arquitectonicos</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="planos" id="id_planos">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'planos' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_biblio">Biblioteca</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="biblio" id="id_biblio">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'biblio' %}
+                                        <div class="col-md-12 mt-2">
+                                            <div class="alert alert-danger w-25">
+                                                <label>{{ error }}</label>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <input type="text" hidden name="id_solicitud" id="id_id_solicitud" value="{{ id_solicitud }}">
+                        <div class="text-center p-3 mt-2">
+                            <button onclick="salir()" class="btn btn-danger">Salir</button>
+                            <button type="submit" class="btn btn-primary">Guardar y continuar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

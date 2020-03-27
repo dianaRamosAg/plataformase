@@ -1,0 +1,78 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Historial Solicitud{% endblock %}
+
+{% block content %}
+
+<nav class=" navbar navbar-expand navbar-light fixed m-2">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
+          </li>
+        </ul>
+    </div>
+    <div class="m-2">
+        <a class="float-right mr-2">{{ user.first_name }} {{ user.last_name }}</a>
+      </div>
+</nav>
+{% if medSup or cInst %}
+<div class="m-2">
+    <a class="btn btn-secondary" href="{% url 'verArchivos' user.id solicitud %}">Ver archivos de esta solicitud</a>
+</div>
+{% else %}
+    <p>No hay archivos subidos.</p>
+{% endif %}
+
+<div class="row">
+    <div class ="col-12 text-center">
+        <h3>Folio:{{solicitud}}</h3>
+    </div>
+
+    <div class="col-8 mx-auto mt-3">
+        <table class="table table-secondary table-bordered table-hover">
+            <tr>
+                <td class="text-center">Fecha</td>
+                <td class="text-center">Descripción</td>
+            </tr>
+
+            {% for element in notificaciones %}
+                <tr>
+                    <td class="text-center">{{element.fechaNotificacion}}</td>
+                    <td class="text-center">{{element.descripcion}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-8 mx-auto mt-3">
+        <table class="table table-secondary table-bordered table-hover">
+            <tr>
+                <td class="text-center">Fecha</td>
+                <td class="text-center">Observaciones</td>
+                <td class="text-center">Departamento</td>
+            </tr>
+
+            {% for element in comentarios %}
+                <tr>
+                    <td class="text-center">{{element.fechaComentario}}</td>
+                    <td class="text-center">{{element.descripcion}}</td>
+                    <td class="text-center">{{element.departamento.nombre}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-4 mx-auto text-center">
+        <a class=" btn btn-secondary" href="../../G">Regresar</a>
+        {% if rechazada == 0 and comentario == '1' %}
+            <a class="ml-3 btn btn-secondary" href="subirArchivos">Subir archivo</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base5.html' %}
+{% block title %}Cambiar permisos{% endblock %}
+   {% block content %}
+   <form action="../actualizarusr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="row m-2">
+            <div class="col-12 text-center"><br>
+                <h2 class="text-center" >Actualización de usuarios</h2>
+                <!-- <p class="text-center">
+                <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</a>.</small>
+                </p> -->
+                <hr>
+            </div>
+        </div>
+        <div class="row m-2 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mx-auto" style="float: left; background-color: lightgray; border-radius: 15px; width: 102%;">
+
+
+            <div class="col-12" style="margin-left: 400px;">
+                
+                <h3>Información de usuario : {{CustomUser.first_name}} {{CustomUser.last_name}} </h3>
+      
+                <br><br>
+
+                <label class="mr-2 " for="id_email">Correo: </label>
+                <input class="form-control" readonly style="width: 50%;"  type="text" name="email"required id="id_email" value="{{CustomUser.username}}"><br>
+                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
+                <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                    <option value="1" selected>Seleccione</option>
+                    <option value="2">Jefe de departamento</option>
+                    <option value="3">Subordinados de departamento</option>
+                    <option value="4">Administrtador de la página</option>
+                </select><br><br>
+                <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
+                <select class="custom-select col-3" name="departamento" id="id_departamento" >
+                {% for entry in departamentos %}
+                    <option value="{{ entry.id }}">{{ entry.nombre }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <br>
+            <div class="m-2 col-12 ">
+                
+            </div>
+            <br><br>
+        <div class="text-center">
+            <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}'">Regresar</button>
+            <button class="btn btn-primary col-2 mx-auto" type="submit">Actualizar</button>
+        </div>
+        <br><br>
+    </div>
+
+    <!--{{ form.as_p }}-->
+</form>
+
+    <script type="text/javascript">
+        function funcion(){
+        departamento();
+        }
+        departamento();
+         function departamento(){
+        var sel = document.getElementById("id_departamento");
+        var lbl = document.getElementById("lbl_departamento");
+        var user = document.getElementById("id_tipo_usuario");
+        if (user.value == '2' || user.value == '3'){
+            sel.style.display = 'inline';
+            lbl.style.display = 'inline';
+        }else{
+            sel.style.display = 'none';
+            lbl.style.display = 'none';
+        }
+    }
+    </script>
+    {% endblock %}
+

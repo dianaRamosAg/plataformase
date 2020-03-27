@@ -1,0 +1,100 @@
+{% extends 'base5.html' %}
+
+{% block title %}Añadir acuerdos{% endblock %}
+
+{% block content %}
+{% if not user.is_authenticated %}
+   <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
+{% else %}
+<div style="text-align:center;">
+    <br><br><br><br>
+    <h2>Estatus de usuarios</h2>
+    <br>
+    <div class="m-5 col-10 mx-auto responsive">
+        <table class="table table-hover table-striped" style="width: 80%; text-align:center; margin: 0 auto;">
+            <thead class="thead-dark">
+                <tr class="bg-primary" >
+                    <th class="" scope="col">Usuario</th>
+                    <th class="" scope="col">Nombre</th>
+                    <th class="" scope="col">Departamento</th>
+                    <th class="" scope="col">Jefe</th>
+                    <th class="" scope="col">Activo</th>
+                    <th class="" scope="col">Tipo de usuario</th>
+                    <th class="" scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for element in usuarios %}
+                <!-- {{ forloop.counter }} -->
+                    <tr onclick="editarUsuario(this.id)" id="row{{forloop.counter}}">
+                        <td class="" id="{{ element.username }}">{{ element.username }}</td>
+                        <td class="">
+                            {{ element.first_name }}
+                            {{ element.last_name }}
+                        </td>
+                        <td class="">
+                            {% if element.departamento_id == 1 %}
+                                Control Escolar
+                            {% endif %}
+                            {% if element.departamento_id == 2 %}
+                                Dirección
+                            {% endif %}
+                            {% if element.departamento_id == 3 %}
+                                Superior
+                            {% endif %}
+                            {% if element.departamento_id == 4 %}
+                                Media Superior
+                            {% endif %}
+                            {% if element.departamento_id == None %}
+                                No aplica
+                            {% endif %}
+                        </td>
+                        <td class="">
+                            <div class="custom-control custom-switch">
+                                {% if element.jefe == '1' %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"checked>
+                                    <label class="custom-control-label" for="customSwitch1">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" >
+                                    <label class="custom-control-label" for="customSwitch1">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="">
+                            <div class="custom-control custom-switch">
+                                {% if element.is_active %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2"checked>
+                                    <label class="custom-control-label" for="customSwitch2">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2" >
+                                    <label class="custom-control-label" for="customSwitch2">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                    <td>
+                            {{ element.tipo_usuario }}
+                    </td>
+                    <td>
+                        <button type="button" data-toggle="modal" href="">Editar</button>
+                           
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a class="btn btn-primary" href="{% url 'menuadmin' %}">Regresar</a>
+</div>
+{% endif %}
+<script>
+    function editarUsuario(usrConsulta){
+        var renglonClickeado = document.getElementById(usrConsulta);
+        var usr = renglonClickeado.children[0].id;
+        console.log("hola");
+        console.log("correo : "+usr);
+        // console.log("correo : "+usr);
+        window.location="editar/"+usr;
+    };
+  </script>
+
+{% endblock %}

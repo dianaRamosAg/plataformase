@@ -1,0 +1,294 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Archivos Solicitud{% endblock %}
+
+{% block content %}
+<div class="text-center">
+<h1 class="mt-3 ">Archivos de la solicitud con folio {{ folio }}</h1>
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        {% if cInst %}
+        <div class="carousel-item active">
+            <div class="text-center">
+            <h3 class="mt-5">Carpeta Institucional</h3>
+            </div>
+            <div name="cInstitucional">
+                <div class="container">  
+                    <div class="row">
+                        {% for archivo in cInst %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Solicitud de RVOE</p>
+                                <button onclick="mostrarPDF('{{ archivo.solicitud.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text" >Comprobante de pago</p>
+                                <button onclick="mostrarPDF('{{ archivo.pago.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Documento que acredita la personalidad juridica</p>
+                                <button onclick="mostrarPDF('{{ archivo.acredita_personalidad.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Documento que acredita la ocupacion legal del inmueble</p>
+                                <button onclick="mostrarPDF('{{ archivo.acredita_inmueble.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Licencia de uso de suelo</p>
+                                <button onclick="mostrarPDF('{{ archivo.licencia_suelo.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Constancia de seguridad estructural</p>
+                                <button onclick="mostrarPDF('{{ archivo.constancia_estructural.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Constancia de proteccion civil</p>
+                                <button onclick="mostrarPDF('{{ archivo.constancia_proteccion.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >INIFE</p>
+                                <button onclick="mostrarPDF('{{ archivo.inife.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Descripcion de las instalaciones</p>
+                                <button onclick="mostrarPDF('{{ archivo.des_instalacion.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Planos estructurales y arquitectonicos</p>
+                                <button onclick="mostrarPDF('{{ archivo.planos.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Biblioteca</p>
+                                <button onclick="mostrarPDF('{{ archivo.biblio.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if cAcad %}
+        <div class="carousel-item">
+            <div class="text-center">
+            <h3 class="mt-5">Carpeta Academica</h3>
+            </div>
+            <div name="cAcademica">
+                <div class="container">  
+                    <div class="row">
+                        {% for archivo in cAcad %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Relación de recursos bibliográficos</p>
+                                <button onclick="mostrarPDF('{{ archivo.rec_bibliograficos.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Relación de recursos didácticos</p>
+                                <button onclick="mostrarPDF('{{ archivo.rec_didacticos.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Talleres</p>
+                                <button onclick="mostrarPDF('{{ archivo.talleres.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Infraestructura de apoyo informático</p>
+                                <button onclick="mostrarPDF('{{ archivo.apoyo_informatico.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Apoyo de comunicaciones</p>
+                                <button onclick="mostrarPDF('{{ archivo.apoyo_comunicaciones.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Personal</p>
+                                <button onclick="mostrarPDF('{{ archivo.personal.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if cCurri %}
+        <div class="carousel-item">
+            <div class="text-center">
+            <h3 class="mt-5">Carpeta Curricular</h3>
+            </div>
+            <div name="cCurricular">
+                <div class="container">  
+                    <div class="row">
+                        {% for archivo in cCurri %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text">Estudio de factibilidad</p>
+                                <button onclick="mostrarPDF('{{ archivo.estudio.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text">Plan de estudios</p>
+                                <button onclick="mostrarPDF('{{ archivo.plan.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text">Mapa curricular</p>
+                                <button onclick="mostrarPDF('{{ archivo.mapa.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text">Programas de estudios</p>
+                                <button onclick="mostrarPDF('{{ archivo.programa.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% if archivo.metodologia %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text">Metodología de modalidad</p>
+                                <button onclick="mostrarPDF('{{ archivo.metodologia.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if archivo.cifrhs %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text">Opinión favorable de CIFRHS</p>
+                                <button onclick="mostrarPDF('{{ archivo.cifrhs.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if archivo.carta %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark  text-center">
+                                <p class="card-text">Carta de intención</p>
+                                <button onclick="mostrarPDF('{{ archivo.carta.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if medSup %}
+        <div class="carousel-item active">
+            <div class="text-center">
+            <h3 class="mt-5">Media  superior</h3>
+            </div>
+            <div name="medSuperior">
+                <div class="container">  
+                    <div class="row">
+                        {% for archivo in medSup %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Formato de solicitud</p>
+                                <button onclick="mostrarPDF('{{ archivo.solicitud.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Recibo de pago</p>
+                                <button onclick="mostrarPDF('{{ archivo.pago.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Identificación oficial con fotografía</p>
+                                <button onclick="mostrarPDF('{{ archivo.identificacion.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Manifiesto de compromiso  de incorporar al personal docente</p>
+                                <button onclick="mostrarPDF('{{ archivo.perDocente.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Instalaciones</p>
+                                <button onclick="mostrarPDF('{{ archivo.instalaciones.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>      
+                        {% if archivo.equipamiento %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">
+                                <p class="card-text" >Tecnología y equipamiento para la opción educativa virtual</p>
+                                <button onclick="mostrarPDF('{{ archivo.equipamiento.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endif %} 
+                        {% if archivo.progEstuio %}
+                        <div class="col-3 mt-1">
+                            <div class="card-body border border-dark text-center">                     
+                                <p class="card-text" >Planes y Programas de Estudio</p>
+                                <button onclick="mostrarPDF('{{ archivo.progEstuio.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                            </div>
+                        </div>
+                        {% endif %} 
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% if not medSup %}
+        <a class="carousel-control-prev text-dark" href="#carouselExampleControls" role="button" data-slide="prev">
+            <div class="bg-primary p-2 d-inline-block">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+            </div>
+        </a>
+        <a class="carousel-control-next text-dark" href="#carouselExampleControls" role="button" data-slide="next">
+            <div class="bg-primary p-2 d-inline-block">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+            </div>
+        </a>
+    {% endif %}
+</div>
+    
+    <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+    
+    <a class="btn btn-secondary m-4" href="./">Regresar</a>
+</div>
+<script>
+    document.getElementById('pdf').style.display = 'none';
+    function mostrarPDF(ruta){
+        document.getElementById('pdf').style.display = 'inline';
+        document.getElementById("pdf").setAttribute("src", ruta);
+    }
+</script>
+{% endblock %}

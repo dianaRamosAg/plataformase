@@ -1,0 +1,145 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Solicitud{% endblock %}
+
+{% block content %}
+<script>
+    function salir(){
+        var opcion = confirm("Podrás continuar con la solicitud actual posteriormente, "+
+                            "pero no se guardarán los documentos que has subido en este apartado. "+
+                            "¿Deseas salir?");
+        if (opcion == true) {
+            window.location.replace("{% url 'inicio' %}");
+        }
+    }
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body" >
+                <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                    <h2 class="cover-heading" style="text-align: center;">Carpeta Académica</h2>
+                    <h4 class="">Solo son validos los archivos PDF</h4>
+                        <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_rec_bibliograficos">Relación de recursos bibliográficos</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="rec_bibliograficos" id="id_rec_bibliograficos">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'rec_bibliograficos' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25 w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_rec_didacticos">Relación de recursos didácticos</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="rec_didacticos" id="id_rec_didacticos">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'rec_didacticos' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25 w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" >
+                            <label class="font-weight-bold" for="id_talleres">Talleres</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="talleres" id="id_talleres">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'talleres' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25 w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_apoyo_informatico">Infraestructura de apoyo informático</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="apoyo_informatico" id="id_apoyo_informatico">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'apoyo_informatico' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25 w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_apoyo_comunicaciones">Apoyo de comunicaciones</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="apoyo_comunicaciones" id="id_apoyo_comunicaciones">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'apoyo_comunicaciones' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" for="id_personal">Personal</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="personal" id="id_personal">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'personal' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <input type="text" hidden name="id_solicitud" id="id_id_solicitud" value="{{ id_solicitud }}">
+
+                        <div class="text-center p-3 mt-2">
+                            <button onclick="salir()" class="btn btn-danger">Salir</button>
+                            <button type="submit" class="btn btn-primary">Finalizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
