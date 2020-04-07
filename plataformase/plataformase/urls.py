@@ -35,7 +35,7 @@ urlpatterns = [
     #urls de app de login
     path('', include('login.urls')),
     #urls de app de usuarios
-    path('inicio/', include('usuarios.urls')),
+    path('inicio/', include('RVOES.urls')),
 
 ]
 

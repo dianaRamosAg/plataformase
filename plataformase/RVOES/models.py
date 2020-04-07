@@ -3,7 +3,7 @@ from .validators import valid_extension
 
 class Departamento(models.Model):
     nombre = models.TextField()
-    """ID= 1: Control Escolar, 2: Dirección, 3: Superior, 4: Media Superior"""
+    """ID= 1: Control Escolar, 2: Dirección, 3: Media Superior, 4: Superior"""
 
 class Solicitud(models.Model):
     fechaRegistro = models.DateField(auto_now_add=False,)#Obtiene la fecha en la que se empezó el proceso de solicitud
@@ -15,7 +15,7 @@ class Solicitud(models.Model):
     customuser = models.ForeignKey('login.CustomUser', on_delete=models.CASCADE,)#Usuario al que le pertenece la solicitud
     completado = models.IntegerField(default='1',)
     """completado: -1 = Cancelada, 0 = Completado, 1 = Institucional, 2 = Curricular,
-    3 = Academica, 4 = Media Superior, 10 = Documentos recibidos, 11 = Termino revisión digital"""
+    3 = Academica, 4 = Media Superior, 10 = Documentos recibidos, 11 = Terminó revisión digital"""
     estatus = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='1')
     """estatus: Define el departamnto en el que se encuentra"""
     noInstrumentoNotarial = models.IntegerField(blank=True, null=True)#Número de instrumento notarial
@@ -36,7 +36,8 @@ class Notificacion(models.Model):
     fechaNotificacion = models.DateField(auto_now_add=True)#Fecha en la que se generó la notificación
     tipo_notificacion = models.CharField(max_length=2, default='C')# H: Historial, C: Comentario, P: Personal administrativo
     #Usuario al que le pertenece la notificación.
-    usuario = models.ForeignKey('login.CustomUser',on_delete=models.CASCADE, blank=True, null=True)
+    usuario = models.ForeignKey('login.CustomUser',
+                                        on_delete=models.CASCADE, blank=True, null=True)
 
 #Archivos para carpeta de Media Superior
 class CMedSuperior(models.Model):
@@ -69,9 +70,12 @@ class CMedSuperior(models.Model):
     folio_inife = models.TextField(blank=True, null=True,)#Folio de dictamen de INIFE
     fecha_inife = models.DateField(blank=True, null=True, auto_now_add=False, )#Fecha de dictamen de INIFE
     firma_inife = models.TextField(blank=True, null=True,)#Nombre de quien firma el dictamen de INIFE
-
+    #Si es virtual
     equipamiento = models.FileField(upload_to='Archivos/MedSuperior', blank=True, null=True, validators=[valid_extension])#Ubicación de archivo de formato no 7 tecnologia y equipamiento para la opción virtual
     progEstuio = models.FileField(upload_to='Archivos/MedSuperior', blank=True, null=True, validators=[valid_extension])#Ubicación de archivo de formato no 8 planes y programas de estudio
+    #Si es del area de la salud
+    cifrhs = models.FileField(upload_to='Archivos/Curricular', validators=[valid_extension], blank=True, null=True)#Ubicación de archivo de opinion favorable de CIFRHS
+    carta = models.FileField(upload_to='Archivos/Curricular', validators=[valid_extension], blank=True, null=True)#Ubicación de archivo de carta de intención
 
     def __str__(self):
         return u'{0}'.format(self.id_solicitud)
@@ -166,7 +170,6 @@ class Acuerdos(models.Model):
     archivo = models.FileField(upload_to='Archivos/Acuerdos',)#Ubicación del arcuerdo
     nivel = models.CharField(max_length=1,)#nivel 1: media superior, nivel 2: superior
 
-
 class NotificacionRegistro(models.Model):
     email = models.TextField(blank=True, null=True)#Mensaje de la notificación
     nombres = models.TextField(blank=True, null=True)#Mensaje de la notificación
@@ -178,5 +181,3 @@ class NotificacionRegistro(models.Model):
     #Usuario al que le pertenece la notificación.
     usuario = models.ForeignKey('login.CustomUser',on_delete=models.CASCADE, blank=True, null=True)
     tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador
-   
-    

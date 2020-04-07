@@ -57,7 +57,7 @@
                     <p class="card-text" >Relación de recursos bibliográficos</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="rec_bibliograficos" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.rec_bibliograficos.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.rec_bibliograficos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -76,7 +76,7 @@
                     <p class="card-text" >Relación de recursos didácticos</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="rec_didacticos" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.rec_didacticos.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.rec_didacticos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -95,7 +95,7 @@
                     <p class="card-text" >Talleres</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="talleres" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.talleres.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.talleres }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -114,7 +114,7 @@
                     <p class="card-text" >Infraestructura de apoyo informático</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="apoyo_informatico" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.apoyo_informatico.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.apoyo_informatico }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -133,7 +133,7 @@
                     <p class="card-text" >Apoyo de comunicaciones</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="apoyo_comunicaciones" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.apoyo_comunicaciones.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.apoyo_comunicaciones }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -152,7 +152,7 @@
                     <p class="card-text" >Personal</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="personal" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.personal.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.personal }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -162,30 +162,77 @@
         {% endfor %}
     </div>
 
-    <div class="col mt-3 mb-3 text-center">
-        <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
-        {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
-            {% if comentarios == "" %}
-                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-            {% else %}
-                {% if comentarioMostrado %}
-                    {% if comentarioNoMostrado %}
-                        <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                    {% else %}
-                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                    {% endif %}
-                {% else %}
-                    <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                {% endif %}
+    <form method="post" action="../../../finProceso/{{ solicitud.id }}/">
+      {% csrf_token %}
+      {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
+
+      <div class="col-5 mt-2 mx-auto">
+          <div class="card-body border border-dark text-center">
+                    <p class="card-text" >Observaciones de la visita a la institución<br></p>
+                    <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
+          </div>
+      </div>
+      <div class="col mt-3 mb-3 text-center">
+          <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+              {% if solicitud.estatus_id == 3 %}
+                  <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
+                  <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
+              {% endif %}
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+      </div>
+
+      {% else %}
+
+      <div class="col mt-3 mb-3 text-center">
+          <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
+          {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
+              {% if comentarios == "" %}
+                  <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+              {% else %}
+                  {% if comentarioMostrado %}
+                      {% if comentarioNoMostrado %}
+                          <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                      {% else %}
+                          <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                      {% endif %}
+                  {% else %}
+                      <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                  {% endif %}
+              {% endif %}
+          {% endif %}
+
+          <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+
+          <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
+          {% if solicitud.completado == 10 %}
+            {% if solicitud.estatus.id == 1 %}
+                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
             {% endif %}
-        {% endif %}
+          {% endif %}
+          <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
+      </div>
 
-        <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+      {% endif %}
 
-        <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
-        <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
-    </div>
+    </form>
+
 </div>
+
+{% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
+<script type="text/javascript">
+  document.getElementById('finProceso2').style.display='none';
+  function cambiarBoton(){
+    var txtObsVisita = document.getElementById("id_observacionesVisita");
+    if(txtObsVisita.value.length==0){
+      document.getElementById('finProceso').style.display='inline';
+      document.getElementById('finProceso2').style.display='none';
+    }else {
+      document.getElementById('finProceso').style.display='none';
+      document.getElementById('finProceso2').style.display='inline';
+    }
+  }
+</script>
+{% endif %}
 
 <script>
     function terminar(estado){
@@ -210,7 +257,8 @@
     document.getElementById('pdf').style.display = 'none';
     function mostrarPDF(ruta){
         document.getElementById('pdf').style.display = 'inline';
-        document.getElementById("pdf").setAttribute("src", ruta+"#toolbar=0&navpanes=0&scrollbar=0");
+        //document.getElementById("pdf").setAttribute("src", "" + ruta);
+        document.getElementById("pdf").setAttribute("src",  "{{MEDIA_URL}}"  + ruta+"#toolbar=0&navpanes=0&scrollbar=0");
     }
 </script>
 {% endblock %}

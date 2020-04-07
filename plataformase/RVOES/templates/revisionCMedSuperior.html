@@ -65,7 +65,7 @@
                         <textarea placeholder="Comentario..." id="solicitud" name="descripcion"></textarea>
                     {% endif %}
 
-                    <button onclick="mostrarPDF('{{ archivo.solicitud.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.solicitud }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -88,7 +88,7 @@
                         <textarea placeholder="Comentario..." id="pago" name="descripcion"></textarea>
                     {% endif %}
 
-                    <button onclick="mostrarPDF('{{ archivo.pago.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.pago }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -111,7 +111,7 @@
                     <textarea placeholder="Comentario..." id="identificacion" name="descripcion"></textarea>
                     {% endif %}
 
-                    <button onclick="mostrarPDF('{{ archivo.identificacion.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.identificacion }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -134,7 +134,7 @@
                         <textarea placeholder="Comentario..." id="perDocente" name="descripcion"></textarea>
                     {% endif %}
 
-                    <button onclick="mostrarPDF('{{ archivo.perDocente.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.perDocente }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -167,7 +167,7 @@
                         <textarea placeholder="Comentario..." id="instalaciones" name="descripcion" ></textarea>
                     {% endif %}
 
-                    <button onclick="mostrarPDF('{{ archivo.instalaciones.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.instalaciones }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -192,7 +192,7 @@
                         <textarea placeholder="Comentario..." id="equipamiento" name="descripcion"></textarea>
                     {% endif %}
 
-                    <button onclick="mostrarPDF('{{ archivo.equipamiento.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.equipamiento }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -225,7 +225,7 @@
                         <textarea placeholder="Comentario..." id="progEstudio" name="descripcion" ></textarea>
                     {% endif %}
                     {% if archivo.progEstuio %}
-                        <button onclick="mostrarPDF('{{ archivo.progEstuio.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                        <button onclick="mostrarPDF('{{ archivo.progEstuio }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% endif %}
                     {% if noHaPasadoPorTodasLasAreas %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -233,6 +233,58 @@
                 </form>
             </div>
         </div>
+
+                {% if archivo.cifrhs %}
+                <div class="col-3 mt-1">
+                    <div class="card-body border border-dark text-center">
+                        <form method="post" id="1_8" action="../comentarios/1_8/medSuperior">
+                            {% csrf_token %}
+                            {% if "1_8" in comentarios and noHaPasadoPorTodasLasAreas %}
+                                <p class="card-text text-danger" >Opinión favorable de CIFRHS<br>
+                                        <small>*Este archivo tiene observaciones</small>
+                                </p>
+                            {% else %}
+                                <p class="card-text" >Opinión favorable de CIFRHS</p>
+                            {% endif %}
+
+                            {% if noHaPasadoPorTodasLasAreas %}
+                                <textarea placeholder="Comentario..." id="cifrhs" name="descripcion"></textarea>
+                            {% endif %}
+
+                            <button onclick="mostrarPDF('{{ archivo.cifrhs }}')" type="button" class="btn btn-secondary">Ver</button>
+                            {% if noHaPasadoPorTodasLasAreas %}
+                                <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if archivo.carta %}
+                <div class="col-3 mt-1">
+                    <div class="card-body border border-dark text-center">
+                        <form method="post" id="1_9" action="../comentarios/1_9/medSuperior">
+                            {% csrf_token %}
+                            {% if "1_9" in comentarios and noHaPasadoPorTodasLasAreas %}
+                                <p class="card-text text-danger" >Carta de intención<br>
+                                        <small>*Este archivo tiene observaciones</small>
+                                </p>
+                            {% else %}
+                                <p class="card-text" >Carta de intención</p>
+                            {% endif %}
+
+                            {% if noHaPasadoPorTodasLasAreas %}
+                                <textarea placeholder="Comentario..." id="carta" name="descripcion"></textarea>
+                            {% endif %}
+
+                            <button onclick="mostrarPDF('{{ archivo.carta }}')" type="button" class="btn btn-secondary">Ver</button>
+                            {% if noHaPasadoPorTodasLasAreas %}
+                                <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
 
         <table class="table table-striped mt-3">
             <tr class="text-center thead-light">
@@ -262,8 +314,32 @@
         <embed src="" type="application/pdf" id="pdf" name="pdf" width="100%" height="600px" />
 
     </div>
+
+    <form method="post" action="../../../finProceso/{{ solicitud.id }}/">
+    {% csrf_token %}
+    {% if solicitud.estatus_id == 4 and solicitud.completado == 10 %}
+    <div class="col-5 mt-1 mx-auto">
+        <div class="card-body border border-dark text-center">
+                  <p class="card-text" >Observaciones de la visita a la institución<br></p>
+                  <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
+        </div>
+    </div>
     <div class="col mt-3 mb-3 text-center">
         <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+            {% if solicitud.estatus.id == 1 or solicitud.estatus.id == 2 %}
+                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+            {% endif %}
+            {% if solicitud.estatus_id == 4 %}
+                <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
+                <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
+            {% endif %}
+          <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+    </div>
+
+    {% else %}
+
+    <div class="col mt-3 mb-3 text-center">
+          <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
         {% if noHaPasadoPorTodasLasAreas and estadoComentario == '0' or estadoComentario == '2' %}
             {% if comentarios == "" %}
                 <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
@@ -280,16 +356,34 @@
             {% endif %}
         {% endif %}
         {% if solicitud.completado == 10 %}
-            {% if solicitud.estatus.id == 1 %}
+            {% if solicitud.estatus.id == 1 or solicitud.estatus.id == 2 %}
                 <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
             {% endif %}
         {% endif %}
-        {% if solicitud.estatus_id == 2 and solicitud.completado == 10 %}
-            <a class="btn btn-primary" href="{% url 'finProceso' solicitud.id %}">Se realizó revisión</a>
-        {% endif %}
-        <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+          <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
     </div>
+
+    {% endif %}
+
+    </form>
+
 </div>
+
+{% if solicitud.estatus_id == 4 and solicitud.completado == 10 %}
+<script type="text/javascript">
+  document.getElementById('finProceso2').style.display='none';
+  function cambiarBoton(){
+    var txtObsVisita = document.getElementById("id_observacionesVisita");
+    if(txtObsVisita.value.length==0){
+      document.getElementById('finProceso').style.display='inline';
+      document.getElementById('finProceso2').style.display='none';
+    }else {
+      document.getElementById('finProceso').style.display='none';
+      document.getElementById('finProceso2').style.display='inline';
+    }
+  }
+</script>
+{% endif %}
 
 <script type="text/javascript">
 
@@ -316,13 +410,12 @@
                 }
                 break
         }
-
     }
 
     document.getElementById('pdf').style.display = 'none';
     function mostrarPDF(ruta){
         document.getElementById('pdf').style.display = 'inline';
-        document.getElementById("pdf").setAttribute("src", ruta+"#toolbar=0&navpanes=0&scrollbar=0");
+        document.getElementById("pdf").setAttribute("src",  "{{MEDIA_URL}}" + ruta+"#toolbar=0&navpanes=0&scrollbar=0");
 
         document.getElementById("pdf").oncontextmenu = function(){return false}
 

@@ -20,7 +20,7 @@
                 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
                     <h2 class="cover-heading" style="text-align: center;">Solicitud Media Superior</h2>
                     <h4 class="">Solo son validos los archivos PDF</h4>
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data" id="formulario">
                         {% csrf_token %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_solicitud">Formato de solicitud</label>
@@ -160,6 +160,42 @@
                                                 <label>{{ error }}</label>
                                             </div>
                                         </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" id="div_salud">
+                            <label class="font-weight-bold" for="id_cifrhs">Opinión favorable de CIFRHS</label>
+                            <input type="file" class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'cifrhs' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" id="div_salud2">
+                            <label class="font-weight-bold" for="id_carta">Carta de intención</label>
+                            <input type="file" class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                        </div>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    {% if field.name == 'carta' %}
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }}</label>
+                                        </div>
+                                    </div>
                                     {% endif %}
                                 {% endfor %}
                             {% endfor %}
@@ -321,10 +357,24 @@
                         {% endif %}
                         <input type="text" hidden name="id_solicitud" id="id_id_solicitud" value="{{ id_solicitud }}">
 
-                        <div class="text-center p-3 mt-2">
+                        <div class="text-center p-3 mt-2" id="divBotones">
                             <button onclick="salir()" class="btn btn-danger">Salir</button>
                             <button type="submit" class="btn btn-primary">Finalizar</button>
+                            <!--button onclick="cargandoArchivos()" type="submit" class="btn btn-primary">Finalizar</button-->
                         </div>
+                        <!--div class="col-5 d-flex justify-content-center mt-3 mx-auto">
+                            <div class="card" id="divMsj">
+                                <div class="card-body">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <h4 class="card-title">Subiendo archivos</h4>
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <p class="card-text">
+                                        Se estan subiendo sus documentos, la duración de esto puede variar según el tamaño de sus documentos.
+                                    </p>
+                                </div>
+                            </div>
+                        </div-->
                     </form>
                 </div>
             </div>
@@ -333,19 +383,134 @@
 </div>
 
 <script>
+
+    /*document.getElementById('divMsj').style.display = 'none';
+    function cargandoArchivos(){
+      if (validacion()){
+        document.getElementById('divBotones').style.display='none';
+        document.getElementById('divMsj').style.display='inline';
+      }
+    }
+
+    function validacion(){
+      //Archivo de solicitud
+      if( document.getElementById("id_solicitud").files.length == 0 ){
+        return false;
+      }
+      //Archivo de pago
+      if( document.getElementById("id_pago").files.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_folio_pago").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_monto_pago").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_fecha_pago").value.length == 0 ){
+        return false;
+      }
+      //Identificación oficial
+      if( document.getElementById("id_identificacion").files.length == 0 ){
+        return false;
+      }
+      //Personal docente
+      if( document.getElementById("id_perDocente").files.length == 0 ){
+        return false;
+      }
+      //Tecnología y equipamiento
+      if( document.getElementById("id_equipamiento").files.length == 0 ){
+        return false;
+      }
+      //CIFRHS
+      if( document.getElementById("id_cifrhs").files.length == 0 ){
+        return false;
+      }
+      //Carta de intención
+      if( document.getElementById("id_carta").files.length == 0 ){
+        return false;
+      }
+      //Formato No. 6
+      if( document.getElementById("id_instalaciones").files.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_dictamen_suelo").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_expediente_suelo").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_fecha_suelo").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_firma_suelo").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_dictamen_estructural").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_fecha_estructural").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_arqui_dictamen_estructural").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_noCedula_dictamen_estructural").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_DRO_dictamen_estructural").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_dictamen_estructural").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_dictamen_proteccion").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_fecha_dictamen_proteccion").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_firma_dictamen_proteccion").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_fecha_dictamen_proteccion").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_folio_inife").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_fecha_inife").value.length == 0 ){
+        return false;
+      }
+      if( document.getElementById("id_firma_inife").value.length == 0 ){
+        return false;
+      }
+      return true;
+    }*/
+
     document.getElementById('id_progEstuio').style.display = 'none';
 
-    if ({{ user.tipo_persona }} == '1'){
+    if ({{ user.tipo_persona }} == 1){
         document.getElementById('lblidentificacion').innerHTML= 'Identificación oficial con fotografía';
     }else{
         document.getElementById('lblidentificacion').innerHTML= 'Acta constitutiva inscrita en el Registro Público de la Propiedad';
     }
 
-    if ({{ virtual }} == '1'){
+    if ({{ virtual }} == '2' && {{ mod }} == '3'){
         document.getElementById('div_virtual').style.display = 'inline';
         document.getElementById("id_equipamiento").setAttribute("required", "required");
     }else{
         document.getElementById('div_virtual').style.display = 'none';
+    }
+
+    if ({{ salud }} == '1'){
+        document.getElementById('div_salud').style.display = 'inline';
+        document.getElementById('div_salud2').style.display = 'inline';
+        document.getElementById("id_cifrhs").setAttribute("required", "required");
+        document.getElementById("id_carta").setAttribute("required", "required");
+    }else{
+        document.getElementById('div_salud').style.display = 'none';
+        document.getElementById('div_salud2').style.display = 'none';
     }
 
     function mostrarProgEstudio(){

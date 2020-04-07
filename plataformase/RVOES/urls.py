@@ -18,7 +18,6 @@ urlpatterns = [
     path('estadoSolicitud/<usuario>/<solicitud>', views.estatus, name='estado'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/', views.historial, name='historial'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/archivos', views.verArchivos,name='verArchivos'),
-    #va a jalar
     path('estadoSolicitud/<usuario>/H/<solicitud>/subirArchivos/', views.subirArchivos, name='subirArchivos'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/subirArchivos/terminar/',
          views.terminarSubArchivos, name='terminarSubArchivos'),
@@ -26,7 +25,7 @@ urlpatterns = [
     path('notificaciones/', views.notificacionUsuario, name='notificacionUsuario'),
     path('hitorialNotificaciones/', views.historialNotificacionesUsuario, name='hitorialNotificacionUsuario'),
     #
-    # Rutas de usuario Administrador
+    # Rutas de usuario personal del departamento
     path('admin/', views.administrador, name='admin'),
     path('admin/historialNotificaciones/',views.historialNotificacionesAdmin, name='hitorialNotificacionAdmin'),
     path('admin/<solicitud>', views.administradorSolicitud, name='adminSolicitud'),
@@ -38,12 +37,11 @@ urlpatterns = [
     path('admin/archivos/<solicitud>/medSuperior/', views.revisionCMedSuperior, name='revMedSuperior'),
     path('admin/archivos/<solicitud>/comentarios/mostrar/<carpeta>', views.comentariosMostrar, name='comentariosSolicitudMostrar'),
     path('admin/archivos/<solicitud>/comentarios/eliminar/<idArchivo>/<carpeta>', views.comentariosEliminar, name='comentariosSolicitudEliminar'),
-    path('admin/archivos/<solicitud>/comentarios/<idArchivo>/<carpeta>', views.comentariosSolicitud, name='comentariosSolicitud'),    
+    path('admin/archivos/<solicitud>/comentarios/<idArchivo>/<carpeta>', views.comentariosSolicitud, name='comentariosSolicitud'),
     path('admin/archivos/<solicitud>/terminado', views.comentariosTerminado, name='comentariosSolicitudTerminado'),
     path('admin/archivos/<solicitud>/entregoDocumentos', views.entregoDocumentosFisicos, name='entregoDocumentos'),
     path('admin/historialActividades/', views.historialActividades, name='historialActivi'),
-    path('admin/finProceso/<solicitud>', views.finProceso, name='finProceso'),
+    path('admin/finProceso/<solicitud>/', views.finProceso, name='finProceso'),
     #path('admin/verpdf/', views.verpdf, name='verpdf'),
     path('generate/pdf/<id>', views.Pdf.as_view(), name='generate_pdf'),
 ]
-
