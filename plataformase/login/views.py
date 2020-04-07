@@ -252,13 +252,7 @@ def actualizarusr(request):
 
 
 def ActUsr(request,email):
-    """Esta vista permite a los administradores del sistema añadir nuevos usuarios.
-
-    Parámetros
-    -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
-    Retorna
-    -:return render: Regresa la vista en la cual el usuario podrá añadir nuevos usuarios.
+    """ Actualizar/quitar departameto en caso de que se cambie a administrador
     """
     
     if request.user.tipo_usuario == '4':

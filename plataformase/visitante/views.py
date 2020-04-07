@@ -27,6 +27,8 @@ def menuvisitante(request):
 
 def cuentavisitante(request):
     return render(request,'cuentavisitante.html')
+def perfiluser(request):
+    return render(request,'perfiluser.html')
 
 def visit(request):
     try:
@@ -196,3 +198,27 @@ def cancelarsolicitud(request,email2,email):
     # vs=VisitanteSC.objects.get(email = email2)
     VisitanteSC.objects.filter(email=email2,leida='0').update(leida='1')
     return redirect('notificacionsc')
+
+#Actualizar datos de los usuarios
+def actualizarperfilusr(request):
+
+    if request.method == 'POST':
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
+        email = request.POST["email"]
+        curp_rfc = request.POST["curp_rfc"]
+        calle = request.POST["calle"]
+        #password = make_password(request.POST["password2"])
+        noexterior = request.POST["noexterior"]
+        nointerior = request.POST["nointerior"]
+        codigopostal = request.POST["codigopostal"]
+        municipio = request.POST["municipio"]
+        colonia = request.POST["colonia"]
+        celular = request.POST["celular"]
+        
+        CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
+        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name)
+        return redirect('perfiluser') 
+       
+            
+      
