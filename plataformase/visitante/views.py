@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from usuarios.models import Departamento
+from RVOES.models import Departamento
 from login.models import CustomUser
-from usuarios.models import NotificacionRegistro
+from RVOES.models import NotificacionRegistro
 from .models import VisitanteSC
 from django.contrib.auth.hashers import make_password
 
@@ -120,19 +120,19 @@ def regVisit(request):
         return redirect('solicitudenviada') #mandar pagina con mensaje de esperar
     # else:
     #     return redirect('solicitudcuenta')
-         
+
 def modal(request):
     return render(request,'modal.html')
 
 def notificacionsc(request):
     visitantes = VisitanteSC.objects.filter(leida='0')
     return render(request, 'notificacionsc.html', {'visitantes': visitantes })
-            
+
 def validar(request,email):
     vs=VisitanteSC.objects.get(email = email)
     return render(request,'validar.html',{'VisitanteSC':vs})
 
-    
+
 def regUser(request):
     """Registra a los usuarios en la base de datos.
 

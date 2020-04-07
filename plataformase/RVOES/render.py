@@ -4,11 +4,11 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from login.models import CustomUser
-from .models import Solicitud, Departamento, CMedSuperior, CInstitucional
+from .models import Solicitud, Departamento, CMedSuperior, CInstitucional, Notificacion
 from django.utils import timezone
 
 #pass_db = "12345"
-pass_db = "sistemas1"
+pass_db = "ismael"
 
 def link_callback(uri, rel):
     sUrl = settings.STATIC_URL      # Typically /static/
@@ -33,7 +33,7 @@ def link_callback(uri, rel):
 
 def render_pdf_planes_prog_estud(request, id):
     """Genera el archivo PDF de Planes y Programas de Estudio
-    
+
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param request: Contiene el id de la solicitud a la que se le quiere generar el PDF.
@@ -53,9 +53,10 @@ def render_pdf_planes_prog_estud(request, id):
     #Obtenemos el nombre del departamento
     departamento = Departamento.objects.filter(id=solicitud.estatus.id)
     #Obtiene la fecha de cuando la solicitud salió de dirección
-    fecha = obtenerFecha(id)
+    fecha = obtenerFecha(id)[0]
     #Si la solicitud es de media superior
     if solicitud.nivel == '1':
+        nivel = "Media Superior"
         #Obtenemos los datos de la carpeta de media superior
         datos = CMedSuperior.objects.get(id_solicitud=id)
         #Obenemos la modalidad y su opción
@@ -78,6 +79,7 @@ def render_pdf_planes_prog_estud(request, id):
             if solicitud.opcion == '2':
                 opc = 'VIRTUAL'
     else:
+        nivel = "Superior"
         #Obtenemos los datos de la carpeta institucional
         datos = CInstitucional.objects.get(id_solicitud=id)
         #Obenemos la modalidad y su opción
@@ -102,6 +104,7 @@ def render_pdf_planes_prog_estud(request, id):
             if solicitud.opcion == '3':
                 opc = 'EN LINEA / VIRUAL'
     #Creamos una variable donde se guardarán todas la variables
+    #usuario =solicitud.customuser.id
     context = {
         'today': today,
         'solicitud': solicitud,
@@ -111,7 +114,8 @@ def render_pdf_planes_prog_estud(request, id):
         'datos': datos,
         'mod': mod,
         'opc': opc,
-        'request': request
+        #'usuario': usuario,
+        'nivel': nivel,
     }
     #Cree un objeto de respuesta Django y especifique content_type como pdf
     response = HttpResponse(content_type='application/pdf')
@@ -129,23 +133,31 @@ def render_pdf_planes_prog_estud(request, id):
 
 #Obtener fecha de cuando la solicitud salio de dirección
 def obtenerFecha(id_solicitud):
-    import psycopg2
-    try:
-        connection = psycopg2.connect(user="postgres", password=pass_db, host="localhost", port="5432",
-                                      database="RVOES")
-        cursor = connection.cursor()
-        select = "SELECT \"fechaNotificacion\" " \
-            "FROM usuarios_notificacion " \
-            "WHERE solicitud_id = %s " \
-            "AND descripcion = 'Una solicitud pasó a ser revisada por tú área' " \
-            "AND usuario_id IN " \
-                "(SELECT id " \
-                "FROM login_customuser " \
-                "WHERE departamento_id = 2 AND jefe = '1');"
-        cursor.execute(select, (id_solicitud,))
-        record = cursor.fetchone()
-        cursor.close()
-        connection.close()
-        return record[0]
-    except (Exception, psycopg2.Error) as error:
-        print("Error al obtener datos con el método obtenerFecha", error)
+    nivel = Solicitud.objects.values_list('nivel').filter(id=id_solicitud)[0]
+    id_jefe = CustomUser.objects.values_list('id').filter(jefe='1', departamento=2)[0]
+    record = Notificacion.objects.values_list('fechaNotificacion').filter(solicitud_id=id_solicitud,
+                                                                        descripcion = "Una solicitud pasó a ser revisada por tú área",
+                                                                        usuario_id = id_jefe)[0]
+    return record
+    # import psycopg2
+    # try:
+    #     connection = psycopg2.connect(user="postgres", password=pass_db, host="localhost", port="5432",
+    #                                   database="RVOES")
+    #     cursor = connection.cursor()
+    #     select = "SELECT \"fechaNotificacion\" " \
+    #         "FROM usuarios_notificacion " \
+    #         "WHERE solicitud_id = %s " \
+    #         "AND descripcion = 'Una solicitud pasó a ser revisada por tú área' " \
+    #         "AND usuario_id IN " \
+    #             "(SELECT id " \
+    #             "FROM login_customuser " \
+    #             "WHERE departamento_id = 2 AND jefe = '1');"
+    #     cursor.execute(select, (id_solicitud,))
+    #     record = cursor.fetchone()
+    #     cursor.close()
+    #     connection.close()
+    #     solicitud = Solicitud.objects.
+    #     record = CustomUser.objects.values_list('id').
+    #     return record[0]
+    # except (Exception, psycopg2.Error) as error:
+    #     print("Error al obtener datos con el método obtenerFecha", error)

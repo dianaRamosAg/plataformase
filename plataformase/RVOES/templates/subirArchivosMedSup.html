@@ -297,6 +297,44 @@
                         </div>
                         {% endif %}
 
+                        {% if "1_8" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="id_8">
+                            <label class="font-weight-bold" >Opinión favorable de CIFRHS</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_8" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_9" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="id_9">
+                            <label class="font-weight-bold" >Carta de intención</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_9" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
                         <div class="form-group custom-file p-3 m-3 text-center">
                             <button class="btn btn-secondary">Actualizar archivos</button>
                         </div>
