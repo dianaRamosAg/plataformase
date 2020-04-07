@@ -32,14 +32,10 @@
 						<nav>
 							<ul class="nav">
 								<li><a href="{% url 'index'%}">Inicio</a></li>
-								<li><a href="#">Servicios</a>
-									<ul>
-										<li><a href="">SIG</a></li>
-										<li><a href="">RVOE</a></li>
-										<li><a href="">AETYS</a></li>
-									</ul></li>
+								
 								<li><a href="#">Bienvenido! Institución, {{ user.first_name }} {{ user.last_name }} </a>
 									<ul>
+										<li><a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a></li>
 										<li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
 									</ul></li>
 							</ul>

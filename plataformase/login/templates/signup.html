@@ -29,7 +29,6 @@
                                 </select>
                              </div>
 
-<<<<<<< HEAD
                         <div class="form-group">
                             <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
                             <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
@@ -74,78 +73,32 @@
                                 <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior"><br>
                                 
                                 <label class="ml-2 " for="id_municipio">Municipio:</label>
-                                <input class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" ><br>
-                
-=======
-                             <div class="form-group">
-                                 <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
-                                 <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
-                                     <option value="1" selected>Persona física</option>
-                                     <option value="2">Persona moral</option>
-                                 </select><br>
-                                 <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
-                                 <select class="custom-select col-3" name="departamento" id="id_departamento" onchange="verificarJefes()">
-                                     {% for entry in departamentos %}
-                                        <option value="{{ entry.id }}">{{ entry.nombre }}</option>
-                                     {% endfor %}
-                                 </select>
-                             </div>
-                             <div class="m-3 mx-auto">
-                                 <div class="alert alert-warning text-center" role="alert" id="alertJefe">
-                                     <strong>¡Cuidado!</strong> Ya existe un jefe para este departamento, si desea reemplazarlo hacer caso omiso a esta advertencia.
-                                 </div>
-                             </div>
-
-                             <div class="m-2 mx-auto">
-                                 {% if not 1 in jefes %}
-                                     <div class="alert alert-warning text-center" role="alert" id="jefes">
-                                         <strong>¡Advertencia!</strong> No existe un jefe para el departamento de Control Escolar.
-                                     </div>
-                                 {% endif %}
-                                 {% if not 2 in jefes %}
-                                     <div class="alert alert-warning text-center" role="alert" id="jefes">
-                                         <strong>¡Advertencia!</strong> No existe un jefe para el departamento de Dirección.
-                                     </div>
-                                 {% endif %}
-                                 {% if not 3 in jefes %}
-                                    <div class="alert alert-warning text-center" role="alert" id="jefes">
-                                        <strong>¡Advertencia!</strong> No existe un jefe para el departamento de Superior.
-                                    </div>
-                                {% endif %}
-                                {% if not 4 in jefes %}
-                                    <div class="alert alert-warning text-center" role="alert" id="jefes">
-                                        <strong>¡Advertencia!</strong> No existe un jefe para el departamento de Media Superior.
-                                    </div>
-                                {% endif %}
->>>>>>> 3a6bbdcd9a33ca4895df5469bd10cbab678fe228
+                                <select  class="form-control ml-2 col-1" name="municipio" id="id_municipio" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="Acaponeta"> Acaponeta </option>
+                                    <option value="Ahucatlán"> Ahucatlán </option>
+                                    <option value="Amatlán de caña"> Amatlán de cañas </option>
+                                    <option value="Bahía de Banderas"> Bahía de Banderas </option>
+                                    <option value="Compostela"> Compostela </option>
+                                    <option value="Del Nayar"> Del Nayar </option>
+                                    <option value="Huajicori"> Huajicori </option>
+                                    <option value="Ixtlán del Rio"> Ixtlán del Rio </option>
+                                    <option value="Jala"> Jala </option>
+                                    <option value="La Yesca">La Yesca</option>
+                                    <option value="Rosamorada">Rosamorada</option>
+                                    <option value="Ruíz">Ruíz</option>
+                                    <option value="San Blas">San Blas</option>
+                                    <option value="San Pedro Lagunillas">San Pedro Lagunillas</option>
+                                    <option value="Santa María del Oro">Santa María del Oro</option>
+                                    <option value="Santiago Ixcuintla">Santiago Ixcuintla</option>
+                                    <option value="Tecuala">Tecuala</option>
+                                    <option value="Tepic">Tepic</option>
+                                    <option value="Tuxpan">Tuxpan</option>
+                                    <option value="Xalisco"> Xalisco </option>
+                                </select>
                             </div>
 
-                            <div class="form-group" style="text-align: left;">
-                                <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                                <input type="text" pattern ="[a-zA-Z]{1,40}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
-                                <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                                <input class="form-control ml-1 col-2" pattern ="[a-zA-Z]{1,40}" type="text" name="last_name" required id="id_last_name">
-                                <label class="ml-2 mr-2" for="id_celular">Celular:</label>
-                                <input class="form-control col-2" required type="tel" pattern="[0-9]{10}"name="celular" id="id_celular">
-                                <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
-                                <input class="form-control ml-1 col-3" type="text" minlength="10" maxlength="18" name="curp_rfc" required id="id_curp_rfc">
-                                <button type="button" class="btn btn-info"  onclick="location.href='http://consultas.curp.gob.mx'" id="acurp" target="_blank">Consulta CURP</button>
-                                <br> <br>
-                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
-                                    <label class="ml-2" for="id_calle">Calle:</label>
-                                    <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle"  ><br>
-
-                                    <label class="ml-2" for="id_codigopostal">Código postal:</label>
-                                    <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"><br>
-
-                                </div>
-                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
-                                    <label class="ml-2" for="id_nointerior">No. Interior:</label>
-                                    <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="0"><br>
-
-                                    <label class="ml-2 " for="id_municipio">Municipio:</label>
-                                    <input class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" ><br>
-                                </div>
+                           
 
                                 <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
 

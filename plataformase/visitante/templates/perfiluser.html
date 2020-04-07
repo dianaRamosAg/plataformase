@@ -36,16 +36,7 @@
             <ul class="nav" >
         
                 <li><a href="{% url 'menuadmin'%}" style="color: white;">Regresar</a>
-                   
-                    <li class="nav-item dropdown ml-auto">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/user.png' %}"/></a>
-                        <div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
-                            <a href="{% url 'notificacionsc'%}" class="dropdown-item">Solicitudes de cuenta</a>
-                            <a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
-                        </div>
-                    </li>
+                  
                     
             </ul>
         </nav><!-- / nav -->
@@ -173,16 +164,27 @@
 		                                        <div class="form-group label-floating">
 		                                            <label class="control-label">Municipio</label>
 	                                            	<select  class="form-control" name="municipio">
-														<option disabled="" selected=""></option>
-	                                                	<option value="Afghanistan"> Acaponeta </option>
-	                                                	<option value="Albania"> Ahucatlan </option>
-	                                                	<option value="Algeria"> Amatlán de cañas </option>
-	                                                	<option value="American Samoa"> American Samoa </option>
-	                                                	<option value="Andorra"> Andorra </option>
-	                                                	<option value="Angola"> Angola </option>
-	                                                	<option value="Anguilla"> Anguilla </option>
-	                                                	<option value="Antarctica"> Antarctica </option>
-	                                                	<option value="...">...</option>
+														<option disabled="" selected="">Seleccione</option>
+	                                                	<option value="Acaponeta"> Acaponeta </option>
+	                                                	<option value="Ahucatlán"> Ahucatlán </option>
+	                                                	<option value="Amatlán de caña"> Amatlán de cañas </option>
+	                                                	<option value="Bahía de Banderas"> Bahía de Banderas </option>
+														<option value="Compostela"> Compostela </option>
+														<option value="Del Nayar"> Del Nayar </option>
+														<option value="Huajicori"> Huajicori </option>
+														<option value="Ixtlán del Rio"> Ixtlán del Rio </option>
+	                                                	<option value="Jala"> Jala </option>
+														<option value="La Yesca">La Yesca</option>
+														<option value="Rosamorada">Rosamorada</option>
+														<option value="Ruíz">Ruíz</option>
+														<option value="San Blas">San Blas</option>
+														<option value="San Pedro Lagunillas">San Pedro Lagunillas</option>
+														<option value="Santa María del Oro">Santa María del Oro</option>
+														<option value="Santiago Ixcuintla">Santiago Ixcuintla</option>
+														<option value="Tecuala">Tecuala</option>
+														<option value="Tepic">Tepic</option>
+														<option value="Tuxpan">Tuxpan</option>
+														<option value="Xalisco"> Xalisco </option>
 	                                            	</select>
 		                                        </div>
 		                                    </div>

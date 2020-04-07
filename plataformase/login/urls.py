@@ -16,7 +16,7 @@ urlpatterns = [
     path('root/', inicioRoot, name='root'),
     path('root/usuarios', usuarios, name='usuarios'),
     path('signupv/', visitante, name='signupv'),
-    path('signupvr/', Regvisitante, name='signupvr'),
+    # path('signupvr/', Regvisitante, name='signupvr'),
     path('root/editar/<email>/',ActUsr, name='editar'),
 ]
  
