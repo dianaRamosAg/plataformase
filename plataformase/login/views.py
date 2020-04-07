@@ -7,7 +7,7 @@ from django.views.generic.base import View
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from .forms import AcuerdosForms
-from usuarios.models import Departamento, Acuerdos
+from RVOES.models import Departamento, Acuerdos
 from django.contrib.auth.hashers import make_password
 
 
@@ -207,7 +207,7 @@ def Regvisitante(request):
             user = User.objects.get(username='uan@gmail.com')
             user.set_password('123')
             user.save()
-            
+
     return redirect('usuarios')
 
 
@@ -242,13 +242,13 @@ def actualizarusr(request):
             departamento = int(request.POST["departamento"])
             if tipo_usuario=='3' or tipo_usuario=='2':
                  CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento)
-                 return redirect('usuarios') 
+                 return redirect('usuarios')
             if tipo_usuario=='4':
                 CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=None,jefe='0')
-                return redirect('usuarios') 
-            
+                return redirect('usuarios')
+
         else:
-                return redirect('menuadmin') 
+                return redirect('menuadmin')
 
 
 def ActUsr(request,email):
@@ -260,7 +260,7 @@ def ActUsr(request,email):
     Retorna
     -:return render: Regresa la vista en la cual el usuario podrá añadir nuevos usuarios.
     """
-    
+
     if request.user.tipo_usuario == '4':
         us = CustomUser.objects.get(username = email)
         #Obtiene todos los departamentos registrados

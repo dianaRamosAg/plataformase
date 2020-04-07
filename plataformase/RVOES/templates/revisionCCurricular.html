@@ -57,7 +57,7 @@
                     <p class="card-text" >Estudio de factibilidad</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="estudio" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.estudio.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.estudio }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -76,7 +76,7 @@
                     <p class="card-text" >Plan de estudios</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="plan" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.plan.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.plan }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -95,7 +95,7 @@
                     <p class="card-text" >Mapa curricular</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="mapa" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.mapa.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.mapa }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -114,7 +114,7 @@
                     <p class="card-text" >Programas de estudios</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="programa" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.programa.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.programa }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -134,7 +134,7 @@
                     <p class="card-text" >Metodología de modalidad</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="metodologia" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.metodologia.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.metodologia }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -156,7 +156,7 @@
                     <p class="card-text" >Opinión favorable de CIFRHS</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="cifrhs" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.cifrhs.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.cifrhs }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -178,7 +178,7 @@
                     <p class="card-text" >Carta de intención</p>
                     {% endif %}
                     <textarea placeholder="Comentario..." id="carta" name="descripcion"></textarea>
-                    <button onclick="mostrarPDF('{{ archivo.carta.url }}')" type="button" class="btn btn-secondary">Ver</button>
+                    <button onclick="mostrarPDF('{{ archivo.carta }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
@@ -206,7 +206,8 @@
     document.getElementById('pdf').style.display = 'none';
     function mostrarPDF(ruta){
         document.getElementById('pdf').style.display = 'inline';
-        document.getElementById("pdf").setAttribute("src", ruta+"#toolbar=0&navpanes=0&scrollbar=0");
+        //document.getElementById("pdf").setAttribute("src", "" + ruta);
+        document.getElementById("pdf").setAttribute("src",  "{{MEDIA_URL}}"  + ruta+"#toolbar=0&navpanes=0&scrollbar=0");
     }
 </script>
 

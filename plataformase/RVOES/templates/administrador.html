@@ -59,21 +59,29 @@
                                     <td>
                                         {% if element.completado == 10 %}
                                             {% if element.estatus.id == 1 %}
-                                                En espera de documentos
+                                                En espera de documentos<br>(Control Escolar)
                                             {% else %}
-                                                En espera de visita de revisión
+                                                {% if element.estatus.id == 2 %}
+                                                    En espera de documentos<br>(Dirección)
+                                                {% else %}
+                                                    En espera de visita de revisión<br>({% if element.nivel == '1' %}Media {% endif %}Superior)
+                                                {% endif %}
                                             {% endif %}
                                         {% else %}
                                             {% if element.completado == 11 %}
                                                 Proceso digital completo
                                             {% else %}
-                                                {{element.estatus.nombre}}
+                                                {% if element.completado == -1 %}
+                                                    Rechazada
+                                                {% else %}
+                                                    {{element.estatus.nombre}}
+                                                {% endif %}
                                             {% endif %}
                                         {% endif %}
                                     </td>
                                     <td>{{element.fechaRegistro}}</td>
                                     <td>{% if element.estatus.id == 3 or element.estatus.id == 4 or element.completado == 10 or element.completado == 11 %}
-                                        <a href="{% url 'generate_pdf' element.id %}">Descargar</a>
+                                        <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
                                         {% endif %}
                                     </td>
                                 </tr>
