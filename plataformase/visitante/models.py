@@ -19,5 +19,5 @@ class VisitanteSC(models.Model):
     tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador
     tipo_persona = models.CharField(max_length=1, default='1')#1: Física, 2:Moral
     #Departamento al que pertenece el usuario (El modelo esta en aplicación usuarios)
-    departamento = models.ForeignKey("usuarios.Departamento", on_delete=models.CASCADE, blank=True, null=True)
+    departamento = models.ForeignKey("RVOES.Departamento", on_delete=models.CASCADE, blank=True, null=True)
     jefe = models.CharField(max_length=1, default='0', blank=True, null=True)#Establece si es jefe o no (0: no, 1: si)

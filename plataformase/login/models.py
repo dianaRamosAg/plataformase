@@ -18,21 +18,21 @@ class CustomUser(AbstractUser):
     tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador
     tipo_persona = models.CharField(max_length=1, default='1')#1: Física, 2:Moral
     #Departamento al que pertenece el usuario (El modelo esta en aplicación usuarios)
-    departamento = models.ForeignKey("usuarios.Departamento", on_delete=models.CASCADE, blank=True, null=True)
+    departamento = models.ForeignKey("RVOES.Departamento", on_delete=models.CASCADE, blank=True, null=True)
     jefe = models.CharField(max_length=1, default='0', blank=True, null=True)#Establece si es jefe o no (0: no, 1: si)
     registro = models.ForeignKey("CustomUser", on_delete=models.CASCADE, blank=True, null=True)#Usuario que registro a este usuario
 
     #Campo que funciona por defecto como email
     USERNAME_FIELD = 'email'
-    #Campos requeridos para la creación de usuario (principalmente para el usuario root) 
+    #Campos requeridos para la creación de usuario (principalmente para el usuario root)
     REQUIRED_FIELDS = [ 'username','password']
 
     def __str__(self):
         """Este método define como se muestra por defecto el usuario.
-        
+
         Parámetros
         -:param self: Instancia de CustomUser
-        
+
         Retorna
         -:return: Retorna el nombre y apellido el usuario
         """

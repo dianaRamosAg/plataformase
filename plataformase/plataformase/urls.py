@@ -23,19 +23,20 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('se/', include('visitante.urls')),
-   # path('login/', include('login.urls')),
-   # path('', include('visitante.urls')),
+    #path('login/', include('login.urls')),
+    #path('', include('visitante.urls')),
     #path('visitante/menu', include('visitante.urls')),
     #path('', views.index, name='index'),
     #Para saber que tipo de usuario entro al sistema
     #path('accounts/profile/', TemplateView.as_view(template_name='perfil.html'), name='perfil'),
     #path('accounts/profile/administrador', TemplateView.as_view(template_name='administrador.html'), name='administrador'),
+   
     #panel de django
     path('admin/', admin.site.urls),
     #urls de app de login
     path('', include('login.urls')),
     #urls de app de usuarios
-    path('inicio/', include('usuarios.urls')),
+    path('inicio/', include('RVOES.urls')),
 
 ]
 

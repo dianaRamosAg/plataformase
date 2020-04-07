@@ -1,0 +1,349 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Actualización de archivos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card-body" >
+                <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                    <form method="post" enctype="multipart/form-data" action="terminar/">
+                        {% csrf_token %}
+                        <div class="col-12 text-center mt-2 mb-1">
+                            <h3>Folio: {{solicitud.id}} -  Institución: {{solicitud.customuser.first_name}}
+                                {{solicitud.customuser.last_name}}</h3>
+                            <h3> {{ solicitud.nombreSolicitud }}</h3>
+                        </div>
+                        <div class="col-12 text-center mb-3">
+                            <h3>
+                                    Modalidad:
+                                    {%if solicitud.modalidad == '2' %}
+                                        Escolarizada
+                                    {%endif%}
+                                    {%if solicitud.modalidad == '1' %}
+                                        Mixta
+                                    {%endif%}
+                                    {%if solicitud.modalidad == '3' %}
+                                        No escolarizada
+                                    {%endif%}
+                                    - Nivel: Media Superior
+                            </h3>
+                            <br>
+                            <h2>Favor de subir nuevamente los siguientes archivos corregidos:</h2>
+                            <h4 class="">Solo son validos los archivos PDF</h4>
+                        </div>
+
+                        {% if "1_1" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" >Formato de solicitud</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_1" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_2" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2">
+                            <label class="font-weight-bold" >Recibo de pago</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_folio_pago">
+                                    Folio de pago:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="folio_pago" id="id_folio_pago">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_monto_pago">
+                                    Monto de pago:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="monto_pago" id="id_monto_pago">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_pago">
+                                    Fecha en que se realizó el pago:
+                                </label>
+                                <input type="date" id="id_fecha_pago" required name="fecha_pago"
+                                       value="2018-07-22" max="2019-11-21">
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_2" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_3" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="1_3">
+                            <label class="font-weight-bold" >Identificación oficial con fotografía</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_3" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_4" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="id_4">
+                            <label class="font-weight-bold" >Manifiesto de compromiso  de incorporar al personal docente</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="perDocente" id="id_perDocente">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_4" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_5" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="1_5">
+                            <label class="font-weight-bold" >Instalaciones</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="instalaciones" id="id_instalaciones">
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_dictamen_suelo">
+                                    Dictamen constancia de uso de suelo:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="dictamen_suelo" id="id_dictamen_suelo">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_expediente_suelo">
+                                    Expediente constancia de uso de suelo:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="expediente_suelo" id="id_expediente_suelo">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_suelo">
+                                    Fecha de constancia:
+                                </label>
+                                <input type="date" id="id_fecha_suelo" required name="fecha_suelo"
+                                       value="2018-07-22" max="2019-11-21">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_firma_suelo">
+                                    Nombre de quien firma:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="firma_suelo" id="id_firma_suelo">
+                            </div>
+                            <p class="m-1 mt-3">Introduce los siguientes datos de la constancia de seguridad estructural:</p>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_dictamen_estructural">
+                                    Nombre de constancia:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="dictamen_estructural" id="id_dictamen_estructural">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_estructural">
+                                    Fecha de constancia:
+                                </label>
+                                <input type="date" id="id_fecha_estructural" required name="fecha_estructural"
+                                       value="2018-07-22" max="2019-11-21">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_arqui_dictamen_estructural">
+                                    Nombre del arquitecto:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="arqui_dictamen_estructural" id="id_arqui_dictamen_estructural">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_DRO_dictamen_estructural">
+                                    No. de Cedula Profesional:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="noCedula_dictamen_estructural" id="id_noCedula_dictamen_estructural">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_DRO_dictamen_estructural">
+                                    Registro de D.R.O. (Directores Responsables de Obra)l:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="DRO_dictamen_estructural" id="id_DRO_dictamen_estructural">
+                            </div>
+                            <p class="m-1 mt-3">Introduce los siguientes datos del dictamen de protección civil:</p>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_dictamen_proteccion">
+                                    Folio de dictamen:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="dictamen_proteccion" id="id_dictamen_proteccion">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_dictamen_proteccion">
+                                    Fecha de dictamen:
+                                </label>
+                                <input type="date" id="id_fecha_dictamen_proteccion" required name="fecha_dictamen_proteccion"
+                                       value="2018-07-22" max="2019-11-21">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_firma_dictamen_proteccion">
+                                    Nombre de quien firma el dictamen:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="firma_dictamen_proteccion" id="id_firma_dictamen_proteccion">
+
+                            </div>
+                            <p class="m-1 mt-3">Introduce los siguientes datos de INIFE:</p>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_folio_inife">
+                                    Folio dictamen de INIFE:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="folio_inife" id="id_folio_inife">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_inife">
+                                    Introduce fecha de INIFE:
+                                </label>
+                                <input type="date" id="id_fecha_inife" required name="fecha_inife"
+                                       value="2018-07-22" max="2019-11-21">
+                            </div>
+                            <div class="row">
+                                <label class="font-weight-normal m-2 pl-4" for="id_firma_inife">
+                                    Nombre de quien firma el dictamen de INIFE:
+                                </label>
+                                <input type="text" class="form-control form-control-sm w-25 p-2" required
+                                       name="firma_inife" id="id_firma_inife">
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_5" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_6" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="1_6">
+                            <label class="card-text" >Tecnología y equipamiento para la opción educativa virtual</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="equipamiento" id="id_equipamiento">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_6" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_7" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="1_7">
+                            <label class="font-weight-bold"  >Planes y Programas de Estudio<br></label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="progEstuio" id="id_progEstuio">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_7" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_8" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="id_8">
+                            <label class="font-weight-bold" >Opinión favorable de CIFRHS</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_8" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if "1_9" in comentarios %}
+                        <div class="form-group custom-file p-3 mt-2" id="id_9">
+                            <label class="font-weight-bold" >Carta de intención</label>
+                            <input type="file" required class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alert-warning w-50 w-50">
+                                    <label>Los comentarios de este documeto son:</label>
+                                    <ul class="list-group">
+                                    {% for element in coment %}
+                                        {% if element.archivo == "1_9" %}
+                                            <li class="list-group-item">{{ element.descripcion }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 m-3 text-center">
+                            <button class="btn btn-secondary">Actualizar archivos</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

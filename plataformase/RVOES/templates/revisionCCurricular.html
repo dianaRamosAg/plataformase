@@ -1,0 +1,214 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Administración{% endblock %}
+
+{% block content %}
+<nav class=" navbar navbar-expand navbar-light fixed m-2">
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link ml-4" href="{% url 'notificacionAdmin' %}">Notificaciones {{total}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
+            </li>
+        </ul>
+    </div>
+    <div class="m-2">
+        <a class="text-dark"> {{ NombreDepartamento }} </a>
+        <a class="float-right mr-2"> - {{ user.first_name }} {{ user.last_name }}</a>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+
+        <div class="col-12 text-center mt-2 mb-1">
+            <h3>Folio: {{solicitud.id}} -  Institución: {{solicitud.customuser.first_name}} {{solicitud.customuser.last_name}}</h3>
+        </div>
+        <div class="col-12 text-center mb-2">
+            <h3>
+                Modalidad:
+                {%if solicitud.modalidad == '2' %}
+                    Escolarizada
+                {%endif%}
+                {%if solicitud.modalidad == '1' %}
+                    Mixta
+                {%endif%}
+                {%if solicitud.modalidad == '3' %}
+                    No escolarizada
+                {%endif%}
+                - Nivel: Superior
+            </h3>
+        </div>
+        <div class="col-12 text-center mb-1">
+            <h3>Carpeta Curricular</h3>
+        </div>
+
+        {% for archivo in archivos %}
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_1" action="../comentarios/3_1/curricular">
+                    {% csrf_token %}
+                    {% if "3_1" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Estudio de factibilidad<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Estudio de factibilidad</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="estudio" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.estudio }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_2" action="../comentarios/3_2/curricular">
+                    {% csrf_token %}
+                    {% if "3_2" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Plan de estudios<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Plan de estudios</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="plan" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.plan }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_3" action="../comentarios/3_3/curricular">
+                    {% csrf_token %}
+                    {% if "3_3" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Mapa curricular<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Mapa curricular</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="mapa" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.mapa }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_4" action="../comentarios/3_4/curricular">
+                    {% csrf_token %}
+                    {% if "3_4" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Programas de estudios<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Programas de estudios</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="programa" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.programa }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+
+        {% if archivo.metodologia %}
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_5" action="../comentarios/3_5/curricular">
+                    {% csrf_token %}
+                    {% if "3_5" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Metodología de modalidad<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Metodología de modalidad</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="metodologia" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.metodologia }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if archivo.cifrhs %}
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_6" action="../comentarios/3_6/curricular">
+                    {% csrf_token %}
+                    {% if "3_6" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Opinión favorable de CIFRHS<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Opinión favorable de CIFRHS</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="cifrhs" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.cifrhs }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if archivo.carta %}
+
+        <div class="col-3 mt-1">
+            <div class="card-body border border-dark text-center">
+                <form method="post" id="3_7" action="../comentarios/3_7/curricular">
+                    {% csrf_token %}
+                    {% if "3_7" in comentarios and solicitud.completado != 10 %}
+                    <p class="card-text text-danger" >Carta de intención<br>
+                        <small>*Este archivo tiene observaciones</small></p>
+                    {% else %}
+                    <p class="card-text" >Carta de intención</p>
+                    {% endif %}
+                    <textarea placeholder="Comentario..." id="carta" name="descripcion"></textarea>
+                    <button onclick="mostrarPDF('{{ archivo.carta }}')" type="button" class="btn btn-secondary">Ver</button>
+                    {% if solicitud.completado != 10 %}
+                        <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+        <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+
+    </div>
+    <div class="col mt-3 mb-3 text-center">
+        <a class="btn btn-info" href="../comentarios/mostrar/curricular">Ver Comentarios</a>
+        <a class="btn btn-secondary" href="../academica">Siguiente Carpeta</a>
+        {% if NombreDepartamento == "Control Escolar" %}
+            <a class="btn btn-secondary" href="../institucional">Anterior Carpeta</a>
+        {% endif %}
+        <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('pdf').style.display = 'none';
+    function mostrarPDF(ruta){
+        document.getElementById('pdf').style.display = 'inline';
+        //document.getElementById("pdf").setAttribute("src", "" + ruta);
+        document.getElementById("pdf").setAttribute("src",  "{{MEDIA_URL}}"  + ruta+"#toolbar=0&navpanes=0&scrollbar=0");
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+*.pyc
+*~
+__pycache__
+/migrations
+/plataformase/Archivos/
+/plataformase/login/migrations/
+/plataformase/login/__pycache__/
+/plataformase/usuarios/migrations
+/plataformase/RVOES/__pycache__
+/plataformase/virenv
+.DS_Store
