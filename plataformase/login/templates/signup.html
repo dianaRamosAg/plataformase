@@ -7,7 +7,7 @@
 
 <div class="container-fluid">
     <div class="container">
-        <h2 class="text-center" id="title">Registro de usuarios</h2>
+        <h2 class="text-center">Registro de usuarios</h2>
         <p class="text-center">
             <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</small>
         </p>
@@ -34,26 +34,26 @@
                             <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
                                 <option value="1" selected>Persona física</option>
                                 <option value="2">Persona moral</option>
-                            </select>
+                            </select><br>
                             <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
                             <select class="custom-select col-3" name="departamento" id="id_departamento" onchange="verificarJefes()">
                             {% for entry in departamentos %}
                                 <option value="{{ entry.id }}">{{ entry.nombre }}</option>
                             {% endfor %}
                             </select>
-                            </div>
-                        <div class="m-3 mx-auto">
-                            <div class="alert alert-warning text-center" role="alert" id="alertJefe">
-                                <strong>¡Cuidado!</strong> Ya existe un jefe para este departamento, si desea reemplazarlo hacer caso omiso a esta advertencia.
-                            </div>
-                        </div>
+                            </div><br>
+                        <div class="ml-1">
+                            <div class="alert alert-warning" role="alert" id="alertJefe">
+                            <small><strong> ¡Cuidado! </strong>Ya existe un jefe para este departamento,<br><br> si desea reemplazarlo hacer caso omiso a esta advertencia.
+                            </small> </div>
+                        </div><br>
 
 
                         <div class="form-group" style="text-align: left;">
                             <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                            <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚ\s]{1,40}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
+                            <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,100}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
                             <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                            <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
+                            <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
                             <label class="ml-2 mr-2" for="id_celular">Celular:</label>
                             <input class="form-control col-2" required type="tel" pattern="[0-9]{10}"name="celular" id="id_celular">
                             <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>

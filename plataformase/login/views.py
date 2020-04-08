@@ -93,7 +93,7 @@ def regUser(request):
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
                             date_joined=datetime.datetime.now())
             usr.save()
-            return redirect('menuadmin')
+            return redirect('usuarios')
         else:
             return redirect('signup')
     else:
