@@ -24,7 +24,6 @@ urlpatterns = [
 
     path('notificaciones/', views.notificacionUsuario, name='notificacionUsuario'),
     path('hitorialNotificaciones/', views.historialNotificacionesUsuario, name='hitorialNotificacionUsuario'),
-    #
     # Rutas de usuario personal del departamento
     path('admin/', views.administrador, name='admin'),
     path('admin/historialNotificaciones/',views.historialNotificacionesAdmin, name='hitorialNotificacionAdmin'),

@@ -35,7 +35,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #urls de app de login
     path('', include('login.urls')),
-    #urls de app de usuarios
+    #urls de app de TBC
+    path('TBC/', include('TBC.urls')),
+    #urls de app de RVOES
     path('inicio/', include('RVOES.urls')),
 
 ]
