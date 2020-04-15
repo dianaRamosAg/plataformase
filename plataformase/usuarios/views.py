@@ -1645,3 +1645,7 @@ def getUltSolicitud(id_usuario):
         return record[0]
     except (Exception, psycopg2.Error) as error:
         print("Error al obtener datos con el método getUltSolicitud", error)
+
+
+
+

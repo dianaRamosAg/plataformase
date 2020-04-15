@@ -36,6 +36,8 @@ urlpatterns = [
     path('', include('login.urls')),
     #urls de app de usuarios
     path('inicio/', include('usuarios.urls')),
+    #urls de app de TBC
+    path('TBC/', include('TBC.urls'))
 
 ]
 
