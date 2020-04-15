@@ -1,4 +1,4 @@
-{% extends 'base3.html' %}  
+{% extends 'base3.html' %}
 {% block content %}
 {% if user.is_authenticated %}
 <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'perfil' %}">
@@ -9,10 +9,10 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4 col-xs-8">
-					<a href="#"> <img src="../static/img/se.png" width="200" height="90"/></a>					
+					<a href="#"> <img src="../static/img/se.png" width="200" height="90"/></a>
 				</div><!--/.col-sm-2-->
 				<div class="col-sm-8 col-xs-4">
-<!------------------------------------------NAVEGADOR PRINCIPAL----------------------------------->		
+<!------------------------------------------NAVEGADOR PRINCIPAL----------------------------------->
 <nav class="header-navigation" style="float: right;">
 	<ul id="menu-menu-principal" class="clearfix"><li id="menu-item-55" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-55"><a href="{% url 'login' %}" aria-current="page">Inicio</a></li>
 		<li id="menu-item-56" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-56">
@@ -23,17 +23,18 @@
 			<a href="#contact-us">Contacto</a></li>
 		<li id="menu-item-139" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59">
 			<a href="{% url 'login'%}" >Iniciar sesión</a></li>
-	</ul>	
+	</ul>
 </nav>
 </div>
-			</div>
+</div>
+
 <div col-sm-12 >
 <div class=" col-sm-5  " style="float:left;margin-right:100px; margin-top: 60px; background-color:  rgba(255, 255, 255, 0.8) ;  border-radius: 3px" id="principal">
 	<h3 align="center" style="color: rgb(70, 87, 180);">SSEMSSICYT</h3>
 	<div class="section-description" ><span style="color: #000000" >
-		<p align="center">Plataforma de unificación de sistemas digitales, <br>Localización de instituciones,generación de turnos de RVOE ,autorización de exámenes a título y sinodales.</p></span>
+		<p align="center">Plataforma de unificación de sistemas digitales, <br>Localización de instituciones,generación de turnos de RVOE, autorización de exámenes a título y sinodales.</p></span>
 				</div>
-</div>	
+</div>
 
  <div class="container2 col-sm-7 " style="float:right;margin-bottom: 42px;">
 	 <div class="d-flex justify-content-center h-100">
@@ -48,7 +49,7 @@
 						 <div class="input-group-prepend">
 							 <span style="color:white">Correo electrónico</span>
 						 </div>
-						 <input type="text" class="form-control" name="username" id="id_username" required class="input" value="" size="5" autocapitalize="off" >	
+						 <input type="text" class="form-control" name="username" id="id_username" required class="input" value="" size="5" autocapitalize="off" >
 					 </div>
 					 <div class="input-group form-group">
 						 <div class="input-group-prepend">
@@ -61,13 +62,15 @@
 								 </button>
 							 </span>
 						 </div>
-					 
+
 					 <div class="form-group">
 						 <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info btn-lg btn-block" value="Acceder">Acceder </button>
 						 </div>
+
 					 {% if form.errors %}
 					 {% for field in form %}
 						 {% for error in field.errors %}
+						 <p>{{error}}</p>
 							 <div class="alert alert-danger">
 								 <label>Por favor ingrese un nombre de usuario y contraseña correctos.</label>
 								 <!--p>Considere que ambos campos son sensibles al uso de mayúsculas.</p-->
@@ -75,6 +78,7 @@
 						 {% endfor %}
 					 {% endfor %}
 					 {% for error in form.non_field_errors %}
+					 <p>{{error}}</p>
 						 <div class="alert alert-danger">
 							 <label>Por favor ingrese un nombre de usuario y contraseña correctos.</label>
 							 <!--p>Considere que ambos campos son sensibles al uso de mayúsculas.</p-->
@@ -83,7 +87,7 @@
 					 {% endif %}
 				 </form>
 			 </div>
-		 
+
 			 <div class="card-footer">
 				 <div class="d-flex justify-content-center links">
 					 <a href="{% url 'menuvisitante'%}" class="visit" style="color: white;">Ingresar como visitante</a>
@@ -91,37 +95,23 @@
 				 <div class="d-flex justify-content-center">
 					 <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
 				 </div>
-				 
+
 			 </div>
 			</div>
-	
+
 			</div><!--/.col-sm-10-->
 		</div><!--/.row-->
 	</div><!--/.container-->
-
-
-		
-		
-		
 			</div>
 		</div>
 	</div>
-	
-
 	</div><!--/.top-header-->
-		
-
 	<br><br>
 </header><!--/#header-->
+
 {% endif %}
 {% endblock %}
 
 
-
-
-
-
-
-				
 </body>
 </html>

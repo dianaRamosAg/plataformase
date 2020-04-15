@@ -7,26 +7,26 @@
 
 <div class="container-fluid">
     <div class="container">
-        <h2 class="text-center" id="title">Registro de usuarios</h2>
-         <p class="text-center">
+        <h2 class="text-center">Registro de usuarios</h2>
+        <p class="text-center">
             <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</small>
         </p>
-         <hr>
+        <hr>
         <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-5">
-                 <form action="../signupr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
-                    {% csrf_token %}
-                    <fieldset>							
-                        <p class="text-uppercase pull-center">Información de usuario</p>	
-                         <div class="form-group">
-                            <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
-                            <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
-                                <option value="1" selected>Institución</option>
-                                <option value="2">Jefe de departamento</option>
-                                <option value="3">Subordinados de departamento</option>
-                                <option value="4">Administrtador de la página</option>
-                            </select>
+            <form action="../signupr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+                {% csrf_token %}
+                <div class="col-md-12">
+                    <div class="col-md-5">
+                        <fieldset>
+                            <p class="text-uppercase pull-center">Información de usuario</p>
+                            <div class="form-group">
+                                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
+                                <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                                    <option value="1" selected>Institución</option>
+                                    <option value="2">Jefe de departamento</option>
+                                    <option value="3">Subordinados de departamento</option>
+                                    <option value="4">Administrtador de la página</option>
+                                </select>
                              </div>
 
                         <div class="form-group">
@@ -34,26 +34,26 @@
                             <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
                                 <option value="1" selected>Persona física</option>
                                 <option value="2">Persona moral</option>
-                            </select>
+                            </select><br>
                             <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
                             <select class="custom-select col-3" name="departamento" id="id_departamento" onchange="verificarJefes()">
                             {% for entry in departamentos %}
                                 <option value="{{ entry.id }}">{{ entry.nombre }}</option>
                             {% endfor %}
                             </select>
-                            </div>
-                        <div class="m-3 mx-auto">
-                            <div class="alert alert-warning text-center" role="alert" id="alertJefe">
-                                <strong>¡Cuidado!</strong> Ya existe un jefe para este departamento, si desea reemplazarlo hacer caso omiso a esta advertencia.
-                            </div>
-                        </div>
+                            </div><br>
+                        <div class="ml-1">
+                            <div class="alert alert-warning" role="alert" id="alertJefe">
+                            <small><strong> ¡Cuidado! </strong>Ya existe un jefe para este departamento,<br><br> si desea reemplazarlo hacer caso omiso a esta advertencia.
+                            </small> </div>
+                        </div><br>
 
 
                         <div class="form-group" style="text-align: left;">
                             <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                            <input type="text" pattern ="[a-zA-Z]{1,40}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
+                            <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,100}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
                             <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                            <input class="form-control ml-1 col-2" pattern ="[a-zA-Z]{1,40}" type="text" name="last_name" required id="id_last_name">
+                            <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
                             <label class="ml-2 mr-2" for="id_celular">Celular:</label>
                             <input class="form-control col-2" required type="tel" pattern="[0-9]{10}"name="celular" id="id_celular">
                             <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
@@ -73,83 +73,93 @@
                                 <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior"><br>
                                 
                                 <label class="ml-2 " for="id_municipio">Municipio:</label>
-                                <input class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" ><br>
-                
+                                <select  class="form-control ml-2 col-1" name="municipio" id="id_municipio" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="Acaponeta"> Acaponeta </option>
+                                    <option value="Ahucatlán"> Ahucatlán </option>
+                                    <option value="Amatlán de caña"> Amatlán de cañas </option>
+                                    <option value="Bahía de Banderas"> Bahía de Banderas </option>
+                                    <option value="Compostela"> Compostela </option>
+                                    <option value="Del Nayar"> Del Nayar </option>
+                                    <option value="Huajicori"> Huajicori </option>
+                                    <option value="Ixtlán del Rio"> Ixtlán del Rio </option>
+                                    <option value="Jala"> Jala </option>
+                                    <option value="La Yesca">La Yesca</option>
+                                    <option value="Rosamorada">Rosamorada</option>
+                                    <option value="Ruíz">Ruíz</option>
+                                    <option value="San Blas">San Blas</option>
+                                    <option value="San Pedro Lagunillas">San Pedro Lagunillas</option>
+                                    <option value="Santa María del Oro">Santa María del Oro</option>
+                                    <option value="Santiago Ixcuintla">Santiago Ixcuintla</option>
+                                    <option value="Tecuala">Tecuala</option>
+                                    <option value="Tepic">Tepic</option>
+                                    <option value="Tuxpan">Tuxpan</option>
+                                    <option value="Xalisco"> Xalisco </option>
+                                </select>
                             </div>
-                
-                            <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
-                                
-                                <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                                <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" ><br>
-                               
-                                <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
-                                <input class="form-control col-2" required type="text" name="colonia" id="id_colonia" ><br>
+
+                           
+
+                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
+
+                                    <label class="ml-2" for="id_noexterior">No. Exterior:</label>
+                                    <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0" ><br>
+
+                                    <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
+                                    <input class="form-control col-2" required type="text" name="colonia" id="id_colonia" ><br>
+                                </div>
                             </div>
-                        </div>
-                    </fieldset>
-                </div>
+                        </fieldset>
+                    </div>
                     <div class="col-md-2">
                         <!-------null------>
                     </div>
                     <div class="col-md-5" style="float: right;">
-                    <fieldset>							
-                        <p class="text-uppercase"> Información de inicio de sesión </p>	
-                             
-                        <div class="form-group" style="text-align: left;">
-                            <div class="container-fluid form-group row " style="width: 100%; float:right;">
-                                <input type="text" name="username" required id="id_username" hidden>
-                            <br>
-                            <label style="text-align: left;"> Correo electronico:</label>
-                                <input class="form-control col"  type="text" name="email"required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
-                                <br>
-                                <label style="text-align: left;"> Contraseña:</label>
+                        <fieldset>
+                            <p class="text-uppercase"> Información de inicio de sesión </p>
+
+                            <div class="form-group" style="text-align: left;">
+                                <div class="container-fluid form-group row " style="width: 100%; float:right;">
+                                    <input type="text" name="username" required id="id_username" hidden>
+                                    <br>
+                                    <label style="text-align: left;"> Correo electronico:</label>
+                                    <input class="form-control col"  type="text" name="email"required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                    <br>
+                                    <label style="text-align: left;"> Contraseña:</label>
                                     <input class="form-control col" type="password" name="password1" required id="id_password1" minlength="8">
                                     <small id="passwordHelpBlock" class="form-text text-muted" align="justify" ><br>
                                         Su contraseña no puede ser muy similar a su información personal,debe contener 8-20 caracteres,
                                         no puede ser de uso común y no puede ser enteramente numérica.
                                     </small><br>
-                                <br>
+                                    <br>
                                     <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" required id="id_password2" placeholder="Confirmar contraseña">
-                            </div>
-                            <div class="col-md-12 mt-2">
-                                {% if form.errors %}
-                                    {% for field in form %}
-                                        {% for error in field.errors %}
-                                            {% if field.name == 'username' %}
-                                            {% else %}
-                                                <div class="alert alert-danger">
-                                                    <label>{{ error }}</label>
-                                                </div>
-                                            {% endif %}
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    {% if form.errors %}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                {% if field.name == 'username' %}
+                                                {% else %}
+                                                    <div class="alert alert-danger">
+                                                        <label>{{ error }}</label>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         {% endfor %}
-                                    {% endfor %}
-                                {% endif %}
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
-                            <button class="btn btn-primary col-2 mx-auto" type="submit">Registrarse</button>
-                        </div>
-                
+                            <div class="text-center">
+                                <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
+                                <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar</button>
+                            </div>
+                         </fieldset>
                     </div>
-                        </div>
-                             
-                     </fieldset>
-                    </div>
-                </form>
                 </div>
+            </form>
         </div>
     </div>
-
 </div>
-
-
-
-
-
-
-
-
 
 
 <script type="text/javascript">
@@ -162,7 +172,8 @@
         var per = document.getElementById('id_tipo_persona');
         if (per.value == '2'){
             document.getElementById('id_last_name').style.display = 'none';
-            document.getElementById("id_last_name").setAttribute("required", "false");
+            document.getElementById("id_last_name").removeAttribute("required");
+//            document.getElementById("id_last_name").setAttribute("required", "false");
             ap = document.getElementById('id_last_name').value;
             document.getElementById("id_last_name").setAttribute("value", " ");
             document.getElementById('lblapellidos').style.display = 'none';

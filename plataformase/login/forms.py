@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
-from usuarios.models import Acuerdos
+from RVOES.models import Acuerdos
 
 
 class CustomUserCreationForm(UserCreationForm):

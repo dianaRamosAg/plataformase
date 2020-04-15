@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="container">
-        <h3 class="text-center" id="title">Información del solicitante '{{VisitanteSC.first_name}} {{VisitanteSC.last_name}}'</h3>
+        <h3 class="text-center" >Información del solicitante '{{VisitanteSC.first_name}} {{VisitanteSC.last_name}}'</h3>
          <p class="text-center">
             <small id="passwordHelpInline" class="text-muted">Valide la siguiente información</small>
         </p>
@@ -115,105 +115,6 @@
 </div>
 
     </div>
-    <!-- <div class="container-fluid">
-        <div class="row m-2">
-            <div class="col-12 text-center"><br>
-                <h2 class="text-center" >Información de usuario {{VisitanteSC.first_name}} {{VisitanteSC.last_name}}</h2>
-                <p class="text-center">
-                <small id="passwordHelpInline" class="text-muted">Valide la información</a>.</small>
-                </p>
-                <hr>
-            </div>
-        </div>
-        <div class="row m-2 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 mx-auto" style="float: left;">
-            <div class="col-12 text-center mt-2">
-                <h3>Información de usuario</h3>
-            </div>
-
-            <div class="m-2 col-12 ">
-                <br><br><br>
-                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
-                <input name="tipo_usuario" value="{{VisitanteSC.tipo_usuario}}" id="id_tipo_usuario"> 
-            </div>
-            <br>
-            <div class="m-2 col-12 ">
-                <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
-                <input name="tipo_persona" id="id_tipo_persona" value="{{VisitanteSC.tipo_persona}}">
-
-                <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
-                <input name="departamento" id="id_departamento" value="{{VisitanteSC.departamento_id}}">
-                
-            </div>
-
-            <div class="col-12 m-3  row d-flex ">
-                <br>
-                <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombres:</label>
-                <input class="form-control ml-1 col-2" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}">
-
-                <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                <input class="form-control ml-1 col-2" type="text" name="last_name" required id="id_last_name" value="{{VisitanteSC.last_name}}">
-
-                <label class="ml-2 mr-2" for="id_celular">Celular:</label>
-                <input class="form-control col-2" required type="text" name="celular" id="id_celular" value="{{VisitanteSC.celular}}"><br>
-
-                <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
-                <input class="form-control ml-1 col-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{VisitanteSC.curp_rfc}}">
-               </div>
-
-            <br>
-            <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
-                <label class="ml-2" for="id_calle">Calle:</label>
-                <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle" placeholder="Calle" value="{{VisitanteSC.calle}}"><br>
-
-                <label class="ml-2" for="id_codigopostal">Código postal:</label>
-                <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"value="{{VisitanteSC.codigopostal}}"><br>
-           
-            </div>
-             <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
-                <label class="ml-2" for="id_nointerior">No. Interior:</label>
-                <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="{{VisitanteSC.nointerior}}"><br>
-                
-                <label class="ml-2 " for="id_municipio">Municipio:</label>
-                <input class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" value="{{VisitanteSC.municipio}}"><br>
-
-            </div>
-
-            <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
-                
-                <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="{{VisitanteSC.noexterior}}"><br>
-               
-                <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
-                <input class="form-control col-2" required type="text" name="colonia" id="id_colonia" value="{{VisitanteSC.colonia}}"><br>
-            </div>
-
-        </div>
-
-
-        <div class="row m-2 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 mx-auto">
-            <div class="col-12 text-center mt-2">
-                <h3>Información para inicio de sesión</h3>
-            </div>
-            <div class="container-fluid form-group row align-items-center" style="width: 100%; float:right;">
-               
-            <br>
-                <input class="form-control col"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
-                <br>
-                <label>Asigne contraseña</label>
-                    <input class="form-control col" type="password" name="password2"  value="{{VisitanteSC.password}}">
-            </div>
-            
-        </div>
-        <div class="text-center">
-            <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-2 mx-auto">Regresar</a> 
-            <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar usuario</button>
-            <br><br>
-            <a class="btn btn-danger col-2 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a> 
-        </div>
-
-    </div> -->
-    <!-- onclick="femail()"  -->
-    <!--{{ form.as_p }}-->
 
 
 <div id="myModal3" class="modal fade" role="dialog">
