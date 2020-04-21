@@ -1,0 +1,61 @@
+{% extends 'base5.html' %}
+
+{% block title %}pdf{% endblock %}
+
+{% block content %} <br><br><br><br>
+<div class="panel panel-info" style="margin-left: 50px; margin-right: 50px;">
+<h4 style="margin-left: 30px;">Formato para PDF</h4>
+<button style="margin-left: 30px; display: inline;" name="btn" id="btn"  class="btn btn-info" data-target="#formulario" data-toggle="modal" >Añadir nuevo</button>
+<br><br> <br>
+
+<table class="table table-condensed" style="width: 80%;text-align:center;  margin: 0 auto;">
+    <thead class="thead-dark" style="text-align: center;" align="center">
+        <tr class="bg-primary" style="text-align:center;">
+            <th class="" scope="col"  style="text-align:center;">Nombre</th>
+            <th class="" scope="col"  style="text-align:center;">Descripción</th>
+            <th class="" scope="col"  style="text-align:center;">Fondo</th>
+            <th class="" scope="col"  style="text-align:center;">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for element in formatos %}
+        <tr>
+            <td>{{element.nombre}}</td>
+            <td>{{element.descripcion}}</td>
+            <td><img src="../../media/{{element.fondo}}" style="width: 30%; height: 30%;"/></td>
+            <td><a>Editar</a> <a>Eliminar</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table><br><br>
+</div>
+
+<div id="formulario" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Imagenes para PDF</h4>
+        </div>
+        <div class="modal-body">
+          <form  enctype="multipart/form-data" action="../GuardarFormatoPDF/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()">
+            {% csrf_token %}
+            <br><br>
+            <label class="ml-3 col-2" for="id_firma" id="lbl_firma" style="text-align: left;">Nombre :</label>
+            <input type="text" id="id_nombre" name="nombre" required ><br>
+            <label class="ml-3 col-2" for="id_descripcion" id="lbl_firma" style="text-align: left;">Descripción :</label>
+            <input type="text" id="id_nombre" name="descripcion" required ><br>
+            <label class="ml-2 col-1" for="id_fondo" id="lbl_firma" style="text-align: left;">Fondo :</label>
+            <input id="id_imagen" type="file"  name="fondo" required>       
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" >Guardar</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock%}

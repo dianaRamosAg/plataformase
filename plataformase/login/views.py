@@ -67,7 +67,15 @@ def regUser(request):
             tipo_persona = request.POST["tipo_persona"]
             first_name = request.POST["first_name"]
             last_name = request.POST["last_name"]
+            if tipo_usuario!='2':
+                firma_digital=request.POST["first_name"]
+            else:
+                firma_digital = request.FILES["firma_digital"]
+            inst_cct = request.POST["cct"]
+            inst_nombredirector = request.POST["nombre_director"]
             departamento = int(request.POST["departamento"])
+
+    
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
             if tipo_usuario == '2':
                 #Definimos jefe como 1 (sí es jefe de departamento)
@@ -75,8 +83,11 @@ def regUser(request):
             else:
                 #Definimos jefe como 0 (no es jefe de departamento)
                 jefe = '0'
+                firma_digital= None
+               
                 #Si el tipo de usuario es institución(1) o administrador del sistema(4)
-                if tipo_usuario == '1' or tipo_usuario == '4':
+                if tipo_usuario == '1' or tipo_usuario == '4' or tipo_usuario=='5':
+                    firma_digital= None
                     #Aseguramos que no pertenezcan a ningún departamento
                     departamento = None
             #Obtenemos el ID del usuario que registro a al nuevo usuario
@@ -91,7 +102,8 @@ def regUser(request):
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
-                            date_joined=datetime.datetime.now())
+                            date_joined=datetime.datetime.now(),firma_digital=firma_digital,
+                            inst_cct=inst_cct,inst_nombredirector=inst_nombredirector)
             usr.save()
             return redirect('usuarios')
         else:
@@ -180,6 +192,9 @@ def perfil(request):
         #Si el tipo de usuario es administrador del sistema(4)  //registrar usuarios
         if request.user.tipo_usuario == '4':
             return redirect('menuadmin')
+        #Usuario institución particular
+        if request.user.tipo_usuario == '5':
+            return redirect('menuparticular')
     else:#Si no hay sesión iniciada, le redirige al login
         return redirect('login')
 
@@ -240,9 +255,13 @@ def actualizarusr(request):
             email = request.POST["email"]
             tipo_usuario = request.POST["tipo_usuario"]
             departamento = int(request.POST["departamento"])
-            if tipo_usuario=='3' or tipo_usuario=='2':
+            if tipo_usuario=='3':
                  CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento)
                  return redirect('usuarios')
+            if tipo_usuario=='2':
+                CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
+                return redirect('usuarios')
+
             if tipo_usuario=='4':
                 CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=None,jefe='0')
                 return redirect('usuarios')

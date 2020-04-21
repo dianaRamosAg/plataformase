@@ -1,9 +1,85 @@
-<!-- templates/signup.html -->
-{% extends 'base5.html' %}
 {% load static %}
-{% block title %}Validar cuenta{% endblock %}
-
-{% block content %}
+<!DOCTYPE >
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{% static '/css/h.css' %}" type='text/css' media='all' >
+  <script src="{% static '/js/jquery/jquery.min.css' %}""></script> 
+  <!---- jquery link local dont forget to place this in first than other script or link or may not work ---->
+  <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+  <!---- boostrap.min link local ----->
+  <link rel="stylesheet" href="{% static '/css/style.css' %}">
+  <!---- boostrap.min link local ----->
+  <!-- <script src="{% static '/js/bootstrap.min.js' %}"></script> -->
+  <!---- Boostrap js link local ----->
+  <link rel="icon" href="images/icon.png" type="image/x-icon" />
+  <!---- Icon link local ----->
+  <title>{% block title %}Validar cuenta{% endblock %}</title>
+</head>
+<body >
+  <header>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #6092D9">
+      <div class="container" > 
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span> 
+              </button>
+              <a target="_blank" href="#" class="navbar-brand"><img src="{% static 'img/se.png' %}" width="120" height="40" style="margin-top: -5px;"/></a>
+          </div>
+          <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                  <li class="active"><a href="{% url 'menuadmin' %}" target="_blank">Menú</a></li>
+                  <li><a href="{% url 'usuarios' %}">Ver Usuarios</a></li>
+                  <li><a href="{% url 'docAnexos' %}">Doc Anexos</a></li>
+                  <li><a href="{% url 'signup' %}">Registrar Usuarios</a></li>
+               </ul>
+              <ul class="nav navbar-nav navbar-right">
+                  <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                          <span class="glyphicon glyphicon-user"></span> 
+                          <strong>{{user.first_name}}</strong>
+                          <span class="glyphicon glyphicon-chevron-down"></span>
+                      </a>
+                      <ul class="dropdown-menu">
+                          <li>
+                              <div class="navbar-login">
+                                  <div class="row">
+                                      <div class="col-lg-4">
+                                          <p class="text-center">
+                                              <span class="glyphicon glyphicon-user icon-size"></span>
+                                          </p>
+                                      </div>
+                                      <div class="col-lg-8">
+                                          <p class="text-left"><strong>{{user.first_name}} {{user.last_name}}</strong></p>
+                                          <p class="text-left small">{{user.username}}</p>
+                                              </div>
+                                  </div>
+                              </div>
+                          </li>
+                          <li class="divider"></li>
+                          <li>
+                              <div class="navbar-login navbar-login-session">
+                                  <div class="row">
+                                      <div class="col-lg-12">
+                                          <p>
+                                              <a href="{% url 'logout' %}" class="btn btn-danger btn-block">Cerrar Sesion</a>
+                                          </p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </li>
+                      </ul>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+  </header>
 <div class="container-fluid">
     <div class="container">
         <h3 class="text-center" >Información del solicitante '{{VisitanteSC.first_name}} {{VisitanteSC.last_name}}'</h3>
@@ -15,13 +91,15 @@
             <div class="col-md-12">
                 <div class="col-md-5">
                         
-<form action="../signuprv/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+<form action="../signuprv/" enctype="multipart/form-data" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
     {% csrf_token %}
-    <fieldset>							
+    <fieldset>		
+        				
         <p class="text-uppercase pull-center">Información de usuario</p>	
-         <div class="form-group">
-            <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
-            <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+         <div class="form-group"><br>
+            <label class="ml-1" for="id_tipo_usuario" style="float: left;">Tipo de usuario:</label>
+            <select class="custom-select col-2" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                <option value="{{VisitanteSC.tipo_usuario}}">Aceptar tipo de usuario</option>
                 <option value="{{VisitanteSC.tipo_usuario}}">{{VisitanteSC.tipo_usuario}}</option>
             </select>
             <a class="btn btn-light col-2 mx-auto" data-target="#myModal4" data-toggle="modal"><img src="{% static 'img/info.png'%}"/></a> 
@@ -29,18 +107,24 @@
              </div>
 
         <div class="form-group">
-            <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
-            <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
+            <label class="ml-1"   for="id_tipo_persona" id="id_tipo_persona" style="float: left;">Tipo de persona:</label>
+            <input  class="form-control col-2" style="width: 15%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="{{VisitanteSC.tipo_persona}}"  >
+            <!-- <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
                 <option value="{{VisitanteSC.tipo_persona}}">{{VisitanteSC.tipo_persona}}</option>
-            </select>
-            <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
-            <select class="custom-select col-3" name="departamento" id="id_departamento" ">
-                <option value="{{VisitanteSC.tipo_persona}}">{{VisitanteSC.departamento_id}} </option>
-            </select>
+                <option value="{{VisitanteSC.tipo_persona}}">{{VisitanteSC.tipo_persona}}</option>
+            </select> --> <br>
+            <label class="ml-1" for="id_departamento" id="lbl_departamento" style="float: left;">Departamento:</label>
+            <input  class="form-control ml-3 mr-3 col-1" style="width: 15%;" type="text"  id="departamento"  readonly name="departamento" value="{{VisitanteSC.departamento_id}}"  >
+
             </div>
+            <div class="form-group" style="text-align:left; display:none; float: left;" id="firma"  >
+                
+                    <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left;">Firma digital :</label>
+                       <input id="id_firma" type="file"  name="firma_digital" >
+            </div><br>
         <div class="form-group" style="text-align: left;">
             <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombres:</label>
-                <input readonly class="form-control ml-1 col-2" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}">
+                <input readonly class="form-control ml-1 col-2" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}" onfocus="funcion()">
 
                 <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
                 <input  readonly class="form-control ml-1 col-2" type="text" name="last_name" required id="id_last_name" value="{{VisitanteSC.last_name}}">
@@ -51,6 +135,14 @@
                 <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
                 <input readonly  class="form-control ml-1 col-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{VisitanteSC.curp_rfc}}">
                 <br>
+                <div class="form-group" style="text-align:left; display: none;" id="datos_inst"  >
+                    <p>Datos de institución</p>
+                    <label class="ml-2 col-1" for="cct" id="cct" style="text-align: left;">CCT :</label>
+                    <input type="text" name="cct"  id="cct" class="form-control col-2" readonly value="{{VisitanteSC.inst_cct}}" >
+                    <label class="ml-2 col-1" for="nombre_director" id="nombre_director" style="text-align: left;">Nombre de director:</label>
+                    <input type="text" readonly name="nombre_director"  id="nombre_director" class="form-control col-2" value="{{VisitanteSC.inst_nombredirector}}" >
+               
+                </div><br>
                 <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
                     <label class="ml-2" for="id_calle">Calle:</label>
                     <input readonly class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle" placeholder="Calle" value="{{VisitanteSC.calle}}"><br>
@@ -163,6 +255,52 @@
 
 
 <script type="text/javascript">
+
+function funcion(){
+        var user = document.getElementById("id_tipo_usuario");
+        var per = document.getElementById("tipo_persona");
+        var depto= document.getElementById("departamento");
+        if (user.value != '1'){
+            console.log("dif")
+            document.getElementById("datos_inst").style.display = 'none';
+        }
+        if(user.value == '2'){
+            console.log("jefe");
+            document.getElementById("firma").style.display = 'inline';
+           }
+        else{
+            
+            document.getElementById("firma").style.display = 'none';
+            // document.getElementById("alertJefe").style.display = 'none';
+           
+        }
+        if(user.value=='1')
+        {
+            document.getElementById("datos_inst").style.display = 'inline';
+        }
+        if(per.value=='2'){
+            document.getElementById('id_tipo_persona').innerHTML= 'Tipo de persona "Moral":';
+        }
+        else {  document.getElementById('id_tipo_persona').innerHTML= 'Tipo de persona "Fisica":';
+       }
+       switch(depto.value){
+            case '1': document.getElementById('lbl_departamento').innerHTML= 'Departamento "Control Escolar":';
+                    break;
+            case '2': document.getElementById('lbl_departamento').innerHTML= 'Departamento "Dirección":';
+                    break;
+            case '3': document.getElementById('lbl_departamento').innerHTML= 'Departamento "Superior":';
+                    break;   
+            case '4': document.getElementById('lbl_departamento').innerHTML= 'Departamento "Media superior":';
+                    break;
+            default:;
+
+       }
+        pmoral();
+        if(per.value!=1 & per.value!=4){
+        departamento();}
+    }
+
+
 function femail(){
     var email = document.getElementById('id_email').value;
  
@@ -177,46 +315,49 @@ function femail(){
     var ap = " ";
     var borrado = 0;
     function pmoral(){
-        var per = document.getElementById('id_tipo_persona');
+        var per = document.getElementById('tipo_persona');
         if (per.value == '2'){
+            
             document.getElementById('id_last_name').style.display = 'none';
-            document.getElementById("id_last_name").setAttribute("required", "false");
-            ap = document.getElementById('id_last_name').value;
-            document.getElementById("id_last_name").setAttribute("value", " ");
+            // document.getElementById("id_last_name").setAttribute("required", "false");
+            // ap = document.getElementById('id_last_name').value;
+            // document.getElementById("id_last_name").setAttribute("value", " ");
             document.getElementById('lblapellidos').style.display = 'none';
             document.getElementById('lblnombres').innerHTML= 'Nombre de la institución:';
             document.getElementById('lblcurp').innerHTML= 'RFC:';
-            document.getElementById('acurp').innerHTML= 'Consulta RFC';
+            // document.getElementById('acurp').innerHTML= 'Consulta RFC';
             document.getElementById("lblnombres").setAttribute("class", "ml-2 col-2");
             document.getElementById("id_first_name").setAttribute("class", "form-control col-3 ml-2");
-            document.getElementById("acurp").setAttribute("href", "https://www.sat.gob.mx/tramites/operacion/28753/obten-tu-rfc-con-la-clave-unica-de-registro-de-poblacion-(curp)");
+            // document.getElementById("acurp").setAttribute("href", "https://www.sat.gob.mx/tramites/operacion/28753/obten-tu-rfc-con-la-clave-unica-de-registro-de-poblacion-(curp)");
         }else {
             document.getElementById('id_last_name').style.display = 'inline';
             document.getElementById("id_last_name").setAttribute("required", "required");
-            document.getElementById("id_last_name").setAttribute("value", ap);
-            document.getElementById('lblapellidos').style.display = '';
+            // document.getElementById("id_last_name").setAttribute("value", ap);
+            // document.getElementById('lblapellidos').style.display = 'none';
             document.getElementById('lblnombres').innerHTML= 'Nombres:';
             document.getElementById('lblcurp').innerHTML= 'CURP:';
-            document.getElementById('acurp').innerHTML= 'Consulta CURP';
+            // document.getElementById('acurp').innerHTML= 'Consulta CURP';
             document.getElementById("lblnombres").setAttribute("class", "ml-2 col-1");
             document.getElementById("id_first_name").setAttribute("class", "form-control ml-1 col-2");
-            document.getElementById("acurp").setAttribute("href", "http://consultas.curp.gob.mx");
+            // document.getElementById("acurp").setAttribute("href", "http://consultas.curp.gob.mx");
         }
     }
-    document.getElementById("alertJefe").style.display = 'none';
-    function verificarJefes(){
-        var a = {{ jefes | safe  }};
-        var dep = document.getElementById("id_departamento");
-        var sel = document.getElementById("alertJefe");
-        for(var i=0; i<a.length+1; i++){
-            if(dep.value == a[i]){
-                sel.style.display = 'inline';
-                i = a.length+1;
-            }else{
-                sel.style.display = 'none';
-            }
-        }
-    }
+    // document.getElementById("alertJefe").style.display = 'none';
+    // function verificarJefes(){
+    //     var a = {{ jefes | safe  }};
+    //     var dep = document.getElementById("id_departamento");
+    //     var sel = document.getElementById("alertJefe");
+    //     for(var i=0; i<a.length+1; i++){
+    //         if(dep.value == a[i]){
+    //             sel.style.display = 'inline';
+    //             i = a.length+1;
+    //         }else{
+    //             sel.style.display = 'none';
+    //         }
+    //     }
+    // }
 
 </script>
-{% endblock %}
+</body>
+</html>
+

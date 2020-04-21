@@ -21,7 +21,9 @@ class CustomUser(AbstractUser):
     departamento = models.ForeignKey("RVOES.Departamento", on_delete=models.CASCADE, blank=True, null=True)
     jefe = models.CharField(max_length=1, default='0', blank=True, null=True)#Establece si es jefe o no (0: no, 1: si)
     registro = models.ForeignKey("CustomUser", on_delete=models.CASCADE, blank=True, null=True)#Usuario que registro a este usuario
-
+    firma_digital = models.ImageField(upload_to ='firmas_digitales/',blank=True,null=True) 
+    inst_cct = models.TextField(blank=True, null=True)
+    inst_nombredirector = models.TextField(blank=True, null=True)
     #Campo que funciona por defecto como email
     USERNAME_FIELD = 'email'
     #Campos requeridos para la creación de usuario (principalmente para el usuario root)

@@ -59,9 +59,10 @@
                                 <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
                                 <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
                                     <option value="1" selected >Institución</option>
-                                    <option value="2">Jefe de departamento</option>
+                                    <option value="5"> Institución particular</option>
+                                    <!-- <option value="2">Jefe de departamento</option>
                                     <option value="3">Subordinados de departamento</option>
-                                    <option value="4">Administrtador de la página</option>
+                                    <option value="4">Administrtador de la página</option> -->
                                 </select>
                             </div>
                 
@@ -164,17 +165,25 @@
                                    <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"><br>
                                </div>
                            </div>
-                           <div class="col-md-6">
-                               
+                           <br><br>
+                           <div class="col-md-12">
+                           <div class="form-group" id="datos_inst">
+                            <p>Datos de institución</p>
+                            <label class="ml-2 col-1" for="cct" id="cct" style="text-align: left;">CCT :</label>
+                            <input type="text" name="cct"  id="cct" class="form-control col-2" placeholder="Clave del centro de trabajo" >
+                            <label class="ml-2 col-1" for="nombre_director" id="nombre_director" style="text-align: left;">Nombre de director:</label>
+                            <input type="text" name="nombre_director"  id="nombre_director" class="form-control ml-1 col-2" placeholder="" >
+                        </div>
                            </div>
                            </div>
-                     
+                     <br>
                         <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right">Siguiente</button>
+                        <a href="{% url 'login'%}"class="btn btn-danger col-2 mx-auto">Salir</a> 
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="step-3">
                     <div class="col-md-12"><br><br>
-                        <h4>Envia tu solicitud de registro a los administradores</h4>
+                        <h4>Enviando tu solicitud de registro a los administradores</h4>
                          </div>
                 </div>
 
@@ -257,7 +266,8 @@
         function funcion(){
             var user = document.getElementById("id_tipo_usuario");
             var per = document.getElementById("id_tipo_persona");
-            if (user.value != '1'){
+            if (user.value != '1' && user.value != '5'){
+                document.getElementById('datos_inst').style.display = 'none';
                 if(borrado == 0){
                     aBorrar = per.options[per.length-1];
                     aBorrar.parentNode.removeChild(aBorrar);
@@ -272,11 +282,10 @@
                     borrado = 0;
                 }
             }
-            // if(user.value == '2'){
-            //     verificarJefes();
-            // }else{
-            //     document.getElementById("alertJefe").style.display = 'none';
-            // }
+            if(user.value == '1'){
+            
+                document.getElementById("datos_inst").style.display = 'inline';
+            }
             pmoral();
             departamento();
         }
