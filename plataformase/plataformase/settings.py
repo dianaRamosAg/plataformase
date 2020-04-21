@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'SigApp',
 ]
 STATICFILES_DIRS = (
   os.path.join(BASE_DIR,"static"),
