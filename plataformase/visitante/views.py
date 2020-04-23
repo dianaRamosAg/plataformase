@@ -23,11 +23,6 @@ def menuadmin(request):
     else:
         return render(request,'menuadmin.html')
 
-def configuracionpdf(request):
-    formatos = ConfiguracionPDF.objects.all()
-    return render(request, 'configuracionpdf.html', {'formatos': formatos })
-    
-
 def menudepartamento(request):
     return render(request,'menudepartamento.html')
 
@@ -39,6 +34,13 @@ def menuvisitante(request):
 
 def cuentavisitante(request):
     return render(request,'cuentavisitante.html')
+
+'''Función que muestra los datos de los formatos de pdf existentes.'''
+def configuracionpdf(request):
+    formatos = ConfiguracionPDF.objects.all()
+    return render(request, 'configuracionpdf.html', {'formatos': formatos })
+
+'''perfiluser, muestra los datos del usuario que este logueado'''
 def perfiluser(request):
  
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='1':
@@ -105,7 +107,7 @@ def notificacionadmon(request):
     else:
         return redirect('perfil')
 
-
+#Registra al visitante como una solicitu
 def regVisit(request):
     if request.method == 'POST':
         import datetime
@@ -149,10 +151,12 @@ def regVisit(request):
 def modal(request):
     return render(request,'modal.html')
 
+#notificasiones solicitud de cuenta, muestra las nuevas solicitudes de cuenta al administrador
 def notificacionsc(request):
     visitantes = VisitanteSC.objects.filter(leida='0')
     return render(request, 'notificacionsc.html', {'visitantes': visitantes })
 
+#Funcion que manda los datos del visitante que pidió cuenta, se valida y puede aceptarse o no.
 def validar(request,email):
     vs=VisitanteSC.objects.get(email = email)
     return render(request,'validar.html',{'VisitanteSC':vs})
@@ -172,7 +176,7 @@ def regUser(request):
         if request.method == 'POST':
             import datetime
             #Generamos las variables con los datos recibidos del request.
-            email = request.POST["email"]
+            username = request.POST["email"]
             curp_rfc = request.POST["curp_rfc"]
             calle = request.POST["calle"]
             password = make_password(request.POST["password2"])
@@ -216,7 +220,7 @@ def regUser(request):
                 #Se le hace usuario normal
                 CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
             #Registramos el usuario en la base de datos
-            usr = CustomUser(username=email, password=password, email=email, curp_rfc=curp_rfc, calle=calle,
+            usr = CustomUser(username=username, password=password, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,

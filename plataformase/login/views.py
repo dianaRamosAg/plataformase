@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import View
 from .forms import CustomUserCreationForm
-from .models import CustomUser
+from .models import CustomUser,UsuarioInstitucion
 from .forms import AcuerdosForms
 from RVOES.models import Departamento, Acuerdos
 from django.contrib.auth.hashers import make_password
@@ -53,7 +53,7 @@ def regUser(request):
         if request.method == 'POST':
             import datetime
             #Generamos las variables con los datos recibidos del request.
-            email = request.POST["email"]
+            username = request.POST["email"]
             curp_rfc = request.POST["curp_rfc"]
             calle = request.POST["calle"]
             password = make_password(request.POST["password2"])
@@ -97,7 +97,7 @@ def regUser(request):
                 #Se le hace usuario normal
                 CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
             #Registramos el usuario en la base de datos
-            usr = CustomUser(username=email, password=password, email=email, curp_rfc=curp_rfc, calle=calle,
+            usr = CustomUser(username=username, password=password, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
@@ -213,24 +213,28 @@ def usuarios(request):
 
 #----------------------------- VISITANTE ---------------------------------
 #-------------------------------------------------------------------------
-def visitante(request):
-    return render(request, 'signup_visitante.html')
+# '''Función que te redirige a la pantalla '''
+# def visitante(request):
+#     return render(request, 'signup_visitante.html')
 
-def Regvisitante(request):
-    if request.user.tipo_usuario == '4':
-        if request.method == 'get':
-            user = User.objects.get(username='uan@gmail.com')
-            user.set_password('123')
-            user.save()
+# def Regvisitante(request):
+#     if request.user.tipo_usuario == '4':
+#         if request.method == 'get':
+#             user = User.objects.get(username='uan@gmail.com')
+#             user.set_password('123')
+#             user.save()
 
-    return redirect('usuarios')
+#     return redirect('usuarios')
 
 
 def editar(request,email):
+    ''' Función editar, por medio del correo electronico se muestra 
+    los permisos que pueden ser cambiados solo por el administrador.'''
     us = CustomUser.objects.get(username = email)
     return render(request,'editarpermisos.html',{'CustomUser':us})
 
 def visit(request):
+    '''Función que carga los departamentos a la ventana de solicitud de cuenta'''
     try:
         #Obtenemos el primer elemento de los departamentos.
         dep = Departamento.objects.get(id=1)
@@ -247,8 +251,8 @@ def visit(request):
     if departamento=="Superior":
          return redirect('login')
 
-# ----------------------Actualizar datos (permisos)---------------------
 
+'''Función para actualizar los permisos de los usuarios,por parte del administrador'''
 def actualizarusr(request):
      if request.user.tipo_usuario == '4':
         if request.method == 'POST':

@@ -15,7 +15,7 @@ urlpatterns = [
     path('docAnexos/', docAnexos, name='docAnexos'),
     path('root/', inicioRoot, name='root'),
     path('root/usuarios', usuarios, name='usuarios'),
-    path('signupv/', visitante, name='signupv'),
+    # path('signupv/', visitante, name='signupv'),
     # path('signupvr/', Regvisitante, name='signupvr'),
     path('root/editar/<email>/',ActUsr, name='editar'),
 ]
