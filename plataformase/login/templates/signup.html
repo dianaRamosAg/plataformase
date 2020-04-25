@@ -7,13 +7,13 @@
 
 <div class="container-fluid">
     <div class="container">
-        <h2 class="text-center" id="title">Registro de usuarios</h2>
+        <h2 class="text-center">Registro de usuarios</h2>
         <p class="text-center">
             <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</small>
         </p>
         <hr>
         <div class="row">
-            <form action="../signupr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+            <form enctype="multipart/form-data" action="../signupr/" class="form-group col-xs-12 col-md-12" method="post"  >
                 {% csrf_token %}
                 <div class="col-md-12">
                     <div class="col-md-5">
@@ -22,44 +22,75 @@
                             <div class="form-group">
                                 <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
                                 <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
-                                    <option value="1" selected>Institución</option>
-                                    <option value="2">Jefe de departamento</option>
+                                    <option value="1" selected title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >
+                                        Institución</option>
+                                    <option value="2"title="Encargado oficial de un departamento." >
+                                        Jefe de departamento</option>
                                     <option value="3">Subordinados de departamento</option>
-                                    <option value="4">Administrtador de la página</option>
+                                    <option value="4" title="Tipo administrador,Maneja recursos de la plataforma">Administrtador de la página</option>
+                                    <option value="5">Institución particular</option>
                                 </select>
                              </div>
-
+                            
+                           
                         <div class="form-group">
                             <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
                             <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
                                 <option value="1" selected>Persona física</option>
                                 <option value="2">Persona moral</option>
-                            </select>
+                            </select><br>
                             <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
                             <select class="custom-select col-3" name="departamento" id="id_departamento" onchange="verificarJefes()">
                             {% for entry in departamentos %}
                                 <option value="{{ entry.id }}">{{ entry.nombre }}</option>
                             {% endfor %}
                             </select>
-                            </div>
-                        <div class="m-3 mx-auto">
-                            <div class="alert alert-warning text-center" role="alert" id="alertJefe">
-                                <strong>¡Cuidado!</strong> Ya existe un jefe para este departamento, si desea reemplazarlo hacer caso omiso a esta advertencia.
-                            </div>
+                            </div><br>
+                        <div class="row" style="float: left;">
+                            <div class="alert alert-warning col-md-4 "  role="alert" id="alertJefe" style="width: 100%; float:left">
+                            <small><strong> ¡Cuidado! </strong>Existe un jefe para este departamento,si desea reemplazarlo haga caso omiso a esta advertencia.
+                            </small> </div>
                         </div>
-
+                        <br>
+                        <div class="form-group" style="text-align:left; display: none;" id="firma" style="float: left;" >
+                        <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
+                           <input id="id_firma" type="file"  name="firma_digital" >
+                    </div><br>
 
                         <div class="form-group" style="text-align: left;">
                             <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                            <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚ\s]{1,40}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
+                            <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,100}"name="first_name" required id="id_first_name" class="form-control col-2" placeholder="Nombre de usuario" >
                             <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                            <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
+                            <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
                             <label class="ml-2 mr-2" for="id_celular">Celular:</label>
                             <input class="form-control col-2" required type="tel" pattern="[0-9]{10}"name="celular" id="id_celular">
                             <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
                             <input class="form-control ml-1 col-3" type="text" minlength="10" maxlength="18" name="curp_rfc" required id="id_curp_rfc">
                             <button type="button" class="btn btn-info"  onclick="location.href='http://consultas.curp.gob.mx'" id="acurp" target="_blank">Consulta CURP</button>
                             <br> <br>
+                            <div class="form-group" id="datos_inst">
+                                <p>Datos de institución</p>
+                                <label class="ml-2 col-1" for="id_cct" style="text-align: left;">CCT :</label>
+                                <input type="text" name="cct"  id="id_cct" class="form-control col-2" placeholder="Clave del centro de trabajo" >
+                                <label class="ml-2 col-1" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
+                                <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control ml-1 col-2" placeholder="" >
+                                <label class="ml-2 col-1" for="id_sector" style="text-align: left;">Sector:</label>
+                                <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="Publico"> Público </option>
+                                    <option value="Privado"> Privado </option>
+                                </select>
+                                <label class="ml-2 col-1" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
+                                <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="1"> Media superior </option>
+                                    <option value="2"> Superior </option>
+                                    <option value="3"> Ambos </option>
+                                </select>
+                            </div>
+
+                            <br>
+
                             <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
                                 <label class="ml-2" for="id_calle">Calle:</label>
                                 <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle"  ><br>
@@ -71,8 +102,14 @@
                              <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
                                 <label class="ml-2" for="id_nointerior">No. Interior:</label>
                                 <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior"><br>
-                                
-                                <label class="ml-2 " for="id_municipio">Municipio:</label>
+
+                                <label class="ml-2" for="id_noexterior">No. Exterior:</label>
+                                <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0" ><br>
+
+                            </div>
+
+                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
+                                    <label class="ml-2 " for="id_municipio">Municipio:</label>
                                 <select  class="form-control ml-2 col-1" name="municipio" id="id_municipio" required>
                                     <option disabled="" selected="">Seleccione</option>
                                     <option value="Acaponeta"> Acaponeta </option>
@@ -96,15 +133,7 @@
                                     <option value="Tuxpan">Tuxpan</option>
                                     <option value="Xalisco"> Xalisco </option>
                                 </select>
-                            </div>
-
-                           
-
-                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
-
-                                    <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                                    <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0" ><br>
-
+                                        <br>
                                     <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
                                     <input class="form-control col-2" required type="text" name="colonia" id="id_colonia" ><br>
                                 </div>
@@ -123,7 +152,7 @@
                                     <input type="text" name="username" required id="id_username" hidden>
                                     <br>
                                     <label style="text-align: left;"> Correo electronico:</label>
-                                    <input class="form-control col"  type="text" name="email"required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                    <input class="form-control col"  type="text" name="email"required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();" pattern="[a-zA-Z0-9_-]+([.][a-zA-Z0-9-_]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
                                     <br>
                                     <label style="text-align: left;"> Contraseña:</label>
                                     <input class="form-control col" type="password" name="password1" required id="id_password1" minlength="8">
@@ -200,7 +229,14 @@
     function funcion(){
         var user = document.getElementById("id_tipo_usuario");
         var per = document.getElementById("id_tipo_persona");
-        if (user.value != '1'){
+        if (user.value != '1')
+        {
+            document.getElementById('datos_inst').style.display = 'none';
+        }
+        if (user.value != '1' && user.value != '5'){
+            console.log("dif")
+          
+           
             if(borrado == 0){
                 aBorrar = per.options[per.length-1];
                 aBorrar.parentNode.removeChild(aBorrar);
@@ -216,14 +252,27 @@
             }
         }
         if(user.value == '2'){
-            verificarJefes();
-        }else{
+            document.getElementById("firma").style.display = 'inline';
+            verificarJefes();}
+        
+        
+        else{
+            
+            document.getElementById("firma").style.display = 'none';
             document.getElementById("alertJefe").style.display = 'none';
+           
         }
+        if(user.value == '1'){
+            
+            document.getElementById("datos_inst").style.display = 'inline';
+        }
+       
         pmoral();
         departamento();
     }
-
+    function mensajes(){
+    console.log("hola");
+    }
     departamento();
     function departamento(){
         var sel = document.getElementById("id_departamento");
@@ -252,5 +301,6 @@
             }
         }
     }
+    
 </script>
 {% endblock %}

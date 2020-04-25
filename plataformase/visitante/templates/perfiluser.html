@@ -5,15 +5,15 @@
 <head>
 	<meta charset="utf-8" />
 	
-	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/favicon.png'%}">
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/us1.png'%}">
 
 	<title>Información de usuario</title>
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
-	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/apple-icon.png'%}" />
-	<link rel="icon" type="image/png" href="{% static '/img/favicon.png'%}" />
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/us1.png'%}" />
+	<link rel="icon" type="image/png" href="{% static '/img/us1.png'%}" />
 
 	<!--     Fonts and icons     -->
 	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
@@ -35,7 +35,7 @@
         <nav>
             <ul class="nav" >
         
-                <li><a href="{% url 'menuadmin'%}" style="color: white;">Regresar</a>
+                <li><a href="{% url 'perfil'%}" style="color: white;" >Regresar</a>
                   
                     
             </ul>
@@ -66,10 +66,10 @@
 		                                	<div class="col-sm-4 col-sm-offset-1">
 		                                    	<div class="picture-container">
 		                                        	<div class="picture">
-                                        				<img src="{% static '/img/default_avatar.png'%}" class="picture-src" id="wizardPicturePreview" title=""/>
-		                                            	<input type="file" id="wizard-picture">
+                                        				<img src="{% static '/img/default-avatar.png'%}" class="picture-src" id="wizardPicturePreview" title=""/>
+		                                            	
 		                                        	</div>
-		                                        	<h6>Choose Picture</h6>
+		                                        
 		                                    	</div>
 		                                	</div>
 		                                	<div class="col-sm-6">
@@ -94,7 +94,7 @@
                                                 </div>
                                                 <div class="input-group">
 													<span class="input-group-addon">
-														<i class="material-icons">record_voice_over</i>
+														<i class="material-icons">description</i>
 													</span>
 													<div class="form-group label-floating">
 													  <label class="control-label">CURP</label>
@@ -103,7 +103,7 @@
 												</div>
                                                 <div class="input-group">
 													<span class="input-group-addon">
-														<i class="material-icons">record_voice_over</i>
+														<i class="material-icons">phone</i>
 													</span>
 													<div class="form-group label-floating">
 													  <label class="control-label">Celular</label>
@@ -118,7 +118,7 @@
 													</span>
 													<div class="form-group label-floating">
 			                                            <label class="control-label">Email</label>
-			                                            <input name="email" type="email"  readonly class="form-control" value="{{ user.email }}">
+			                                            <input name="email" type="email"  readonly class="form-control" value="{{ user.username }}">
 			                                        </div>
 												</div>
 		                                	</div>
@@ -164,7 +164,7 @@
 		                                        <div class="form-group label-floating">
 		                                            <label class="control-label">Municipio</label>
 	                                            	<select  class="form-control" name="municipio">
-														<option disabled="" selected="">Seleccione</option>
+														<option value="{{user.municipio}}">{{user.municipio}}</option>
 	                                                	<option value="Acaponeta"> Acaponeta </option>
 	                                                	<option value="Ahucatlán"> Ahucatlán </option>
 	                                                	<option value="Amatlán de caña"> Amatlán de cañas </option>

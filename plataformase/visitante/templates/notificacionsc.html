@@ -1,6 +1,6 @@
 {% extends 'base5.html' %}
 {% load static %}
-{% block title %}{% endblock %}
+{% block title %}Solicitudes de cuentas{% endblock %}
 {% block content %}
 {% if not user.is_authenticated %}
    <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
@@ -17,7 +17,6 @@
                 <tr class="bg-primary" style="text-align:center;">
                     <th class="" scope="col">Usuario</th>
                     <th class="" scope="col">Nombre</th>
-                    <th class="" scope="col">Departamento</th>
                     <th class="" scope="col">CURP</th>
                     <th class="" scope="col">Tipo de usuario</th>
                     <th class="" scope="col"><center><img src="{% static '/img/mas.png'%}" align="none"/></center></th>
@@ -26,44 +25,26 @@
             <tbody>
                 {% for element in visitantes %}
                 <!-- {{ forloop.counter }} -->
-                    <tr onclick="verSolicitudVisitUsr(this.id)" id="row{{forloop.counter}}">
-                        <td class="" id="{{ element.email }}">{{ element.email }}</td>
-                        <td class="">
-                            {{ element.first_name }}
-                            {{ element.last_name }}
-                        </td>
-                        <td class="">
-                            {% if element.departamento_id == 1 %}
-                                Control Escolar
-                            {% endif %}
-                            {% if element.departamento_id == 2 %}
-                                Dirección
-                            {% endif %}
-                            {% if element.departamento_id == 3 %}
-                                Superior
-                            {% endif %}
-                            {% if element.departamento_id == 4 %}
-                                Media Superior
-                            {% endif %}
-                            {% if element.departamento_id == None %}
-                                No aplica
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ element.curp_rfc }}
-                        </td>
-                  
-                       
-                    <td>
-                            {{ element.tipo_usuario }}
+                <tr onclick="verSolicitudVisitUsr(this.id)" id="row{{forloop.counter}}">
+                    <td class="" id="{{ element.email }}">{{ element.email }}</td>
+                    <td class="">
+                        {{ element.first_name }}
+                        {{ element.last_name }}
                     </td>
-
-
                     <td>
-                        <button type="button"">Validar</button>
-                    
-                        </td>
-                    </tr>
+                        {{ element.curp_rfc }}
+                    </td>
+                    <td>
+                        {% if element.tipo_usuario == '1' %}
+                            Institución
+                        {% else %}
+                            Particular
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button type="button">Validar</button>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

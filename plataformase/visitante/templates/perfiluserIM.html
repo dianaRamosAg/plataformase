@@ -1,0 +1,233 @@
+
+{% load static %}
+<!doctype html>
+<html lang="es-MX">
+<head>
+	<meta charset="utf-8" />
+	
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/us1.png'%}">
+
+	<title>Información de usuario</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/us1.png'%}" />
+	<link rel="icon" type="image/png" href="{% static '/img/us1.png'%}" />
+
+	<!--     Fonts and icons     -->
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+
+	<!-- CSS Files -->
+	<link href="{% static '/css/css/bootstrap.min.css' %}" rel="stylesheet" />
+	<link href="{% static '/css/material-bootstrap-wizard.css' %}" rel="stylesheet" />
+
+	<!-- CSS Just for demo purpose, don't include it in your project -->
+
+    <link rel="stylesheet" href="{% static '/css/h.css' %}" type='text/css' media='all' >
+    <link href="{% static '/css/demo.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="image-container set-full-height" style="background-image: url({% static '/img/tres.jpg'%})">
+    
+        <nav>
+            <ul class="nav" >
+        
+                <li><a href="{% url 'perfil'%}" style="color: white;" >Regresar</a>
+                  
+                    
+            </ul>
+        </nav><!-- / nav -->
+	    <!--   Big container   -->
+	    <div class="container">
+	        <div class="row">
+		        <div class="col-sm-8 col-sm-offset-2">
+		            <!--      Wizard container        -->
+		            <div class="wizard-container">
+		                <div class="card wizard-card" data-color="green" id="wizardProfile">
+							<form action="../actualizarperfilusr/" method="POST">
+								{% csrf_token %}
+		                <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
+
+		                    	<div class="wizard-header">
+		                        	<h3 class="wizard-title">
+		                        	   Información de usuario
+		                        	</h3>
+									<!-- <h5>This information will let us know more about you.</h5> -->
+		                    	</div>
+							
+
+		                        <div class="">
+		                            <div class="" id="about">
+		                              <div class="row">
+		                                	<h4 class="info-text">Datos generales</h4>
+		                                	<div class="col-sm-4 col-sm-offset-1">
+		                                    	<div class="picture-container">
+		                                        	<div class="picture">
+                                        				<img src="{% static '/img/default-avatar.png'%}" class="picture-src" id="wizardPicturePreview" title=""/>
+		                                            	
+		                                        	</div>
+		                                        
+		                                    	</div>
+		                                	</div>
+		                                	<div class="col-sm-6">
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">face</i>
+													</span>
+													<div class="form-group label-floating">
+			                                          <label class="control-label">Nombre de institución </label>
+			                                          <input name="first_name" type="text" class="form-control" value="{{ user.first_name }}">
+			                                        </div>
+												</div>
+
+                                                <div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">description</i>
+													</span>
+													<div class="form-group label-floating">
+													  <label class="control-label">RFC</label>
+													  <input name="curp_rfc" type="text" class="form-control" value="{{ user.curp_rfc }}">
+													</div>
+												</div>
+                                                <div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">phone</i>
+													</span>
+													<div class="form-group label-floating">
+													  <label class="control-label">Celular</label>
+													  <input name="celular" type="text" class="form-control" value="{{ user.celular }}">
+													</div>
+												</div>
+											
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="material-icons">record_voice_over</i>
+												</span>
+												<div class="form-group label-floating">
+												  <label class="control-label">CCT</label>
+												  <input name="cct" type="text" class="form-control" value="{{ user.inst_cct }}">
+												</div>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon">
+													<i class="material-icons">record_voice_over</i>
+												</span>
+												<div class="form-group label-floating">
+												  <label class="control-label">Nombre director </label>
+												  <input name="nombre_director" type="text" class="form-control" value="{{ user.inst_nombredirector }}">
+												</div>
+											</div>
+											</div>
+		                                	<div class="col-sm-10 col-sm-offset-1">
+												<div class="input-group">
+													<span class="input-group-addon">
+														<i class="material-icons">email</i>
+													</span>
+													<div class="form-group label-floating">
+			                                            <label class="control-label">Email</label>
+			                                            <input name="email" type="email"  readonly class="form-control" value="{{ user.username }}">
+			                                        </div>
+												</div>
+		                                	</div>
+		                            	</div>
+		                            </div>
+		                            
+		                            <div class="tab-pane" id="address">
+		                                <div class="row">
+		                                    <div class="col-sm-12">
+		                                        <h4 class="info-text"> Dirección</h4>
+		                                    </div>
+		                                    <div class="col-sm-4 col-sm-offset-1">
+	                                        	<div class="form-group label-floating">
+	                                        		<label class="control-label">Calle</label>
+	                                    			<input type="text" name ="calle" class="form-control" value="{{ user.calle }}">
+	                                        	</div>
+                                            </div>
+                                            <div class="col-sm-4 ">
+	                                        	<div class="form-group label-floating">
+	                                        		<label class="control-label">Colonia</label>
+	                                    			<input type="text" name="colonia" class="form-control" value="{{ user.colonia}}">
+	                                        	</div>
+		                                    </div>
+		                                    <div class="col-sm-1">
+		                                        <div class="form-group label-floating">
+		                                            <label class="control-label">No.Int</label>
+		                                            <input type="number" name="nointerior" class="form-control" value="{{ user.nointerior }}">
+		                                        </div>
+                                            </div>
+                                            <div class="col-sm-1">
+		                                        <div class="form-group label-floating">
+		                                            <label class="control-label">No.Ext</label>
+		                                            <input type="number" name="noexterior" class="form-control" value="{{ user.noexterior }}">
+		                                        </div>
+		                                    </div>
+		                                    <div class="col-sm-5 col-sm-offset-1">
+		                                        <div class="form-group label-floating">
+		                                            <label class="control-label">Código postal</label>
+		                                            <input type="number" maxlength="5" minlength="5" name="codigopostal" class="form-control" value="{{ user.codigopostal }}">
+		                                        </div>
+		                                    </div>
+		                                    <div class="col-sm-5">
+		                                        <div class="form-group label-floating">
+		                                            <label class="control-label">Municipio</label>
+	                                            	<select  class="form-control" name="municipio" required>
+														<option value="{{user.municipio}}">{{user.municipio}}</option>
+	                                                	<option value="Acaponeta"> Acaponeta </option>
+	                                                	<option value="Ahucatlán"> Ahucatlán </option>
+	                                                	<option value="Amatlán de caña"> Amatlán de cañas </option>
+	                                                	<option value="Bahía de Banderas"> Bahía de Banderas </option>
+														<option value="Compostela"> Compostela </option>
+														<option value="Del Nayar"> Del Nayar </option>
+														<option value="Huajicori"> Huajicori </option>
+														<option value="Ixtlán del Rio"> Ixtlán del Rio </option>
+	                                                	<option value="Jala"> Jala </option>
+														<option value="La Yesca">La Yesca</option>
+														<option value="Rosamorada">Rosamorada</option>
+														<option value="Ruíz">Ruíz</option>
+														<option value="San Blas">San Blas</option>
+														<option value="San Pedro Lagunillas">San Pedro Lagunillas</option>
+														<option value="Santa María del Oro">Santa María del Oro</option>
+														<option value="Santiago Ixcuintla">Santiago Ixcuintla</option>
+														<option value="Tecuala">Tecuala</option>
+														<option value="Tepic">Tepic</option>
+														<option value="Tuxpan">Tuxpan</option>
+														<option value="Xalisco"> Xalisco </option>
+	                                            	</select>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                        <div class="wizard-footer">
+		                            <div class="pull-right">
+		                                <input type='submit' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Guardar' />
+		                                 </div>
+
+		                            
+		                            <div class="clearfix"></div>
+		                        </div>
+		                    </form>
+		                </div>
+		            </div> <!-- wizard container -->
+		        </div>
+	        </div><!-- end row -->
+	    </div> <!--  big container -->
+
+	 
+
+</body>
+	<!--   Core JS Files   -->
+    <script src="{% static '/js/jquery-2.2.4.min.js' %}" type="text/javascript"></script>
+	<script src="{% static '/js/bootstrap.min.js' %}" type="text/javascript"></script>
+	<script src="{% static '/js/bootstrap.js' %}" type="text/javascript"></script>
+
+	<!--  Plugin for the Wizard -->
+	<script src="{% static '/js/material-bootstrap-wizard.js' %}"></script>
+
+    <!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
+	<script src="{% static '/js/jquery.validate.min.js' %}"></script>
+
+</html>

@@ -35,10 +35,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #urls de app de login
     path('', include('login.urls')),
-    #urls de app de usuarios
+    #urls de app de TBC
+    path('TBC/', include('TBC.urls')),
+    #urls de app de RVOES
     path('inicio/', include('RVOES.urls')),
 
 ]
 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += [] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    urlpatterns += [] + static(settings.MEDIA_URL)
+

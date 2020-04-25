@@ -29,15 +29,19 @@
 							</div><!--/.col-sm-2-->
 					</a>
 						 <!-- / #logo-header -->
-						<nav>
+						 <nav>
 							<ul class="nav">
-								<li><a href="{% url 'index'%}">Inicio</a></li>
 						
-								<li><a href="#">Bienvenido! Usuario, {{ user.first_name }} {{ user.last_name }} </a>
-									<ul>
-										<li><a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a></li>
-										<li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
-									</ul></li>
+								<li><a href="#" style="pointer-events: none;">Bienvenido! {{ user.first_name }} {{ user.last_name }} </a>
+									<li class="nav-item dropdown ml-auto">
+										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/us2.png' %}"/></a>
+										<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
+											<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
+											<div class="dropdown-divider"></div>
+											<a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
+										</div>
+									</li>
+									
 							</ul>
 						</nav><!-- / nav -->
 
@@ -53,19 +57,19 @@
 	<section class="pricingCardGrid ">
 						<div class="pricingCardGrid__body row ">
 						<div class="pricingCardGrid__pricingCard">
-						<a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
-						<div class="pricingCard__heading title--small">
-						Autozicación de exámenes a títulos y sinodales </div>
+						<a class="pricingCard" href="" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+						Autorización de exámenes a títulos y sinodales </div>
 						<div class="pricingCard__pricing">
 							<div class="col-sm-4 col-xs-4">
-								<img src="{% static '/img/examen.png'%}" width="200" height="200"/>
+								<img src="{% static '/img/contrato.png'%}" width="200" height="200"/>
 							</div>
 						<span class="pricingCard__period">
 							<p align="justify">Sistema de autorización de exámenes a título y sinodales.</p></span>
 						</div>
 						<div class="pricingCard__button">
 						<span class="button button--primary">
-						Acceder </span>
+						Próximamente </span>
 						</div>
 						</a>
 						</div>
@@ -73,10 +77,10 @@
 						<div class="pricingCardGrid__pricingCard">
 							<a class="pricingCard" href="{% url 'admin' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 							<div class="pricingCard__heading title--small">
-							Sistema de generación de turnos RVOE </div>
+							Sistema de generación de turnos de RVOE </div>
 							<div class="pricingCard__pricing">
 								<div class="col-sm-4 col-xs-4">
-									<img src="{% static '/img/examen.png'%}" width="200" height="200"/>
+									<img src="{% static '/img/institucion.png'%}" width="200" height="200"/>
 								</div>
 							<span class="pricingCard__period">
 								<p align="justify">Sistema de Generación de turnos de RVOE.</p> </span>
@@ -89,5 +93,7 @@
 							</div>
 						</div>
 						</section>
+										
+<script type='text/javascript' src="{% static '/js/bootstrap2.min.js' %}"></script>
 					</body>
 </html>

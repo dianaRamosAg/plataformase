@@ -3,7 +3,7 @@
 <html lang="es-MX">
 <head>
 	<meta charset="UTF-8">
-		<title>iniciosistemas &#8211; plataformse</title>
+		<title>Administrador</title>
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 		<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -16,8 +16,6 @@
 <link rel='stylesheet' id='canvaabout-css' href="{% static '/css/canvaabout.css' %}" media='screen' />
 <link rel='stylesheet' id='pages-q-pro-css' href="{% static '/css/pro.css' %}" media='screen' />
 <!-- <link rel='stylesheet' id='pages-q-pro-v11-css' href='https://about.canva.com/wp-content/themes/canvaabout//view/experiments/q/pro/13/stylesheets/pages/q/pro-v11.css?ver=03891446'/> -->
-
-
 <link rel='stylesheet' id='elementor-post-148-css'  href="{% static '/css/post-148.css' %}" type='text/css' media='all' />
 
 </head>
@@ -32,13 +30,15 @@
 						<nav>
 							<ul class="nav">
 						
-								<li><a href="#" style="pointer-events: none;">Bienvenido! Administrador del sistema, {{ user.first_name }} {{ user.last_name }} </a>
+								<li><a href="#" style="pointer-events: none;">Bienvenido,Administrador del sistema! {{ user.first_name }} {{ user.last_name }} </a>
+									
 									<li class="nav-item dropdown ml-auto">
-										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/user.png' %}"/></a>
+										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/us2.png' %}"/></a>
 										<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
-											<a href="{% url 'notificacionsc'%}" class="dropdown-item">Solicitudes de cuenta</a>
-											<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
+											<a href="{% url 'notificacionsc'%}" class="dropdown-item">Solicitud de cuenta     <span class="badge pull-right">{{numSol}}</span></a>
+											<a href="{% url 'configuracionpdf'%}" class="dropdown-item">Configuración PDF</a>
 											<div class="dropdown-divider"></div>
+											<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
 											<a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
 										</div>
 									</li>

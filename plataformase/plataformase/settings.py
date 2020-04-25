@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'TBC'
 ]
-STATICFILES_DIRS = (
-  os.path.join(BASE_DIR,"static"),
-)
+# STATICFILES_DIRS = (
+#   os.path.join(BASE_DIR,"static"),
+# )
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,7 +86,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'plataforma',
         'USER': 'postgres',
-        'PASSWORD': 'diana',
+        'PASSWORD': 'ismael',
+        #'PASSWORD': 'diana',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -135,3 +137,7 @@ LOGIN_REDIRECT_URL = 'perfil'
 LOGOUT_REDIRECT_URL = 'login'
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

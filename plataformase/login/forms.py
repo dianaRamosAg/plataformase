@@ -11,7 +11,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email', 'curp_rfc', 'calle', 'noexterior',
                   'nointerior', 'codigopostal', 'municipio', 'colonia',
                   'celular', 'tipo_usuario', 'tipo_persona', 'first_name',
-                  'last_name', 'departamento')
+                  'last_name', 'departamento','firma_digital')
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -27,4 +27,4 @@ class AcuerdosForms(forms.ModelForm):
         model = Acuerdos
         fields = '__all__'
 
-#-------------------------VISITANTE---------------------------
+
