@@ -287,6 +287,8 @@ def actualizarperfilusr(request):
         if request.user.tipo_usuario=='1':
             inst_cct=request.POST["cct"]
             inst_nombredirector=request.POST["nombre_director"]
+            sector=request.POST["sector"]
+            nivel_educativo=request.POST["nivel_educativo"]
 
         else:
             inst_cct=None
@@ -294,9 +296,13 @@ def actualizarperfilusr(request):
 
         
         CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
-        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name,
-        inst_cct=inst_cct,inst_nombredirector=inst_nombredirector)
-        return redirect('perfiluser') 
+        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name)
+        if request.user.tipo_usuario=='1':
+            UsuarioInstitucion.objects.filter(id_usuariobase=usrl).update(cct = inst_cct,
+                                             nombredirector = inst_nombredirector, sector=sector,
+                                             nivel_educativo=nivel_educativo)
+               
+    return redirect('perfiluser') 
 
 
 def GuardarFormatoPDF(request):
