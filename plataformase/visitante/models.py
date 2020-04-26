@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 class VisitanteSC(models.Model):
-    pass
     first_name = models.TextField(blank=True, null=True)
     last_name = models.TextField(blank=True, null=True)
     password = models.TextField(blank=True, null=False)
@@ -16,11 +15,13 @@ class VisitanteSC(models.Model):
     celular = models.TextField(blank=True, null=True)
     email = models.TextField(unique=True)
     leida = models.CharField(max_length=1, default='0',null=False)
-    tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador
+    tipo_usuario = models.CharField(max_length=1, default='5')#1: Institución, 5: Particular
     tipo_persona = models.CharField(max_length=1, default='1')#1: Física, 2:Moral
-    #Departamento al que pertenece el usuario (El modelo esta en aplicación usuarios)
-    departamento = models.ForeignKey("RVOES.Departamento", on_delete=models.CASCADE, blank=True, null=True)
-    jefe = models.CharField(max_length=1, default='0', blank=True, null=True)#Establece si es jefe o no (0: no, 1: si)
+    #Datos solo si son institución
+    inst_cct = models.TextField(blank=True, null=True)
+    inst_nombredirector = models.TextField(blank=True, null=True)
+    sector = models.TextField(blank=True, null=True)  # Publico, Privado
+    nivel_educativo = models.CharField(max_length=1, blank=True, null=True)  # 1: Media superior, 2: Superior, 3: Ambos
 
 class ConfiguracionPDF(models.Model):
     nombre = models.TextField(blank=True, null=True)

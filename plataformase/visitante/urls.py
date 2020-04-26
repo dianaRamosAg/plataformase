@@ -23,8 +23,9 @@ urlpatterns = [
      path('notificacionsc/', views.notificacionsc, name='notificacionsc'),
      path('notificacionsc/validar/<email>/',views.validar, name='validar'),
      path('notificacionsc/validar/<email2>/cancelarsolicitud/<email>',views.cancelarsolicitud, name='cancelarsolicitud'),
-    #  path('signuprv/',views.regUser, name='signuprv'),
+     path('signuprv/<email>',views.regUser, name='signuprv'),
     path('configuracionpdf/', views.configuracionpdf, name='configuracionpdf'),
     path('GuardarFormatoPDF/', views.GuardarFormatoPDF, name='GuardarFormatoPDF'),
-        
+
+    path('cct/', views.cct, name='cct'),
 ]

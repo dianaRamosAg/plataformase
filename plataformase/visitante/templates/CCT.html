@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Centros de trabajo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header id="main-header">
+        <a href="#" id="logo-header">
+            <div class="col-sm-2 col-xs-4 ">
+                <img src="{% static '/img/se.png'%}" width="230" height="80"/>
+            </div><!--/.col-sm-2-->
+        </a>
+        <!-- / #logo-header -->
+        <nav>
+            <ul class="nav">
+                <li><a href="#" style="pointer-events: none;"> {{ user.first_name }} {{ user.last_name }} </a>
+                <li class="nav-item dropdown ml-auto">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="{% static '/img/us2.png' %}"/></a>
+                    <div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
+                        <a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
+                    </div>
+                </li>
+            </ul>
+        </nav><!-- / nav -->
+    </header><!-- / #main-header -->
+
+    <div class="text-center m-5">
+        <h2>Centros de Trabajo</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <label class="m-2" for="id_cct">Clave de Centro de Trabajo</label>
+                <input class="form-control col-2 m-2" type="text" name="cct" id="id_cct">
+            </div>
+            <div class="row m-2">
+                <label class="m-2" for="id_nombredirector">Nombre del director del centro de trabajo</label>
+                <input class="form-control col-3 m-2" type="text" name="nombredirector" id="id_nombredirector">
+            </div>
+            <div class="row m-2">
+                <label class="m-2" for="id_sector">Sector del centro de trabajo</label>
+                <select class="custom-select col-1 m-2" name="sector" id="id_sector">
+                    <option>Seleccione</option>
+                    <option value="Público">Público</option>
+                    <option value="Privado">Privado</option>
+                </select>
+            </div>
+            <div class="row m-2">
+                <label class="m-2" for="id_nivel_educativo">Nivel educativo del centro de trabajo</label>
+                <select class="custom-select col-2 m-2" name="nivel_educativo" id="id_nivel_educativo">
+                    <option>Seleccione</option>
+                    <option value="1">Media Superior</option>
+                    <option value="2">Superior</option>
+                    <option value="3">Ambos</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Añadir</button>
+
+        </form>
+    </div>
+
+    <div class="m-5 col-10 mx-auto">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr class="bg-primary" >
+                    <th class="" scope="col">Centro de Trabajo</th>
+                    <th class="" scope="col">Director</th>
+                    <th class="" scope="col">Sector</th>
+                    <th class="" scope="col">Nivel educativo</th>
+                    <th class="" scope="col">Activo</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for element in centros %}
+                <!-- {{ forloop.counter }} -->
+                    <tr>
+                        <td class="" id="{{ element.username }}">{{ element.cct }}</td>
+                        <td class="">{{ element.nombredirector }}</td>
+                        <td class="">{{ element.sector }}</td>
+                        <td class="">
+                            {% if element.nivel_educativo == '1' %}
+                                Media Superior
+                            {% endif %}
+                            {% if element.nivel_educativo == '2' %}
+                                Superior
+                            {% endif %}
+                            {% if element.nivel_educativo == '3' %}
+                                Ambos
+                            {% endif %}
+                        </td>
+                        <td class="">
+                            <div class="custom-control custom-switch">
+                                {% if element.is_active %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"checked>
+                                    <label class="custom-control-label" for="customSwitch1">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" >
+                                    <label class="custom-control-label" for="customSwitch1">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
