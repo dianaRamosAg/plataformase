@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import View
 from .forms import CustomUserCreationForm
-from .models import CustomUser,UsuarioInstitucion
+from .models import CustomUser
 from .forms import AcuerdosForms
 from RVOES.models import Departamento, Acuerdos
 from django.contrib.auth.hashers import make_password
@@ -71,8 +71,6 @@ def regUser(request):
                 firma_digital=request.POST["first_name"]
             else:
                 firma_digital = request.FILES["firma_digital"]
-            inst_cct = request.POST["cct"]
-            inst_nombredirector = request.POST["nombre_director"]
             departamento = int(request.POST["departamento"])
 
     
@@ -102,8 +100,7 @@ def regUser(request):
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
-                            date_joined=datetime.datetime.now(),firma_digital=firma_digital,
-                            inst_cct=inst_cct,inst_nombredirector=inst_nombredirector)
+                            date_joined=datetime.datetime.now(),firma_digital=firma_digital)
             usr.save()
             return redirect('usuarios')
         else:

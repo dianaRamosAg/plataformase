@@ -50,7 +50,9 @@
                             <div class="form-group">
                                 <input type="text" name="username" required id="id_username" hidden>
                                 <label class="mr-2" for="id_email">Correo: </label>
-                                <input class="form-control col"  type="text" name="email" required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();"  pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                <input class="form-control col"  type="text" name="email" required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();"  pattern="[a-zA-Z0-9_-]+([.][a-zA-Z0-9-_]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                <label class="mr-2" for="id_email">Contraseña: </label>
+                                <input class="form-control "  type="password" name="password" required id="password" >
                             
                             </div>
                         </div><br>
@@ -94,7 +96,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                                <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,40}" type="text" name="first_name" required id="id_first_name">
+                                <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s-1-9]{1,40}" type="text" name="first_name" required id="id_first_name">
                             </div>
                             <div class="form-group">
                                 <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
@@ -167,13 +169,13 @@
                            </div>
                            <br><br>
                            <div class="col-md-12">
-                           <div class="form-group" id="datos_inst">
+                           <!-- <div class="form-group" id="datos_inst">
                             <p>Datos de institución</p>
                             <label class="ml-2 col-1" for="cct" id="cct" style="text-align: left;">CCT :</label>
                             <input type="text" name="cct"  id="cct" class="form-control col-2" placeholder="Clave del centro de trabajo" >
                             <label class="ml-2 col-1" for="nombre_director" id="nombre_director" style="text-align: left;">Nombre de director:</label>
                             <input type="text" name="nombre_director"  id="nombre_director" class="form-control ml-1 col-2" placeholder="" >
-                        </div>
+                        </div> -->
                            </div>
                            </div>
                      <br>
@@ -267,7 +269,7 @@
             var user = document.getElementById("id_tipo_usuario");
             var per = document.getElementById("id_tipo_persona");
             if (user.value != '1' && user.value != '5'){
-                document.getElementById('datos_inst').style.display = 'none';
+                // document.getElementById('datos_inst').style.display = 'none';
                 if(borrado == 0){
                     aBorrar = per.options[per.length-1];
                     aBorrar.parentNode.removeChild(aBorrar);
@@ -284,7 +286,7 @@
             }
             if(user.value == '1'){
             
-                document.getElementById("datos_inst").style.display = 'inline';
+                // document.getElementById("datos_inst").style.display = 'inline';
             }
             pmoral();
             departamento();

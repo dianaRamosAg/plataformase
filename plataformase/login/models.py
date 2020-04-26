@@ -38,12 +38,3 @@ class CustomUser(AbstractUser):
         """
         return self.first_name, self.last_name, self.tipo_usuario
 
-
-class UsuarioInstitución(models.Model):
-    id_usuariobase = models.ForeignKey("CustomUser", on_delete=models.CASCADE, blank=True, null=True)
-    cct = models.TextField(blank=True, null=True)
-    nombredirector = models.TextField(blank=True, null=True)
-    sector = models.TextField(blank=True, null=True)
-    estatus= models.CharField(blank=True, null=True,max_length=1)
-    nivel_educativo = models.TextField(blank=True, null=True)
-  

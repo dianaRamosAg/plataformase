@@ -116,7 +116,7 @@ def regVisit(request):
         email = request.POST["email"]
         curp_rfc = request.POST["curp_rfc"]
         calle = request.POST["calle"]
-        password = "se2020"
+        password = request.POST["password"]
         noexterior = request.POST["noexterior"]
         nointerior = request.POST["nointerior"]
         codigopostal = request.POST["codigopostal"]
@@ -125,15 +125,13 @@ def regVisit(request):
         celular = request.POST["celular"]
         tipo_usuario = request.POST["tipo_usuario"]
         tipo_persona = request.POST["tipo_persona"]
-        inst_cct = request.POST["cct"]
-        inst_nombredirector = request.POST["nombre_director"]
         departamento = int(request.POST["departamento"])
         if tipo_usuario == '2':
             jefe = '1'
         else:
             jefe = '0'
                 #Si el tipo de usuario es institución(1) o administrador del sistema(4)
-        if tipo_usuario == '1' or tipo_usuario == '4':
+        if tipo_usuario == '1' or tipo_usuario == '4' or tipo_usuario == '5':
             departamento = None
         if VisitanteSC.objects.filter(jefe='1', departamento_id=departamento).exists():
             VisitanteSC.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
@@ -141,8 +139,7 @@ def regVisit(request):
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona,
-                            departamento_id=departamento, jefe=jefe,
-                            inst_cct=inst_cct,inst_nombredirector=inst_nombredirector)
+                            departamento_id=departamento, jefe=jefe)
         visit.save()
         return redirect('solicitudenviada') #mandar pagina con mensaje de esperar
     # else:
@@ -194,9 +191,8 @@ def regUser(request):
                 firma_digital=request.POST["first_name"]
             else:
                 firma_digital = request.FILES["firma_digital"]
-            inst_cct = request.POST["cct"]
-            inst_nombredirector = request.POST["nombre_director"]
-            departamento = int(request.POST["departamento"])
+            if tipo_usuario!= '1' and tipo_usuario!='4' and tipo_usuario!='5':
+                departamento = int(request.POST["departamento"])
 
     
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
@@ -209,7 +205,7 @@ def regUser(request):
                 firma_digital= None
                
                 #Si el tipo de usuario es institución(1) o administrador del sistema(4)
-                if tipo_usuario == '1' or tipo_usuario == '4':
+                if tipo_usuario == '1' or tipo_usuario == '4' or tipo_usuario=='5':
                     firma_digital= None
                     #Aseguramos que no pertenezcan a ningún departamento
                     departamento = None
@@ -225,10 +221,9 @@ def regUser(request):
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
-                            date_joined=datetime.datetime.now(),firma_digital=firma_digital,
-                            inst_cct=inst_cct,inst_nombredirector=inst_nombredirector)
+                            date_joined=datetime.datetime.now(),firma_digital=firma_digital)
             usr.save()
-            VisitanteSC.objects.filter(email=email,leida='0').update(leida='1')
+            VisitanteSC.objects.filter(email=username,leida='0').update(leida='1') #email=email en caso de que ya vuelva el email en lugar de user
             return redirect('usuarios')
         else:
             return redirect('signup')
