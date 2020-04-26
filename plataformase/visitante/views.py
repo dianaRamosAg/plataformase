@@ -44,10 +44,13 @@ def configuracionpdf(request):
 def perfiluser(request):
  
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='1':
-        return render(request,'perfiluserIF.html')
+        usrinst = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
+        return render(request, 'perfiluserIF.html', {'usrinst': usrinst })
+
     else:
         if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-            return render(request,'perfiluserIM.html')
+            usrinst = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
+            return render(request, 'perfiluserIM.html', {'usrinst': usrinst })
     
         if request.user.tipo_persona=='1':
             return render(request,'perfiluser.html')
@@ -298,10 +301,11 @@ def actualizarperfilusr(request):
         CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
         codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name)
         if request.user.tipo_usuario=='1':
-            UsuarioInstitucion.objects.filter(id_usuariobase=usrl).update(cct = inst_cct,
+            UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id).update(cct = inst_cct,
                                              nombredirector = inst_nombredirector, sector=sector,
                                              nivel_educativo=nivel_educativo)
-               
+
+  
     return redirect('perfiluser') 
 
 
