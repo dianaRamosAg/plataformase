@@ -20,21 +20,12 @@ class CustomUser(AbstractUser):
     departamento = models.ForeignKey("RVOES.Departamento", on_delete=models.CASCADE, blank=True, null=True)
     jefe = models.CharField(max_length=1, default='0', blank=True, null=True)#Establece si es jefe o no (0: no, 1: si)
     registro = models.ForeignKey("CustomUser", on_delete=models.CASCADE, blank=True, null=True)#Usuario que registro a este usuario
-<<<<<<< HEAD
-    firma_digital = models.ImageField(upload_to ='firmas_digitales/',blank=True,null=True) 
-    localidad = models.TextField(blank=True, null=True)
-    #Campo que funciona por defecto como email
-    USERNAME_FIELD = 'username'
-    #Campos requeridos para la creación de usuario (principalmente para el usuario root)
-    REQUIRED_FIELDS = [ 'first_name','password']
-=======
     firma_digital = models.ImageField(upload_to ='firmas_digitales/', blank=True, null=True)
     localidad = models.TextField(blank=True, null=True)
     #Campo que funciona por defecto como email
     #USERNAME_FIELD = 'username'
     #Campos requeridos para la creación de usuario (principalmente para el usuario root)
     REQUIRED_FIELDS = [ 'first_name','password','email']
->>>>>>> 702eb4fbcef19cc73dbe7df7a0bb5ebf9a89c8df
 
     def __str__(self):
         """Este método define como se muestra por defecto el usuario.
