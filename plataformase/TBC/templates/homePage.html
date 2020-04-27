@@ -3,7 +3,7 @@
     {% block content%}
     <div class="form-row p-3">
         <div class="col-md-7">
-                <div class="container-flex bg-dark m-auto">
+                <div class="container-flex m-auto p-3">
                     <div id="carousel-reciente" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             <li data-target="#carousel-reciente" data-slide-to="0" class="active"></li>
@@ -48,7 +48,7 @@
                 </div>
 				
 				<!--Inicio acordeon de docentes-->
-				<div style="margin-top: 5%;" class="col-md-12 mb-3">
+				<div class="col-md-12 mb-3"> <!-- style="margin-top: 5%;" -->
             		<div class="container-flex" id="wwg-accordian">
                 		<div class="card">
                     	<div class="card-header" id="docentes-heading" style="background-color: white;">
@@ -327,12 +327,11 @@
         </div>
         <!--Fin de la columna total del lado izquierdo de la pagina-->
        
-        <div class="col-md-5">
+        <div class="col-md-5 mt-3">
             <div class="container-flex mb-3" id="wwg-accordian">
                 <div class="card">
-                    <div class="form-row card-header" id="notificaciones-heading" style="background-color: white;">      
-                        <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#notificaciones" style="cursor:pointer;"><i class="far fa-bell"></i>&nbsp;Notificaciones</h5>
-                        <span class="badge badge-pill badge-danger" style="margin-left: 2%; font-size: 100%; padding-top: 2%;">5</span>
+                    <div class="card-header" id="notificaciones-heading" style="background-color: white;">      
+                        <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#notificaciones" style="cursor:pointer;"><i class="far fa-bell"></i>&nbsp;Notificaciones<span class="badge badge-pill badge-danger" style="margin-left: 2%; font-size: 80%; padding-top: 1.2%;">5</h5></span>
                     </div>
                     <div class="collapse show" id="notificaciones">
                         <div class="card-text p-3">
@@ -386,7 +385,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container-flex h-40" id="wwg-accordian">
+            <div class="container-flex h-40 mb-3" id="wwg-accordian">
                 <div class="card">
                     <div class="card-header" id="actividadesrecientes-heading" style="background-color: white;">
                         <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#actividades-recientes" style="cursor:pointer;"><i class="fas fa-tasks"></i>&nbsp;Estadisticas Alumnos</h5>
@@ -398,7 +397,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container-flex h-40" id="wwg-accordian">
+            <div class="container-flex h-40 mb-3" id="wwg-accordian">
                 <div class="card">
                     <div class="card-header" id="ingresaronhoy-heading" style="background-color: white;">
                         <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#ingresaron-hoy" style="cursor:pointer;"><i class="fas fa-tasks"></i>&nbsp;Uso de la plataforma</h5>
