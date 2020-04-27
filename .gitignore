@@ -7,4 +7,6 @@ __pycache__
 /plataformase/login/__pycache__/
 /plataformase/usuarios/migrations
 /plataformase/RVOES/__pycache__
+/plataformase/TBC/migrations
+/plataformase/TBC/__pycache__
 .DS_Store
