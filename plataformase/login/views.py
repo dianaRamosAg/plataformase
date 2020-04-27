@@ -71,10 +71,11 @@ def regUser(request):
                 firma_digital=request.POST["first_name"]
             else:
                 firma_digital = request.FILES["firma_digital"]
-            inst_cct = request.POST["cct"]
-            inst_nombredirector = request.POST["nombre_director"]
-            sector = request.POST["sector"]
-            nivel_educativo = request.POST["nivel_educativo"]
+            if tipo_usuario=='1':
+                inst_cct = request.POST["cct"]
+                inst_nombredirector = request.POST["nombre_director"]
+                sector = request.POST["sector"]
+                nivel_educativo = request.POST["nivel_educativo"]
             departamento = int(request.POST["departamento"])
 
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
