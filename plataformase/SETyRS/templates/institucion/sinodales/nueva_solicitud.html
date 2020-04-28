@@ -1,0 +1,20 @@
+{% extends 'institucion/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container col-md-10 col-lg-6 text-center">
+    <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    <form action="{% url 'SETyRS_crear_solicitud_sinodal' %}" method="POST">
+        {% csrf_token %}
+        <p class="text-justify">
+            Bienvenido al modulo para la solicitud y autorización de registro de Sinodales. 
+            En este apartado se podrá realizar una solicitud para la autorización del registro de sus sinodales,
+            para ello, tendrá que agregar la información correspondiente que se le vaya solicitando.
+        </p>
+        <p class="text-center">
+        Da clic en el siguiente botón para crear una <srong>nueva solicitud</srong> de registro de sinodales.
+        </p>
+        <button type="submit" class="btn btn-primary mt-3">Nueva solicitud</button>
+    </form>
+</div>
+{% endblock %}

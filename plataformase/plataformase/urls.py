@@ -39,6 +39,8 @@ urlpatterns = [
     path('TBC/', include('TBC.urls')),
     #urls de app de RVOES
     path('inicio/', include('RVOES.urls')),
+    #urls de app de SETyRS
+    path('SETyRS/', include('SETyRS.urls')),
 
 ]
 
