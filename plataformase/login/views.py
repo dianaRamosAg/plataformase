@@ -100,7 +100,7 @@ def regUser(request):
                 #Se le hace usuario normal
                 CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
             #Registramos el usuario en la base de datos
-            usr = CustomUser(username=username, password=password, curp_rfc=curp_rfc, calle=calle,
+            usr = CustomUser(username=username,email=username, password=password, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
