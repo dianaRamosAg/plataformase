@@ -39,6 +39,8 @@ urlpatterns = [
     path('TBC/', include('TBC.urls')),
     #urls de app de RVOES
     path('inicio/', include('RVOES.urls')),
+    #urls de app de SIG
+    path('SigApp/', include('SigApp.urls')),
 
 ]
 

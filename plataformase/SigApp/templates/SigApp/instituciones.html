@@ -1,0 +1,409 @@
+{% extends 'SigApp/base.html' %}
+{% load static%}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+
+                .carousel-control-prev-icon {
+                background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+                }
+
+                .carousel-control-next-icon {
+                 background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+                }
+
+                .estiloTablas{
+                    font-family: "Montserrat", sans-serif;
+                    border: 2px solid black;
+                    background-color:rgba(0, 0, 0, 0);
+                }
+
+
+                .estiloTablas tr:hover{
+                    background-color:  #AFC9CF !important;
+                }
+
+                .fillC{
+                    max-width: 100% !important;
+                    max-height: 120% !important;
+                }
+              </style>
+
+    <script>
+
+    //$(document).ready(function() {
+    //$('.mdb-select').materialSelect();
+    //});
+   
+   //jQuery(window).load(function() {  
+ 
+    //$('.carousel').carousel('pause');
+
+    //});
+
+    function detalleCarrera(rvoeConsulta){
+        var renglonClickeado = document.getElementById(rvoeConsulta);
+        var rvoe = renglonClickeado.children[0].id;
+        console.log(rvoe);
+        window.location="/SigApp/detalle/"+rvoe+"/{{institucion.ClaveEscuela}}";
+    };
+
+    </script>
+    <!--<p class="centro" style="margin-left:50px; font-size:20px; margin-top: 10px; margin-bottom: 50px;">Información de la institución educativa</p>-->
+    <div class="row " style="margin-right: 0px;">
+    <!--Inicio Carousel -->
+
+    <div id="carouselExampleControls" class="col-lg-7 carousel slide " style="margin-top: 2%">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+              <h4 style="margin-left: 35%" class=" texto col-12 col-lg-6">Información Institución (1/2)</h4>
+            
+            <div class="row bg-light m-3">
+                <div class = "centro col-12 col-lg-12 p-2">
+                    <div class="row mb-2">
+                        <div class="col-12 col-lg-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Nombre:</p>
+                            <label class="texto w-75">{{institucion.NombreEscuela}}</label>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Clave Centro Trabajo:</p>
+                            <label class="texto w-75">{{institucion.ClaveEscuela}}</label>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Municipio:</p>
+                            <label class="texto w-75">{{institucion.Municipio}}</label>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Estatus:</p>
+                            <label class="texto w-75">{{institucion.EstatusEscuela}}</label>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Localidad:</p>
+                            <label class="texto w-75">{{institucion.Localidad}}</label>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Domicilio:</p>
+                            <label class="texto w-75">{{institucion.Calle}}</label>
+                        </div>
+                    </div> 
+                    
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Sector:</p>
+                            <label class="texto w-75">{{institucion.Dominio}}</label>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Codigo Postal:</p>
+                            <label class="texto w-75">{{institucion.CodPostal}}</label>
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Correo:</p>
+                            <label class="texto w-75">{{institucion.Email}}</label>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <p class="texto" style="font-size: 18px; font-weight: bold;">Director:</p>
+                            <label class="texto w-75">{{institucion.nombreDirector}} {{institucion.ApellidoP_Director}} {{institucion.ApellidoM_Director}}</label>
+                        </div>
+                    </div> 
+                    
+                </div>
+
+            
+             <!-- -->
+     
+            </div>
+
+          </div>
+         
+
+
+          <div class="carousel-item">
+               
+            <div> <h4 style="margin-left: 35%" class=" texto col-12 col-lg-7">Información Institución (2/2)</h4> </div>
+
+            <div class="row" style="margin-left: 42%;">
+                <div col-lg-6>
+                        <p style="font-size: 18px; font-weight: bold;  color: #757575;">Datos por escuela:</p>
+                </div>
+
+            </div>
+
+                 
+            <div class="row bg-light m-3">
+                <div class = "centro col-12 col-lg-12 p-2">
+                    <div class="row mb-2">
+                        <div class="col-12 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Total de Alumnos:</p>
+                            {% if statsg != None%}
+                                <label id="lblTotalAlumnos" class="texto w-75">{{statsg.TotalAlumnos}}</label>
+                                {%else%}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                            
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Alumnos Hombres:</p>
+                            {% if statsg != None%}
+                                <label id="lblTotalAlumnosHombres" class="texto w-75">{{statsg.TotalHombres}}</label>
+                                {%else%}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {%endif%}
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Alumnos Mujeres:</p>
+                            {% if statsg != None %}
+                                <label id="lblTotalAlumnosMujeres" class="texto w-75">{{statsg.TotalMujeres}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                        </div>
+
+                    </div>
+          
+                </div>
+             </div>
+
+             <div class="row" style="margin-left: 43%; color: #757575">
+                    <div col-lg-6>
+                            <p style="font-size: 18px; font-weight: bold;">Datos por año:</p>
+                    </div>
+    
+            </div>
+
+             <div class="row bg-light m-3">
+                <div class = "centro col-12 col-lg-12 p-2">
+                    <div class="row mb-2">
+                        <div class="col-12 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Primer Año:</p>
+                            {% if statsg != None %}
+                                <label id="lblTotalAlumnos" class="texto w-75">{{statsg.TotalPrimero}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                            
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Segundo Año:</p>
+                            {% if statsg != None %}
+                                <label id="lblTotalAlumnosHombres" class="texto w-75">{{statsg.TotalSegundo}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Tercer Año:</p>
+                            {% if statsg != None%}
+                                <label id="lblTotalAlumnosMujeres" class="texto w-75">{{statsg.TotalTercero}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                        </div>
+
+                    </div>
+          
+                </div>
+             </div>
+
+             <div class="row bg-light m-3">
+                <div class = "centro col-12 col-lg-12 p-2">
+                    <div class="row mb-2">
+                        <div class="col-12 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">cuartoAño:</p>
+                            {% if statsg != None %}
+                                <label id="lblTotalAlumnos" class="texto w-75">{{statsg.TotalCuarto}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                            
+                        </div>
+                        <div class="col-12 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Quinto Año:</p>
+                            {% if statsg != None %}
+                                <label id="lblTotalAlumnosHombres" class="texto w-75">{{statsg.TotalQuinto}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <p style="font-size: 18px; font-weight: bold;">Sexto Año:</p>
+                            {% if statsg != None %}
+                                <label id="lblTotalAlumnosMujeres" class="texto w-75">{{statsg.TotalSexto}}</label>
+                                {% else %}
+                                <label id="lblTotalAlumnos" class="texto w-75">Esperando registro</label>
+                            {% endif %}
+                        </div>
+
+                    </div>
+          
+                </div>
+             </div>
+             
+
+            
+          </div>
+          
+        </div>
+        <a class="carousel-control-prev col-1" href="#carouselExampleControls" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next col-1" href="#carouselExampleControls" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+
+        <!--Final Carousel --->
+
+
+      <!--Inicio Segundo Carousel --->
+
+      <div id="carouselExampleControls2" class="col-lg-5 carousel slide " style="margin-top: 2%; height: 100%;">
+        <div class="carousel-inner" style="height: 100%;">
+            {% if institucion.ImagenNo1.url != None %}
+          <div class="carousel-item active" style="height: 100%;">
+             
+            <div class="col-12 col-lg-12">
+                <img class="fillC" src="{{institucion.ImagenNo1.url}}"  alt="#">
+            </div>
+                  
+         </div>
+         {% else %}
+         <div class="carousel-item active" style="height: 100%;">
+             
+            <div class="col-12 col-lg-12">
+                <img class="fillC" src="{% static 'SigApp/noi.png' %}"  alt="#">
+            </div>
+                  
+         </div>
+
+         {% endif %}
+
+         {% if institucion.ImagenNo2.url != None %}
+          <div class="carousel-item">
+             
+            <div class="col-12 col-lg-12" >
+                <img class="fillC" src="{{institucion.ImagenNo2.url}}" alt="#">
+            </div>
+                  
+         </div>
+         {% else %}
+         <div class="carousel-item active" style="height: 100%;">
+             
+            <div class="col-12 col-lg-12">
+                <img class="fillC" src="{% static 'SigApp/noi.png' %}"  alt="#">
+            </div>
+                  
+         </div>
+         {% endif %}
+
+         {% if institucion.ImagenNo3.url != None %}
+          <div class="carousel-item">
+             
+            <div class="col-12 col-lg-12">
+                    <img class="fillC" src="{{institucion.ImagenNo3.url}}" alt="#">
+            </div>
+                  
+         </div>
+         {% else %}
+         <div class="carousel-item active" style="height: 100%;">
+             
+            <div class="col-12 col-lg-12">
+                <img class="fillC" src="{% static 'SigApp/noi.png' %}"  alt="#">
+            </div>
+                  
+         </div>
+         {% endif %}
+
+            
+          
+        </div>
+        <a class="carousel-control-prev col-1" href="#carouselExampleControls2" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next col-1" href="#carouselExampleControls2" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+
+      <!--Final Segundo Carousel --->
+        
+    </div><!--final div contenedor row-->
+
+    
+
+    <hr>
+    <div class="centro col">
+        <table  class="estiloTablas table table-secondary table-bordered table-hover">
+            <tr style="background-color: #BDBDBD"><td colspan="4"><h4>MEDIA SUPERIOR</h4></td></tr>
+            <tr style="background-color: #EDEDEF">
+                <td style="border-bottom: 2px solid black;">RVOE</td>
+                <td style="border-bottom: 2px solid black;">Carrera</td>
+                <td style="border-bottom: 2px solid black;">Modalidad</td>
+                <td style="border-bottom: 2px solid black;">Periodo</td>
+            </tr>
+
+            {% for element in RVOESF %}
+            {% if element.Tipo == 'Bachillerato' %}
+                <tr><a href="/SigApp/detalle">
+                    <td>{{element.ClaveCarrera}}</td>
+                    <td>{{element.NombreCarrera}}</td>
+                    <td>{{element.Modalidad}}</td>
+                    <td>{{element.Periodos}}</td>
+                </a>
+                </tr>
+                {% endif %}
+            {%endfor%}
+        </table>
+           
+        <table class="estiloTablas table table-secondary table-bordered table-hover">
+            <tr style=" background-color: #BDBDBD"><td colspan="4"><h4>SUPERIOR</h4></td></tr>
+                <tr style="background-color: #EDEDEF">
+                    <td>RVOE</td>
+                    <td>Carrera</td>
+                    <td>Modalidad</td>
+                    <td>Periodo</td>
+                </tr>
+                {% for element in RVOESF %}
+                {% if element.Tipo == 'CARRERA' or element.Tipo == 'POSGRADO' %}
+                    <tr onclick="detalleCarrera(this.id)" id="row{{forloop.counter}}">
+                        <td id="{{element.ClaveCarrera}}">{{element.ClaveCarrera}}</td>
+                        <td>{{element.NombreCarrera}}</td>
+                        <td>{{element.Modalidad}}</td>
+                        <td>{{element.Periodos}}</td>
+                    </tr>
+                    {% endif %}
+                {%endfor%}
+        </table>
+    </div>
+
+</body>
+{% endblock %}
+</html>
