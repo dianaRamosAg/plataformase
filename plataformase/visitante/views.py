@@ -44,10 +44,13 @@ def configuracionpdf(request):
 def perfiluser(request):
  
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='1':
-        return render(request,'perfiluserIF.html')
+        usrinst = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
+        return render(request, 'perfiluserIF.html', {'usrinst': usrinst })
+
     else:
         if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-            return render(request,'perfiluserIM.html')
+            usrinst = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
+            return render(request, 'perfiluserIM.html', {'usrinst': usrinst })
     
         if request.user.tipo_persona=='1':
             return render(request,'perfiluser.html')
@@ -176,8 +179,11 @@ def regUser(request, email):
     -:return redirect 'root': Regresa a la pantalla principal del administrador del sistema.
     -:return redirect 'signup': Regresa la vista en la cual el usuario podrá añadir nuevos usuarios.
     """
+    #Si quien hizo la solicitud de la página es un usuario administrador
     if request.user.tipo_usuario == '4':
+        #usrV (usuario-visitante): Obtenemos el usuario visitante por el email
         usrV = VisitanteSC.objects.get(email=email)
+        #Creamos el usuario base con los datos de usrV y posteriormente lo guardamos
         usr = CustomUser(username=usrV.email, email=usrV.email, password=usrV.password,
                          first_name=usrV.first_name, last_name=usrV.last_name,
                          curp_rfc=usrV.curp_rfc, calle=usrV.calle, noexterior=usrV.noexterior,
@@ -185,79 +191,18 @@ def regUser(request, email):
                          municipio=usrV.municipio, colonia=usrV.colonia, celular=usrV.celular,
                          tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona)
         usr.save()
+        #Si el usuario que se registró es un usuario de institución (1)
         if usrV.tipo_usuario == '1':
+            #Obtenemos el usuario base que se registró
             customUsr = CustomUser.objects.get(id=usr.id)
+            #Creamos la relación de la institución y el usuario base y posteriormente lo guardamos
             usrInst = UsuarioInstitucion(id_usuariobase=customUsr, cct=usrV.inst_cct, nombredirector=usrV.inst_nombredirector,
                                          sector=usrV.sector, nivel_educativo=usrV.nivel_educativo)
             usrInst.save()
-            VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
+        #Actualizamos el usuario visitante como un registro que ya fue revisado.
+        VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
+    #Lo redirige a la vista de los usuarios que ya se encuentran registrados.
     return redirect('usuarios')
-
-    '''
-    if request.method == 'POST':
-        import datetime
-        #Generamos las variables con los datos recibidos del request.
-        
-        username = request.POST["email"]
-        email = request.POST["email"]
-        curp_rfc = request.POST["curp_rfc"]
-        calle = request.POST["calle"]
-        password = make_password(request.POST["password2"])
-        noexterior = request.POST["noexterior"]
-        nointerior = request.POST["nointerior"]
-        codigopostal = request.POST["codigopostal"]
-        municipio = request.POST["municipio"]
-        colonia = request.POST["colonia"]
-        celular = request.POST["celular"]
-        tipo_usuario = request.POST["tipo_usuario"]
-        if request.POST["tipo_persona"] == "Física":
-            tipo_persona = '1'
-        else:
-            tipo_persona = '2'
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        if tipo_usuario!='2':
-            firma_digital=request.POST["first_name"]
-        else:
-            firma_digital = request.FILES["firma_digital"]
-        departamento = None
-
-
-        #Sí el usuario es jefe de departamento (tipo_usuario:2)
-        if tipo_usuario == '2':
-            #Definimos jefe como 1 (sí es jefe de departamento)
-            jefe = '1'
-        else:
-            #Definimos jefe como 0 (no es jefe de departamento)
-            jefe = '0'
-            firma_digital= None
-           
-            #Si el tipo de usuario es institución(1) o administrador del sistema(4)
-            if tipo_usuario == '1' or tipo_usuario == '4':
-                firma_digital= None
-                #Aseguramos que no pertenezcan a ningún departamento
-                departamento = None
-        #Obtenemos el ID del usuario que registro a al nuevo usuario
-        registro = (request.user.id)
-        #Si existe un usuario que sea jefe de ese departamento
-        if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists():
-            #Se le hace usuario normal
-            CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
-        #Registramos el usuario en la base de datos
-        usr = CustomUser(username=username, password=password, curp_rfc=curp_rfc, calle=calle,
-                        noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
-                        municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
-                        tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
-                        departamento_id=departamento, jefe=jefe, registro_id=registro,
-                        date_joined=datetime.datetime.now(),firma_digital=firma_digital)
-        usr.save()
-        VisitanteSC.objects.filter(email=username,leida='0').update(leida='1')
-        return redirect('usuarios')
-    else:
-        return redirect('signup')
-else:
-    return redirect('perfil')
-    '''
          
 
 def cancelarsolicitud(request,email2,email):
@@ -287,6 +232,8 @@ def actualizarperfilusr(request):
         if request.user.tipo_usuario=='1':
             inst_cct=request.POST["cct"]
             inst_nombredirector=request.POST["nombre_director"]
+            sector=request.POST["sector"]
+            nivel_educativo=request.POST["nivel_educativo"]
 
         else:
             inst_cct=None
@@ -294,9 +241,14 @@ def actualizarperfilusr(request):
 
         
         CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
-        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name,
-        inst_cct=inst_cct,inst_nombredirector=inst_nombredirector)
-        return redirect('perfiluser') 
+        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name)
+        if request.user.tipo_usuario=='1':
+            UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id).update(cct = inst_cct,
+                                             nombredirector = inst_nombredirector, sector=sector,
+                                             nivel_educativo=nivel_educativo)
+
+  
+    return redirect('perfiluser') 
 
 
 def GuardarFormatoPDF(request):

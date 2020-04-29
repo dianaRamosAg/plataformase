@@ -97,18 +97,18 @@
                             <div class="form-group">
                                 <label class="ml-2" for="tipo_persona" style="float: left;">Tipo de persona:</label>
                                 {% if VisitanteSC.tipo_persona == '1' %}
-                                    <input  class="form-control col-2" style="width: 15%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Física">
+                                    <input  class="form-control col-2" style="width: 35%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Física">
                                 {% endif %}
                                 {% if VisitanteSC.tipo_persona == '2' %}
-                                    <input  class="form-control col-2" style="width: 15%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Moral">
+                                    <input  class="form-control col-2" style="width: 35%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Moral">
                                 {% endif %}
                                 <br>
                                 <label class="ml-2" for="id_tipo_usuario" style="float: left;">Tipo de usuario:</label>
                                 {% if VisitanteSC.tipo_usuario == '1' %}
-                                    <input  class="form-control col-4" style="width: 15%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Institución">
+                                    <input  class="form-control col-4" style="width: 35%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Institución">
                                 {% endif %}
                                 {% if VisitanteSC.tipo_usuario == '5' %}
-                                    <input  class="form-control col-4" style="width: 15%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Particular">
+                                    <input  class="form-control col-4" style="width: 35%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Particular">
                                 {% endif %}
                                 <br>
                             </div>
@@ -127,7 +127,7 @@
                                 {% if VisitanteSC.tipo_usuario == '1' %}
                                     <div class="form-group" style="text-align:left;" id="datos_inst"  >
                                         <p>Datos de institución</p>
-                                        <label class="ml-2 col-1" for="cct" style="text-align: left;">CCT :</label>
+                                        <label class="ml-2 col-1" for="cct" style="text-align: left;">Clave del cenro de trabajo (CCT) :</label>
                                         <input type="text" name="cct"  id="cct" class="form-control col-2" readonly value="{{VisitanteSC.inst_cct}}" >
                                         <label class="ml-2 col-1" for="nombre_director" style="text-align: left;">Nombre de director:</label>
                                         <input type="text" readonly name="nombre_director" id="nombre_director" class="form-control col-2" value="{{VisitanteSC.inst_nombredirector}}" >
@@ -307,7 +307,6 @@ function femail(){
     function pmoral(){
         var per = document.getElementById('tipo_persona');
         if (per.value == '2'){
-
             document.getElementById('id_last_name').style.display = 'none';
             // document.getElementById("id_last_name").setAttribute("required", "false");
             // ap = document.getElementById('id_last_name').value;

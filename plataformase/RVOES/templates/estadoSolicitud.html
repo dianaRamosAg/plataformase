@@ -52,6 +52,7 @@
                     <thead>
                         <tr class="text-center">
                             <th>Folio</th>
+                            <th>CCT</th>
                             <th>Modalidad</th>
                             <th>Nivel</th>
                             <th>Estatus</th>
@@ -63,6 +64,7 @@
                             {% for element in solicitudes %}
                             <tr class="text-center">
                                 <td><a href="{% url 'historial' user.id element.id %}">{{element.id}}</a></td>
+                                <td>{{ element.cct }}</td>
                                 <td>{% if element.modalidad == '2' %}
                                         Escolarizada
                                     {% endif %}

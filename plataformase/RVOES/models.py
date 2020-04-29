@@ -23,6 +23,7 @@ class Solicitud(models.Model):
     noNotario = models.IntegerField(blank=True, null=True)#Número de notario público
     nombreRepresentante = models.TextField(blank=True, null=True)#Nombre del representante legal
     nombreSolicitud = models.TextField(blank=True, null=True)#Nombre de la solicitud
+    cct = models.TextField(blank=True, null=True)#Clave de centro de trabajo a la que esta vinculada la solicitud
 
     def __str__(self):
         return u'{0}'.format(self.id)

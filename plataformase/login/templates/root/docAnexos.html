@@ -6,16 +6,13 @@
 {% if not user.is_authenticated %}
    <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
 {% else %}
-<div class="text-center m-5">
-    <br><br><br>
-    <h2>Subir archivos de acuerdos</h2>
-    <br>
-    <div>
-        <form method="post" enctype="multipart/form-data" class="form-group custom-file p-3 m-2 pb-5">
-            {% csrf_token %}
+<div class="col-md-6" style="float: left;">
+        <form method="post" enctype="multipart/form-data" class="form-group ">
+            {% csrf_token %} <br><br><br><br>
+            <h3 align="center">Subir archivos de acuerdos</h3><br><br>
             <div class="row">
                 <label class="" for="id_nombre" style="float:left; margin-left: 50px;">Nombre del acuerdo : </label>
-                <input type="text" class="form-control" required name="nombre" id="id_nombre" style="width: 30%;">
+                <input type="text" class="form-control" required name="nombre" id="id_nombre" style="width: 50%;">
                 <br>
                 <label class="" for="id_nivel" style="float:left; margin-left: 50px;">Nivel:</label>
                 <select class="custom-select " name="nivel" id="id_nivel" style="float:left; margin-left: 105px;">
@@ -23,20 +20,21 @@
                     <option value="2">Superior</option>
                 </select>
             </div><br>
-            <div class="row d-flex"  style="background-color: lightgray; width: 41%; margin-left: 37px;">
+            <div class="row d-flex"  style="background-color: lightgray; width: 75%; margin-left: 37px;">
                 <br>
                 <label class="font-weight-normal" for="id_archivo" style="float:left; margin-left: 0px;"><b>Archivo de acuerdo :</b></label>
-                <input type="file" required class="form-control-file col-4 p-3" name="archivo" id="id_archivo">
+                <input type="file" required class="form-control-file " name="archivo" id="id_archivo">
                 <br>
                 <button class="btn btn-primary" style="float:left; margin-left: 145px;">Añadir</button>
             </div>
         </form>
     </div>
-    <br>
 
-    <h3>Acuerdos subidos</h3>
-    <div class="m-5 col-10 mx-auto ">
-        <table class="table table-hover" style="width: 80%; text-align:center; margin: 0 auto;">
+
+   
+    <div class="col-md-6" style="float: right;" ><br><br><br><br>
+        <h3 align="center">Acuerdos subidos</h3><br><br>
+        <table class="table table-hover" style="width: 100%; text-align:center; margin: 0 auto;">
             <thead class="thead-dark">
                 <tr class="bg-primary">
                     <th class="w-50">Nombre</th>
