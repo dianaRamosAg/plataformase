@@ -24,10 +24,8 @@ else:
 
 def SignUpView(request):
     """Esta vista permite a los administradores del sistema añadir nuevos usuarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
     Retorna
     -:return render: Regresa la vista en la cual el usuario podrá añadir nuevos usuarios.
     """
@@ -41,10 +39,8 @@ def SignUpView(request):
 
 def regUser(request):
     """Registra a los usuarios en la base de datos.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
     Retorna
     -:return redirect 'root': Regresa a la pantalla principal del administrador del sistema.
     -:return redirect 'signup': Regresa la vista en la cual el usuario podrá añadir nuevos usuarios.
@@ -120,10 +116,8 @@ def regUser(request):
 
 def docAnexos(request):
     """Registra acuerdos y visualiza los ya registrados.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
     Retorna
     -:return: Regresa a la pantalla para que el usuario pueda añadir y ver los acuerdos.
     """
@@ -149,10 +143,8 @@ def docAnexos(request):
 
 def inicioRoot(request):
     """Redirige a la página de inicio del administrador del sistema.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
     Retorna
     -:return: Redirige a la página de inicio del administrador del sistema.
     """
@@ -163,10 +155,8 @@ def inicioRoot(request):
 
 def perfil(request):
     """Redirige a la página de inicio según el tipo de usuario.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
     Retorna
     -:return: Redirige a la página de inicio según el tipo de usuario.
     """
@@ -207,10 +197,8 @@ def perfil(request):
 
 def usuarios(request):
     """Esta vista permite a los administradores del sistema actualizar el estatus de los usuarios registrados.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
-
     Retorna
     -:return render: Regresa la vista en la cual el usuario podrá actualizar el estatus de los usuarios.
     """

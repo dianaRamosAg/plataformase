@@ -92,10 +92,8 @@ def notificacion(request):
         return render(request,'menuvisitante.html')
 def notificacionadmon(request):
     """Muestra al usuario las notificaciones que tiene como no leídas.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar las notificaciones que tiene que no han sido leídas.
     """
@@ -170,11 +168,9 @@ def validar(request,email):
 
 def regUser(request, email):
     """Registra a los usuarios en la base de datos.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
     -:param email: Contiene el correo de la persona que va a ser aceptada su cuenta.
-
     Retorna
     -:return redirect 'root': Regresa a la pantalla principal del administrador del sistema.
     -:return redirect 'signup': Regresa la vista en la cual el usuario podrá añadir nuevos usuarios.
@@ -224,8 +220,6 @@ def regUser(request, email):
         else:
             firma_digital = request.FILES["firma_digital"]
         departamento = None
-
-
         #Sí el usuario es jefe de departamento (tipo_usuario:2)
         if tipo_usuario == '2':
             #Definimos jefe como 1 (sí es jefe de departamento)
@@ -331,4 +325,3 @@ def cct(request):
         usrInst.save()
     centros = UsuarioInstitucion.objects.all().order_by('cct').filter(id_usuariobase=request.user.id)
     return render(request, 'CCT.html', {'centros': centros})
-

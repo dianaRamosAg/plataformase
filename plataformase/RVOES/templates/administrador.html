@@ -44,6 +44,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Folio</th>
+                                <th>CTT</th>
                                 <th>Institución</th>
                                 <th>Estatus</th>
                                 <th>Fecha</th>
@@ -55,6 +56,7 @@
                                 {% for element in solicitudes %}
                                 <tr class="text-center">
                                     <td><a href="{% url 'solicitudArchivos' element.id %}">{{element.id}}</a></td>
+                                    <td>{% if element.cct %}{{ element.cct }}{% endif %}</td>
                                     <td>{{element.customuser.first_name}} {{element.customuser.last_name}}</td>
                                     <td>
                                         {% if element.completado == 10 %}

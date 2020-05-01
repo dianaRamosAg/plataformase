@@ -15,25 +15,37 @@
                             <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
                                 <main role="main" class="inner cover">
                                     <h2 class="cover-heading">Registro de Nueva Solicitud</h2>
-                                    <label class="my-1 mr-2 lead" for="id_nivel">Nivel:</label>
-                                    <select required class="custom-select mr-sm-2" name="nivel" id="id_nivel" onchange="activaModalidades();">
-                                        <option selected>Seleccionar...</option>
-                                        <option value="1">Media Superior</option>
-                                        <option value="2">Superior</option>
-                                    </select>
+
+                                    <div id="div_cct">
+                                        <label class="my-1 mr-2 lead" for="id_cct">Clave de Centro de Trabajo:</label>
+                                        <select class="custom-select mr-sm-2 col-3" name="cct" id="id_cct" onchange="activaNivel();">
+                                            {% for element in cct %}
+                                                <option value="{{element.cct}}">{{element.cct}}</option>
+                                            {% endfor %}
+                                        </select><br>
+                                    </div>
+
+                                    <label class="my-1 mr-2 lead" for="id_nivel" id="id_lblNivel">Nivel:</label>
+                                    <div id="div_nivel">
+                                        <select required class="custom-select mr-sm-2 col-4" name="nivel" id="id_nivel" onchange="activaModalidades();">
+                                            <option selected>Seleccionar...</option>
+                                            <option value="1">Media Superior</option>
+                                            <option value="2">Superior</option>
+                                        </select>
+                                    </div><br>
 
                                     <label class="my-1 mr-2 lead" for="id_modalidad">Modalidad:</label>
-                                    <select required class="custom-select mr-sm-2" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
+                                    <select required class="custom-select mr-sm-2 col-4" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
                                         <option selected>Seleccionar...</option>
                                         <option value="1">Mixta</option>
                                         <option value="2">Escolarizada</option>
                                         <option value="3">No escolarizada</option>
-                                    </select>
+                                    </select><br>
 
                                     <label class="my-1 mr-2 lead" for="id_opcion">Opción:</label>
-                                    <select required class="custom-select mr-sm-2" disabled="true" name="opcion" id="id_opcion">
+                                    <select required class="custom-select mr-sm-2 col-4" disabled="true" name="opcion" id="id_opcion">
                                         <option selected>Seleccionar...</option>
-                                    </select>
+                                    </select><br>
 
                                     <div class="custom-control custom-checkbox">
                                       <input type="checkbox" class="custom-control-input" id="idcheckbox">
@@ -228,6 +240,40 @@
             document.getElementById("id_modalidad").disabled = false;
         }
     }
+
+    function activaNivel(){
+      tipoUsr = "{{request.user.tipo_usuario}}";
+      if (tipoUsr == "1"){
+      {% for element in cct %}
+        element = "{{element.cct}}";
+        if(element == document.getElementById("id_cct").value){
+          switch({{ element.nivel_educativo }}){
+            case 1:
+                document.getElementById("id_nivel").value = '1';
+                document.getElementById("div_nivel").style.display = 'none';
+                document.getElementById("id_lblNivel").innerHTML = 'Nivel: Media Superior';
+                activaModalidades();
+                break;
+            case 2:
+                document.getElementById("id_nivel").value = '2';
+                document.getElementById("div_nivel").style.display = 'none';
+                document.getElementById("id_lblNivel").innerHTML = 'Nivel: Superior';
+                activaModalidades();
+                break;
+            case 3:
+                document.getElementById("id_nivel").value = 'Seleccionar...';
+                document.getElementById("div_nivel").style.display = 'block';
+                document.getElementById("id_lblNivel").innerHTML = 'Nivel:';
+                activaModalidades();
+                break;
+          }
+        }
+      {% endfor %}
+      }else{
+        document.getElementById("div_cct").style.display = 'none';
+      }
+    }
+    activaNivel();
 
     function activaOpciones(){
         document.getElementById("id_opcion").disabled = false;

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.views.generic.base import View
 from .models import *
-from login.models import CustomUser
+from login.models import CustomUser, UsuarioInstitucion
 from django.db.models.expressions import RawSQL
 from .forms import ArchivosInstForm, ArchivosCCurrForm, ArchivosCAcadForm, ArchivosMedSupForm, ComentariosForms
 from django.contrib.auth.hashers import make_password
@@ -146,7 +146,8 @@ def solicitud(request):
             if record[1] != -1:#Si el id es diferente a -1 (Posible borrado de esta línea)
                 if record[0] >= 1 and record[0] <= 4:#Si la solicitud se encuentra pediente en alguna carpeta
                     Solicitud.objects.filter(id=record[1]).delete()#Borra la solicitud de la base de datos.
-        return render(request, 'solicitud.html')#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
+        cct = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
+        return render(request, 'solicitud.html', {'cct': cct})#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
     else:
         return redirect('perfil')
 
@@ -182,6 +183,11 @@ def solicitud_insert(request):
             nombreSolicitud = request.POST["nombreSolicitud"]
             fechaRegistro = datetime.datetime.now()#Obtenemos la fecha actual
             estatus = Departamento.objects.get(id=1)#Obtenemos el primer departamento al que debe pasar
+            #Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
+            if request.user.tipo_usuario == '1':
+                cct = request.POST["cct"]
+            else:
+                cct = None
             # Se generá la plantilla para inserción de solicitud
             solicitud = Solicitud(nivel=nivel, modalidad=modalidad, opcion=opcion,
                                 salud=salud, customuser_id=customuser_id,
@@ -189,7 +195,7 @@ def solicitud_insert(request):
                                 noInstrumentoNotarial=noInstrumentoNotarial,
                                 nombreNotario=nombreNotario, noNotario=noNotario,
                                 nombreRepresentante=nombreRepresentante,
-                                nombreSolicitud=nombreSolicitud)
+                                nombreSolicitud=nombreSolicitud, cct=cct)
             solicitud.save()#Guarda la solicitud
             if nivel == '1':#Si el nivel es uno, redirecciona a la URL para subir archivos de solicitudes de media superior
                 return redirect('medSuperior')
