@@ -29,9 +29,10 @@
 			<!-- / #logo-header -->
 			<nav>
 				<ul class="nav">
-					<li><a href="{% url 'cct'%}" >Centros de trabajo  |  </a>
+					<li><a href="{% url 'cct'%}" >TBC    </a>
+					<li><a href="{% url 'cct'%}" >Centros de trabajo    </a>
 					
-					<li><a href="#" style="pointer-events: none;">Bienvenido, Institución! {{ user.first_name }} {{ user.last_name }} </a>
+					<li><a href="#" style="pointer-events: none;">Bienvenido (a) : {{ user.first_name }} {{ user.last_name }} </a>
 					<li class="nav-item dropdown ml-auto">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="{% static '/img/us2.png' %}"/></a>
 						<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
@@ -110,6 +111,27 @@
 						<div class="pricingCard__button">
 							<span class="button button--primary">
 								Acceder
+							</span>
+						</div>
+					</a>
+				</div>
+				<div class="pricingCardGrid__pricingCard">
+					<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
+					<a class="pricingCard" href="{% url 'inicio' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+							Sistema de Telebachillerato Comunitario
+						</div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-4 col-xs-4">
+								<img src="{% static '/img/institucion.png'%}"/>
+							</div>
+							<span class="pricingCard__period">
+								<p align="justify">Sistema de Telebachillerato <br><br></p>
+							</span>
+						</div>
+						<div class="pricingCard__button">
+							<span class="button button--primary">
+								Próximamente
 							</span>
 						</div>
 					</a>

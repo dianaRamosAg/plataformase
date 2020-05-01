@@ -89,7 +89,7 @@ def regUser(request):
                 firma_digital= None
                
                 #Si el tipo de usuario es institución(1) o administrador del sistema(4)
-                if tipo_usuario == '1' or tipo_usuario == '4' or tipo_usuario=='5':
+                if tipo_usuario == '1' or tipo_usuario == '4' or tipo_usuario =='5':
                     firma_digital= None
                     #Aseguramos que no pertenezcan a ningún departamento
                     departamento = None

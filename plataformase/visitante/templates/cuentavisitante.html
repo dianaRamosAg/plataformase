@@ -49,19 +49,34 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="mr-2" for="id_email">Correo: </label>
-                                <input class="form-control col"  type="text" name="email" required id="id_email" placeholder="correo@dominio.com" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                <input class="form-control col"  type="text" name="email" required id="id_email" placeholder="correo@dominio.com" onblur="verificar3()"pattern="[a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                <div class="row"><br>
+                                    <div class="alert alert-warning col-md-4 "  role="alert" id="errore" style="width: 100%; float:left; display: none;">
+                                    <small><strong> ¡Email no sigue el patrón!</strong>
+                                    </small> </div>
+                                </div>
                                 <label class="mr-2" for="id_password">Contraseña: </label>
-                                <input class="form-control col"  type="password" name="password" minlength="8" maxlength="20" required id="id_password" placeholder="Contraseña">
+                                <input class="form-control col"  type="password" name="password" minlength="8" maxlength="20" onblur="verificar()" pattern="[A-Za-z0-9!?-]{8,12}" required id="id_password" placeholder="Contraseña" >
                                 <small id="passwordHelpBlock" class="form-text text-muted" align="justify" ><br>
                                     Su contraseña no puede ser muy similar a su información personal, debe contener 8-20 caracteres,
                                     no puede ser de uso común y no puede ser enteramente numérica.
                                 </small><br>
+                                <div class="row">
+                                    <div class="alert alert-warning col-md-4 "  role="alert" id="errorp" style="width: 100%; float:left; display: none;">
+                                    <small><strong> ¡La contraseña no es valida!</strong>
+                                    </small> </div>
+                                </div>
                                 <br>
-                                <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" required id="id_password2" placeholder="Confirmar contraseña">
+                                <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" required id="id_password2" onblur="verificar2()" pattern="[A-Za-z0-9!?-]{8,12}"placeholder="Confirmar contraseña">
+                            </div>
+                            <div class="row">
+                                <div class="alert alert-warning col-md-4 "  role="alert" id="diferente" style="width: 100%; float:left; display: none;">
+                                <small><strong> ¡ Las contraseñas son diferentes !</strong>
+                                </small> </div>
                             </div>
                         </div><br>
 
-                            <div class="m-2 col-12 text-center">
+                            <div class="m-2 col-12 text-center" style="float: left;">
                                 <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
                                 <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
                                     <option value="1" selected >Institución</option>
@@ -76,8 +91,8 @@
                                     <option value="2">Persona moral</option>
                                 </select>
                                 <br>
-                            </div>
-                        <button id="step-1-next" class="btn btn-lg btn-primary nextBtn pull-right">Siguiente</button>
+                            </div><br><br><br><br><br><br><br>
+                        <button id="step-1-next" type="submit" class="btn btn-lg btn-primary nextBtn pull-right" onclick="checar()">Siguiente</button>
                         <br><br><br>
                     </div>
                 </div>
@@ -88,7 +103,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                                <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,40}" type="text" name="first_name" required id="id_first_name">
+                                <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*" type="text" name="first_name" required id="id_first_name">
                             </div>
                             <div class="form-group">
                                 <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
@@ -96,28 +111,30 @@
                             </div>
                             <div class="form-group">
                                 <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
-                                <input class="form-control ml-1 col-3" type="text" minlength="10" maxlength="18"  name="curp_rfc" required id="id_curp_rfc">
+                                <input class="form-control ml-1 col-2" type="text" minlength="10" maxlength="18"  name="curp_rfc" required id="id_curp_rfc">
                                 <a class="btn btn-secondary ml-1" href="http://consultas.curp.gob.mx" id="acurp" target="_blank">Consulta CURP</a>
                             </div>
                             <div class="form-group">
-                                <label class="ml-2 mr-2" for="id_celular">Teléfono celular:</label>
-                                <input class="form-control col-2" required type="tel" name="celular" id="id_celular"><br>
+                                <label class="ml-1 col-1" for="id_celular">Teléfono celular:</label>
+                                <input class="form-control ml-1 col-2" required type="tel" name="celular" id="id_celular" pattern="[0-9]{10,12}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="ml-1 col-1 "for="id_calle">Calle:</label>
+                                    <input class="form-control ml-1 col-2" required type="text" name="calle" id="id_calle">
+                                </div>
+                                   
+                                <div class="form-group">
+                                    <label class="ml-1 col-1" for="id_colonia">Colonia:</label>
+                                    <input class="form-control ml-1 col-2" required type="text" name="colonia" id="id_colonia">
                                 </div>
                             </div>
                     
                             <div class="col-md-6">
+                            
                                 <div class="form-group">
-                                    <label class="ml-2" for="id_calle">Calle:</label>
-                                    <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle"><br>
-                                </div>
-                                <div class="form-group">
-                                    <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
-                                    <input class="form-control col-2" required type="text" name="colonia" id="id_colonia"><br>
-                                </div>
-                                <div class="form-group">
-                                    <label class="ml-2 mr-2" for="id_municipio">Municipio:</label>
-                                    <select  class="form-control col-2" name="municipio" id="id_municipio" required>
-                                        <option disabled="" selected="">Seleccione</option>
+                                    <label class="ml-2 mr-2" for="id_municipio">Municipio *:</label>
+                                    <select  class="form-control col-2" name="municipio" id="id_municipio" required >
+                                        <option disabled="" selected="" value="">Seleccione</option>
                                         <option value="Acaponeta"> Acaponeta </option>
                                         <option value="Ahucatlán"> Ahucatlán </option>
                                         <option value="Amatlán de caña"> Amatlán de cañas </option>
@@ -143,56 +160,59 @@
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0"><br>
+                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0">
                                    </div>
                                </div>
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_nointerior">No. Interior:</label>
-                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="0"><br>
+                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="0">
                                    </div>
                                </div>
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_codigopostal">Código postal:</label>
-                                       <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"><br>
+                                       <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal">
                                    </div>
                                </div>
-                                <br><br>
+                                
                                 <div class="col-md-12">
                                     <div class="form-group" id="datos_inst">
-                                        <p>Datos de institución</p>
-                                        <label class="ml-2 col-1" for="id_cct" style="text-align: left;">CCT :</label>
-                                        <input type="text" name="cct"  id="id_cct" class="form-control col-2" placeholder="Clave del centro de trabajo" >
+                                        <h3>Datos de institución</h3>*
+                                        <small>Estos datos son obligatorios</small><br>
+                                        <label class="ml-2 col-1" for="id_cct" style="text-align: left;">Clave del centro de trabajo :</label>
+                                        <input type="text" name="cct"  id="id_cct" class="form-control col-2"  required >
                                         <label class="ml-2 col-1" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
-                                        <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control ml-1 col-2" placeholder="" >
+                                        <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control ml-1 col-2" required >
                                         <label class="ml-2 col-1" for="id_sector" style="text-align: left;">Sector:</label>
                                         <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
-                                            <option disabled="" selected="">Seleccione</option>
+                                            <option disabled="" selected="" value="">Seleccione</option>
                                             <option value="Publico"> Público </option>
                                             <option value="Privado"> Privado </option>
                                         </select>
                                         <label class="ml-2 col-1" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
                                         <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required>
-                                            <option disabled="" selected="">Seleccione</option>
+                                            <option disabled="" selected="" value="">Seleccione</option>
                                             <option value="1"> Media superior </option>
                                             <option value="2"> Superior </option>
                                             <option value="3"> Ambos </option>
                                         </select>
                                     </div>
                                 </div>
+                                <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right" type="submit">Enviar</button>
+                                <a href="{% url 'login'%}"class="btn btn-lg  btn-danger pull-right" >Salir</a>
                         </div>
-                        <br>
-                        <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right">Siguiente</button>
-                        <a href="{% url 'login'%}"class="btn btn-danger col-2 mx-auto">Salir</a>
+                        <br><br><br>   <br><br><br>
+                       
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="step-3">
+                <!-- <div role="tabpanel" class="tab-pane" id="step-3">
                     <div class="col-md-12"><br><br>
                         <h4>Enviando tu solicitud de registro a los administradores</h4>
                     </div>
-                </div>
+                </div> -->
             </form>
+            
         </div>
     </div>
 
@@ -236,6 +256,56 @@
         });
     });
 
+    //Funciones para validar campos del formulario y mandar mensaje en caso de error
+    function verificar(){
+        //Función para validar contraseña
+        var sel = document.getElementById("errorp");
+        var pass = document.getElementById("id_password");
+        var re = /[A-Za-z0-9!?-]{8,12}/;  
+        var ps= re.exec(pass.value)
+        if(!ps)
+        {
+            sel.style.display = 'inline';
+        }
+        else
+        {sel.style.display = 'none';}    
+    }
+    function verificar2(){
+        //Función para validar que las contraseñas sean iguales
+        var sel = document.getElementById("diferente");
+        var pass = document.getElementById("id_password2");
+        var pass1 = document.getElementById("id_password");
+        if(pass1.value!=pass.value)
+        {
+            sel.style.display = 'inline';
+        }
+        else
+        {sel.style.display = 'none';}    
+    }
+    function checar(){
+        
+       
+        var pass = document.getElementById("id_password2");
+      
+        if(pass.value=="")
+        {
+            alert("¡No pueden quedar campos vacios!");
+        }
+         
+    }
+    function verificar3(){
+        //validar email
+        var sel = document.getElementById("errore");
+        var pass = document.getElementById("id_email");
+        var re = /[a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}/;  
+        var ps= re.exec(pass.value)
+        if(!ps)
+        {
+            sel.style.display = 'inline';
+        }
+        else
+        {sel.style.display = 'none';}    
+    }
         var ap = " ";
         var borrado = 0;
         function pmoral(){
@@ -299,20 +369,7 @@
         pmoral();
         }
     
-        departamento();
-        function departamento(){
-            var sel = document.getElementById("id_departamento");
-            var lbl = document.getElementById("lbl_departamento");
-            var user = document.getElementById("id_tipo_usuario");
-            if (user.value == '2' || user.value == '3'){
-                sel.style.display = 'inline';
-                lbl.style.display = 'inline';
-            }else{
-                sel.style.display = 'none';
-                lbl.style.display = 'none';
-            }
-        }
-    
+        
 
 
     </script>

@@ -193,7 +193,7 @@ def regUser(request, email):
             usrInst = UsuarioInstitucion(id_usuariobase=customUsr, cct=usrV.inst_cct, nombredirector=usrV.inst_nombredirector,
                                          sector=usrV.sector, nivel_educativo=usrV.nivel_educativo)
             usrInst.save()
-            VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
+    VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
     return redirect('usuarios')
 
     '''
