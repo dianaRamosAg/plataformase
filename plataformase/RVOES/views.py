@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.views.generic.base import View
 from .models import *
-from login.models import CustomUser
+from login.models import CustomUser, UsuarioInstitucion
 from django.db.models.expressions import RawSQL
 from .forms import ArchivosInstForm, ArchivosCCurrForm, ArchivosCAcadForm, ArchivosMedSupForm, ComentariosForms
 from django.contrib.auth.hashers import make_password
@@ -16,7 +16,7 @@ from .render import render_pdf_planes_prog_estud
 """
 Todos los métodos (menos class Pdf(View) y def  getUltSolicitud(id_usuario) ) incluyen el siguiente código:
 #Si el tipo de usuario que hizo la solicitud es (1: institución, 2-3: personal del departamento)
-if request.user.tipo_usuario == '1':
+if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
     #Código del método
     ....
 #Si no corresponde el tipo de usuario lo manda a su página principal o login por defecto
@@ -59,7 +59,7 @@ def index_user(request):
     Retorna
     -:return: Regresa la plantilla "Inicio.html" (página principal del usuario).
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1' or request.user.tipo_usuario == '5' :
         TotalNotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='H',
                                                         usuario_id=request.user.id).count()
         return render(request, 'Inicio.html', {"total": TotalNotificaciones})
@@ -80,7 +80,7 @@ def acuerdos(request):
     -:return: Regresa la plantilla "acuerdos.html" en la cual la institución visualiza los acuerdos para realizar una
     solicitud de RVOE
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1' or request.user.tipo_usuario == '5':
         docsMS = Acuerdos.objects.filter(nivel='1')#Obtiene los acuerdos correspondientes para Media Superior.
         docsS = Acuerdos.objects.filter(nivel='2')#Obtiene los acuerdos correspondientes para Superior.
         return render(request, 'acuerdos.html', {'docsMS': docsMS, 'docsS': docsS})
@@ -105,7 +105,7 @@ def validacion(request):
     -:return render: Retorna la plantilla "faltaArchivos.html" para preguntar a la institución si quiere continuar con la
      solicitud pendiente o empezar una nueva.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1' or request.user.tipo_usuario == '5':
         record = Solicitud.objects.values_list('completado', 'id').filter(customuser=request.user.id).last()
         if not record == None:#Si no existe una solicitud ingresada
             if (record[0] != 11) and (record[0] != 10):#Si la última solicitud aún no a terminado su revición digital
@@ -139,14 +139,15 @@ def solicitud(request):
     Retorna
     -:return: Retorna la plantilla "solicitud.html" para que el usuario empiece el proceso de solicitud de RVOE.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         #record obtiene de la última solicitud del usuario, el valor de los campos "completado" e "id"
         record = Solicitud.objects.values_list('completado', 'id').filter(customuser=request.user.id).last()
         if record:#Si se obtuvo algún resultado
             if record[1] != -1:#Si el id es diferente a -1 (Posible borrado de esta línea)
                 if record[0] >= 1 and record[0] <= 4:#Si la solicitud se encuentra pediente en alguna carpeta
                     Solicitud.objects.filter(id=record[1]).delete()#Borra la solicitud de la base de datos.
-        return render(request, 'solicitud.html')#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
+        cct = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
+        return render(request, 'solicitud.html', {'cct': cct})#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
     else:
         return redirect('perfil')
 
@@ -165,7 +166,7 @@ def solicitud_insert(request):
     -:return redirect('institucionalSup'): Redirige a la URL de Superior para que la institución pueda subir los archivos correspondientes.
     -:return redirect('solicitud'): Redirige a la URL de Solicitud para que la institución pueda iniciar una nueva solicitud.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         #Si el request es con el método POST, registra la solicitud en la base de datos y después lo redirige a subir archivos
         if request.method == 'POST':#Si el request fue realizada con el método POST
             import datetime#Librería para guardar la fecha
@@ -182,6 +183,11 @@ def solicitud_insert(request):
             nombreSolicitud = request.POST["nombreSolicitud"]
             fechaRegistro = datetime.datetime.now()#Obtenemos la fecha actual
             estatus = Departamento.objects.get(id=1)#Obtenemos el primer departamento al que debe pasar
+            #Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
+            if request.user.tipo_usuario == '1':
+                cct = request.POST["cct"]
+            else:
+                cct = None
             # Se generá la plantilla para inserción de solicitud
             solicitud = Solicitud(nivel=nivel, modalidad=modalidad, opcion=opcion,
                                 salud=salud, customuser_id=customuser_id,
@@ -189,7 +195,7 @@ def solicitud_insert(request):
                                 noInstrumentoNotarial=noInstrumentoNotarial,
                                 nombreNotario=nombreNotario, noNotario=noNotario,
                                 nombreRepresentante=nombreRepresentante,
-                                nombreSolicitud=nombreSolicitud)
+                                nombreSolicitud=nombreSolicitud, cct=cct)
             solicitud.save()#Guarda la solicitud
             if nivel == '1':#Si el nivel es uno, redirecciona a la URL para subir archivos de solicitudes de media superior
                 return redirect('medSuperior')
@@ -213,7 +219,7 @@ def SInstitucional(request):
     -:return: Retorna la plantilla "institucionalSup.html" para que la institución pueda subir los archivos correspondientes
      a la carpeta institucional.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         request.POST._mutable = True#Activando esta opción podremos editar los datos que vienen del método POST
         request.POST["id_solicitud"] = Solicitud.objects.values_list('id').order_by('id').last()[0]#Pasamos el id de la solicitud en caso
         id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Es solo para inicializar el valor ya que el uso de la misma lo exige
@@ -255,7 +261,7 @@ def SCurricular(request):
     -:return: Retorna la plantilla "curricularSup.html" para que la institución  pueda subir los archivos correspondientes
      a la carpeta curricular.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         request.POST._mutable = True#Activando esta opción podremos editar los datos que vienen del método POST
         request.POST["id_solicitud"] = getUltSolicitud(request.user.id)#Pasamos el id de la solicitud en caso
         id_solicitud = getUltSolicitud(request.user.id)#Es solo para inicializar el valor ya que el uso de la misma lo exige
@@ -289,7 +295,7 @@ def SAcademica(request):
     -:return: Retorna la plantilla "academicaSup.html" para que la institución  pueda subir los archivos correspondientes
      a la carpeta académica.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         request.POST._mutable = True#Activando esta opción podremos editar los datos que vienen del método POST
         request.POST["id_solicitud"] = Solicitud.objects.values_list('id').order_by('id').last()[0]#Pasamos el id de la solicitud en caso
         id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Es solo para inicializar el valor ya que el uso de la misma lo exige
@@ -321,7 +327,7 @@ def SMedSuperior(request):
     -:return: Retorna la plantilla "medSuperior.html" para que la institución pueda subir los archivos correspondientes a la
      carpeta de media superior.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]
         #id_solicitud = getUltSolicitud(request.user.id)#Es solo para inicializar el valor ya que el uso de la misma lo exige
         salud = Solicitud.objects.values_list('salud').get(id=id_solicitud)[0]#Obtiene si la solicitud pertenece al área de la salud
@@ -368,7 +374,7 @@ def finSolicitud(request):
     -:return: Retorna la plantilla "finSolicitud.html" para decirle a la institución que ahí acaba el proceso de subida de
      archivos y comienza el proceso de revisión.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         import datetime#Se utiliza para obtener la fecha actual
         from django.db.models import Q#Se utiliza para hacer consultas más complejas con QuerySet
         id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Se obtiene la última solicitud ingresada por el usuario
@@ -406,7 +412,7 @@ def estatus(request, usuario, solicitud):
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá observar solicitudes que ha ingresado anteriormente.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         try:
             if (solicitud == 'G'):# Si el parámetro 'solicitud' es una "G"
                 Solicitudes = Solicitud.objects.filter(customuser=usuario).order_by('id')# Obtenemos todas las solicitudes pertenecientes a ese usuario.
@@ -433,7 +439,7 @@ def historial(request, usuario, solicitud):
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá observar información del proceso de la solicitud
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         try:
             comentario = Solicitud.objects.values_list("comentario").get(id=solicitud)[0]# Variable que nos permite determinar si la solicitud tiene comentarios o no.(0: no tiene comentarios, 1: si tiene comentarios)
             rechazada = Solicitud.objects.values_list("completado").get(id=solicitud)[0]# Variable que nos permite determinar si la solicitud ya fue rechazada(0: aún está vigente, 1: fue rechazada)
@@ -462,7 +468,7 @@ def notificacionUsuario(request):
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar las notificaciones que tiene que no han sido leídas.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         import pickle # Importa una librería que nos permite la manipulación del acceso a memoria de una manera mas directa.
         Notificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='H', usuario_id=request.user.id).order_by(
             'fechaNotificacion')# Se obtienen todas las notificaciones no leídas (leida=0) de tipo 'Historial'(H) del usuario en sesión.
@@ -482,7 +488,7 @@ def historialNotificacionesUsuario(request):
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar todas las notificaciones que ha recibido.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         Notificaciones = Notificacion.objects.filter(tipo_notificacion='H', usuario_id=request.user.id).order_by(
             'fechaNotificacion')# Se obtienen todas las notificaciones de tipo 'Historial'(H) del usuario en sesión.
         TotalNotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='H',
@@ -503,7 +509,7 @@ def verArchivos(request, usuario, solicitud):
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver los documentos subidos ordenados por carpeta.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         tipoS = Solicitud.objects.values_list('nivel').get(id=solicitud)#Obtenemos si la solicitud es de nivel superior o nivel media superior
         #Inicialización de variables.
         if tipoS[0] == '1':#Si la solicitud es de Media Superior
@@ -531,7 +537,7 @@ def subirArchivos(request, usuario, solicitud):
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver los comentarios dados por el personal de los departamentos hacia la solicitud.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         sol = Solicitud.objects.get(id=solicitud)#Obtenemos la solicitud seleccionada desde la base de datos.
         Coment = Comentarios.objects.filter(solicitud_id=solicitud, departamento=sol.estatus)#Obtenemos los comentarios correspontiendes a la solicitud y dadas por su departamento actual.
         comentario = ""#Inicializa variable "comentairio" en vacío.
@@ -574,7 +580,7 @@ def terminarSubArchivos(request, usuario, solicitud):
     Curricular, 4: Academica. El segundo número representa que documento es, por ejemplo, 1: Solicitud, 2:
     Folio de pago, 3: Personal docente, lo que representa este número depende del primer número.
     """
-    if request.user.tipo_usuario == '1':
+    if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         if request.method == 'POST':#Si la solicitud es con el método POST
             request.POST._mutable = True#Permitimos la edición de lo que se recibe por el método POST
             IsLoSolicitud = Solicitud.objects.get(id=solicitud)#Solicitud que recibirá la actualización de documentos.

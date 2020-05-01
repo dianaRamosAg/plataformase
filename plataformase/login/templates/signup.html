@@ -28,7 +28,7 @@
                                         Jefe de departamento</option>
                                     <option value="3">Subordinados de departamento</option>
                                     <option value="4" title="Tipo administrador,Maneja recursos de la plataforma">Administrtador de la página</option>
-                                    <option value="5">Institución particular</option>
+                                    <option value="5" title="Particular, no cuenta con cct puede solicitar rvoe">Particular</option>
                                 </select>
                              </div>
                             
@@ -70,12 +70,27 @@
                             <br> <br>
                             <div class="form-group" id="datos_inst">
                                 <p>Datos de institución</p>
-                                <label class="ml-2 col-1" for="cct" id="cct" style="text-align: left;">CCT :</label>
-                                <input type="text" name="cct"  id="cct" class="form-control col-2" placeholder="Clave del centro de trabajo" >
-                                <label class="ml-2 col-1" for="nombre_director" id="nombre_director" style="text-align: left;">Nombre de director:</label>
-                                <input type="text" name="nombre_director"  id="nombre_director" class="form-control ml-1 col-2" placeholder="" >
+                                <label class="ml-2 col-1" for="id_cct" style="text-align: left;">Clave del centro de trabajo (CCT) :</label>
+                                <input type="text" name="cct"  id="id_cct" class="form-control col-2" placeholder="Clave del centro de trabajo" >
+                                <label class="ml-2 col-1" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
+                                <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control ml-1 col-2" placeholder="" >
+                                <label class="ml-2 col-1" for="id_sector" style="text-align: left;">Sector:</label>
+                                <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="Publico"> Público </option>
+                                    <option value="Privado"> Privado </option>
+                                </select>
+                                <label class="ml-2 col-1" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
+                                <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="1"> Media superior </option>
+                                    <option value="2"> Superior </option>
+                                    <option value="3"> Ambos </option>
+                                </select>
                             </div>
-<br>
+
+                            <br>
+
                             <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
                                 <label class="ml-2" for="id_calle">Calle:</label>
                                 <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle"  ><br>
@@ -87,18 +102,13 @@
                              <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
                                 <label class="ml-2" for="id_nointerior">No. Interior:</label>
                                 <input class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior"><br>
-                                
-                                
+
                                 <label class="ml-2" for="id_noexterior">No. Exterior:</label>
                                 <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0" ><br>
 
-                                
                             </div>
 
-                           
-
                                 <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
-
                                     <label class="ml-2 " for="id_municipio">Municipio:</label>
                                 <select  class="form-control ml-2 col-1" name="municipio" id="id_municipio" required>
                                     <option disabled="" selected="">Seleccione</option>

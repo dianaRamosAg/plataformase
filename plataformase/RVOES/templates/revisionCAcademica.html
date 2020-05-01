@@ -23,7 +23,7 @@
     <div class="row">
 
         <div class="col-12 text-center mt-2 mb-1">
-            <h3>Folio: {{solicitud.id}} -  Institución: {{solicitud.customuser.first_name}} {{solicitud.customuser.last_name}}</h3>
+            <h3>Folio: {{solicitud.id}} -  Institución: {{solicitud.customuser.first_name}} {{solicitud.customuser.last_name}}{% if solicitud.cct %} - CCT: {{solicitud.cct}}{% endif %}</h3>
         </div>
         <div class="col-12 text-center mb-2">
             <h3>

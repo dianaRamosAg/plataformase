@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import View
 from .forms import CustomUserCreationForm
-from .models import CustomUser
+from .models import CustomUser, UsuarioInstitucion
 from .forms import AcuerdosForms
 from RVOES.models import Departamento, Acuerdos
 from django.contrib.auth.hashers import make_password
@@ -71,9 +71,19 @@ def regUser(request):
                 firma_digital=request.POST["first_name"]
             else:
                 firma_digital = request.FILES["firma_digital"]
+<<<<<<< HEAD
             departamento = int(request.POST["departamento"])
 
     
+=======
+            if tipo_usuario=='1':
+                inst_cct = request.POST["cct"]
+                inst_nombredirector = request.POST["nombre_director"]
+                sector = request.POST["sector"]
+                nivel_educativo = request.POST["nivel_educativo"]
+            departamento = int(request.POST["departamento"])
+
+>>>>>>> 336c7c9c5b3edb1eb969590ceadded3e3d9095b1
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
             if tipo_usuario == '2':
                 #Definimos jefe como 1 (sí es jefe de departamento)
@@ -81,6 +91,10 @@ def regUser(request):
             else:
                 #Definimos jefe como 0 (no es jefe de departamento)
                 jefe = '0'
+<<<<<<< HEAD
+=======
+                #No le asiganmos firma digital ya que no la necesita
+>>>>>>> 336c7c9c5b3edb1eb969590ceadded3e3d9095b1
                 firma_digital= None
                
                 #Si el tipo de usuario es institución(1) o administrador del sistema(4)
@@ -100,8 +114,18 @@ def regUser(request):
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
+<<<<<<< HEAD
                             date_joined=datetime.datetime.now(),firma_digital=firma_digital)
             usr.save()
+=======
+                            date_joined=datetime.datetime.now(), firma_digital=firma_digital)
+            usr.save()
+            if tipo_usuario == '1':
+                usrInst = UsuarioInstitucion(id_usuariobase=usr, cct = inst_cct,
+                                             nombredirector = inst_nombredirector, sector=sector,
+                                             nivel_educativo=nivel_educativo)
+                usrInst.save()
+>>>>>>> 336c7c9c5b3edb1eb969590ceadded3e3d9095b1
             return redirect('usuarios')
         else:
             return redirect('signup')
