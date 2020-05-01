@@ -155,14 +155,20 @@
                                     <input class="form-control col"  type="text" name="email"required id="id_email" placeholder="correo@dominio.com" onkeyup="PasarValor();" pattern="[a-zA-Z0-9_-]+([.][a-zA-Z0-9-_]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
                                     <br>
                                     <label style="text-align: left;"> Contraseña:</label>
-                                    <input class="form-control col" type="password" name="password1" required id="id_password1" minlength="8">
+                                    <input class="form-control col" type="password" name="password1" required id="id_password1" minlength="8" >
                                     <small id="passwordHelpBlock" class="form-text text-muted" align="justify" ><br>
                                         Su contraseña no puede ser muy similar a su información personal,debe contener 8-20 caracteres,
                                         no puede ser de uso común y no puede ser enteramente numérica.
                                     </small><br>
                                     <br>
-                                    <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" required id="id_password2" placeholder="Confirmar contraseña">*
+                                    <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" onblur="verificar2()" required id="id_password2" placeholder="Confirmar contraseña">*
                                 </div>
+                                <div class="row">
+                                    <div class="alert alert-warning col-md-4 "  role="alert" id="diferente" style="width: 100%; float:left; display: none;">
+                                    <small><strong> ¡ Las contraseñas son diferentes !</strong>
+                                    </small> </div>
+                                </div>
+                            </div><br>
                                 <div class="col-md-12 mt-2">
                                     {% if form.errors %}
                                         {% for field in form %}
@@ -301,6 +307,17 @@
             }
         }
     }
-    
+    function verificar2(){
+        //Función para validar que las contraseñas sean iguales
+        var sel = document.getElementById("diferente");
+        var pass = document.getElementById("id_password2");
+        var pass1 = document.getElementById("id_password");
+        if(pass1.value!=pass.value)
+        {
+            sel.style.display = 'inline';
+        }
+        else
+        {sel.style.display = 'none';}    
+    }
 </script>
 {% endblock %}
