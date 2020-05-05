@@ -197,6 +197,12 @@
                                             <option value="2"> Superior </option>
                                             <option value="3"> Ambos </option>
                                         </select>
+                                        <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">¿Es modalidad Telebachillerato? :</label>
+                                        <select  class="form-control ml-2 col-1" name="modalidad" id="id_nivel_educativo" required>
+                                            <option disabled="" selected="" value="">Seleccione</option>
+                                            <option value="0"> No </option>
+                                            <option value="1"> Sí </option>
+                                        </select>
                                     </div>
                                 </div>
                                 <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right" type="submit">Enviar</button>
@@ -325,7 +331,7 @@
             }else {
                 document.getElementById('id_last_name').style.display = 'inline';
                 document.getElementById("id_last_name").setAttribute("required", "required");
-                document.getElementById("id_last_name").setAttribute("value", ap);
+                // document.getElementById("id_last_name").setAttribute("value", ap);
                 document.getElementById('lblapellidos').style.display = '';
                 document.getElementById('lblnombres').innerHTML= 'Nombres:';
                 document.getElementById('lblcurp').innerHTML= 'CURP:';

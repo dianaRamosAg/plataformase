@@ -9,6 +9,8 @@ from .models import CustomUser, UsuarioInstitucion
 from .forms import AcuerdosForms
 from RVOES.models import Departamento, Acuerdos
 from django.contrib.auth.hashers import make_password
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 
 """
@@ -21,6 +23,9 @@ if request.user.tipo_usuario == '4':
 else:
     return redirect('perfil')
 """
+def SignUpViewtbc(request):
+    # if request.user.tipo_usuario == '1':
+    return render(request, 'signuptbc.html')
 
 def SignUpView(request):
     """Esta vista permite a los administradores del sistema añadir nuevos usuarios.
@@ -72,6 +77,7 @@ def regUser(request):
                 inst_nombredirector = request.POST["nombre_director"]
                 sector = request.POST["sector"]
                 nivel_educativo = request.POST["nivel_educativo"]
+                modalidad = request.POST["modalidad"]
             departamento = int(request.POST["departamento"])
 
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
@@ -106,7 +112,7 @@ def regUser(request):
             if tipo_usuario == '1':
                 usrInst = UsuarioInstitucion(id_usuariobase=usr, cct = inst_cct,
                                              nombredirector = inst_nombredirector, sector=sector,
-                                             nivel_educativo=nivel_educativo)
+                                             nivel_educativo=nivel_educativo,modalidad=modalidad)
                 usrInst.save()
             return redirect('usuarios')
         else:
@@ -281,3 +287,5 @@ def ActUsr(request,email):
         return render(request, 'editarpermisos.html', {'departamentos': departamentos, 'jefes': list(idJefesDepReg),'CustomUser':us })
     else:
         return redirect('perfil')
+
+  

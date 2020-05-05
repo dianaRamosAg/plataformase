@@ -46,3 +46,4 @@ class UsuarioInstitucion(models.Model):
     sector = models.TextField(blank=True, null=True)#Publico, Privado
     is_active = models.BooleanField(blank=True, null=True, default=True)#Es una institución activa
     nivel_educativo = models.CharField(max_length=1, blank=True, null=True)#1: Media superior, 2: Superior, 3: Ambos
+    modalidad = models.CharField(max_length=1, default='0',null=True) #1: Si es telebachillerato, 0:No

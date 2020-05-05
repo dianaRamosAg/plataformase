@@ -27,14 +27,12 @@
 				</div><!--/.col-sm-2-->
 			</a>
 			<!-- / #logo-header -->
-			<nav>
+			<nav >
 				<ul class="nav">
-					<li><a href="{% url 'cct'%}" >TBC    </a>
-					<li><a href="{% url 'cct'%}" >Centros de trabajo    </a>
-					
+					<li><a href="{% url 'cct'%}" title="Lista de centros de trabajo pertenecientes a esta institución.También podrás añadir más centros de trabajo.">Centros de trabajo</a>
 					<li><a href="#" style="pointer-events: none;">Bienvenido (a) : {{ user.first_name }} {{ user.last_name }} </a>
 					<li class="nav-item dropdown ml-auto">
-						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"><img src="{% static '/img/us2.png' %}"/></a>
+						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" title="Usuario"><img src="{% static '/img/us2.png' %}"/></a>
 						<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
 							<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
 							<div class="dropdown-divider"></div>
@@ -56,7 +54,7 @@
 				<div class="pricingCardGrid__pricingCard">
 					<a class="pricingCard" href="" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
-							Sistema de información geográfica (SIG)
+							Sistema de información geográfica (SIG).
 						</div>
 						<div class="pricingCard__pricing">
 							<div class="col-sm-3 col-xs-3">
@@ -76,7 +74,7 @@
 				<div class="pricingCardGrid__pricingCard">
 					<a class="pricingCard" href="" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
-							Autorización de exámenes a títulos y sinodales
+							Autorización de exámenes a títulos y sinodales.
 						</div>
 						<div class="pricingCard__pricing">
 							<div class="col-sm-4 col-xs-4">
@@ -98,7 +96,7 @@
 					<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
 					<a class="pricingCard" href="{% url 'inicio' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
-							Sistema de generación de turnos RVOE
+							Sistema de generación de turnos RVOE.
 						</div>
 						<div class="pricingCard__pricing">
 							<div class="col-sm-4 col-xs-4">
@@ -117,16 +115,17 @@
 				</div>
 				<div class="pricingCardGrid__pricingCard">
 					<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
-					<a class="pricingCard" href="{% url 'inicio' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+					<a class="pricingCard" title="Alumnos y docentes pueden llevar sus cursos semestrales de manera comoda y sencilla."
+					 href="#" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
-							Sistema de Telebachillerato Comunitario
+							Sistema automatizado de servicios escolares TBC.
 						</div>
 						<div class="pricingCard__pricing">
 							<div class="col-sm-4 col-xs-4">
-								<img src="{% static '/img/institucion.png'%}"/>
+								<img src="{% static '/img/peole.png'%}"/>
 							</div>
 							<span class="pricingCard__period">
-								<p align="justify">Sistema de Telebachillerato <br><br></p>
+								<p align="justify">Sistema de centros de telebachillerato comunitario.</p>
 							</span>
 						</div>
 						<div class="pricingCard__button">
@@ -138,17 +137,17 @@
 				</div>
 		
 
-			<div class="pricingCardGrid__pricingCard">
+			<!-- <div class="pricingCardGrid__pricingCard">
 					<a class="pricingCard" href="{% url 'cct' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
 							Añadir Centros de Trabajo(CCT)
 						</div>
 						<div class="pricingCard__pricing">
-							<!-- <div class="col-sm-4 col-xs-4">
+							<div class="col-sm-4 col-xs-4">
 								<img src="{% static '/img/institucion.png'%}"/>
-							</div> -->
+							</div>
 							<span class="pricingCard__period">
-								<p align="justify">Lista de centros de trabajo pertenecientes a esta institución.<br>También podrás añadir más centros de trabajo desde este partado.</p>
+								<p align="justify">Lista de centros de trabajo pertenecientes a esta institución.También podrás añadir más centros de trabajo.</p>
 							</span>
 						</div>
 						<div class="pricingCard__button">
@@ -157,7 +156,7 @@
 							</span>
 						</div>
 					</a>
-				</div>
+				</div> -->
 			</div>
 		</section>
 		<script type='text/javascript' src="{% static '/js/bootstrap2.min.js' %}"></script>

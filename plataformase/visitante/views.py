@@ -5,6 +5,7 @@ from login.models import CustomUser, UsuarioInstitucion
 from RVOES.models import NotificacionRegistro
 from .models import VisitanteSC,ConfiguracionPDF
 from django.contrib.auth.hashers import make_password
+from django.core.mail import EmailMessage
 
 ''' Vistas que redireccionan respecto a permisos de usuario'''
 def index(request):
@@ -133,13 +134,14 @@ def regVisit(request):
             inst_nombredirector = request.POST["nombre_director"]
             sector = request.POST["sector"]
             nivel_educativo = request.POST["nivel_educativo"]
+            modalidad = request.POST["modalidad"]
             visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
                             email=email, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular,
                             tipo_usuario=tipo_usuario,tipo_persona=tipo_persona,
                             inst_cct=inst_cct, inst_nombredirector=inst_nombredirector,
-                            sector=sector, nivel_educativo=nivel_educativo)
+                            sector=sector, nivel_educativo=nivel_educativo,modalidad=modalidad)
         # Si es tipo de usuario particular guardamos con los datos vacicos
         else:
             visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
@@ -184,81 +186,24 @@ def regUser(request, email):
                          municipio=usrV.municipio, colonia=usrV.colonia, celular=usrV.celular,
                          tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona)
         usr.save()
+        email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
+        email.send()
         if usrV.tipo_usuario == '1':
             customUsr = CustomUser.objects.get(id=usr.id)
             usrInst = UsuarioInstitucion(id_usuariobase=customUsr, cct=usrV.inst_cct, nombredirector=usrV.inst_nombredirector,
-                                         sector=usrV.sector, nivel_educativo=usrV.nivel_educativo)
+                                         sector=usrV.sector, nivel_educativo=usrV.nivel_educativo,modalidad=usrV.modalidad)
             usrInst.save()
     VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
     return redirect('usuarios')
 
-    '''
-    if request.method == 'POST':
-        import datetime
-        #Generamos las variables con los datos recibidos del request.
-        
-        username = request.POST["email"]
-        email = request.POST["email"]
-        curp_rfc = request.POST["curp_rfc"]
-        calle = request.POST["calle"]
-        password = make_password(request.POST["password2"])
-        noexterior = request.POST["noexterior"]
-        nointerior = request.POST["nointerior"]
-        codigopostal = request.POST["codigopostal"]
-        municipio = request.POST["municipio"]
-        colonia = request.POST["colonia"]
-        celular = request.POST["celular"]
-        tipo_usuario = request.POST["tipo_usuario"]
-        if request.POST["tipo_persona"] == "Física":
-            tipo_persona = '1'
-        else:
-            tipo_persona = '2'
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        if tipo_usuario!='2':
-            firma_digital=request.POST["first_name"]
-        else:
-            firma_digital = request.FILES["firma_digital"]
-        departamento = None
-        #Sí el usuario es jefe de departamento (tipo_usuario:2)
-        if tipo_usuario == '2':
-            #Definimos jefe como 1 (sí es jefe de departamento)
-            jefe = '1'
-        else:
-            #Definimos jefe como 0 (no es jefe de departamento)
-            jefe = '0'
-            firma_digital= None
-           
-            #Si el tipo de usuario es institución(1) o administrador del sistema(4)
-            if tipo_usuario == '1' or tipo_usuario == '4':
-                firma_digital= None
-                #Aseguramos que no pertenezcan a ningún departamento
-                departamento = None
-        #Obtenemos el ID del usuario que registro a al nuevo usuario
-        registro = (request.user.id)
-        #Si existe un usuario que sea jefe de ese departamento
-        if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists():
-            #Se le hace usuario normal
-            CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
-        #Registramos el usuario en la base de datos
-        usr = CustomUser(username=username, password=password, curp_rfc=curp_rfc, calle=calle,
-                        noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
-                        municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
-                        tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
-                        departamento_id=departamento, jefe=jefe, registro_id=registro,
-                        date_joined=datetime.datetime.now(),firma_digital=firma_digital)
-        usr.save()
-        VisitanteSC.objects.filter(email=username,leida='0').update(leida='1')
-        return redirect('usuarios')
-    else:
-        return redirect('signup')
-else:
-    return redirect('perfil')
-    '''
+
          
 
 def cancelarsolicitud(request,email2,email):
     # vs=VisitanteSC.objects.get(email = email2)
+    usrV = VisitanteSC.objects.get(email=email)
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta NO ha sido aceptada, Usuario: '+usrV.email+". Ante cuanlquier duda, comuniquese  a  SSEMSSYCyT", to=[usrV.email])
+    email.send()
     VisitanteSC.objects.filter(email=email2,leida='0').update(leida='1')
     return redirect('notificacionsc')
 

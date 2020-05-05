@@ -21,8 +21,9 @@
                             <p class="text-uppercase pull-center">Información de usuario</p><br>
                             <div class="form-group" style="float: left;">
                                 <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
-                                <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
-                                    <option value="1" selected title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >
+                                <select class="custom-select col-3"  required name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                                    <option value="" selected disabled>Seleccione</option>
+                                    <option value="1"title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >
                                         Institución</option>
                                     <option value="2"title="Encargado oficial de un departamento." >
                                         Jefe de departamento</option>
@@ -35,8 +36,9 @@
                            
                         <div class="form-group" style="float: left;">
                             <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
-                            <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
-                                <option value="1" selected>Persona física</option>
+                            <select class="custom-select col-3" name="tipo_persona"  required id="id_tipo_persona" onchange="pmoral()">
+                                <option value=""  disabled selected>Seleccione</option>
+                                <option value="1" >Persona física</option>
                                 <option value="2">Persona moral</option>
                             </select><br>
                             <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
@@ -61,7 +63,7 @@
                             <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
                             <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"name="first_name" required id="id_first_name" class="form-control col-2">
                             <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                            <input class="form-control ml-1 col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
+                            <input class="form-control ml-1 col-2" required pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
                             <label class="ml-2 mr-2" for="id_celular">Celular:</label>
                             <input class="form-control col-2" required type="tel" pattern="[0-9]{10}"name="celular" id="id_celular">
                             <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
@@ -86,7 +88,13 @@
                                     <option value="1"> Media superior </option>
                                     <option value="2"> Superior </option>
                                     <option value="3"> Ambos </option>
-                                </select>
+                                </select><br>
+                                <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">¿Es modalidad Telebachillerato? :</label>
+                                        <select  class="form-control ml-2 col-1" name="modalidad" id="id_nivel_educativo" required>
+                                            <option disabled="" selected="" value="">Seleccione</option>
+                                            <option value="0"> No </option>
+                                            <option value="1"> Sí </option>
+                                        </select>
                             </div>
 
                             <br>
@@ -96,7 +104,7 @@
                                 <input class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle"  ><br>
                 
                                 <label class="ml-2" for="id_codigopostal">Código postal:</label>
-                                <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"><br>
+                                <input class="form-control ml-2 col-1" required type="number" minlength="5" maxlength="5"  name="codigopostal" placeholder="00000" id="id_codigopostal"><br>
                            
                             </div>
                              <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
@@ -111,7 +119,7 @@
                                 <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
                                     <label class="ml-2 " for="id_municipio">Municipio:</label>
                                 <select  class="form-control ml-2 col-1" name="municipio" id="id_municipio" required>
-                                    <option disabled="" selected="">Seleccione</option>
+                                    <option disabled=""  value="" selected="">Seleccione</option>
                                     <option value="Acaponeta"> Acaponeta </option>
                                     <option value="Ahucatlán"> Ahucatlán </option>
                                     <option value="Amatlán de caña"> Amatlán de cañas </option>
@@ -168,22 +176,8 @@
                                     <small><strong> ¡ Las contraseñas son diferentes !</strong>
                                     </small> </div>
                                 </div>
-                            </div><br>
-                                <div class="col-md-12 mt-2">
-                                    {% if form.errors %}
-                                        {% for field in form %}
-                                            {% for error in field.errors %}
-                                                {% if field.name == 'username' %}
-                                                {% else %}
-                                                    <div class="alert alert-danger">
-                                                        <label>{{ error }}</label>
-                                                    </div>
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
                             </div>
+                          
                             <div class="text-center">
                                 <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
                                 <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar</button>
@@ -208,7 +202,7 @@
         if (per.value == '2'){
             document.getElementById('id_last_name').style.display = 'none';
             document.getElementById("id_last_name").removeAttribute("required");
-//            document.getElementById("id_last_name").setAttribute("required", "false");
+            document.getElementById("id_last_name").setAttribute("required", "false");
             ap = document.getElementById('id_last_name').value;
             document.getElementById("id_last_name").setAttribute("value", " ");
             document.getElementById('lblapellidos').style.display = 'none';
@@ -221,7 +215,7 @@
         }else {
             document.getElementById('id_last_name').style.display = 'inline';
             document.getElementById("id_last_name").setAttribute("required", "required");
-            document.getElementById("id_last_name").setAttribute("value", ap);
+            // document.getElementById("id_last_name").setAttribute("value", ap);
             document.getElementById('lblapellidos').style.display = '';
             document.getElementById('lblnombres').innerHTML= 'Nombres:';
             document.getElementById('lblcurp').innerHTML= 'CURP:';
@@ -279,6 +273,18 @@
     function mensajes(){
     console.log("hola");
     }
+    function verificar2(){
+        //Función para validar que las contraseñas sean iguales
+        var sel = document.getElementById("diferente");
+        var pass = document.getElementById("id_password2");
+        var pass1 = document.getElementById("id_password1");
+        if(pass1.value!=pass.value)
+        {
+            sel.style.display = 'inline';
+        }
+        else
+        {sel.style.display = 'none';}    
+    }
     departamento();
     function departamento(){
         var sel = document.getElementById("id_departamento");
@@ -307,17 +313,6 @@
             }
         }
     }
-    function verificar2(){
-        //Función para validar que las contraseñas sean iguales
-        var sel = document.getElementById("diferente");
-        var pass = document.getElementById("id_password2");
-        var pass1 = document.getElementById("id_password");
-        if(pass1.value!=pass.value)
-        {
-            sel.style.display = 'inline';
-        }
-        else
-        {sel.style.display = 'none';}    
-    }
+
 </script>
 {% endblock %}
