@@ -52,9 +52,9 @@
                 Sinodales
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="">Solicitudes</a>
-                <a class="dropdown-item" href=""> Lista de Sinodales</a>
-                <a class="dropdown-item" href="">Historial de actividades</a>
+                <a class="dropdown-item" href="{% url 'SETyRS_lista_solicitudes_sinodal' %}">Solicitudes</a>
+                <a class="dropdown-item" href="{% url 'SETyRS_lista_sinodales' %}"> Lista de Sinodales</a>
+                <a class="dropdown-item" href="{% url 'SETyRS_historial_sinodales' %}">Historial de actividades</a>
               </div>
             </li>
             <li class="nav-item">
@@ -79,7 +79,7 @@
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle ml-3" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{user.first_name}} {{user.last_name}} - {{department.nombre}}
+                {{user.first_name}} {{user.last_name}} - {{departamento.nombre}}
                 <span class="badge badge-light align-top">
                   <i class="material-icons align-middle" data-toggle="tooltip" title="Sesión">person</i>
                 </span>
@@ -99,7 +99,7 @@
   <ul class="list-group list-group-flush">
       {% if notificacion %}
       {% for n in notificacion %}
-      <a href="" class="list-group-item list-group-item-action" style="font-size: 12px; padding: 0px;">
+      <a href="{% url 'SETyRS_leer_notificacion_admin' n.id %}" class="list-group-item list-group-item-action" style="font-size: 12px; padding: 0px;">
         {% if n.visto %}
         <div class="form-row">
         {% else %}
@@ -107,9 +107,9 @@
         {% endif %}
           <div class="col-2" style="margin: auto;">
             {% if n.visto %}
-            <img src="{% static 'images/2x/round_drafts.png' %}" class="img-fluid mx-auto" alt="Responsive image">
+            <img src="{% static 'img/2x/round_drafts.png' %}" class="img-fluid mx-auto" alt="Responsive image">
             {% else %}
-            <img src="{% static 'images/2x/round_email.png' %}" class="img-fluid mx-auto" alt="Responsive image">
+            <img src="{% static 'img/2x/round_email.png' %}" class="img-fluid mx-auto" alt="Responsive image">
             {% endif %}
           </div>
           <div class="col">

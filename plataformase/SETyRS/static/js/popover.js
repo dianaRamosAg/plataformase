@@ -6,11 +6,11 @@ function showpop(){
 
 $(function () {
     $('[data-toggle="popover"]').popover({
-    trigger:"focus",
-    placement:"bottom",
-    container:"body",
-    html:true,
-    title:"Notificaciones",
-    content: $('#a1'),
-    boundary: "scrollParent"});
+        trigger:"focus",
+        placement:"bottom",
+        container:"body",
+        html:true,
+        title:"Notificaciones",
+        content: $('#a1'),
+        boundary: "scrollParent"});
 });

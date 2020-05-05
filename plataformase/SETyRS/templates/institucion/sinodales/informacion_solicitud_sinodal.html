@@ -1,11 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>informacion solicitud sinodal</p>
-</body>
-</html>
+{% extends 'institucion/base.html' %} {% load static %} {% block content %}{% load index %}
+<div class="container col-md-10 text-center">
+    <h2 class="mt-3">Solicitud Enviada</h2>
+    <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    <h4 class="mt-3">Detalles de solicitud</h4>
+    {% if solicitud.estatus == 'Pendiente' %}
+    <p>Solicitud {{solicitud.estatus}}. Se le notificará cuando su solicitud haya sido revisada.</p>
+    {% else %}
+    <p>Solicitud {{solicitud.estatus}}.</p>
+        {% if rechazados %}
+        {% for s in rechazados %}
+        <div class="container">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Motivo de rechazo</h5>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p><strong>{{s.sinodal}}</strong></p>
+                            <p>{{s.comentarios}}</p>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+        {% endif %}
+    {% endif %}
+    <br>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>RFC</th>
+                <th>Curriculum</th>
+                <th>Cedula</th>
+                <th>Estatus</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if lista_sinodales %}
+            {% for sinodal in lista_sinodales %}
+            <tr>
+                <td>{{ sinodal.nombre_sinodal }}</td>
+                <td>{{ sinodal.rfc }}</td>
+                <td>
+                    {% docS archivos sinodal.id as a %}
+                    {% if a %}
+                        <a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.curr}}')">Ver archivo</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {% docS archivos sinodal.id as a %}
+                    {% if a %}
+                        <a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.ced}}')">Ver archivo</a>
+                    {% endif %}
+                </td>
+                <td>
+                    {{sinodal.estatus}}
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>Sin datos</td>
+                <td>Sin datos</td>
+                <td>Sin datos</td>
+                <td>Sin datos</td>
+                <td>Sin datos</td>
+                <td>Sin datos</td>
+                <td>Sin datos</td>
+            </tr>
+        {% endif %}	
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'SETyRS_solicitudes_sinodales' %}" class="btn btn-primary">Regresar</a>
+</div>
+
+<div id="viewPDF" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: max-content;">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 5px 20px;">
+                <h4 class="modal-title">Visualizador de archivos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <iframe id="PDFviewer" width="1000" height="540" type="application/pdf"></iframe>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+<script>
+    function verArchivo(url) {
+        var pdf = document.getElementById('PDFviewer')
+        pdf.setAttribute("src", "{{MEDIA_URL}}" + url);
+	}
+</script>
+{% endblock %}

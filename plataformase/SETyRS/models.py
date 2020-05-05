@@ -61,6 +61,7 @@ class Sinodales(models.Model):
     estatus = models.IntegerField(default=1)
     id_solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE)
     nivel_educativo = models.IntegerField(default=1)
+    institucion = models.CharField(max_length = 50, default='Instituto Tecnologico de Tepic')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -120,7 +121,7 @@ class Historial_admins_examen(models.Model):
 class Historial_admins_sinodal(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     sinodal = models.ForeignKey(Sinodales, on_delete=models.CASCADE)
-    solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
+    solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE)
     fecha = models.DateField()
     comentarios = models.CharField(max_length=500, blank=True)
     estatus = models.BooleanField(default=False)

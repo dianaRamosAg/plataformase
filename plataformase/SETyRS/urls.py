@@ -4,10 +4,20 @@ from . import views
 
 urlpatterns = [
     #urls del administrador
-    path('admin/',login_required(views.index_admin), name='SETyRS_admin_index'), #INDEX
+    path('admin/',login_required(views.index_admin), name='SETyRS_admin_index'), #INDEX del administrador
+    path('admin/solicitud/sinodal/<int:id>/', login_required(views.revisar_solicitud_sinodal), name='SETyRS_revisar_solicitud_sinodal'), #Vista para revisar una solicitud de sinodales
+    path('admin/sinodal/aceptar/<int:id>/', login_required(views.aceptar_sinodal), name='SETyRS_aceptar_sinodal'), #Metodo para autorizar al sinodal para que sea utilizado por la institucion
+    path('admin/sinodal/rechazar/<int:id>/', login_required(views.rechazar_sinodal), name='SETyRS_rechazar_sinodal'), #Metodo para rechazar al sinodal si no cumple con los requisitos de la secretaría
+
+    path('admin/solicitudes/sinodales', login_required(views.lista_solicitudes_sinodales_admin), name='SETyRS_lista_solicitudes_sinodal'),
+    path('admin/sinodales/',login_required(views.lista_sinodales), name='SETyRS_lista_sinodales'),
+    path('admin/historial/sinodales', login_required(views.historial_sinodales), name='SETyRS_historial_sinodales'),
+
+    #urls de notificaciones de administrador
+    path('admin/notificacion/<int:id>', login_required(views.leer_notificacion_admin), name='SETyRS_leer_notificacion_admin'), #Metodo para marcar como leida la notificacion
 
     #urls de la institucion SINODALES
-    path('institucion/', login_required(views.index_institucion), name='SETyRS_institucion_index'), #INDEX
+    path('institucion/', login_required(views.index_institucion), name='SETyRS_institucion_index'), #INDEX de la institucion
     path('institucion/nueva_solicitud_sinodal/', login_required(views.nueva_solicitud_sinodal), name='SETyRS_nueva_solicitud_sinodal'), #Vista para crear una nueva solicitud de sinodal
     path('institucion/nueva_solicitud_sinodal/crear', login_required(views.crear_solicitud_sinodal), name='SETyRS_crear_solicitud_sinodal'), #Metodo de creacion de una nueva solicitud de sinodal en la bd
     path('institucion/solicitud/sinodal/<int:id>/', login_required(views.detalle_solicitud_sinodal), name='SETyRS_detalle_solicitud_sinodal'), #Vista de detalle solicitud que redirige a una pagina deacuerdo al estado o fase de la solicitud
@@ -22,6 +32,6 @@ urlpatterns = [
     path('institucion/solicitudes/sinodales', login_required(views.lista_solicitudes_sinodales), name='SETyRS_solicitudes_sinodales'), #Vista de solicitudes de sinodales realizadas
 
     #urls de notificaciones de institucion
-    path('institucion/notificacion/<int:id>', login_required(views.leer_notificacion), name='leerNotificacion'), #Metodo para marcar como leida la notificacion
+    path('institucion/notificacion/<int:id>', login_required(views.leer_notificacion), name='SETyRS_leer_notificacion_institucion'), #Metodo para marcar como leida la notificacion
 
 ]
