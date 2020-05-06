@@ -1,0 +1,14 @@
+.popover-body{
+    width: auto;
+    overflow-y: auto;
+    max-height: auto;
+    min-height: auto;
+}
+.popover-header{
+    width: auto;
+}
+.popover{
+    max-width: auto;
+    max-height: auto;
+    min-height: auto;
+}

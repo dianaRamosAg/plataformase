@@ -1,0 +1,16 @@
+{% extends 'institucion/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container col-md-10 col-lg-6 text-center">
+    <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    <p class="text-justify">
+        Bienvenido al sistema para la solicitud y autorización de Exámenes a Titulo y Sinodales. 
+        En esta plataforma se podrá solicitar la  autorización del exámen para los alumnos próximos a titularse,
+        para ello, se tendrá que agregar una nueva solicitud en la pestaña de solicitudes y seguir los pasos que se muestran.
+        Antes de hacer una solicitud, es necesario que se realice una para tus Sinodales, ya que se requieren para llevar
+        a cabo la solicitud de exámenes a titulo. Para ello ve a la pestaña de Sinodales y selecciona nuevo sinodal,
+        despues sigue los pasos que ahí se requieren.
+    </p>
+</div>
+{% endblock %}
