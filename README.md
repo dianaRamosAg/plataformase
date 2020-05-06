@@ -22,4 +22,5 @@
 
 - Correr el servidor para verificar funcionamiento del sistema ``` python manage.py runserver```⚙️
 #### En caso de ser una aplicación externa del proyecto se realizan los mismos pasos a excepción de ''crear la aplicación''
+- Guardando aplicación dentro del proyecto
 
