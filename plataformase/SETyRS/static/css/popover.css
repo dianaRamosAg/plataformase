@@ -1,14 +1,13 @@
 .popover-body{
-    width: auto;
+    min-width: auto;
     overflow-y: auto;
-    max-height: auto;
-    min-height: auto;
-}
-.popover-header{
+    max-height: 282px;
+  }
+  .popover-header{
     width: auto;
-}
-.popover{
+  }
+  .popover{
     max-width: auto;
-    max-height: auto;
-    min-height: auto;
-}
+    right:auto;
+    top: auto;
+  }

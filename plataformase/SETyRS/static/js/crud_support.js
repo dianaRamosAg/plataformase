@@ -40,3 +40,8 @@ function editSinodal(id,nombre_sinodal, curp, rfc, grado_academico) {
 function deleteSinodal(id) {
     $("#idSin").val(id);
 }
+
+$(document).ready(function()
+	{
+	   $("#error").modal("show");
+	});
