@@ -1,0 +1,117 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+              </style>
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+                <div class="row mt-4 ml-1">       
+                    <a href="/SigApp/perfilAdmin">Mi perfil </a>     	
+                </div>
+                <div class="row mt-4 ml-1">
+                    <a href="/SigApp/modificacionesAdmin">Modificaciones</a> 
+                </div>
+                <div class="row mt-4 ml-1">
+                  <a href="/SigApp/registrosAdmin">Registros</a>
+                </div>
+            </div>
+            <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
+                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Modificaciones del sistema</p>
+                
+            <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Información Actual</th>
+                    <th scope="col">Información a Modificar</th>
+                  </tr>
+                </thead>
+              <tbody >
+                  <tr>
+                    <th scope="row">Institución: {{ nombreI }} </th>
+                    <th scope="row">Clave: {{ clave}}</th>           
+                    <th scope="row">Municipio: {{ municipio }}</th>            
+                    <th scope="row">Localidad: {{ localidad }}</th>             
+                    <th scope="row">Estatus: {{ estatus }}</th>             
+                    <th scope="row">Director: {{ director }}</th>             
+                    <th scope="row">Dirección: {{ direccion }} </th>            
+                  </tr>
+                  <tr>
+                    <th scope="row">Institución: {{ nombreTE }}</th>
+                    <th scope="row">Clave: {{ claveTE }} </th>       
+                    <th scope="row">Municipio: {{ municipioTE }} 
+                    <th scope="row">Localidad: {{ localidadTE }}</th> 
+                    <th scope="row">Estatus: {{ estatusTE }} </th>
+                    <th scope="row">Director: {{ directorTE }} </th>
+                    <th scope="row">Dirección: {{ direccionTE }} </th>
+                  </th>
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Rechazar</button>
+                              <button type="button" class="btn btn-primary">Aceptar</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div> 
+                  </tr>
+                  
+
+                {% endfor %}
+              </tbody>
+              </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+  //
+  function setTitle(institucion){
+    var ins = document.getElementsByClassName("modal-title");
+    ins[0].innerHTML = institucion;
+    //alert(institucion)
+    //
+  }
+
+   function cambiaURL(ins2){
+    var x = document.getElementsByClassName("visualizar");
+    for (var i = 0 ; i < x.length ; i++ ){
+      x[i].href = ""
+      x[i].href = "mostrarInstitucion/"+ins2+"/"
+    }
+     //document.getElementById("visualizar").href="mostrarInstitucion/"+ins2+"/";
+     //alert("Hola, probando, uno dos uno dos");
+   }
+
+   function metodos(insNombre){
+    setTitle(insNombre);
+    //location.reload(true/false);
+    cambiaURL(insNombre);
+   }
+  
+</script>
+{% endblock %}
+</html>
