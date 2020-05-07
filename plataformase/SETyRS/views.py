@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.utils import timezone
 from datetime import date
+from django.contrib import messages
 
 from .models import *
 from .forms import *
@@ -274,9 +275,15 @@ def agregar_sinodal(request, id):
             curp=request.POST["curp"]
             rfc=request.POST["rfc"]
             grado=request.POST["grado_academico"]
-            sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name)
-            sinodal.save()
-            return redirect('SETyRS_detalle_solicitud_sinodal',id)
+            comprobar_duplicidad = Sinodales.objects.filter(nombre_sinodal=nombre, curp=curp, institucion=request.user.first_name)
+            if comprobar_duplicidad:
+                error = 'Este sinodal ya existe en su registro'
+                messages.error(request, error)
+                return redirect('SETyRS_detalle_solicitud_sinodal',id)
+            else:
+                sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name)
+                sinodal.save()
+                return redirect('SETyRS_detalle_solicitud_sinodal',id)
     else:
         raise Http404('El usuario no tiene permiso de ver esta pagina')
 
@@ -326,6 +333,9 @@ def subir_documentos_sinodal(request, id):
             form = ArchivosSinodalesForm(request.POST, request.FILES)
             if form.is_valid():
                 form.save()
+            else:
+                error = 'Solo son validos los archivos PDF'
+                messages.error(request, error)
             return redirect('SETyRS_detalle_solicitud_sinodal',id)
     else:
         raise Http404("El usuario no tiene permiso de ver esta página")
