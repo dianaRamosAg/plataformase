@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'TBC',
     'SETyRS',
+    'SigApp',
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
