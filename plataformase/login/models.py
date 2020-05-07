@@ -36,7 +36,7 @@ class CustomUser(AbstractUser):
         Retorna
         -:return: Retorna el nombre y apellido el usuario
         """
-        return self.first_name, self.last_name
+        return self.first_name , self.last_name
 
 
 class UsuarioInstitucion(models.Model):

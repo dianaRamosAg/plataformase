@@ -1,0 +1,297 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+
+
+    <body>
+        {% block content %}
+        <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                    .texto{
+                        font-family: "Montserrat", sans-serif;
+                    }
+                
+                    .centro{
+                        text-align: center;
+                    }
+                
+                    .centroItem{
+                        align-items: center;
+                    }
+
+                    .leyendaH {text-align:center;}
+                    .leyenda  ul {list-style-type:none;padding:0 10px;}
+                    .leyendaH ul {display:inline-block;}
+                    .leyenda  ul>li {font-size:14px;}
+                    .leyendaH ul>li {float:left;margin-right:10px;}
+                    .leyenda  ul>li>span {width:12px;height:12px;display:inline-block;margin-right:3px;}
+
+        </style>
+
+        
+
+        <br>
+        <div class="centro col-12">
+            <table class="table table-secondary table-bordered table-hover">
+                <tr>
+                    <td colspan="3">
+                        <h2 class="texto">{{RVOE.NombreCarrera}}</h2>
+
+                    </td>
+            </tr>
+
+
+            </table>
+        </div>
+
+    <div style=" margin-left: 1%; margin-right: 1%; border: solid 1px black; background-color: #AFC9CF;">
+        <div class="row" >
+            <div style=" padding-left: 2%; text-align: left;" class="centro col-3 texto">
+                <p>■ RVOE: {{RVOE.ClaveCarrera}}</p>
+            </div>
+            <div style="text-align: left;" class="centro col-5 texto">
+                <p>■ Institución: {{Institucion.NombreEscuela}}</p>
+            </div>
+            <div style="text-align: left;" class="centro col-4 texto">
+                    <p>■ Descripción: Ninguna</p>
+            </div>
+        </div>
+
+        <div class="row" >
+                <div class="col-3 texto" style="padding-left: 2%;">
+                    <p>■ Modalidad: {{RVOE.Modalidad}}</p>
+                </div>
+                <div style="text-align: left;" class="centro col-5 texto">
+                        <p>■ Campo: Sin Definir</p>
+                </div>
+                <div style="text-align: left;" class="centro col-4 texto">
+                        <p>■ Periodo: {{RVOE.Periodos}}</p>
+                </div>
+            </div>
+    </div>
+
+    <div style="margin-bottom: 2%; margin-top: 3%;" class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">       
+             <select onchange="updCharts(this.id);" class="browser-default custom-select" TYPE=text id="selectCharts" name="selectCharts" value="" size="1" >
+                <option value="general">Estadisticas generales del curso</option>
+                <!--<option value="primero">Estadisticas primer año</option>
+                <option value="segundo">Estadisticas segundo año</option>
+                <option value="tercero">Estadisticas tercer año</option>
+                <option value="cuarto">Estadisticas cuarto año</option>
+                <option value="quinto">Estadisticas quinto año</option>
+                <option value="sexto">Estadisticas sexto año</option>-->
+            </select> 
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div id="GeneroGeneral" style=" height: 300px; width: 100%;"></div>
+        </div>
+
+       <!-- <div class="col-lg-4">
+                <div id="IndigenasGeneral" style=" height: 300px; width: 100%;"></div>
+        </div>-->
+
+        <div class="col-lg-6">
+                <div id="TodosGradosGeneral" style=" height: 300px; width: 100%;"></div>
+         </div>
+    </div> 
+    
+    <script>
+        function updCharts(id){
+            var APG = "{{RVOE.TotalPrimero}}";
+            var ASG = "{{RVOE.TotalSegundo}}";
+            var ATG = "{{RVOE.TotalTercero}}";
+            var ACG = "{{RVOE.TotalCuarto}}";
+            var AQG = "{{RVOE.TotalQuinto}}";
+            var ASG = "{{RVOE.TotalSexto}}";
+
+            var Select = document.getElementById(id);
+            var grado = Select.value;
+            switch(grado){
+                case 'primero':
+                    var AH = "{{Datos.alumnosPrimerGradoHombres}}";
+                    var AM = "{{Datos.alumnosPrimerGradoMujeres}}";
+                    var AIM = 0;
+                    var AIF = 0;
+                    var tituloPrimerChart = "Alumnos de primer grado"
+                    var tituloSegundoChart = "Alumnos de órigen indigena primer grado"
+
+                break;
+
+                case 'segundo':
+                    var AH = "{{Datos.alumnosSegundoGradoHombres}}";
+                    var AM = "{{Datos.alumnosSegundoGradoMujeres}}";
+                    var AIM = 0;
+                    var AIF = 0;
+                    var tituloPrimerChart = "Alumnos de segundo grado"
+                    var tituloSegundoChart = "Alumnos de órigen indigena segundo grado"
+                break;
+
+                case 'tercero':
+                    var AH = "{{Datos.alumnosTercerGradoHombres}}";
+                    var AM = "{{Datos.alumnosTercerGradoMujeres}}";
+                    var AIM = 0;
+                    var AIF = 0;
+                    var tituloPrimerChart = "Alumnos de tercer grado"
+                    var tituloSegundoChart = "Alumnos de órigen indigena tercer grado"
+                break;
+
+                case 'cuarto':
+                    var AH = "{{Datos.alumnosCuartoGradoHombres}}";
+                    var AM = "{{Datos.alumnosCuartoGradoMujeres}}";
+                    var AIM = 0;
+                    var AIF = 0;
+                    var tituloPrimerChart = "Alumnos de cuarto grado"
+                    var tituloSegundoChart = "Alumnos de órigen indigena cuarto grado"
+                break;
+
+                case 'quinto':
+                    var AH = "{{Datos.alumnosQuintoGradoHombres}}";
+                    var AM = "{{Datos.alumnosQuintoGradoMujeres}}";
+                    var AIM = 0;
+                    var AIF = 0;
+                    var tituloPrimerChart = "Alumnos de quinto grado"
+                    var tituloSegundoChart = "Alumnos de órigen indigena quinto grado"
+                break;
+
+                case 'sexto':
+                    var AH = "{{Datos.alumnosSextoGradoHombres}}";
+                    var AM = "{{Datos.alumnosSextoGradoMujeres}}";
+                    var AIM = 0;
+                    var AIF = 0;
+                    var tituloPrimerChart = "Alumnos de sexto grado"
+                    var tituloSegundoChart = "Alumnos de órigen indigena sexto grado"
+                break;
+
+                case 'general':
+                var AM = "{{RVOE.TotalMujeres}}";
+                var AH = "{{RVOE.TotalHombres}}";
+                var AIM = 0;
+                var AIF = 0;
+                var tituloPrimerChart = "Alumnos del curso"
+                var tituloSegundoChart = "Alumnos de órigen indigena"
+                break;
+            };
+            var GG = new CanvasJS.Chart("GeneroGeneral", {
+                animationEnabled: true,
+                title: {
+                    text: tituloPrimerChart
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: AH, label: "Hombres: "},
+                        {y: AM, label: "Mujeres: ", color:"pink"}
+                    ]
+                }]
+            });
+
+            var IG = new CanvasJS.Chart("IndigenasGeneral", {
+                animationEnabled: true,
+                title: {
+                    text: tituloSegundoChart
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: AIM, label: "Hombres de origen Indigena: "},
+                        {y: AIF, label: "Mujeres de origen Indigena: ", color:"pink"}
+                    ]
+                }]
+            });
+
+            
+            GG.render(); IG.render(); 
+        };
+        //FINAL FUNCIÓN UPD CHARTS
+
+            window.onload = function() {
+            var AM = "{{RVOE.TotalMujeres}}";
+            var AH = "{{RVOE.TotalHombres}}";
+            var AIM = 0;
+            var AIF = 0;
+
+            var APG = "{{RVOE.TotalPrimero}}";
+            var ASG = "{{RVOE.TotalSegundo}}";
+            var ATG = "{{RVOE.TotalTercero}}";
+            var ACG = "{{RVOE.TotalCuarto}}";
+            var AQG = "{{RVOE.TotalQuinto}}";
+            var ASG = "{{RVOE.TotalSexto}}";
+          
+            var GG = new CanvasJS.Chart("GeneroGeneral", {
+                animationEnabled: true,
+                title: {
+                    text: "Alumnos en el curso"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: AH, label: "Hombres: "},
+                        {y: AM, label: "Mujeres: ", color:"pink"}
+                    ]
+                }]
+            });
+
+           /* var IG = new CanvasJS.Chart("IndigenasGeneral", {
+                animationEnabled: true,
+                title: {
+                    text: "Alumnos de órigen Indigena"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: AIM, label: "Hombres de origen Indigena: "},
+                        {y: AIF, label: "Mujeres de origen Indigena: ", color:"pink"}
+                    ]
+                }]
+            });*/
+
+            var TG = new CanvasJS.Chart("TodosGradosGeneral", {
+                animationEnabled: true,
+                title: {
+                    text: "Alumnos por grado"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: APG, label: "Primer grado: "},
+                        {y: ASG, label: "Segundo grado: ", color:"pink"},
+                        {y: ATG, label: "Tercer grado: "},
+                        {y: ACG, label: "Cuarto grado: "},
+                        {y: AQG, label: "Quinto grado: "},
+                        {y: ASG, label: "Sexto grado: "},
+                    ]
+                }]
+            });
+            GG.render(); /*IG.render();*/ TG.render();
+        
+            }
+            </script>
+
+    </body>
+
+    
+
+{% endblock %}
+</html>

@@ -1,0 +1,99 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+              </style>
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+                <div class="row mt-4 ml-1">       
+                    <a href="/SigApp/perfilAdmin">Mi perfil </a>     	
+                </div>
+                <div class="row mt-4 ml-1">
+                    <a href="/SigApp/modificacionesAdmin">Modificaciones</a> 
+                </div>
+                <div class="row mt-4 ml-1">
+                  <a href="/SigApp/registrosAdmin">Registros</a>
+                </div>
+            </div>
+            <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
+                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Información del registro de la institución {{ username }}</p>
+                
+            <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th colspan="2">Información</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Nombre de usuario</th>
+                    <td>{{ username }}</td>
+                  </tr>
+                  <tr>
+                    <th>Nombre de institución</th>
+                    <td>{{ nombreI }}</td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td>{{ emailI }}</td>
+                  </tr>
+                  <tr>
+                    <th>Estado</th>
+                    {% if is_active%}
+                    <td> Activo</td>
+                    {% else %}
+                    <td> Inactivo </td>
+                    {% endif %}
+                  </tr>
+                </tbody>
+              </table>
+              <form method="post">
+              <div style="text-align: right;">
+                {% csrf_token %}
+                {% if is_active%}
+                <input onclick="notificaAlta()" type="submit" class="btn btn-warning" value= "Desactivar">
+                {% else %}
+                <input onclick="notificaAlta()" type="submit" class="btn btn-warning" value= "Activar">
+                {% endif %}
+                <!-- <button class="btn btn-danger">Desactivar</button> -->
+                <!-- <button class="btn btn-info" onclick="window.history.go(-1);">Regresar</button> -->
+              </div>
+              </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+   function notificaAlta(){
+     alert("¡La institución se ha registrado correctamente!");
+     onClick="document.location.reload(true)"
+   }
+</script>
+{% endblock %}
+</html>

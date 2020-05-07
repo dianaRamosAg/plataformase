@@ -1,0 +1,355 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<body>
+	{% block content %}
+
+	<style>
+	@import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+	.texto{
+		font-family: "Montserrat", sans-serif;
+		}
+	.centro{
+		text-align: center;
+		}	
+	.centroItem{
+		align-items: center;
+		}
+	</style>
+
+	<script type="text/javascript">
+
+		function infoInstitucion(aInstitucion){
+			var aInst = document.getElementById(aInstitucion);
+			var sInstitucion = document.getElementById('selectInstitucion');
+			var CCT = document.getElementById('inputCCT'); 
+			var valueInstitucion = sInstitucion.value;
+			console.log(valueInstitucion);
+			if( CCT.value != ''){
+				console.log("/SigApp/instituciones/clave/"+CCT.value);
+				aInst.href = "/SigApp/instituciones/clave/"+CCT.value;	
+			}else if (valueInstitucion != 'seleccion'){
+					aInst.href = "/SigApp/instituciones/id/"+valueInstitucion;
+					console.log("/SigApp/instituciones/id/"+valueInstitucion);
+			}											 
+		};
+	 
+		function populate(){
+			$('#selectMunicipio').change(function(){
+				var municipio = $('#selectMunicipio').find(":selected").val();
+				var municipioF;
+				switch(municipio){
+					case 'ACAPONETA':
+						municipioF =1 ;
+					break;
+
+					case 'AHUACATLÁN':
+						municipioF =2 ;
+					break;
+
+					case 'AMATLÁN DE CAÑAS':
+						municipioF =3 ;
+					break;
+
+					case 'COMPOSTELA':
+						municipioF =4 ;
+					break;
+
+					case 'HUAJICORI':
+						municipioF =5 ;
+					break;
+
+					case 'IXTLÁN DEL RÍO':
+						municipioF =6 ;
+					break;
+
+					case 'JALA':
+						municipioF =7 ;
+					break;
+
+					case 'XALISCO':
+						municipioF =8 ;
+					break;
+
+					case 'EL NAYAR':
+						municipioF =9 ;
+					break;
+
+					case 'ROSAMORADA':
+						municipioF =10 ;
+					break;
+
+					case 'RUÍZ':
+						municipioF =11 ;
+					break;
+
+					case 'SAN BLAS':
+						municipioF =12 ;
+					break;
+
+					case 'SAN PEDRO LAGUNILLAS':
+						municipioF =13 ;
+					break;
+
+					case 'SANTA MARÍA DEL ORO':
+						municipioF =14 ;
+					break;
+
+					case 'SANTIAGO IXCUINTLA':
+						municipioF =15 ;
+					break;
+
+					case 'TECUALA':
+						municipioF =16 ;
+					break;
+
+					case 'TEPIC':
+						municipioF =17 ;
+					break;
+
+					case 'TUXPAN':
+						municipioF =18 ;
+					break;
+
+					case 'LA YESCA':
+						municipioF =19 ;
+					break;
+
+					case 'BAHÍA DE BANDERAS':
+						municipioF =20 ;
+					break;
+				};
+					$.ajax({
+						url:"/SigApp/updl/"+municipioF,
+						method: 'GET',
+						dataType: "json",
+						success:function(jsonData){
+							var optionsLocalidades="";
+							
+							$('#selectLocalidad').empty();
+							$('#selectLocalidad').append('<option value="seleccion"> Seleccione Localidad </option>');
+							$.each(JSON.parse(jsonData),function(i,item){
+								optionsLocalidades+='<option value="'+item["fields"]["Nombre"]+'">'+item["fields"]["Nombre"]+'</option>';
+								item["fields"]["Nombre"]
+							});
+							$('#selectLocalidad').append(optionsLocalidades);
+							console.log(jsonData);							
+						}
+					})				
+			});
+									
+		}	
+
+function updInstituciones(selectOrigen){
+	var origen = '#'+selectOrigen;			
+	$(origen).change(function(){
+		var urlF = "/SigApp/updInstituciones/";
+		if(origen == '#selectMunicipio'){$('#selectLocalidad').val('seleccion');}
+		var municipioSeleccionado = $('#selectMunicipio').find(':selected').val();
+		var municipioF = municipioSeleccionado.replace(/\s/g, '-');
+		
+		if(municipioSeleccionado=='RUÍZ'){municipioF='RUIZ';}
+		if(municipioSeleccionado=='AHUACATLÁN'){municipioF='AHUACATLAN';}
+		if(municipioSeleccionado=='AMATLÁN DE CAÑAS'){municipioF='AMATLAN-DE-CANAS';}
+		if(municipioSeleccionado=='IXTLÁN DEL RÍO'){municipioF='IXTLAN-DEL-RIO';}
+		if(municipioSeleccionado=='SANTA MARÍA DEL ORO'){municipioF='SANTA-MARIA-DEL-ORO';}
+		if(municipioSeleccionado=='BAHÍA DE BANDERAS'){municipioF='BAHIA-DE-BANDERAS';}
+		
+
+
+		var localidadSeleccionado = $('#selectLocalidad').find(':selected').val();
+		var localidadSeleccionadoF = localidadSeleccionado.replace(/\s/g, '-');
+		if(localidadSeleccionadoF.includes('Á')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Á','a')}
+		if(localidadSeleccionadoF.includes('É')){localidadSeleccionadoF=localidadSeleccionadoF.replace('É','e')}
+		if(localidadSeleccionadoF.includes('Í')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Í','i')}
+		if(localidadSeleccionadoF.includes('Ó')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ó','o')}
+		if(localidadSeleccionadoF.includes('Ú')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ú','u')}
+
+		var nivelacademicoSeleccionado = $('#selectNA').find(':selected').val();
+		nivelacademicoSeleccionadoF = nivelacademicoSeleccionado.replace(' ','-')
+		var areainteresSeleccionado = $('#selectAI').find(':selected').val();
+		var dominioSeleccionado = $('#selectDominio').find(':selected').val();
+		if(!municipioSeleccionado.startsWith("seleccion")){urlF=urlF+municipioF+"/";}else{urlF=urlF+"empty/";}
+		if(!localidadSeleccionado.startsWith("seleccion")){urlF=urlF+localidadSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+		if(!nivelacademicoSeleccionado.startsWith("seleccion")){urlF=urlF+nivelacademicoSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+		if(!areainteresSeleccionado.startsWith("seleccion")){urlF=urlF+areainteresSeleccionado+"/";}else{urlF=urlF+"empty/";}
+		if(!dominioSeleccionado.startsWith("seleccion")){urlF=urlF+dominioSeleccionado+"/";}else{urlF=urlF+"empty/";}
+		console.log(urlF);
+		$.ajax({
+			url: urlF ,
+			method: 'GET',
+			dataType: "json",
+			success:function(jsonData){
+				var optionsInstituciones="";
+				$('#selectInstitucion').empty();
+				$('#selectInstitucion').append('<option value="seleccion"> Seleccione Institución </option>');
+				$.each(JSON.parse(jsonData),function(i,item){
+					optionsInstituciones+='<option value="'+item["pk"]+'">'+item["fields"]["NombreEscuela"]+'</option>';
+				});
+				$('#selectInstitucion').append(optionsInstituciones);
+				console.log(jsonData);				
+			}
+		})
+	});
+}
+	
+	</script>
+
+	
+
+    <div class="container-fluid col-12 "  style="padding-top: 3%; background-image: url({% static 'SigApp/backgroundBlur.png' %})"; padding-top: 5%; padding-bottom: 5%">
+		
+		<div class="container-fluid col-xl-7 col-lg-9 col-md-9 col-sm-10 col-xs-10" style="background-color: #FFFFFF;  border: solid 2px #000000; padding-bottom: 2%;">
+			
+					
+
+			<div class="row mt-3">				
+				<div class="centro texto col-12" style=" color: #707070; font-size: 158%;">
+					<p>INVESTIGA TU INSTITUCIÓN</p>
+				</div>
+			</div>
+
+			<div class="row mt-1">
+				<div class="centro col-12">
+					<label class="texto">Clave Centro</label> 
+				</div>
+
+				<div class="centro col-12">
+					<INPUT class="texto"  TYPE=text id="inputCCT" name="ClaveCentroTrabajo" value="" size="17" style="font-weight: bold; text-align: center;"/>	 					 
+				</div>
+
+			</div>
+
+			<hr>
+
+			<div class="row">	
+				<div class="centro col-12">
+					<label class="texto">Sector Institución</label> 
+				</div>
+			</div>
+			<!--*FIN ROW ETIQUETA AREA INTERES-->
+			<!--*ROW COMBO AREA INTERES-->
+			<div class="row">	
+				<div class="centro col-12">
+					<select class="dropDown" onclick="updInstituciones(this.id);" TYPE=text id="selectDominio" name="selectDominio" value="" size="1" style="text-align-last:center; font-weight: bold;" >
+						<option value="seleccione">Seleccione Sector de la Institución</option>
+							<option value="PUBLICO">Instituciones Públicas</option>
+							<option value="PRIVADO">Instituciones Privadas</option>
+					</select> 
+				</div>
+			</div>
+			<!--*FIN COMBO ETIQUETA AREA INTERES-->
+
+			<!--*ROW ETIQUETA AREA INTERES-->
+			<div class="row">	
+				<div class="centro col-12">
+					<label class="texto">Área de Interes</label> 
+				</div>
+			</div>
+			<!--*FIN ROW ETIQUETA AREA INTERES-->
+			<!--*ROW COMBO AREA INTERES-->
+			<div class="row">	
+				<div class="centro col-12">
+					<select class="dropDown" onclick="updInstituciones(this.id);" TYPE=text id="selectAI" name="selectAI" value="" size="1" style="text-align-last:center; font-weight: bold;" >
+						<option value="seleccione">Seleccione Área de Interes</option>
+						{% for element in areaseducacion %}
+							<option value="{{element.Clave_Area}}">{{element.Descripcion}}</option>
+						{%endfor%}
+					</select> 
+				</div>
+			</div>
+			<!--*FIN COMBO ETIQUETA AREA INTERES-->
+			<!--*ROW ETIQUETA NIVEL EDUCATIVO-->
+			<div class="row">	
+				<div class="centro col-12">
+					<label class="texto">Nivel Academico</label> 
+				</div>
+			</div>
+			<!--*FIN ROW ETIQUETA NIVEL EDUCATIVO-->
+			<!--*ROW COMBO NIVEL EDUCATIVO-->
+			<div class="row">	
+				<div class="centro col-12">
+					<select class= TYPE=text onclick="updInstituciones(this.id);" id="selectNA" name="selectNA" value="" size="1" style="text-align-last:center;  font-weight: bold;" >
+						<option class="opt" value="seleccion">Seleccione Nivel Academico</option>
+						{% for element in opcionesgrados %}
+						<option value="{{element.Descripcion}}">{{element.Descripcion}}</option>
+						{%endfor%}
+					</select> 
+				</div>
+			</div>
+			<!--*FIN ROW COMBO NIVEL EDUCATIVO-->
+
+			<!--*ROW ETIQUETAS MUNICIPIO y LOCALIDAD-->
+			<div class="row">					
+				<div class="centro col-6"> 
+					<label class="texto">Municipio</label> 					
+				</div>
+				<div class="centro col-6"> 
+					<label class="texto">Localidad</label> 				
+				</div>
+			</div>
+			<!--*FIN ROW ETIQUETAS MUNICIPIO y LOCALIDAD-->	
+
+			<!--*ROW COMBO MUNICIPIO y LOCALIDAD-->
+			<div class = "row">
+				<div class="centro col-6">												
+					<select id="selectMunicipio" TYPE=text name="selectMunicipio" onclick="populate(); updInstituciones(this.id);" size="1" style="text-align-last:center;  font-weight: bold;">
+						<option class="opt" value="seleccion">Seleccione Municipio</option>
+						{% for element in opcionesmunicipios %}
+							<option value="{{element.Nombre}}">{{element.Nombre}}</option>
+						{% endfor %}
+					</select>
+				</div>	
+				<div class="centro col-6">				
+					<select id="selectLocalidad" TYPE=text name="selectLocalidad"  size="1" onclick="updInstituciones(this.id);" style="width:180px; text-align-last:center;  font-weight: bold;" >
+						<option class="opt" value="seleccion">Seleccione Localidad</option>
+						{% for element in localidades %}
+							<option value="{{element.Nombre}}">{{element.Nombre}}</option>
+						{%endfor%}
+					</select>  
+				</div>									
+			</div>
+			<!--*FIN ROW COMBO MUNICIPIO y LOCALIDAD->
+	
+			<!-*ROW ETIQUETA NOMBRE INSTITUCIÓN-->
+			<div class="row">	
+				<div class="centro col-12">
+					<label class="texto">Nombre de Institución</label> 
+				</div>
+			</div>
+			<!--*FIN ROW ETIQUETA NOMBRE INSTITUCIÓN-->
+			<!--*ROW COMBO NOMBRE INSTITUCIÓN-->
+			<div class="row">	
+				<div class="centro col-12" >					
+					<select class="dropDown" TYPE=text id="selectInstitucion" name="selectInstitucion" value="" size="1" style="width:280px; text-align-last:center; font-weight: bold;" >
+						<option class="opt" value="seleccion">Seleccione Institucion</option>
+						{% for element in opcionesinstituciones %}
+							<option value="{{element.ClaveEscuela}}">{{element.NombreEscuela}}</option>
+						{% endfor %}
+					</select> 
+				</div>
+			</div>
+			<!--*FIN COMBO ETIQUETA NOMBRE INSTITUCIÓN-->
+			<br>
+			<!--* ROW BOTONES*-->
+			<div class="row">
+				<div class="centro col-6">
+					<button class="btn btn-secondary w-75" form="ConsultaInstitucion" value="Submit">Ubicar</button>
+				</div>
+
+				<div class="centro col-6">		
+					
+						<a style="color: white;" class="btn btn-secondary w-75 " id="buscarInstitucion" onclick="infoInstitucion(this.id)" >Buscar</a>
+					</button>
+				</div>
+			</div>
+			<!--*FIN DEL ROW DE BOTONES UBICAR E INFORMACIÓN*-->
+      	</div>
+		<!--*FIN DEL CONTAINER PARA EL FORMULARIO *-->
+		  
+    </div>
+</body>	
+{% endblock %}
+</html>
