@@ -372,7 +372,8 @@ def miInstitucion(request,nombre):
                              +'Localidad: '+loca+'\n'
                              +'Estatus: '+estatus+'\n'
                              +'Dirección: '+dire+'\n',
-                             to=['marcogp97@gmail.com','janeth.lopeez@gmail.com', 'ulalegriasa@ittepic.edu.mx'])
+                             #to=['marcogp97@gmail.com','janeth.lopeez@gmail.com', 'ulalegriasa@ittepic.edu.mx'])
+                              to=['henry.ricoe@gmail.com'])
         email.send()
         nuevo = DatosTemporal(clave_centrotrabajo_temp=clave, direccion_temp = dire, director_temp=director,nombre_institucion=nombre2,municipio = muni, localidad = loca,
                             status=estatus, modificando = True)

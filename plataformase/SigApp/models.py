@@ -4,12 +4,12 @@ from django.db import models
 
 class CentroTrabajo(models.Model):
     Clave_CentroTrabajo = models.CharField(primary_key=True,max_length=30)
-    Nombre_CentroTrabajo = models.CharField(max_length=50)
+    Nombre_CentroTrabajo = models.CharField(max_length=100)
     Descripcion = models.CharField(max_length=200)
 
 class Institucion(models.Model):
     Clave_Institucion  = models.CharField(primary_key=True,max_length=30)
-    Nombre_Institucion = models.CharField(max_length=50)
+    Nombre_Institucion = models.CharField(max_length=100)
     estatus = models.CharField(max_length=15)
     Clave_CentroTrabajo = models.ForeignKey(CentroTrabajo,on_delete=models.CASCADE)
     Dominio_Institucion = models.CharField(max_length=7)

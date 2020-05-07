@@ -34,7 +34,7 @@ urlpatterns = [
     path('inicio/', include('RVOES.urls')),
     #urls de app de SETyRS
     path('SETyRS/', include('SETyRS.urls')),
-    #urls de app de SigApp
+    #urls de app de SIG
     path('SigApp/', include('SigApp.urls')),
 
 ]
