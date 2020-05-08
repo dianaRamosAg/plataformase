@@ -7,6 +7,7 @@ from django.contrib import messages
 from .models import *
 from .forms import *
 from RVOES.models import Departamento
+from login.models import UsuarioInstitucion
 
 # Vistas del administrador-----------------------------------------------------------------------------
 # funcion que retorna el index del administrador con el contexto de acuerdo al departamento del usuario
@@ -257,8 +258,9 @@ def contarNotificaciones(id):
 # Metodo guarda una solcitud de sinodales en la BD
 def crear_solicitud_sinodal(request):
     if request.method == 'POST':
-        user = request.user.id
-        solicitud = SolicitudSinodal(user_id=user, fecha=timezone.now(), institucion=request.user.first_name)
+        user_id = request.user.id
+        datos_escuela = get_object_or_404(UsuarioInstitucion, id_usuariobase_id=user_id)
+        solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=datos_escuela.nivel_educativo)
         solicitud.save()
         msg = 'Nueva solicitud de sinodales. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
         notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2, user_id=user)
@@ -275,7 +277,7 @@ def agregar_sinodal(request, id):
             curp=request.POST["curp"]
             rfc=request.POST["rfc"]
             grado=request.POST["grado_academico"]
-            comprobar_duplicidad = Sinodales.objects.filter(nombre_sinodal=nombre, curp=curp, institucion=request.user.first_name)
+            comprobar_duplicidad = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name)
             if comprobar_duplicidad:
                 error = 'Este sinodal ya existe en su registro'
                 messages.error(request, error)
@@ -363,6 +365,7 @@ def finalizar_solicitud_sinodal(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         if request.method == 'POST':
             solicitud = get_object_or_404(SolicitudSinodal, pk=id)
+            datos_escuela = get_object_or_404(UsuarioInstitucion, id_usuariobase_id=request.user.id)
             solicitud.fase = 3
             solicitud.estatus = 2
             solicitud.save()
@@ -373,7 +376,7 @@ def finalizar_solicitud_sinodal(request, id):
             notificacion.fecha = timezone.now()
             notificacion.save()
             msgadmin = 'Nueva solicitud de sinodales de '+request.user.first_name+'. Folio: ' + str(solicitud.id)
-            notificacionadmin = NotificacionAdmin(descripcion=msgadmin, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2)
+            notificacionadmin = NotificacionAdmin(descripcion=msgadmin, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2, departamento_id=datos_escuela.nivel_educativo)
             notificacionadmin.save()
             return redirect('SETyRS_detalle_solicitud_sinodal',id)
     else:
