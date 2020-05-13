@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from login.models import CustomUser
+from login.models import CustomUser, UsuarioInstitucion
 from django.utils import timezone
 from .validators import validate_file_extension
 
@@ -9,12 +9,9 @@ from .validators import validate_file_extension
 #--------------------------------------- Modelos de Institución ------------------------------------------------------------
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
-    oficio = models.CharField(max_length=20)
-    cct = models.IntegerField()
     categoria = models.IntegerField()
-    clave_institucion = models.IntegerField()
-    institucion = models.CharField(max_length=50)
-    area_carrera = models.CharField(max_length=30)
+    institucion = models.ForeignKey(UsuarioInstitucion, on_delete=models.CASCADE)
+    area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
     id_secretario = models.IntegerField()
     id_vocal = models.IntegerField()
@@ -125,7 +122,7 @@ class Historial_admins_sinodal(models.Model):
     fecha = models.DateField()
     comentarios = models.CharField(max_length=500, blank=True)
     estatus = models.BooleanField(default=False)
-    departamento_id = models.IntegerField()
+    nivel_educativo = models.IntegerField()
 
     class Meta:
         db_table = 'SETyRS_historial_sinodales'
@@ -137,7 +134,7 @@ class NotificacionAdmin(models.Model):
     fecha = models.DateTimeField('fecha de publicacion')
     solicitud_id = models.IntegerField()
     tipo_solicitud = models.IntegerField()
-    departamento_id = models.IntegerField(default=1)
+    nivel_educativo = models.IntegerField(default=1)
 
     class Meta:
         db_table = 'SETyRS_notificaciones_admin'
