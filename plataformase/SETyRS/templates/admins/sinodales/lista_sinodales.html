@@ -1,4 +1,4 @@
-{% extends 'admins/base.html' %} {% load static %} {% block content %} {% load index %}
+{% extends 'admins/base.html' %} {% load static %} {% block content %}
 <div class="container col-md-10 col-lg-10 text-center">
     <h2>Listado de Sinodales</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -42,12 +42,11 @@
             <tr>
 
                 <td>{{forloop.counter}}</a></td>
-                <td>{{s.nombre_sinodal}}</a></td>
-                <td>{{s.rfc}}</td>
-                <td>{{s.institucion}}</td>
-                {% docS documentos s.id as d %}
-                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{d.curr}}')"><u>Ver archivo</u></a></td>
-                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{d.ced}}')"><u>Ver archivo</u></a></td>
+                <td>{{s.sinodal.nombre_sinodal}}</a></td>
+                <td>{{s.sinodal.rfc}}</td>
+                <td>{{s.sinodal.institucion}}</td>
+                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.curriculum}}')"><u>Ver archivo</u></a></td>
+                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.cedula}}')"><u>Ver archivo</u></a></td>
         
             </tr>
             {% endfor %}
