@@ -135,8 +135,8 @@
                 <tbody>
                     {% for element in centros %}
                     <!-- {{ forloop.counter }} -->
-                        <tr>
-                            <td class="" id="{{ element.username }}">{{ element.cct }}</td>
+                        <tr onclick="editarCCT(this.id)" id="row{{forloop.counter}}" >
+                            <td class="" id="{{ element.cct }}">{{ element.cct }}</td>
                             <td class="">{{ element.nombredirector }}</td>
                             <td class="">{{ element.sector }}</td>
                             <td class="">
@@ -166,7 +166,16 @@
                 </tbody>
             </table>
         </div>
-   
+        <script>
+            function editarCCT(usrConsulta){
+                var renglonClickeado = document.getElementById(usrConsulta);
+                var usr = renglonClickeado.children[0].id;
+                console.log("hola");
+                console.log("correo : "+usr);
+                // console.log("correo : "+usr);
+                window.location="editar/"+usr;
+            };
+          </script>
 
     
 </body>
