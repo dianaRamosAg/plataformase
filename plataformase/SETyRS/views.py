@@ -8,8 +8,10 @@ from .models import *
 from .forms import *
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
+from .render import Render
 
-# Vistas del administrador-----------------------------------------------------------------------------
+# VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
+
 # el departamento de dirección es el unico que puede ver e interactuar con las solicitudes de ambos niveles educativos (superior y media superior)
 #dirección: 2
 #superior: 3
@@ -146,7 +148,11 @@ def historial_sinodales(request):
         raise Http404("El usuario no tiene permiso de ver esta página")
 
 
-# Funciones del administrador-------------------------------------------------------------------------
+
+# FUNCIONES DEL ADMINISTRADOR SINODALES--------------------------------------------------------------------------------------------
+
+
+
 # Metodo que retorna el total de notificaciones que no han sido leidas dependiendo del departamento del usuario activo
 def contarNotificacionesadmin(departamento):
     if departamento == 2:
@@ -221,7 +227,147 @@ def rechazar_sinodal(request, id):
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
 
-# Vistas de la institución SINODALES-----------------------------------------------------------------------------
+
+#VISTAS DEL ADMINISTRADOR EXAMENES A TITULO----------------------------------------------------------------------------------------
+
+
+def lista_solicitudes_examenes_admin(request):
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+        dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
+        num_notifi = contarNotificaciones(request.user.departamento_id)
+        if request.user.departamento_id==2:
+            solicitudes = SolicitudExamen.objects.select_related('user').filter(fase=3).order_by('-id')
+            notificacion = NotificacionAdmin.objects.filter().order_by('-fecha')
+            
+        elif request.user.departamento_id==3:
+            solicitudes = SolicitudExamen.objects.filter(fase=3,nivel_educativo=2).order_by('-id')
+            notificacion = NotificacionAdmin.objects.filter(nivel_educativo=2).order_by('-fecha')
+            
+        elif request.user.departamento_id==4:
+            solicitudes = SolicitudExamen.objects.filter(fase=3,nivel_educativo=1).order_by('-id')
+            notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+        
+        context = {'departamento':dep, 'solicitudes': solicitudes, 'notificacion':notificacion,'notificaciones':num_notifi}
+        for s in solicitudes:
+            if s.estatus == 2:
+                s.estatus = 'Pendiente'
+            elif s.estatus == 3:
+                s.estatus = 'Aprobada'
+            elif s.estatus == 4:
+                s.estatus = 'Rechazada'
+        return render(request,'admins/examenes/lista_solicitud_examenes.html', context)
+    else:
+        raise Http404("El usuario no tiene permiso de ver esta página")
+
+def revisar_solicitud_examen(request, id):
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+        solicitud = get_object_or_404(SolicitudExamen, pk=id)
+        if solicitud.fase == 3:
+            dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
+            alumnos = ArchivosAlumnos.objects.select_related('alumno').filter(solicitud_id=id).order_by('alumno__nombre_alumno')
+            if solicitud.estatus == 2:
+                solicitud.estatus = 'Pendiente'
+            elif solicitud.estatus == 3:
+                solicitud.estatus = 'Aceptada'
+            elif solicitud.estatus == 4:
+                solicitud.estatus = 'Rechazada'
+            num_notifi = contarNotificaciones(request.user.departamento_id)
+            presidente = ArchivosSinodales.objects.select_related('sinodal').get(sinodal_id = solicitud.id_presidente)
+            secretario = ArchivosSinodales.objects.select_related('sinodal').get(sinodal_id = solicitud.id_secretario)
+            vocal =  ArchivosSinodales.objects.select_related('sinodal').get(sinodal_id = solicitud.id_vocal)
+            context = {'departamento':dep,'lista_alumnos': alumnos, 'solicitud':solicitud,'p':presidente,'s':secretario,'v':vocal,'notificaciones':num_notifi}
+
+            if request.user.departamento_id == 2:
+                notificacion = NotificacionAdmin.objects.filter().order_by('-fecha')
+                context.update({'notificacion':notificacion})
+                return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
+
+            elif request.user.departamento_id == 3 and solicitud.nivel_educativo == 2: #nivel educativo: 2 es superior y 1 es media superior
+                notificacion = NotificacionAdmin.objects.filter(nivel_educativo=2).order_by('-fecha')
+                context.update({'notificacion':notificacion})
+                return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
+            
+            elif request.user.departamento_id == 4 and solicitud.nivel_educativo == 1:
+                notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+                context.update({'notificacion':notificacion})
+                return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
+        else:
+            raise Http404("El usuario no tiene permiso de ver esta página")        
+    else:
+        raise Http404("El usuario no tiene permiso de ver esta página")
+
+def historial_examenes(request):
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+        dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
+        num_notifi = contarNotificacionesadmin(request.user.departamento_id)
+        if request.user.departamento_id == 2:
+            notificacion = NotificacionAdmin.objects.filter().order_by('-fecha')
+            historial = Historial_admins_examen.objects.select_related('user','solicitud__user').order_by('fecha')
+        elif request.user.departamento_id == 3:
+            notificacion = NotificacionAdmin.objects.filter(nivel_educativo=2).order_by('-fecha')
+            historial = Historial_admins_examen.objects.select_related('user').filter(nivel_educativo=2).order_by('fecha')
+        elif request.user.departamento_id == 4:
+            notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+            historial = Historial_admins_examen.objects.select_related('user').filter(nivel_educativo=1).order_by('fecha')
+        for h in historial:
+            if h.estatus:
+                h.estatus = 'Aprobada'
+            else:
+                h.estatus = 'Rechazada'
+            if h.user.departamento_id == 2:
+                h.user.departamento_id = 'Dirección'
+            elif h.user.departamento_id == 3:
+                h.user.departamento_id = 'Superior'
+            elif h.user.departamento_id == 4:
+                h.user.departamento_id = 'Media Superior'
+        context = {'departamento':dep,'notificacion':notificacion,'notificaciones':num_notifi,'historial':historial}
+        return render(request,'admins/examenes/historial_actividades.html', context)
+    else:
+        raise Http404("El usuario no tiene permiso de ver esta página")
+
+
+#FUNCINES DEL ADMINISTRADOR EXAMENES A TITULO----------------------------------------------------------------------------------------
+
+
+def aceptar_solicitud(request, id):
+    if request.user.departamento_id == 2 or request.user.departamento_id == 3 or request.user.departamento_id == 4:
+        if request.method == 'POST':
+            solicitud = get_object_or_404(SolicitudExamen, pk=id)
+            solicitud.estatus = 3
+            solicitud.save()
+            h_solicitud = Historial_admins_examen(user_id = request.user.id, solicitud_id = id,fecha=timezone.now(), estatus=True, nivel_educativo=solicitud.nivel_educativo)
+            h_solicitud.save()
+            msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
+            notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
+            notificacion.save()
+            return redirect('SETyRS_revisar_solicitud_examen', id)
+        else:
+            raise Http404('Página no encontrada')
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def rechazar_solicitud(request, id):
+    if request.user.departamento_id == 2 or request.user.departamento_id == 3 or request.user.departamento_id == 4:
+        if request.method == 'POST':
+            solicitud = get_object_or_404(SolicitudExamen, pk=id)
+            solicitud.estatus = 4
+            solicitud.save()
+            comentarios = request.POST['comentarios']
+            h_solicitud = Historial_admins_examen(user_id = request.user.id,solicitud_id = id,fecha=timezone.now(),comentarios=comentarios,nivel_educativo=solicitud.nivel_educativo)
+            msg = 'Solicitud de examenes a titulo RECHAZADA. Folio: ' + str(id)
+            notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
+            notificacion.save()
+            h_solicitud.save()
+            return redirect('SETyRS_revisar_solicitud_examen', id)
+        else:
+            raise Http404('Página no encontrada')
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+
+# VISTAS DE LA INSTITUCION SINODALES-----------------------------------------------------------------------------
+
+
 #funcion que retorna el index del usuario institucion
 def index_institucion(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -296,7 +442,10 @@ def lista_solicitudes_sinodales(request):
     else:
         raise Http404('El usuario no tiene permiso de ver esta pagina')
 
-# Funciones de la institución SINODALES--------------------------------------------------------------------------
+
+# FUNCIONES DE LA INSTITUCION SINODALES--------------------------------------------------------------------------
+
+
 # Metodo que retorna el total de notificaciones no leidas por el usuario. Recibe el id del usuario logueado
 def contarNotificaciones(id):
     notificacion = Notificaciones.objects.filter(user_id=id, visto=False).count()
@@ -443,7 +592,10 @@ def leer_notificacion(request, id):
     else:
         return redirect('SETyRS_detalle_solicitud_sinodal', notificacion.solicitud_id)
 
-#Vistas de la institucion EXAMENES A TITULO ------------------------------------------------------------------------------------------------
+
+#VISTAS DE LA INSTITUCION EXAMENES A TITULO ------------------------------------------------------------------------------------------------
+
+
 def nueva_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
@@ -470,7 +622,7 @@ def detalle_solicitud_examen(request, id):
             elif solicitud.fase == 2:
                 archivos = ArchivosAlumnos.objects.filter(solicitud_id=id).order_by('id')
                 context.update({'archivos':archivos})
-                return render(request, 'institucion/examenes/agregar_documentos.html', context)
+                return render(request, 'institucion/examenes/agregar_documentos_alumnos.html', context)
             else:
                 if solicitud.estatus == 2:
                     solicitud.estatus = 'Pendiente'
@@ -480,17 +632,56 @@ def detalle_solicitud_examen(request, id):
                     solicitud.estatus = 'Rechazada'
                     historial_rechazo = get_object_or_404(Historial_admins_examen,solicitud_id=id)
                     context.update({'comentarios':historial_rechazo})
+                archivos = ArchivosAlumnos.objects.filter(solicitud_id=id).order_by('id')
                 presidente = get_object_or_404(Sinodales, pk=solicitud.id_presidente)
                 secretario = get_object_or_404(Sinodales, pk=solicitud.id_secretario)
                 vocal =  get_object_or_404(Sinodales, pk=solicitud.id_vocal)
-                context.update({'p':presidente, 's':secretario, 'v':vocal})
+                context.update({'p':presidente, 's':secretario, 'v':vocal, 'archivos':archivos})
                 return render(request, 'institucion/examenes/informacion_solicitud_examen.html', context)
         else:
             raise Http404("El usuario no tiene permiso de ver esta página")
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
 
-#Funciones de la institucion EXAMENES A TITULO------------------------------------------------------------------------------------------------
+def lista_solicitudes_examenes(request):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
+        num_notifi = contarNotificaciones(request.user.id)
+        data = SolicitudExamen.objects.filter(user_id=request.user.id).order_by('-id')
+        context = {"data":data,'notificacion':notificacion,'notificaciones':num_notifi}
+        for s in data:
+            c = s.categoria
+            if c==1:
+                s.categoria = 'SEMINARIO DE TITULACION'
+            elif c==2:
+                s.categoria = 'TESIS EXTERNA'
+            elif c==3:
+                s.categoria = 'INFORME SOBRE SERVICIO SOCIAL'
+            elif c==4:
+                s.categoria = 'ESTUDIOS DE POSGRADO'
+            elif c==5:
+                s.categoria = 'EXAMEN GENERAL DE CONOCIMIENTOS'
+            elif c==6:
+                s.categoria = 'EXAMEN CENEVAL'
+            elif c==7:
+                s.categoria = 'ALTO RENDIMIENTO DE LICENCIATURA'
+            elif c==8:
+                s.categoria = 'EXPERIENCIA PROFESIONAL'
+            e = s.estatus
+            if e==1:
+                s.estatus = 'Incompleta'
+            elif e==2:
+                s.estatus = 'Pendiente'
+            elif e==3:
+                s.estatus = 'Aprobada'
+            elif e==4:
+                s.estatus = 'Rechazada'     
+        return render(request, 'institucion/examenes/lista_solicitudes_examenes.html', context)
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+
+# FUNCIONES DE LA INSTITUCION EXAMENES A TITULO------------------------------------------------------------------------------------------------
 
 def crear_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -512,4 +703,159 @@ def crear_solicitud_examen(request):
         else:
             return redirect('SETyRS_nueva_solicitud_examen')
     else:
-        raise Http404('El usuario no tiene permiso de ver esta pagina')
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def agregar_alumno(request, id):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            nombre=request.POST["nombre"].upper()
+            certificado=request.POST["certificado"].upper()
+            curp=request.POST["curp"].upper()
+            alumno = Alumnos(no_certificado=certificado, nombre_alumno=nombre, CURP=curp, id_solicitud_id=id)
+            alumno.save()
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+        else:
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def editar_alumno(request):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            idAlumno = request.POST["idAlumn"]
+            alumno = Alumnos.objects.get(pk=idAlumno)
+            alumno.nombre_alumno = request.POST["nom"]
+            alumno.no_certificado = request.POST["cert"]
+            alumno.CURP = request.POST["curp"]
+            alumno.save()
+            solicitud = alumno.id_solicitud_id
+            return redirect('SETyRS_detalle_solicitud_examen', solicitud)
+        else:
+            raise Http404('El usuario no tiene permiso de ver esta página')
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def eliminar_alumno(request):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            idAlumno = request.POST["idAl"]
+            alumno = Alumnos.objects.get(pk=idAlumno)
+            solicitud = alumno.id_solicitud_id
+            alumno.delete()
+            return redirect('SETyRS_detalle_solicitud_examen', solicitud)
+        else:
+            raise Http404('El usuario no tiene permiso de ver esta página')
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def agregar_documentos_alumno(request, id):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            solicitud = get_object_or_404(SolicitudExamen, pk=id)
+            solicitud.fase = 2
+            solicitud.save()
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+        else:
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def subir_documentos_alumno(request, id):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            form = ArchivosAlumnosForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+            else:
+                error = 'Solo son validos los archivos PDF'
+                messages.error(request, error)
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+        else:
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def editar_documentos_alumno(request, id):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            docs = ArchivosAlumnos.objects.get(alumno_id = request.POST['alumno'])
+            if request.FILES:
+                if 'certificado_egreso' in request.FILES:
+                    docs.certificado_egreso.delete()
+                    docs.certificado_egreso = request.FILES['certificado_egreso']
+                if 'servicio_social' in request.FILES:
+                    docs.servicio_social.delete()
+                    docs.servicio_social = request.FILES['servicio_social']
+                if 'inscripcion_ctrl_escolar' in request.FILES:
+                    docs.inscripcion_ctrl_escolar.delete()
+                    docs.inscripcion_ctrl_escolar = request.FILES['inscripcion_ctrl_escolar']
+                if 'recibo_pago' in request.FILES:
+                    docs.recibo_pago.delete()
+                    docs.recibo_pago = request.FILES['recibo_pago']
+                docs.save()
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+        else:
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def finalizar_solicitud_examen(request, id):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        if request.method == 'POST':
+            solicitud = get_object_or_404(SolicitudExamen, pk=id)
+            solicitud.fase = 3
+            solicitud.estatus = 2
+            solicitud.save()
+            msg = 'Solicitud de exámenes a titulo enviada. Folio: ' + str(solicitud.id) + '. Estatus: Pendiente'
+            notificacion = Notificaciones.objects.get(solicitud_id=id, tipo_solicitud=1)
+            notificacion.visto = False
+            notificacion.descripcion = msg
+            notificacion.fecha = timezone.now()
+            notificacion.save()
+            msgadmin = 'Nueva solicitud de exámenes a título de '+request.user.first_name+'. Folio: ' + str(solicitud.id)
+            notificacionadmin = NotificacionAdmin(descripcion=msgadmin, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=1,nivel_educativo=solicitud.nivel_educativo)
+            notificacionadmin.save()
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+        else:
+            return redirect('SETyRS_detalle_solicitud_examen', id)
+    else:
+        raise Http404('El usuario no tiene permiso de ver esta página')
+
+def generar_pdf(request, id):
+    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        solicitud = get_object_or_404(SolicitudExamen, pk=id)
+        if solicitud.estatus == 3:
+            h = Historial_admins_examen.objects.get(solicitud_id=solicitud.id)
+            jefe = CustomUser.objects.get(id=h.user_id)
+            params = {
+                'solicitud': solicitud,
+                'alumnos':Alumnos.objects.filter(id_solicitud_id=id), 
+                'request': request,
+                'escuela': UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id),
+                'presidente': Sinodales.objects.get(id=solicitud.id_presidente),
+                'secretario': Sinodales.objects.get(id=solicitud.id_secretario),
+                'vocal': Sinodales.objects.get(id=solicitud.id_vocal),
+                'jefe': jefe,
+            }
+            c = solicitud.categoria
+            if c==1:
+                solicitud.categoria = 'SEMINARIO DE TITULACION'
+            elif c==2:
+                solicitud.categoria = 'TESIS EXTERNA'
+            elif c==3:
+                solicitud.categoria = 'INFORME SOBRE SERVICIO SOCIAL'
+            elif c==4:
+                solicitud.categoria = 'ESTUDIOS DE POSGRADO'
+            elif c==5:
+                solicitud.categoria = 'EXAMEN GENERAL DE CONOCIMIENTOS'
+            elif c==6:
+                solicitud.categoria = 'EXAMEN CENEVAL'
+            elif c==7:
+                solicitud.categoria = 'ALTO RENDIMIENTO DE LICENCIATURA'
+            elif c==8:
+                solicitud.categoria = 'EXPERIENCIA PROFESIONAL'
+            return Render.render('institucion/examenes/formato_aprobacion_solicitud.html', params)
+        else:
+             raise Http404("El usuario no tiene permiso de ver esta página")
+    else:
+         raise Http404("El usuario no tiene permiso de ver esta página")

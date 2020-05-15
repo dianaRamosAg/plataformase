@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>SETyRS</title>
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/estilo_tabla.css' %}">
 
@@ -46,7 +46,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'SETyRS_nueva_solicitud_examen' %}">Nueva Solicitud</a>
-                <a class="dropdown-item" href="">Mis Solicitudes</a>
+                <a class="dropdown-item" href="{% url 'SETyRS_solicitudes_examenes' %}">Mis Solicitudes</a>
               </div>
             </li>
             <li class="nav-item dropdown">
