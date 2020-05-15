@@ -1,24 +1,27 @@
-{% extends 'admins/base.html' %} {% load static %} {% block content %}
+{% extends 'admins/base.html' %} {% load static %} {% block content %} {% load index %}
 <div class="container col-md-10 col-lg-10 text-center">
-    <h2>Listado de Sinodales</h2>
+    <h2>Historial de solicitudes de exámenes a título</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
     <div class="container col-md-8">
+        <div class="form-group">
+            <select class="form-control" id="select" onchange="buscarSolicitud()">
+                <option value="1">Todas</option>
+                <option value="2">Aprobadas</option>
+                <option value="3">Rechazadas</option>
+            </select>
+        </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="checkBA" onclick="mostrarBA()">
             <label class="form-check-label" for="exampleCheck1">Busqueda avanzada</label>
         </div>
         <div class="container" id="BA" style="display: none;">
             <div class="row">
-                <label class="form-check-label col-2" for="nombre">Nombre</label>
-                <input type="text" class="form-control col" placeholder="Nombre del sinodal" id="nombre" onkeyup="buscarsino()">  
-            </div>
-            <div class="row mt-3">
-                <label class="form-check-label col-2" for="rfc">RFC</label>
-                <input type="text" class="form-control col" placeholder="RFC" id="rfc" onkeyup="buscarsino()">
+                <label class="form-check-label col-2" for="date">Fecha</label>
+                <input type="date" class="form-control col" id="date" onchange="buscar()">  
             </div>
             <div class="row mt-3">
                 <label class="form-check-label col-2" for="institucion">Institución</label>
-                <input type="text" class="form-control col" placeholder="Nombre de la institución" id="institucion" onkeyup="buscarsino()">
+                <input type="text" class="form-control col" placeholder="Nombre de la institución" id="institucion" onkeyup="buscar()">
             </div>
         </div>
     </div>
@@ -27,27 +30,23 @@
         <thead>
             <tr>
 
-                <th scope="col">No.</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">RFC</th>
-                <th scope="col">Institución</th>
-                <th scope="col">Curriculum</th>
-                <th scope="col">Cedula</th>
+                <th scope="col">Solicitud</th>
+                <th scope="col">Institucion</th>
+                <th scope="col">Estatus</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Usuario</th>
 
             </tr>
         </thead>
         <tbody>
-            {% if sinodales %}
-            {% for s in sinodales %}
+            {% if historial %}
+            {% for h in historial %}
             <tr>
-
-                <td>{{forloop.counter}}</a></td>
-                <td>{{s.sinodal.nombre_sinodal}}</a></td>
-                <td>{{s.sinodal.rfc}}</td>
-                <td>{{s.sinodal.institucion}}</td>
-                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.curriculum}}')"><u>Ver archivo</u></a></td>
-                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.cedula}}')"><u>Ver archivo</u></a></td>
-        
+                <td>{{h.solicitud_id}}</a></td>
+                <td>{{h.solicitud.user.first_name}}</td>
+                <td>{{h.estatus}}</td>
+                <td>{{h.fecha}}</td>
+                <td>{{h.user.username}} - {{h.user.departamento_id}}</td>
             </tr>
             {% endfor %}
             {% endif %}
@@ -68,7 +67,7 @@
     </div>
 </div>
 
-<script src="{% static 'js/admins/sinodales/lista_sinodales.js' %}"></script>
+
 </div>
 <script>
     function verArchivo(url) {
@@ -76,5 +75,6 @@
         pdf.setAttribute("src", "{{MEDIA_URL}}" + url);
     }
 </script>
+<script src="{% static 'js/admins/examenes/historial_actividades.js' %}"></script>
 
 {% endblock %}
