@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'SigApp/base.html' %}
 {% load static %}
 <!DOCTYPE html>
@@ -275,3 +276,267 @@
 </script>
 {% endblock %}
 </html>
+=======
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+    .texto{
+        font-family: "Montserrat", sans-serif;
+    }       
+    .centro{
+        text-align: center;
+    }       
+    .centroItem{
+        align-items: center;
+    }
+    a{
+        color: black;
+    }
+    a:hover{
+        color:grey;
+    }
+    .dm-uploader {
+	    border: 0.25rem dashed grey;
+	    text-align: center;
+    }
+    .dm-uploader.active {
+	    border-color: grey;
+	     border-style: solid;
+    }
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;   
+        cursor: inherit;
+        display: block;
+    }
+    </style>
+
+    <script type="text/javascript">
+
+    var imagen1, imagen2, imagen3;
+
+
+
+        function contenidoDivImagen(event,idpanel){
+            var reader = new FileReader();
+            var panel = document.getElementById(idpanel);
+
+            reader.onload = function(){
+                if(reader.readyState == 2){
+                    var imagen = reader.result;
+                    panel.style.backgroundImage="url("+imagen+")";
+                    panel.style.backgroundSize="cover";
+
+                    switch(idpanel){
+                        case 'DragAndDrop1':
+                            imagen1 = imagen;
+                        case 'DragAndDrop2':
+                            imagen2 = imagen;
+                        case 'DragAndDrop3':
+                            imagen3 = imagen;
+                    }
+
+                    // if(idpanel=='DragAndDrop1'){imagen1=imagen;}
+                    //     else{
+                    //         if(idpanel=='DragAndDrop2'){imagen2=imagen;}
+                    //         else{
+                    //             if(idpanel=='DragAndDrop3'){imagen3=imagen;}}
+                    //         }
+                }
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        //FUNCION AJAX PARA HACER EL POST/UPDATE DE LA INFORMACIÓN
+
+    function updInformacion(){			
+            // var director = $('#directorField').val().replace(' ','-');
+            // var urlF = "/SigApp/updInformacion/"+director+"/{{user.username.split|join:'-'}}/";
+		    // $.ajax({
+			//     url: urlF ,
+			//     method: 'GET',
+			//     dataType: "json",
+			//     success:function(jsonData){
+            alert("Solicitud de modificación enviada. \nSi no hay en cola otra modificación, se le notificará a tu correo electronico");
+			//     }
+		    // })
+    }  
+
+    </script>
+
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 85vh;">
+                <div class="row mt-4 ml-1">       
+                    <a href="/SigApp/miInstitucion/{{user.username.split|join:'-'}}/">Mi institución </a>     	
+                </div>
+                <div class="row mt-4 ml-1">
+                    <a href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/" hidden>Mis estadísticas</a> 
+                </div>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="col-8 bg-light mt-3" style="margin-left: 8.3%;">
+                {% csrf_token %}
+            <div class="" style="height: 40px;">
+                <p style="font-size:20px; margin-bottom: 50px;">Solicitar cambio de información sobre mi institución educativa: {{ user.first_name }}</p>
+            <!--
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col-5" style="margin-left: 4%"><p> {{ user.first_name }}</p></div>
+                <div class="col-4"></div>
+            </div>
+            -->
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 20%; margin-top: 5%;">
+                    <div class="row">
+                        <div class="col-12 col-lg-5">
+                            <p  style="font-size: 18px; font-weight: normal;">Nombre</p>
+                            <input class="centro" value="{{Escuela.NombreEscuela}}" id="nombreIns" name="nombre" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <p style="font-size: 18px; font-weight: normal;">Clave centro de trabajo</p>
+                            <input class="centro"  value="{{Escuela.ClaveEscuela}}" name="clave" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Municipio</p>
+                            <input class="centro" value="{{Escuela.Municipio}}" name="municipio" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Estatus</p>
+                            <input class="centro"  value="{{Escuela.EstatusEscuela}}" name="estatus" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Localidad</p>
+                            <input class="centro"  value="{{Escuela.Localidad}}" name="localidad" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Dirección</p>
+                            <input class="centro"  value="{{Escuela.Calle}}" name="direccion" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                    
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-5 col-lg-4" style="margin-left: 25%">
+                        <hr>
+                            <p style="font-size: 18px; font-weight: normal;">Director de la Institución</p>
+                            <input id="directorField" class="centro"  value="{{Escuela.nombreDirector}}" name="director" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div class="col-6 col-sm-10 mt-1">
+                        <p style="font-size: 18px; font-weight: normal;">Imagenes de la Institución</p>
+                    </div>
+                </div>
+            <div class="row">
+            <!--PRIMER UPLOADER -->
+            {% if Escuela.ImagenNo1.url != None %}
+                <div id="PrimeraImagenIns" class="col-md-6 col-sm-12 col-lg-4">         
+                    <div style="background-image: url({{Escuela.ImagenNo1.url}}); background-size: cover" id="DragAndDrop1" class="dm-uploader p-5">
+                        <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                        <div style="background-color: #757575" class="btn btn-primary btn-file">
+                            <span>Buscar Archivo...</span>
+                            <input onchange="contenidoDivImagen(event,'DragAndDrop1');" id="img1"  type="file" name="img1" title='Presione para agregar archivo' />
+                        </div>
+                    </div>  
+                </div>
+                {% else %}
+                <div id="PrimeraImagenIns" class="col-md-6 col-sm-12 col-lg-4">         
+                    <div style="background-image: url({% static 'SigApp/noi.png' %}); background-size: cover" id="DragAndDrop1" class="dm-uploader p-5">
+                        <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                        <div style="background-color: #757575" class="btn btn-primary btn-file">
+                            <span>Buscar Archivo...</span>
+                            <input onchange="contenidoDivImagen(event,'DragAndDrop1');" id="img1"  type="file" name="img1" title='Presione para agregar archivo' />
+                        </div>
+                    </div>  
+                </div>
+            {% endif %}
+            <!--FIN PRIMER UPLOADER -->
+            <!--SEGUNDO UPLOADER-->
+            {% if Escuela.ImagenNo2.url != None %}
+            <div class="col-md-6 col-sm-12 col-lg-4">       
+                <div style="background-image: url({{Escuela.ImagenNo2.url}}); background-size: cover"; id="DragAndDrop2" class="dm-uploader p-5">
+                    <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                        <div style="background-color: #757575" class="btn btn-primary btn-file">
+                            <span>Buscar Archivo...</span>
+                            <input onchange="contenidoDivImagen(event,'DragAndDrop2');" type="file" name="img2" id="id_ImagenNo2" title='Presione para agregar archivo' />
+                        </div>
+                </div>  
+            </div>
+            {% else %}
+            <div class="col-md-6 col-sm-12 col-lg-4">       
+                <div style="background-image: url({% static 'SigApp/noi.png'%}); background-size: cover" id="DragAndDrop2" class="dm-uploader p-5">
+                    <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                        <div style="background-color: #757575" class="btn btn-primary btn-file">
+                            <span>Buscar Archivo...</span>
+                            <input onchange="contenidoDivImagen(event,'DragAndDrop2');" type="file" name="img2" id="id_ImagenNo2" title='Presione para agregar archivo' />
+                        </div>
+                </div>  
+            </div>
+            {% endif %}
+            <!-- FIN SEGUNDO UPLOADER-->
+            <!--TERCER UPLOADER-->
+            {% if Escuela.ImagenNo3.url != None %}
+            <div class="col-md-6 col-sm-12 col-lg-4">       
+                <div style="background-image: url({{Escuela.ImagenNo3.url}}); background-size: cover"; id="DragAndDrop3" class="dm-uploader p-5">
+                    <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                        <div style="background-color: #757575" class="btn btn-primary btn-file">
+                            <span>Buscar Archivo...</span>
+                            <input onchange="contenidoDivImagen(event,'DragAndDrop3');" type="file" name="img3" id="id_ImagenNo3" title='Presione para agregar archivo' />
+                        </div>
+                </div>  
+            </div>
+            {% else %}
+            <div class="col-md-6 col-sm-12 col-lg-4">       
+                <div style="background-image: url({% static 'SigApp/noi.png'%}); background-size: cover" id="DragAndDrop3" class="dm-uploader p-5">
+                    <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                        <div style="background-color: #757575" class="btn btn-primary btn-file">
+                            <span>Buscar Archivo...</span>
+                            <input onchange="contenidoDivImagen(event,'DragAndDrop3');" type="file" name="img3" id="id_ImagenNo3" title='Presione para agregar archivo' />
+                        </div>
+                </div>  
+            </div>
+            {% endif %}
+            <!-- FIN TERCER UPLOADER-->
+        </div>
+        <div class="centro">
+            {% for message in messages %}
+            <span onload="bloqueaMod()" class="badge badge-danger" style="margin-top: 20px; text-align: center;">{{ message }}</span> <br>
+            {% endfor  %}
+        </div>
+        <div class="col-11" style="text-align: right; margin-left: 19%; bottom: -25%;">
+            <!--<button onclick="updInformacion()" class="btn btn-danger">Solicitar modificación</button>-->
+            {% csrf_token %}
+            <input onclick="updInformacion()" type="submit" class="btn btn-danger" id="btnSolicitar" value= "Solicitar modificación">
+        </form>
+        </div>
+    </div>
+</body>
+<script>
+    function bloqueaMod(){
+        //document.getElementById("btnSolicitar").disabled = true;
+        //alert("asd");
+        document.getElementById("btnSolicitar").style.visibility = "hidden";
+    }
+</script>
+{% endblock %}
+</html>
+>>>>>>> df3a05e1aa0b236e15a3f664cf95cb478ff64807

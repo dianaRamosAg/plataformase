@@ -1,4 +1,4 @@
-{% extends 'admins/base.html' %} {% load static %} {% block content %}{% load index %}
+{% extends 'admins/base.html' %} {% load static %} {% block content %}
 <div class="container col-md-10 col-lg-10 text-center">
     <h2 class="mt-3">Revisión de Solicitud de Sinodal</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -17,21 +17,20 @@
             </tr>
         </thead>
         <tbody>
-            {% for sinodal in lista_sinodales %}
+            {% for s in lista_sinodales %}
             <tr>
-                <td>{{ sinodal.nombre_sinodal }}</td>
-                <td>{{ sinodal.rfc }}</td>
-                {% docS archivos sinodal.id as a %}
-                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.curr}}')"><u>Ver archivo</u></a></td>
-                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.ced}}')"><u>Ver archivo</u></a></td>
-                <td>{{sinodal.estatus}}</td>
+                <td>{{ s.sinodal.nombre_sinodal }}</td>
+                <td>{{ s.sinodal.rfc }}</td>
+                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.curriculum}}')"><u>Ver archivo</u></a></td>
+                <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.cedula}}')"><u>Ver archivo</u></a></td>
+                <td>{{s.sinodal.estatus}}</td>
                 <td>
-                    {% if sinodal.estatus == 'Aceptado' or sinodal.estatus == 'Rechazado' %}
+                    {% if s.sinodal.estatus == 'Aceptado' or s.sinodal.estatus == 'Rechazado' %}
                     <input type="button" class="btn btn-primary" value="Aceptar" disabled>
                     <input type="button" class="btn btn-danger" value="rechazar" disabled> 
                     {% else %}
-                    <input type="button" class="btn btn-primary" value="Aceptar" onclick="sendID('{{sinodal.id}}')" data-toggle="modal" data-target="#confirmacion">
-                    <input type="button" class="btn btn-danger" value="Rechazar" onclick="sendID2('{{sinodal.id}}')" data-toggle="modal" data-target="#rechazar">
+                    <input type="button" class="btn btn-primary" value="Aceptar" onclick="sendID('{{s.sinodal.id}}')" data-toggle="modal" data-target="#confirmacion">
+                    <input type="button" class="btn btn-danger" value="Rechazar" onclick="sendID2('{{s.sinodal.id}}')" data-toggle="modal" data-target="#rechazar">
                     {% endif %}
                 </td>
             </tr>
@@ -113,6 +112,6 @@
         pdf.setAttribute("src", "{{MEDIA_URL}}" + url);
     }
 </script>
-<script src="{% static 'js/revisar_solicitud_sinodal.js' %}"></script>
+<script src="{% static 'js/admins/sinodales/revisar_solicitud_sinodal.js' %}"></script>
 
 {% endblock %}

@@ -1,5 +1,4 @@
 {% load staticfiles  %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +8,14 @@
         @page {
             size: letter portrait;
             background-image: url('login/static/login/fondo.png');
-            margin:25px;
-            margin-top: 105px;
+            @frame content_frame {
+                padding: 10px;
+                left: 25px;
+                right: 10px;
+                top: 150px;
+                height: 730px;
+                /* -pdf-frame-border: 1;    /* for debugging the layout */
+            }
 
         }
         .header {
@@ -55,11 +60,11 @@
         }
 
         .fila{
-            width:100px;
+            width:100%;
         }
 
         .columna{
-            width: 50px;
+            width: 50%;
         }
 
     </style>
@@ -67,9 +72,6 @@
 
 <body>
     <div class="cuerpo">
-        <div class="encabezado">
-            <br><br>
-        </div>
         <div class="fecha">
             <p><strong>Oficio:</strong> {{ solicitud.id }}<br>
                 Tepic, Nayarit, a {{ fecha }}<br>
@@ -99,28 +101,36 @@
                         la revisión de las formalidades jurídicas, mismas que detallo a continuación:
             </p>
         </div>
-            <table class="tabla">
-                        <tr class="centrado">
-                            <th>CONSTANCIA DE SEGURIDAD ESTRUCTURAL</th>
-                            <th>DICTAMEN PROTECCIÓN CIVIL</th>
-                            <th>CONSTANCIA DE USO DE SUELO</th>
-                            <th>DICTAMEN INIFE</th>
-                            <th>FECHA DE PAGO DE DERECHOS</th>
-                        </tr>
-                        <tr class="centrado">
-                            <td>{{ datos.dictamen_estructural }} {{ datos.fecha_estructural }}
-                                {{ datos.arqui_dictamen_estructural}} Registro D.R.O
-                                {{ datos.DRO_dictamen_estructural }} Cedula Profesional:
-                                {{ datos.noCedula_dictamen_estructural }} </td>
-                            <td>{{ datos.dictamen_proteccion }} {{ datos.fecha_dictamen_proteccion }}
-                                Firmado por: {{ datos.firma_dictamen_proteccion }} </td>
-                            <td>Dictamen: {{ datos.dictamen_suelo}} Expediente: {{ datos.expediente_suelo }}
-                                {{ datos.fecha_suelo }} Firmado por: {{ datos.firma_suelo }}</td>
-                            <td>{{ datos.folio_inife }} {{ datos.fecha_inife }} Firmado por:
-                                {{ datos.firma_inife }}</td>
-                            <td>Recibo oficial: {{ datos.folio_pago }} {{ datos.fecha_pago }} ${{ datos.monto_pago }}</td>
-                        </tr>
-                </table>
+
+        <div>
+            <p><strong>CONSTANCIA DE SEGURIDAD ESTRUCTURAL</strong> <br>
+                {{ datos.dictamen_estructural }} <br>
+                {{ datos.fecha_estructural }}<br>
+                {{ datos.arqui_dictamen_estructural}} <br>
+                Registro D.R.O {{ datos.DRO_dictamen_estructural }} <br>
+                Cedula Profesional: {{ datos.noCedula_dictamen_estructural }}</p>
+
+            <p><strong>DICTAMEN PROTECCIÓN CIVIL</strong><br>
+                {{ datos.dictamen_proteccion }}<br>
+                {{ datos.fecha_dictamen_proteccion }}<br>
+                Firmado por: {{ datos.firma_dictamen_proteccion }}</p>
+
+            <p><strong>CONSTANCIA DE USO DE SUELO</strong><br>
+                Dictamen: {{ datos.dictamen_suelo}} <br>
+                Expediente: {{ datos.expediente_suelo }}<br>
+                {{ datos.fecha_suelo }} <br>
+                Firmado por: {{ datos.firma_suelo }}</p>
+
+            <p><strong>DICTAMEN INIFE</strong><br>
+                {{ datos.folio_inife }} <br>
+                {{ datos.fecha_inife }} <br>
+                Firmado por: {{ datos.firma_inife }}</p>
+
+            <p><strong>FECHA DE PAGO DE DERECHOS</strong><br>
+                Recibo oficial: {{ datos.folio_pago }}<br>
+                {{ datos.fecha_pago }}<br>
+                ${{ datos.monto_pago }}</p>
+        </div>
 
         <div>
             <div >
@@ -139,25 +149,12 @@
             </div>
 
             <div>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
                 <p class="centrado despedida"><strong>A T E N T A M E N T E</strong><br>
                     <strong>EL DIRECTOR DE EDUCACIÓN MEDIA SUPERIOR Y SUPERIOR</strong></p>
                 <p class="centrado"><strong>LIC. VÍCTOR MANUEL ALVARADO JIMÉNEZ</strong></p>
             </div>
 
             <div style="font-size: 12px;">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
                 <ul>
                     <li><small><em><strong>c.c.p. Mtro. Martin Isaac Pérez Gómez. - Subsecretario de Educación Media Superior, Superior e Investigación Científica y Tecnológica. Para su conocimiento.</strong></em></small></li>
                     <li><small><em><strong>c.c.p. Lic. Osvaldo Antonio Valencia Barragán.- Jefe de Departamento de Control escolar y Estadísticas. Para su conocimiento.</strong></em></small></li>

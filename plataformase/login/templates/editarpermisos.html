@@ -3,48 +3,56 @@
    {% block content %}
    <form action="../actualizarusr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
     {% csrf_token %}
-    <div class="container-fluid">
+    <div class="container">
         <div class="row m-2">
-            <div class="col-12 text-center"><br>
-                <h2 class="text-center" >Actualización de usuarios</h2>
-                <!-- <p class="text-center">
-                <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</a>.</small>
-                </p> -->
+            <div class="col-12 text-center"><br><br><br>
+                <h3 class="text-center" >Actualización de usuarios</h3>
+               
                 <hr>
             </div>
         </div>
-        <div class="row m-2 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mx-auto" style="float: left; background-color: lightgray; border-radius: 15px; width: 102%;">
+        <div class="row m-2 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mx-auto" style="float: left; background-color: rgb(240, 240, 240); border-radius: 15px; width: 102%;">
 
 
-            <div class="col-12" style="margin-left: 400px;">
-                
-                <h3>Información de usuario : {{CustomUser.first_name}} {{CustomUser.last_name}} </h3>
+            <div class="col-12" style="margin-left: 50px;">
+                <br>
+                <h4>Información de usuario : {{CustomUser.first_name}} {{CustomUser.last_name}} </h4>
       
                 <br><br>
-
-                <label class="mr-2 " for="id_email">Correo: </label>
-                <input class="form-control" readonly style="width: 50%;"  type="text" name="email"required id="id_email" value="{{CustomUser.username}}"><br>
-                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
-                <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
-                    <option value="1" selected>Seleccione</option>
+                <div class="row">
+                <label class="mr-2 " for="id_email" style="float: left;">Correo electrónico : </label>
+                <input class="form-control" readonly style="width: 30%;"  type="text" name="email"required id="id_email" value="{{CustomUser.username}}"><br>
+                
+                <label class="ml-2" for="id_tipo_usuario" style="float: left;">Tipo de usuario :</label>
+                <select class="custom-select col-3 " style="float: left; margin-left: 20px;" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                    <option value="1" selected disabled>Seleccione</option>
                     <option value="2">Jefe de departamento</option>
                     <option value="3">Subordinados de departamento</option>
                     <option value="4">Administrtador de la página</option>
                 </select><br><br>
-                <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
-                <select class="custom-select col-3" name="departamento" id="id_departamento" >
-                {% for entry in departamentos %}
+                <div class="form-group" style="text-align:left; display: none;" id="firma" style="float: left;" >
+                    <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
+                       <input id="id_firma" type="file"  name="firma_digital" style=" float:left; margin-left: 40px;"><br>
+                </div><br>
+                <label class="ml-1" for="id_departamento" id="lbl_departamento" style="float: left;">Departamento :</label>
+                <select class="custom-select col-3" name="departamento" style="float: left; margin-left: 30px;" id="id_departamento" onchange="verificarJefes()">
+                    <option value="0" disabled selected>Seleccione</option>
+                    {% for entry in departamentos %}
                     <option value="{{ entry.id }}">{{ entry.nombre }}</option>
                 {% endfor %}
-                </select>
+                </select><br>
+                <div class="row" style="float: left;">
+                    <div class="alert alert-warning col-md-4 "  role="alert" id="alertJefe" style="width: 100%; float:left; display:none;">
+                    <small><strong> ¡Cuidado! </strong>Existe un jefe para este departamento,si desea reemplazarlo haga caso omiso a esta advertencia.
+                    </small> </div><br>
+                </div><br>
             </div>
             <br>
-            <div class="m-2 col-12 ">
-                
-            </div>
+           </div>
+
             <br><br>
         <div class="text-center">
-            <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}'">Regresar</button>
+            <a class="btn btn-secondary col-2" href="{% url 'usuarios' %}">Regresar</a>
             <button class="btn btn-primary col-2 mx-auto" type="submit">Actualizar</button>
         </div>
         <br><br>
@@ -55,6 +63,13 @@
 
     <script type="text/javascript">
         function funcion(){
+        var user = document.getElementById("id_tipo_usuario");
+        if(user.value=='2'){
+            document.getElementById("firma").style.display = 'inline';
+        }
+        else{
+            document.getElementById("firma").style.display = 'none';
+            document.getElementById("alertJefe").style.display = 'none';}
         departamento();
         }
         departamento();
@@ -68,6 +83,19 @@
         }else{
             sel.style.display = 'none';
             lbl.style.display = 'none';
+        }
+    }
+    function verificarJefes(){
+        var a = {{ jefes|safe  }};
+        var dep = document.getElementById("id_departamento");
+        var sel = document.getElementById("alertJefe");
+        for(var i=0; i<a.length+1; i++){
+            if(dep.value == a[i]){
+                sel.style.display = 'inline';
+                i = a.length+1;
+            }else{
+                sel.style.display = 'none';
+            }
         }
     }
     </script>

@@ -28,4 +28,6 @@ urlpatterns = [
     path('GuardarFormatoPDF/', views.GuardarFormatoPDF, name='GuardarFormatoPDF'),
 
     path('cct/', views.cct, name='cct'),
+    path('cct/editar/<cct>', views.ccteditar, name='ccteditar'),
+    path('cct/actualizarcct/', views.actualizarcct, name='actualizarcct'),
 ]

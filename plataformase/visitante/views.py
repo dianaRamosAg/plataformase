@@ -9,7 +9,7 @@ from django.core.mail import EmailMessage
 
 ''' Vistas que redireccionan respecto a permisos de usuario'''
 def index(request):
-    return render(request,'registration/login.html')
+    return redirect('login')
 
 def menuinstitucion(request):
     return render(request,'menuinstitucion.html')
@@ -226,23 +226,15 @@ def actualizarperfilusr(request):
         municipio = request.POST["municipio"]
         colonia = request.POST["colonia"]
         celular = request.POST["celular"]
-        if request.user.tipo_usuario=='1':
-            inst_cct=request.POST["cct"]
-            inst_nombredirector=request.POST["nombre_director"]
-            sector=request.POST["sector"]
-            nivel_educativo=request.POST["nivel_educativo"]
-
-        else:
-            inst_cct=None
-            inst_nombredirector=None
+  
 
         
         CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
         codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name)
-        if request.user.tipo_usuario=='1':
-            UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id).update(cct = inst_cct,
-                                             nombredirector = inst_nombredirector, sector=sector,
-                                             nivel_educativo=nivel_educativo)
+        # if request.user.tipo_usuario=='1':
+        #     UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id).update(cct = inst_cct,
+        #                                      nombredirector = inst_nombredirector, sector=sector,
+        #                                      nivel_educativo=nivel_educativo)
 
   
     return redirect('perfiluser') 
@@ -270,3 +262,17 @@ def cct(request):
         usrInst.save()
     centros = UsuarioInstitucion.objects.all().order_by('cct').filter(id_usuariobase=request.user.id)
     return render(request, 'CCT.html', {'centros': centros})
+
+def ccteditar(request,cct):
+    us = UsuarioInstitucion.objects.get(cct = cct)
+    return render(request,'editarcct.html',{'UsuarioInstitucion':us})
+
+def actualizarcct(request):
+    if request.method == 'POST':
+        cct = request.POST["cct"]
+        nombredirector = request.POST["nombredirector"]
+        sector = request.POST["sector"]
+        nivel_educativo = request.POST["nivel_educativo"]
+        
+        UsuarioInstitucion.objects.filter(cct=cct).update(nombredirector=nombredirector,sector=sector,nivel_educativo=nivel_educativo)
+    return redirect('cct')

@@ -1,0 +1,59 @@
+{% extends 'admins/base.html' %} {% load static %} {% block content %}
+<div class="container col-md-10 col-lg-10 text-center">
+    <h2>Solicitudes de Exámenes a Título</h2>
+    <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    <div class="container col-md-8">
+        <div class="form-group">
+            <select class="form-control" id="select" onchange="buscarSolicitud()">
+                <option value="1">Todas</option>
+                <option value="2">Pendientes</option>
+                <option value="3">Aceptadas</option>
+                <option value="4">Rechazadas</option>
+            </select>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="checkBA" onclick="mostrarBA()">
+            <label class="form-check-label" for="exampleCheck1">Busqueda avanzada</label>
+        </div>
+        <div class="container" id="BA" style="display: none;">
+            <div class="row">
+                <label class="form-check-label col-2" for="date">Fecha</label>
+                <input type="date" class="form-control col" id="date" value="{{fecha}}" onchange="buscar()">  
+            </div>
+            <div class="row mt-3">
+                <label class="form-check-label col-2" for="institucion">Institución</label>
+                <input type="text" class="form-control col" placeholder="Nombre de la institución" id="institucion" onkeyup="buscar()">
+            </div>
+        </div>
+    </div>
+    <br>
+    <table class="table table-striped table-hover" id="solicitudes">
+        <thead>
+            <tr>
+
+                <th scope="col">Folio</th>
+                <th scope="col">Institución</th>
+                <th scope="col">Estatus</th>
+                <th scope="col">Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if solicitudes %}
+            {% for s in solicitudes %}
+            <tr>
+                <td><a href="{% url 'SETyRS_revisar_solicitud_examen' s.id %}">{{s.id}}</a></td>
+                <td>{{s.user.first_name}}</td>
+                <td>{{s.estatus}}</td>
+                <td>{{s.fecha}}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+
+
+</div>
+<script src="{% static 'js/admins/examenes/lista_solicitud_examenes.js' %}"></script>
+{% endblock %}

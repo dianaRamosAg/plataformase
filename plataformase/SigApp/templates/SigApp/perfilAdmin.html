@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'SigApp/base.html' %}
 {% load static %}
 <!DOCTYPE html>
@@ -78,3 +79,85 @@
 </body>
 {% endblock %}
 </html>
+=======
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+              </style>
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+                <div class="row mt-4 ml-1">       
+                    <a href="/SigApp/perfilAdmin">Mi perfil </a>     	
+                </div>
+                <div class="row mt-4 ml-1">
+                    <a href="/SigApp/modificacionesAdmin">Modificaciones</a> 
+                </div>
+                <div class="row mt-4 ml-1">
+                    <a href="/SigApp/registrosAdmin">Registros</a>
+                </div>
+            </div>
+            <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
+                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Perfil del administrador: {{ user.username }}</p>
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 20%; margin-top: 5%;">
+                    <div class="row">
+                        <div class="col-12 col-lg-5">
+                            <p style="font-size: 18px; font-weight: normal;">Nombre de usuario</p>
+                            <input class="centro" value="{{ user.username }}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <p style="font-size: 18px; font-weight: normal;">Correo</p>
+                            <input class="centro" value="{{ user.email }}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Contraseña</p>
+                            <input class="centro" value="" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Nueva contraseña</p>
+                            <input class="centro" value="" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-11" style="text-align: right; margin-left: -2%; bottom: -150%;">
+                    <button class="btn btn-primary">Cambiar contraseña</button>
+                </div>
+            </div>
+            
+           
+
+            
+        </div>
+    </div>
+
+</body>
+{% endblock %}
+</html>
+>>>>>>> df3a05e1aa0b236e15a3f664cf95cb478ff64807

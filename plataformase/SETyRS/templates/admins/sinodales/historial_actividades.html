@@ -1,5 +1,4 @@
 {% extends 'admins/base.html' %} {% load static %} {% block content %} {% load index %}
-<!-- Cambios para el pull request :v -->
 <div class="container col-md-10 col-lg-11 text-center">
     <h2>Historial de solicitudes de sinodales</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -55,7 +54,7 @@
                 <td>{{h.sinodal.institucion}}</td>
                 <td>{{h.estatus}}</td>
                 <td>{{h.fecha}}</td>
-                <td>{{h.user.username}} - {{h.user.tipo_usuario}}</td>
+                <td>{{h.user.username}} - {{h.user.departamento_id}}</td>
             </tr>
             {% endfor %}
             {% endif %}
@@ -78,7 +77,7 @@
 
 
 </div>
-<script src="{% static 'js/historial_actividades.js' %}"></script>
+<script src="{% static 'js/admins/sinodales/historial_actividades.js' %}"></script>
 <script>
     function verArchivo(url) {
         var pdf = document.getElementById('PDFviewer')

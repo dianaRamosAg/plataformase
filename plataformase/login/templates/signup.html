@@ -23,10 +23,8 @@
                                 <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
                                 <select class="custom-select col-3"  required name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
                                     <option value="" selected disabled>Seleccione</option>
-                                    <option value="1"title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >
-                                        Institución</option>
-                                    <option value="2"title="Encargado oficial de un departamento." >
-                                        Jefe de departamento</option>
+                                    <option value="1"title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >Institución</option>
+                                    <option value="2"title="Encargado oficial de un departamento." >Jefe de departamento</option>
                                     <option value="3">Subordinados de departamento</option>
                                     <option value="4" title="Tipo administrador,Maneja recursos de la plataforma">Administrtador de la página</option>
                                     <option value="5" title="Particular, no cuenta con cct puede solicitar rvoe">Particular</option>
@@ -52,8 +50,7 @@
                             <div class="alert alert-warning col-md-4 "  role="alert" id="alertJefe" style="width: 100%; float:left">
                             <small><strong> ¡Cuidado! </strong>Existe un jefe para este departamento,si desea reemplazarlo haga caso omiso a esta advertencia.
                             </small> </div>
-                        </div>
-                        <br>
+                        </div><br><br><br><br>
                         <div class="form-group" style="text-align:left; display: none;" id="firma" style="float: left;" >
                         <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
                            <input id="id_firma" type="file"  name="firma_digital" >
@@ -90,8 +87,8 @@
                                     <option value="3"> Ambos </option>
                                 </select><br>
                                 <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">¿Es modalidad Telebachillerato? :</label>
-                                        <select  class="form-control ml-2 col-1" name="modalidad" id="id_nivel_educativo" required>
-                                            <option disabled="" selected="" value="">Seleccione</option>
+                                        <select  class="form-control ml-2 col-1" name="modalidad" id="id_modalidad" required>
+                                            <option disabled="" selected="" >Seleccione</option>
                                             <option value="0"> No </option>
                                             <option value="1"> Sí </option>
                                         </select>
@@ -266,6 +263,11 @@
             
             document.getElementById("datos_inst").style.display = 'inline';
         }
+        if(user.value == '3'){
+            
+            
+            document.getElementById("alertJefe").style.display = 'none';
+        }
        
         pmoral();
         departamento();
@@ -304,13 +306,18 @@
         var a = {{ jefes|safe  }};
         var dep = document.getElementById("id_departamento");
         var sel = document.getElementById("alertJefe");
-        for(var i=0; i<a.length+1; i++){
-            if(dep.value == a[i]){
-                sel.style.display = 'inline';
-                i = a.length+1;
-            }else{
-                sel.style.display = 'none';
+        var typeUser = document.getElementById("id_tipo_usuario");
+        if(typeUser.value == '2'){
+            for(var i=0; i<a.length+1; i++){
+                if(dep.value == a[i]){
+                    sel.style.display = 'inline';
+                    i = a.length+1;
+                }else{
+                    sel.style.display = 'none';
+                }
             }
+        }else{
+            sel.style.display = 'none';
         }
     }
 
