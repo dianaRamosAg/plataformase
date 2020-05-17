@@ -14,7 +14,7 @@ from .models import *
 from .render import render_pdf_planes_prog_estud
 
 """
-Todos los métodos (menos class Pdf(View) y def  getUltSolicitud(id_usuario) ) incluyen el siguiente código:
+Todos los métodos (menos class Pdf(View)) incluyen el siguiente código:
 #Si el tipo de usuario que hizo la solicitud es (1: institución, 2-3: personal del departamento)
 if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
     #Código del método
@@ -23,12 +23,6 @@ if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
 else:
     return redirect('perfil')
 """
-
-'''pass_db
-Esta variable se utiliza para generar conexión de la base de datos al momento de realizar cierto tipo de consultas.
-El valor de quede contener esta variable la contraseña de conexión hacia la base de datos.'''
-pass_db = "ismael"
-#pass_db = "marcos"
 
 class Pdf(View):
     """
@@ -263,8 +257,9 @@ def SCurricular(request):
     """
     if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
         request.POST._mutable = True#Activando esta opción podremos editar los datos que vienen del método POST
-        request.POST["id_solicitud"] = getUltSolicitud(request.user.id)#Pasamos el id de la solicitud en caso
-        id_solicitud = getUltSolicitud(request.user.id)#Es solo para inicializar el valor ya que el uso de la misma lo exige
+        id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]
+        request.POST["id_solicitud"] = id_solicitud#Pasamos el id de la solicitud en caso
+        #id_solicitud = getUltSolicitud(request.user.id)#Es solo para inicializar el valor ya que el uso de la misma lo exige
         if request.method == 'POST':#Si el request fue realizado con el método POST
             form = ArchivosCCurrForm(request.POST, request.FILES)#Se añaden los archivos y los campos de texto ingresados al sistema
             if form.is_valid():#Si el formulario es válido, lo guarda en la base de datos y redirige a la siguiente vista para que guarde los archivos de la siguente carpeta
@@ -272,7 +267,7 @@ def SCurricular(request):
                 return redirect('academicaSup')#Redirige a la URL con nombre "academicaSup"
         else:#Si el request no fue realizado con el método POST
             form = ArchivosCCurrForm()#Se crea el formulario de la información requerida según el modelo "CCurricular"
-            id_solicitud = getUltSolicitud(request.user.id)#Se obtiene el ID de la última solicitud ingresada.
+            id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Se obtiene el ID de la última solicitud ingresada.
             mod = Solicitud.objects.values_list('modalidad').get(id=id_solicitud)[0]#Se obtiene la modalidad de la última solicitud ingresada.
             salud = Solicitud.objects.values_list('salud').get(id=id_solicitud)[0]#Se obtiene de la última solicitud ingresada, si esta es pertenecienete al área de salud o no.
             Solicitud.objects.filter(id=id_solicitud).update(completado=2)#Actualiza en qué carpeta se encuentra el proceso de subida de solicitud.
@@ -446,7 +441,7 @@ def historial(request, usuario, solicitud):
             Notificaciones = Notificacion.objects.filter(solicitud_id=solicitud, tipo_notificacion='H').order_by('id')# Se obtienen todas las notificaciones a esa solicitud de tipo 'Historial'(H).
             ComentariosSolic = Comentarios.objects.filter(solicitud_id=solicitud, mostrado=1)# Se obtienen todos los comentarios realizados a esta solicitud.
             medSup = CMedSuperior.objects.filter(id_solicitud=solicitud)#Obtenemos todos los archivos subidos en la carpeta media superior corespondientes a la solicitud
-            cInst = CInstitucional.objects.filter(id_solicitud=solicitud)#Obtenemos todos los archivos subidos en la carpeta institucional corespondientes a la solicitud
+            cInst = CAcademica.objects.filter(id_solicitud=solicitud)#Obtenemos todos los archivos subidos en la carpeta institucional corespondientes a la solicitud
         except Notificacion.DoesNotExist:
             raise Http404("Ningúna Notificación coincide con la consulta dada.")
         return render(request, 'historialSolicitud.html', {"notificaciones": Notificaciones,
@@ -689,8 +684,8 @@ def terminarSubArchivos(request, usuario, solicitud):
                     if not ("2_2" in comentario):
                         request.FILES["pago"] = inst.pago.url
                         request.POST["folio_pago"] = inst.folio_pago
-                        request.POST["monto_pago"] = medSup.monto_pago
-                        request.POST["fecha_pago"] = medSup.fecha_pago
+                        request.POST["monto_pago"] = inst.monto_pago
+                        request.POST["fecha_pago"] = inst.fecha_pago
                     if not ("2_3" in comentario):
                         request.FILES["acredita_personalidad"] = inst.acredita_personalidad.url
                     if not ("2_4" in comentario):
@@ -861,7 +856,7 @@ def terminarSubArchivos(request, usuario, solicitud):
             Estatus = Solicitud.objects.values_list("estatus").get(id=solicitud)[0]#Se obtiene en que departamento se encuentra dicha solicitud.
             JefeSigDept = CustomUser.objects.values_list('id').get(jefe='1', departamento_id=Estatus)[0]#Extrae el id del jefe del área en que está la solicitud
             notificacionA = Notificacion(solicitud_id=solicitud,
-                                        descripcion="A una solicitud le fueron subidos nuevos archivos.",
+                                        descripcion="A una solicitud le fueron subidos nuevos archivos",
                                         leida='0',
                                         fechaNotificacion=datetime.datetime.now(),
                                         tipo_notificacion='P',
@@ -1698,24 +1693,3 @@ def finProceso(request, solicitud):
 
     else:
         return redirect('perfil')
-
-# --------------------- Métodos fuera de vistas -------------------------------------------------------------
-
-def getUltSolicitud(id_usuario):
-    import psycopg2
-    try:
-        connection = psycopg2.connect(user="postgres", password=pass_db, host="localhost", port="5432",
-                                      database="RVOES")
-        cursor = connection.cursor()
-        select = "SELECT id FROM usuarios_solicitud WHERE customuser_id = %s ORDER BY id DESC LIMIT 1"
-        cursor.execute(select, (id_usuario,))
-        record = cursor.fetchone()
-        cursor.close()
-        connection.close()
-        return record[0]
-    except (Exception, psycopg2.Error) as error:
-        print("Error al obtener datos con el método getUltSolicitud", error)
-
-
-
-

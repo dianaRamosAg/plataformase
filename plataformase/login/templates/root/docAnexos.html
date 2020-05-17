@@ -11,14 +11,11 @@
             {% csrf_token %} <br><br><br><br>
             <h3 align="center">Subir archivos de acuerdos</h3><br><br>
             <div class="row">
-                <label class="" for="id_nombre" style="float:left; margin-left: 50px;">Nombre del acuerdo : </label>
+                <label class="" for="id_nombre" style="float:left; margin-left: 50px;">Nombre del acuerdo: </label>
                 <input type="text" class="form-control" required name="nombre" id="id_nombre" style="width: 50%;">
                 <br>
                 <label class="" for="id_nivel" style="float:left; margin-left: 50px;">Nivel:</label>
-                <select class="custom-select " name="nivel" id="id_nivel" style="float:left; margin-left: 105px;">
-                    <option value="1" selected>Media Superior</option>
-                    <option value="2">Superior</option>
-                </select>
+                <input class="form-control" type="text" name="nivel" id="id_nivel" value="{{ request.user.departamento.nombre }}" readonly style="width: 25%;">
             </div><br>
             <div class="row d-flex"  style="background-color: lightgray; width: 75%; margin-left: 37px;  border: 2px solid lightgray;
             border-radius: 5px;">
@@ -31,23 +28,23 @@
         </form>
     </div>
 
+    <br><br><br><br>
 
-   
-    <div class="col-md-6" style="float: right;" ><br><br><br><br>
+    <div class="col-md-6" style="float: right;" >
         <h3 align="center">Acuerdos subidos</h3><br><br>
         <table class="table table-hover" style="width: 100%; text-align:center; margin: 0 auto;">
             <thead class="thead-dark">
                 <tr class="bg-primary">
-                    <th class="w-50">Nombre</th>
-                    <th class="w-25">Nivel</th>
-                    <th class="w-25">Ver</th>
+                    <th class="">Nombre</th>
+                    <th class="">Nivel</th>
+                    <th class="">Ver/Eliminar</th>
                 </tr>
             </thead>
             <tbody>
                 {% for element in docs %}
                     <tr>
-                        <td class="w-50">{{ element.nombre }}</td>
-                        <td class="w-25">
+                        <td class="">{{ element.nombre }}</td>
+                        <td class="">
                             {% if element.nivel == '1' %}
                                 Media Superior
                             {% endif %}
@@ -55,7 +52,10 @@
                                 Superior
                             {% endif %}
                         </td>
-                        <td class="w-25"><a class="btn btn-secondary" target="_blank" href="{{ element.archivo.url }}">Ver</a></td>
+                        <td class="">
+                            <a class="btn btn-secondary" target="_blank" href="{{ element.archivo.url }}">Ver</a> /
+                            <a class="btn btn-secondary" href="{% url 'eliminarAcuerdo' element.id %}">Eliminar</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
