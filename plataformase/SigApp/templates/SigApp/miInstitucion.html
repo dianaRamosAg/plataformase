@@ -86,20 +86,9 @@
             reader.readAsDataURL(event.target.files[0]);
         }
 
-        //FUNCION AJAX PARA HACER EL POST/UPDATE DE LA INFORMACIÓN
+       
 
-    function updInformacion(){			
-            // var director = $('#directorField').val().replace(' ','-');
-            // var urlF = "/SigApp/updInformacion/"+director+"/{{user.username.split|join:'-'}}/";
-		    // $.ajax({
-			//     url: urlF ,
-			//     method: 'GET',
-			//     dataType: "json",
-			//     success:function(jsonData){
-            alert("Solicitud de modificación enviada. \nSi no hay en cola otra modificación, se le notificará a tu correo electronico");
-			//     }
-		    // })
-    }  
+    
 
     </script>
 
@@ -108,8 +97,14 @@
         <div class="row bg-light m-2">
             <!--Nav bar izquierdo-->
             <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 85vh;">
-                <div class="row mt-4 ml-1">       
-                    <a href="/SigApp/miInstitucion/{{user.username.split|join:'-'}}/">Mi institución </a>     	
+                <div class="row mt-4 ml-1" align="center">       
+                    
+                        <a href="/SigApp/miInstitucion/{{ Escuela.ClaveEscuela }}/">{{ Escuela.NombreEscuela }}</a>
+                        <hr>
+                    
+                        <!--<a href="/SigApp/miInstitucion/{{ user.id }}/">{{Escuela.NombreEscuela}}  </a> !-->  
+                    
+                    <hr>
                 </div>
                 <div class="row mt-4 ml-1">
                     <a href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/" hidden>Mis estadísticas</a> 
@@ -118,7 +113,10 @@
             <form method="post" enctype="multipart/form-data" class="col-8 bg-light mt-3" style="margin-left: 8.3%;">
                 {% csrf_token %}
             <div class="" style="height: 40px;">
-                <p style="font-size:20px; margin-bottom: 50px;">Solicitar cambio de información sobre mi institución educativa: {{ user.first_name }}</p>
+                <label style="font-size:20px; margin-left: 15%; text-align:center; margin-bottom: 30px;">
+                    Solicitar cambio de información sobre mi institución educativa:<br> 
+                    <b>{{ Escuela.NombreEscuela }}</b>
+                </label>
             <!--
             <div class="row">
                 <div class="col-4"></div>
@@ -243,10 +241,14 @@
             <span onload="bloqueaMod()" class="badge badge-danger" style="margin-top: 20px; text-align: center;">{{ message }}</span> <br>
             {% endfor  %}
         </div>
-        <div class="col-11" style="text-align: right; margin-left: 19%; bottom: -25%;">
+        <div class="col-11" style="text-align: center; padding: 2%; margin-left: 10%; margin-top: 5%; bottom: -10%;">
             <!--<button onclick="updInformacion()" class="btn btn-danger">Solicitar modificación</button>-->
             {% csrf_token %}
-            <input onclick="updInformacion()" type="submit" class="btn btn-danger" id="btnSolicitar" value= "Solicitar modificación">
+            {% if modificando %}
+                <input style="visibility:hidden;" onclick="updInformacion()" type="submit" class="btn btn-danger" id="btnSolicitar" value= "Solicitar modificación">
+            {% else %}
+                <input onclick="updInformacion()" type="submit" class="btn btn-danger" id="btnSolicitar" value= "Solicitar modificación">
+            {% endif %}
         </form>
         </div>
     </div>
@@ -257,6 +259,19 @@
         //alert("asd");
         document.getElementById("btnSolicitar").style.visibility = "hidden";
     }
+     //FUNCION AJAX PARA HACER EL POST/UPDATE DE LA INFORMACIÓN
+    function updInformacion(){			
+            // var director = $('#directorField').val().replace(' ','-');
+            // var urlF = "/SigApp/updInformacion/"+director+"/{{user.username.split|join:'-'}}/";
+		    // $.ajax({
+			//     url: urlF ,
+			//     method: 'GET',
+			//     dataType: "json",
+			//     success:function(jsonData){
+            alert("Solicitud de modificación enviada. \nSi no hay en cola otra modificación, se le notificará a tu correo electronico");
+			//     }
+		    // })
+    }  
 </script>
 {% endblock %}
 </html>

@@ -15,12 +15,15 @@ urlpatterns = [
     path('updInstituciones/<slug:municipio>/<slug:localidad>/<slug:nivelacademico>/<areainteres>/<slug:dominio>/',views.updInst,name="filtrar_instituciones"),
     path('updInformacion/<Ndirector>/<Ninstitucion>/',views.updInfo,name="modificar_datos"),
     path('detalle/<idr>/<inst>',views.detalle, name='detalle'),
-    path('miInstitucion/<nombre>/',views.miInstitucion, name='miInstitucion'), 
+    path('miInstitucion/<id>/',views.miInstitucion, name='miInstitucion'), 
+    path('selectInstitucion/<id>/',views.selectInstitucion, name='selectInstitucion'), 
     path('updInfoEstadistica/<año>/<clave_ins>/',views.updInfoEstadistica, name='updInfoEstadistica'), 
     #path('SigApp/accounts/', include('accounts.urls')),
     path('perfilAdmin',views.perfilAdmin, name='perfilAdmin'),
+
     path('modificacionesAdmin',views.modificacionesAdmin, name='modificacionesAdmin'),
     path('mostrarInstitucion/<nombre>/',views.mostrarInstitucion, name='mostrarInstitucion'),
+
     path('mostrarRegistro/<nombre>/',views.mostrarRegistro, name='mostrarRegistro'),
     path('modificaciones',views.modificacionesAdmin, name='modificaciones'),
     path('SigMovil/<id>/<clave>',views.APIapp,name="SigMovil"),

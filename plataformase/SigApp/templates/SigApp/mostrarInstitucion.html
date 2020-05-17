@@ -35,12 +35,10 @@
                 <div class="row mt-4 ml-1">
                     <a href="/SigApp/modificacionesAdmin">Modificaciones</a> 
                 </div>
-                <div class="row mt-4 ml-1">
-                  <a href="/SigApp/registrosAdmin">Registros</a>
-                </div>
+
             </div>
             <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
-                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Datos a modificar de la institución {{ nombreI }}</p>
+                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Datos a modificar de la institución: <b>{{ nombreI }}</b></p>
                 
             <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
               <table class="table">
@@ -90,7 +88,7 @@
                 </tbody>
               </table>
               <form method="post">
-              <div style="text-align: right;">
+              <div style="text-align: right; padding: 2%">
                 {% csrf_token %}
                 <input onclick="notificaAlta()" type="submit" class="btn btn-primary" value= "Aceptar">
                 <button class="btn btn-danger">Cancelar</button>

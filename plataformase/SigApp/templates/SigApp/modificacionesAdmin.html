@@ -35,34 +35,41 @@
                 <div class="row mt-4 ml-1">
                     <a href="/SigApp/modificacionesAdmin">Modificaciones</a> 
                 </div>
-                <div class="row mt-4 ml-1">
+                {% comment %} <div class="row mt-4 ml-1">
                   <a href="/SigApp/registrosAdmin">Registros</a>
-                </div>
+                </div> {% endcomment %}
             </div>
-            <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
-                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Modificaciones del sistema</p>
-                
-            <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
-              <table class="table">
-                <thead class="thead-dark">
-                  <tr>
-                    <th scope="col">Institución</th>
-                    <th scope="col">Estado</th>
-                    <th colspan="2">Acción</th>
-                  </tr>
-                </thead>
-              <tbody >
-                {% for element in temporales %}
-                  <tr>
-                    <th scope="row">{{ element.nombre_institucion }}</th>
-                    <td>Por atender</td>
-                    <td><a href=".../SigApp/modificaciones" style="color:dodgerblue" onclick="metodos('{{ element.nombre_institucion }}')" class="visualizar" onmouseover="cambiaURL('{{ element.nombre_institucion }}')">Visualizar</a></td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-              </table>
+            {% if not temporales %}
+              <div class="col-9 col-sm-5 col-md-7 col-lg-7 col-xl-9" style="height: 40x;">
+                  <p style="font-size:20px; margin-bottom: 50px; margin-left: 35%; margin-top: 30%;">Sin modificaciones por el momento</p>
+              <div>   
+            {% else %}
+              <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
+                  <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;"><b>Modificaciones de institución</b></p>
+                  
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
+                  <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Institución</th>
+                        <th scope="col">Estado</th>
+                        <th colspan="2">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody >
+                      {% for element in temporales %}
+                        <tr>
+                          <th scope="row">{{ element.nombre_institucion }}</th>
+                          <td>Por atender</td>
+                          <td><a href="/SigApp/mostrarInstitucion/{{ element.nombre_institucion }}/" style="color:dodgerblue">Visualizar</a></td>
+                          {% comment %} <td><a href=".../SigApp/modificaciones" style="color:dodgerblue" onclick="metodos('{{ element.nombre_institucion }}')" class="visualizar" onmouseover="cambiaURL('{{ element.nombre_institucion }}')">Visualizar</a></td> {% endcomment %}
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
                 </div>
-            </div>
+              </div>
+            {% endif %}
         </div>
     </div>
 </body>

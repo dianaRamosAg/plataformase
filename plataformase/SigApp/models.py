@@ -139,13 +139,13 @@ class DatosEstadisticos(models.Model):
     alumnosISextoGradoMujeres = models.IntegerField()
 
 class DatosTemporal(models.Model):
-    clave_centrotrabajo_temp = models.CharField(max_length=30)
-    direccion_temp = models.CharField(max_length=250)
-    director_temp = models.CharField(max_length=100)
-    nombre_institucion = models.CharField(max_length=50)
-    municipio = models.CharField(max_length=30)
-    localidad = models.CharField(max_length=70)
-    status = models.CharField(max_length=15)
+    clave_centrotrabajo_temp = models.CharField(max_length=200)
+    direccion_temp = models.CharField(max_length=200)
+    director_temp = models.CharField(max_length=200)
+    nombre_institucion = models.CharField(max_length=200)
+    municipio = models.CharField(max_length=200)
+    localidad = models.CharField(max_length=200)
+    status = models.CharField(max_length=200)
     modificando = models.BooleanField()
 
 #Modelo para catalogo

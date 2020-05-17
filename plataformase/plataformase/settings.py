@@ -150,9 +150,19 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dianalaura.lee@gmail.com'
-EMAIL_HOST_PASSWORD = 'dianalee96'
-EMAIL_PORT = 587
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#EMAIL_USE_TLS = True
+#EMAIL_HOST = 'smtp.gmail.com'
+#EMAIL_HOST_USER = 'dianalaura.lee@gmail.com'
+#EMAIL_PORT = 587
+#EMAIL_HOST_PASSWORD = 'dianalee96'
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST           = 'smtp.gmail.com'
+EMAIL_PORT           = 587
+EMAIL_HOST_USER      = 'sigssemssicyt@gmail.com'
+EMAIL_HOST_PASSWORD  = 'sigapp2019'
+EMAIL_USE_TLS        = True
+DEFAULT_FROM_EMAIL   = 'SigApp'
+EMAIL_FROM           = 'SigApp'
+EMAIL_SUBJECT_PREFIX = 'SigApp: '
+EMAIL_BACKEND        = 'django.core.mail.backends.smtp.EmailBackend'

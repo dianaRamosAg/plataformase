@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import GradoAcademico, AreaInteres, Municipio,Localidad, Institucion,CentroTrabajo,UbicacionCentroTrabajo,DetalleCarrera,Carrera,RVOE,DatosEstadisticos,Modalidad,Periodos, Escuela, DatosTemporal, EscuelaC, estadisticosNuevo,RVOES
+from login.models import UsuarioInstitucion
+from RVOES.models import Departamento
 from django.db.models import OuterRef, Subquery, Sum
 from django.core import serializers
 from django.urls import reverse
@@ -335,12 +337,34 @@ def detalle(request,idr,inst):
     return render(request,'SigApp/detalle_carreras.html',{"RVOE":RVOEF,"Institucion":InstitucionF})
 
 
-def miInstitucion(request,nombre):
-    nombre = nombre.replace("-"," ")
-    Escuela = EscuelaC.objects.get(NombreEscuela=nombre)
+def selectInstitucion(request,id):
+    queryset = UsuarioInstitucion.objects.filter(id_usuariobase_id=id) #1
+    
+    clavect = []
+    for c in queryset:
+        Escuela = EscuelaC.objects.get(ClaveEscuela=c.cct)
+        clavect.append({'cct': c.cct,'name': Escuela.NombreEscuela})
+
+    print(clavect)
+
+    
+    
+    #cct = UsuarioInstitucion.objects.select_related('cct','id_usuariobase','ClaveEscuela').filter(id_usuariobase_id=id)
+
+
+    #cct = EscuelaC.objects.select_related('ClaveEscuela').filter(usuarioinstitucion__ClaveEscuela=id) #1
+    
+
+    return render(request,'SigApp/selectInstitucion.html',{"clavect":clavect })
+
+
+def miInstitucion(request,id):
+    
+    Escuela = EscuelaC.objects.get(ClaveEscuela=id)
+
     modificando = False
     try:
-        Temporal = DatosTemporal.objects.get(nombre_institucion=nombre)
+        Temporal = DatosTemporal.objects.get(clave_centrotrabajo_temp=id)
         modificando = Temporal.modificando
     except:
         modificando = False
@@ -353,9 +377,9 @@ def miInstitucion(request,nombre):
         loca = request.POST['localidad']
         estatus = request.POST['estatus']
         dire = request.POST['direccion']
-        email = EmailMessage('Solicitud para modificar información de la institución '+ nombre,
-                             'Información actual \n'
-                             +'Nombre: '+nombre+'\n'
+        email = EmailMessage('Solicitud para modificar información de la institución '+ Escuela.NombreEscuela,
+                             'INFORMACIÓN ACTUAL: \n'
+                             +'Nombre: '+Escuela.NombreEscuela+'\n'
                              +'Director: '+Escuela.nombreDirector+'\n'
                              +'Clave: '+Escuela.ClaveEscuela+'\n'
                              +'Municipio: '+Escuela.Municipio+'\n'
@@ -364,7 +388,7 @@ def miInstitucion(request,nombre):
                              +'Dirección: '+Escuela.Calle+'\n'
 
 
-                             +'\nInformación a actualizar \n'
+                             +'\nINFORMACIÓN A ACTUALIZAR: \n'
                              +'Nombre: '+ nombre2+'\n'
                              +'Director: '+director+'\n'
                              +'Clave: '+clave+'\n'
@@ -391,7 +415,7 @@ def miInstitucion(request,nombre):
         
         Escuela.save()
 
-    return render(request,'SigApp/miInstitucion.html',{"Escuela":Escuela})
+    return render(request,'SigApp/miInstitucion.html',{"Escuela":Escuela, "modificando":modificando})
 
 
 def perfilAdmin(request):
@@ -478,14 +502,14 @@ def modificacionesAdmin(request):
     
     #InstitucionOri = Institucion.objects.all()
     DatosTemp = DatosTemporal.objects.all()
+    print(DatosTemp)
     return render(request,'SigApp/modificacionesAdmin.html',{
         "temporales" : DatosTemp,
     })
 
 def mostrarInstitucion(request, nombre):
+
     nombre = nombre.replace("-"," ")
-    #InstitucionI = Institucion.objects.get(Nombre_Institucion=nombre)
-    #DireccionI = UbicacionCentroTrabajo.objects.get(Clave_CentroTrabajo=InstitucionI.Clave_CentroTrabajo.Clave_CentroTrabajo)
     Escuela = EscuelaC.objects.get(NombreEscuela=nombre)
     InstitucionT = DatosTemporal.objects.get(nombre_institucion=nombre)
     
@@ -517,9 +541,15 @@ def mostrarInstitucion(request, nombre):
 
         Escuela.save()
         DatosTemporal.objects.get(nombre_institucion = nombre).delete()
-        email = EmailMessage('Se ha actualizado una institución','Información de la institución '+ Escuela.NombreEscuela+' actualizada.',to=['marcogp97@gmail.com','janeth.lopeez@gmail.com', 'ulalegriasa@ittepic.edu.mx'])
+        email = EmailMessage('<Informacion Actualizada>','La Institución:' + Escuela.NombreEscuela + ' ha sido actualizada correctamente.',to=['henry.ricoe@gmail.com'])
         email.send()
- 
+
+    
+        DatosTemp = DatosTemporal.objects.all()
+        return render(request,'SigApp/modificacionesAdmin.html',{
+            "temporales" : DatosTemp,
+        })
+        
     return render(request, 'SigApp/mostrarInstitucion.html', {
        "nombreI" : nombreI, 
        "director" : directorI, 
@@ -557,7 +587,7 @@ def mostrarRegistro(request, nombre):
         registroI.is_active = True
         registroI.save()
         #User.objects.get(username = nombre).delete()
-        email = EmailMessage('Se ha dado de alta una institución','Registro de la institución '+ nombreU+' completado.',to=['marcogp97@gmail.com','janeth.lopeez@gmail.com', 'ulalegriasa@ittepic.edu.mx'])
+        email = EmailMessage('Se ha dado de alta una institución','Registro de la institución '+ nombreU+' completado.',to=['henry.ricoe@gmail.com'])
         email.send()
 
     return render(request, 'SigApp/mostrarRegistro.html', {

@@ -42,7 +42,7 @@
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item">
-        <a class="nav-link mr-5" href="/SigApp">Inicio <span class="sr-only">(current)</span></a>
+        <a class="nav-link mr-5" href="/SigApp/">Inicio <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item mr-5">
         <a class="nav-link" href="/SigApp/localizador">Mapa de instituciones</a>
@@ -57,13 +57,13 @@
       {% if user.is_authenticated and user.is_superuser is False %}
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
-          Hola, {{ user.first_name }}
+          Hola, {{ user.first_name }} {{ user.last_name }}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/SigApp/miInstitucion/{{user.username.split|join:'-'}}/" style="font-size: 15px;">Mi institución</a>
+          <a class="dropdown-item" href="/SigApp/selectInstitucion/{{ user.id }}/" style="font-size: 15px;">Mi institución</a>
           <a class="dropdown-item" href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/" style="font-size: 15px;" hidden >Mis estadísticas</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/SigApp/accounts/logout" style="font-size: 15px; color:crimson;">Salir</a>
+          <a class="dropdown-item" href="{% url 'logout' %}" style="font-size: 15px; color:crimson;">Salir</a>
         </div>
       </li>
     </ul>  
@@ -78,9 +78,9 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/SigApp/perfilAdmin" style="font-size: 15px;">Mi perfil</a>
           <a class="dropdown-item" href="/SigApp/modificacionesAdmin" style="font-size: 15px;">Modificaciones</a>
-          <a class="dropdown-item" href="/SigApp/registrosAdmin" style="font-size: 15px;">Registros</a>
+          {% comment %} <a class="dropdown-item" href="/SigApp/registrosAdmin" style="font-size: 15px;">Registros</a> {% endcomment %}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/SigApp/accounts/logout" style="font-size: 15px; color:crimson;">Salir</a>
+          <a class="dropdown-item" href="{% url 'logout' %}" style="font-size: 15px; color:crimson;">Salir</a>
         </div>
       </li>
       {% else %}
