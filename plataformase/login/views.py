@@ -135,6 +135,11 @@ def docAnexos(request):
         #Inicializa la variable docs que almacena los acuerdos que se tienen registrados
         docs = None
         if request.method == 'POST':
+            request.POST._mutable = True
+            if request.POST['nivel'] == 'Superior':
+                request.POST['nivel'] = '2'
+            else:
+                request.POST['nivel'] = '1'
             #Inicializamos una variable que contiene la información del formulario.
             form = AcuerdosForms(request.POST, request.FILES)
             #Si el formulario es válido.
@@ -146,10 +151,17 @@ def docAnexos(request):
             #Obtenemos el formulario predefinido de los acuerdos
             form = AcuerdosForms()
             #Obtenemos todos los acuerdos que ya se encuentran registrados
-            docs = Acuerdos.objects.all()
+            if request.user.departamento_id == 3:
+                docs = Acuerdos.objects.filter(nivel='2')
+            else:
+                docs = Acuerdos.objects.filter(nivel='1')
         return render(request, 'root/docAnexos.html', {'form': form, 'docs': docs})
     else:
         return redirect('perfil')
+
+def eliminarAcuerdo(request, id):
+    Acuerdos.objects.filter(id=id).delete()
+    return redirect('docAnexos')
 
 def inicioRoot(request):
     """Redirige a la página de inicio del administrador del sistema.

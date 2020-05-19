@@ -9,7 +9,7 @@ from django.core.mail import EmailMessage
 
 ''' Vistas que redireccionan respecto a permisos de usuario'''
 def index(request):
-    return render(request,'registration/login.html')
+    return redirect('login')
 
 def menuinstitucion(request):
     return render(request,'menuinstitucion.html')

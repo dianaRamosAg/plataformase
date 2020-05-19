@@ -12,6 +12,7 @@ urlpatterns = [
     path('root/editar/actualizarusr/', actualizarusr, name='actualizarusr'),#Editar permisos de usuario  
     path('perfil/', perfil, name='perfil'), #Visualizar datos del usuario logeado/actualizar datos
     path('docAnexos/', docAnexos, name='docAnexos'),
+    path('eliminarAcuerdos/<id>', eliminarAcuerdo, name='eliminarAcuerdo'),
     path('root/', inicioRoot, name='root'),
     path('root/usuarios', usuarios, name='usuarios'),
     path('root/editar/<email>/',ActUsr, name='editar'),

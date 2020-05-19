@@ -96,6 +96,7 @@
       <br>
 <div class=" col-12"></div>
 
+<<<<<<< HEAD
       <div class="col-12">
           <label  for="id_first_name" id="lblnombres" style="float: left;" >Nombre(s):</label>
           <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"name="first_name" required id="id_first_name" class="form-control ">
@@ -118,6 +119,96 @@
      <br>
         </div>
     
+=======
+<div class="container-fluid">
+    <div class="container">
+        <h2 class="text-center">Registro de usuarios</h2>
+        <p class="text-center">
+            <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</small>
+        </p>
+        <hr>
+        <div class="row">
+            <form enctype="multipart/form-data" action="../signupr/" class="form-group col-xs-12 col-md-12" method="post"  >
+                {% csrf_token %}
+                <div class="col-md-12">
+                    <div class="col-md-5">
+                        <fieldset>
+                            <p class="text-uppercase pull-center">Información de usuario</p><br>
+                            <div class="form-group" style="float: left;">
+                                <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
+                                <select class="custom-select col-3"  required name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                                    <option value="" selected disabled>Seleccione</option>
+                                    <option value="1"title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >Institución</option>
+                                    <option value="2"title="Encargado oficial de un departamento." >Jefe de departamento</option>
+                                    <option value="3">Subordinados de departamento</option>
+                                    <option value="4" title="Tipo administrador,Maneja recursos de la plataforma">Administrtador de la página</option>
+                                    <option value="5" title="Particular, no cuenta con cct puede solicitar rvoe">Particular</option>
+                                </select>
+                             </div>
+                            
+                           
+                        <div class="form-group" style="float: left;">
+                            <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
+                            <select class="custom-select col-3" name="tipo_persona"  required id="id_tipo_persona" onchange="pmoral()">
+                                <option value=""  disabled selected>Seleccione</option>
+                                <option value="1" >Persona física</option>
+                                <option value="2">Persona moral</option>
+                            </select><br>
+                            <label class="ml-1" for="id_departamento" id="lbl_departamento">Departamento:</label>
+                            <select class="custom-select col-3" name="departamento" id="id_departamento" onchange="verificarJefes()">
+                            {% for entry in departamentos %}
+                                <option value="{{ entry.id }}">{{ entry.nombre }}</option>
+                            {% endfor %}
+                            </select>
+                            </div><br>
+                        <div class="row" style="float: left;">
+                            <div class="alert alert-warning col-md-4 "  role="alert" id="alertJefe" style="width: 100%; float:left">
+                            <small><strong> ¡Cuidado! </strong>Existe un jefe para este departamento,si desea reemplazarlo haga caso omiso a esta advertencia.
+                            </small> </div>
+                        </div><br><br><br><br>
+                        <div class="form-group" style="text-align:left; display: none;" id="firma" style="float: left;" >
+                        <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
+                           <input id="id_firma" type="file"  name="firma_digital" >
+                    </div><br><br>
+
+                        <div class="form-group" style="text-align: left;">
+                            <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
+                            <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"name="first_name" required id="id_first_name" class="form-control col-2">
+                            <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                            <input class="form-control ml-1 col-2" required pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
+                            <label class="ml-2 mr-2" for="id_celular">Celular:</label>
+                            <input class="form-control col-2" required type="tel" pattern="[0-9]{10}"name="celular" id="id_celular">
+                            <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">CURP:</label>
+                            <input class="form-control ml-1 col-3" type="text" minlength="10" maxlength="18" name="curp_rfc" required id="id_curp_rfc">
+                            <button type="button" class="btn btn-info"  onclick="location.href='http://consultas.curp.gob.mx'" id="acurp" target="_blank">Consulta CURP</button>
+                            <br> <br>
+                            <div class="form-group" id="datos_inst">
+                                <p class="text-uppercase pull-center">Datos de institución</p>
+                                <label class="ml-2 col-1" for="id_cct" style="text-align: left;">Clave del centro de trabajo (CCT) :</label>
+                                <input type="text" name="cct"  id="id_cct" class="form-control col-2"  >
+                                <label class="ml-2 col-1" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
+                                <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control ml-1 col-2" placeholder="" >
+                                <label class="ml-2 col-1" for="id_sector" style="text-align: left;">Sector:</label>
+                                <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="Publico"> Público </option>
+                                    <option value="Privado"> Privado </option>
+                                </select>
+                                <label class="ml-2 col-1" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
+                                <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required>
+                                    <option disabled="" selected="">Seleccione</option>
+                                    <option value="1"> Media superior </option>
+                                    <option value="2"> Superior </option>
+                                    <option value="3"> Ambos </option>
+                                </select><br>
+                                <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">¿Es modalidad Telebachillerato? :</label>
+                                        <select  class="form-control ml-2 col-1" name="modalidad" id="id_modalidad" required>
+                                            <option disabled="" selected="" >Seleccione</option>
+                                            <option value="0"> No </option>
+                                            <option value="1"> Sí </option>
+                                        </select>
+                            </div>
+>>>>>>> df3a05e1aa0b236e15a3f664cf95cb478ff64807
 
       <div class="col-12" id="datos_inst">
           <p class=" pull-center">Datos de institución</p>
@@ -360,6 +451,7 @@
             {sel.style.display = 'none';}    
         }
         departamento();
+<<<<<<< HEAD
         function departamento(){
             var sel = document.getElementById("id_departamento");
             var lbl = document.getElementById("lbl_departamento");
@@ -370,7 +462,55 @@
             }else{
                 sel.style.display = 'none';
                 lbl.style.display = 'none';
+=======
+    }
+    function mensajes(){
+    console.log("hola");
+    }
+    function verificar2(){
+        //Función para validar que las contraseñas sean iguales
+        var sel = document.getElementById("diferente");
+        var pass = document.getElementById("id_password2");
+        var pass1 = document.getElementById("id_password1");
+        if(pass1.value!=pass.value)
+        {
+            sel.style.display = 'inline';
+        }
+        else
+        {sel.style.display = 'none';}    
+    }
+    departamento();
+    function departamento(){
+        var sel = document.getElementById("id_departamento");
+        var lbl = document.getElementById("lbl_departamento");
+        var user = document.getElementById("id_tipo_usuario");
+        if (user.value == '2' || user.value == '3'){
+            sel.style.display = 'inline';
+            lbl.style.display = 'inline';
+        }else{
+            sel.style.display = 'none';
+            lbl.style.display = 'none';
+        }
+    }
+
+    document.getElementById("alertJefe").style.display = 'none';
+    function verificarJefes(){
+        var a = {{ jefes|safe  }};
+        var dep = document.getElementById("id_departamento");
+        var sel = document.getElementById("alertJefe");
+        var typeUser = document.getElementById("id_tipo_usuario");
+        if(typeUser.value == '2'){
+            for(var i=0; i<a.length+1; i++){
+                if(dep.value == a[i]){
+                    sel.style.display = 'inline';
+                    i = a.length+1;
+                }else{
+                    sel.style.display = 'none';
+                }
+>>>>>>> df3a05e1aa0b236e15a3f664cf95cb478ff64807
             }
+        }else{
+            sel.style.display = 'none';
         }
     
         document.getElementById("alertJefe").style.display = 'none';

@@ -95,8 +95,8 @@ class ArchivosAlumnos(models.Model):
     solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
     certificado_egreso = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
     servicio_social = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
-    inscripcion_ctrl_escolar = models.FileField(upload_to='Archivos/Alumnos',validators=[validate_file_extension], blank=True, null=True)
-    recibo_pago = models.FileField(upload_to='Archivos/Alumnos', validators=[validate_file_extension], blank=True, null=True)
+    inscripcion_ctrl_escolar = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
+    recibo_pago = models.FileField(upload_to='SETyRS/archivos/alumnos', validators=[validate_file_extension], blank=True, null=True)
 
     class Meta:
         db_table = 'SETyRS_documentos_alumnos'
@@ -109,7 +109,7 @@ class Historial_admins_examen(models.Model):
     fecha = models.DateField()
     comentarios = models.CharField(max_length=500, blank=True)
     estatus = models.BooleanField(default=False)
-    departamento_id = models.IntegerField()
+    nivel_educativo = models.IntegerField()
 
     class Meta:
         db_table = 'SETyRS_historial_examenes'

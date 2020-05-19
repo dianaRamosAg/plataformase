@@ -26,9 +26,7 @@ def link_callback(uri, rel):
 
     #Asegúrese de que ese archivo existe
     if not os.path.isfile(path):
-            raise Exception(
-                'media URI must start with %s or %s' % (sUrl, mUrl)
-            )
+            raise Exception('media URI must start with %s or %s' % (sUrl, mUrl))
     return path
 
 def render_pdf_planes_prog_estud(request, id):
