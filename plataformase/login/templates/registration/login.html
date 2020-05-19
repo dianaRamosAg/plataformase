@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 {% load static %}
+{% if user.is_authenticated %}
+<META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'perfil' %}">
+{% else %}
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -32,7 +35,7 @@
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Servicios</a></li>
                         
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contacto</a></li>
-                    </ul>
+                       </ul>
                 </div>
             </div>
         </nav>
@@ -138,11 +141,11 @@
                 <div class="row">
                     <div class="col-lg-4 col-sm-6 mb-4">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1"
+                            <a class="portfolio-link" data-toggle="modal" href="#"
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="assets/img/portfolio/01-thumbnail.jpg" alt=""
+                                <img class="img-fluid" src="{% static '/img/rvoe.jpeg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">RVOES</div>
@@ -152,11 +155,11 @@
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal2"
+                            <a class="portfolio-link" data-toggle="modal" href="#"
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="assets/img/portfolio/02-thumbnail.jpg" alt=""
+                                <img class="img-fluid" src="{% static '/img/exam.jpg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">SETyRS</div>
@@ -166,11 +169,11 @@
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal3"
+                            <a class="portfolio-link" data-toggle="modal" href="#"
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="assets/img/portfolio/03-thumbnail.jpg" alt=""
+                                <img class="img-fluid" src="{% static '/img/tb.jpg'%}"  alt=""
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">TBC</div>
@@ -180,11 +183,11 @@
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal4"
+                            <a class="portfolio-link" data-toggle="modal" href="#"
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="assets/img/portfolio/04-thumbnail.jpg" alt=""
+                                <img class="img-fluid" src="{% static '/img/sig.jpg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">SIG</div>
@@ -194,11 +197,11 @@
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal5"
+                            <a class="portfolio-link" data-toggle="modal" href="#"
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="assets/img/portfolio/05-thumbnail.jpg" alt=""
+                                <img class="img-fluid" src="{% static '/img/app.jpg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">SIG App</div>
@@ -208,11 +211,11 @@
                     </div>
                     <div class="col-lg-4 col-sm-6">
                         <div class="portfolio-item">
-                            <a class="portfolio-link" data-toggle="modal" href="#portfolioModal6"
+                            <a class="portfolio-link" data-toggle="modal" href="#"
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="assets/img/portfolio/06-thumbnail.jpg" alt=""
+                                <img class="img-fluid" src="{% static '/img/block.jpg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">Blockchain</div>
@@ -437,6 +440,8 @@
                 </div>
             </div>
         </div>
+        
+{% endif %}
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
