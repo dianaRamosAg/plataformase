@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="ml-1 col-1 "for="id_calle">Calle:</label>
-                                    <input class="form-control ml-1 col-2" required type="text" name="calle" id="id_calle">
+                                    <input class="form-control ml-1 col-2" required type="text" name="calle" id="id_calle" pattern="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,40}">
                                 </div>
                                    
                                 <div class="form-group">
@@ -160,19 +160,19 @@
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="0">
+                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" >
                                    </div>
                                </div>
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_nointerior">No. Interior:</label>
-                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="0">
+                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" >
                                    </div>
                                </div>
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_codigopostal">Código postal:</label>
-                                       <input class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal">
+                                       <input class="form-control ml-2 col-1" required type="number" name="codigopostal" placeholder="63000" id="id_codigopostal" minlength="5" maxlength="5">
                                    </div>
                                </div>
                                 
@@ -188,23 +188,25 @@
                                         
                                         <label class="ml-2 col-1" for="id_sector" style="text-align: left;">Sector:</label>
                                         <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
-                                            <option disabled="" selected="" >Seleccione</option>
+                                            <option disabled selected value="" >Seleccione</option>
                                             <option value="Publico"> Público </option>
                                             <option value="Privado"> Privado </option>
                                         </select>
                                         <label class="ml-2 col-1" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
-                                        <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required>
-                                            <option disabled="" selected="" >Seleccione</option>
+                                        <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required onchange="fmod()">
+                                            <option disabled="" selected="" value="" >Seleccione</option>
                                             <option value="1"> Media superior </option>
                                             <option value="2"> Superior </option>
                                             <option value="3"> Ambos </option>
                                         </select>
-                                        <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">¿Es modalidad Telebachillerato? :</label>
-                                        <select  class="form-control ml-2 col-1" name="modalidad" id="id_modalidad" required>
-                                            <option disabled="" selected="" >Seleccione</option>
-                                            <option value="0"> No </option>
-                                            <option value="1"> Sí </option>
-                                        </select>
+                                        <div id="modalidad" style="display: none;">
+                                            <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">¿Es modalidad Telebachillerato? :</label>
+                                                    <select  class="form-control ml-2 col-1" name="modalidad" id="id_modalidad" required>
+                                                        <option disabled="" selected="" >Seleccione</option>
+                                                        <option value="0"> No </option>
+                                                        <option value="1"> Sí </option>
+                                                    </select>
+                                                </div>
                                     </div>
                                 </div>
                                 <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right" type="submit">Enviar</button>
@@ -263,7 +265,13 @@
             }
         });
     });
-
+    function fmod(){
+        var nivel = document.getElementById("id_nivel_educativo").value;
+        if (nivel == '1'){
+            document.getElementById('modalidad').style.display = 'inline';
+        }
+        else { document.getElementById('modalidad').style.display = 'none';}
+    }
     //Funciones para validar campos del formulario y mandar mensaje en caso de error
     function verificar(){
         //Función para validar contraseña

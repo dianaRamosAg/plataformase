@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="es-MX">
+	<head>
+		<meta charset="UTF-8">
+		<title>Institución</title>
+		<link href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" rel="stylesheet" id="bootstrap-css">
+		<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+		<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+		<link rel='dns-prefetch' href='//s.w.org' />
+		<link rel="stylesheet" href="{% static '/css/nav.css' %}" type='text/css' media='all' >
+		
+		<link rel="stylesheet" href="{% static '/css/h.css' %}" type='text/css' media='all' >
+		<link rel='stylesheet' id='wp-block-library-css'  href="{% static '/wp-includes/css/dist/block-library/style.min.css' %}" type='text/css' media='all' />
+		<link rel='stylesheet' id='wp-block-library-css2' href="{% static '/css/style2.min.css' %}" media='all' />
+		<link rel='stylesheet' id='canva-css' href="{% static '/css/canva.css' %}" media='screen' />
+		<link rel='stylesheet' id='canvaabout-css' href="{% static '/css/canvaabout.css' %}" media='screen' />
+		<link rel='stylesheet' id='pages-q-pro-css' href="{% static '/css/pro.css' %}" media='screen' />
+		<link rel='stylesheet' id='pages-q-pro-v11-css' href='https://about.canva.com/wp-content/themes/canvaabout//view/experiments/q/pro/13/stylesheets/pages/q/pro-v11.css?ver=03891446'/>
+		<link rel='stylesheet' id='elementor-post-148-css'  href="{% static '/css/post-148.css' %}" type='text/css' media='all' />
+	</head>
+
+	<body class="page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
+		<header id="main-header">
+			<a href="#" id="logo-header">
+				<div class="col-sm-2 col-xs-4 ">
+					<img src="{% static '/img/se.png'%}" width="230" height="80"/>
+				</div><!--/.col-sm-2-->
+			</a>
+			<!-- / #logo-header -->
+				
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container">
+				  <a class="navbar-brand" href="#">Animated Dropdown</a>
+				  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+			  
+				  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ml-auto">
+					  <li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Click Me!
+					  </a>
+						<!-- Here's the magic. Add the .animate and .slide-in classes to your .dropdown-menu and you're all set! -->
+						<div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown">
+						  <a class="dropdown-item" href="#">Action</a>
+						  <a class="dropdown-item" href="#">Another action</a>
+						  <div class="dropdown-divider"></div>
+						  <a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					  </li>
+					</ul>
+				  </div>
+				</div>
+			  </nav>
+		</header><!-- / #main-header -->
+		<br><br><br>
+		<div class="pricingCardGrid__header">
+			<h4 class="pricingCardGrid__heading"> Sistemas digitales </h4>
+		</div>
+		<br><br>
+
+<!------------------------------------------SISTEMAS------------------------------>
+		<section class="pricingCardGrid">
+			<div class="pricingCardGrid__body row">
+				<div class="pricingCardGrid__pricingCard">
+					<a class="pricingCard" href="/SigApp" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+							Sistema de información geográfica (SIG).
+						</div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-3 col-xs-3">
+								<img src="{% static '/img/universidad.png'%}" width="200" height="200"/>
+							</div>
+						</div>
+						<span class="pricingCard__period" >
+							<p align="justify">Localización de instituciones educativas  de media superior y superior del estado de Nayarit.</p>
+						</span>
+						<div class="pricingCard__button">
+						<span class="button button--primary">
+							Próximamente </span>
+						</div>
+						</a>
+					</div>
+						<div class="pricingCardGrid__pricingCard">
+						<a class="pricingCard" href="{% url 'SETyRS_institucion_index' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+						Solicitudes de Exámenes a Título y Registro de Sinodales </div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-4 col-xs-4">
+								<img src="{% static '/img/contrato.png'%}"/>
+							</div>
+						<span class="pricingCard__period">
+							<p align="justify">Sistema de autorización de exámenes a título y registro de sinodales.</p> </span>
+						</div> 
+						<div class="pricingCard__button">
+							<span class="button button--primary">
+								Próximamente
+							</span>
+						</div>
+					</a>
+				</div>
+
+				<div class="pricingCardGrid__pricingCard">
+					<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
+					<a class="pricingCard" href="{% url 'inicio' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+							Sistema de generación de turnos RVOE.
+						</div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-4 col-xs-4">
+								<img src="{% static '/img/institucion.png'%}"/>
+							</div>
+							<span class="pricingCard__period">
+								<p align="justify">Sistema de Generación de turnos de RVOE. <br><br></p>
+							</span>
+						</div>
+						<div class="pricingCard__button">
+							<span class="button button--primary">
+								Acceder
+							</span>
+						</div>
+					</a>
+				</div>
+				<div class="pricingCardGrid__pricingCard">
+					<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
+					<a class="pricingCard" title="Alumnos y docentes pueden llevar sus cursos semestrales de manera comoda y sencilla."
+					 href="#" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+							Sistema automatizado de servicios escolares TBC.
+						</div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-4 col-xs-4">
+								<img src="{% static '/img/peole.png'%}"/>
+							</div>
+							<span class="pricingCard__period">
+								<p align="justify">Sistema de centros de telebachillerato comunitario.</p>
+							</span>
+						</div>
+						<div class="pricingCard__button">
+							<span class="button button--primary">
+								Próximamente
+							</span>
+						</div>
+					</a>
+				</div>
+		
+
+			<!-- <div class="pricingCardGrid__pricingCard">
+					<a class="pricingCard" href="{% url 'cct' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+							Añadir Centros de Trabajo(CCT)
+						</div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-4 col-xs-4">
+								<img src="{% static '/img/institucion.png'%}"/>
+							</div>
+							<span class="pricingCard__period">
+								<p align="justify">Lista de centros de trabajo pertenecientes a esta institución.También podrás añadir más centros de trabajo.</p>
+							</span>
+						</div>
+						<div class="pricingCard__button">
+							<span class="button button--primary">
+								Acceder
+							</span>
+						</div>
+					</a>
+				</div> -->
+			</div>
+		</section>
+		<script type='text/javascript' src="{% static '/js/bootstrap2.min.js' %}"></script>
+	</body>
+</html>

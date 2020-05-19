@@ -30,7 +30,7 @@
                     <option value="3">Subordinados de departamento</option>
                     <option value="4">Administrtador de la página</option>
                 </select><br><br>
-                <div class="form-group" style="text-align:left; display: none;" id="firma" style="float: left;" >
+                <div class="form-group" style="text-align:left; display: none;" id="firma"  >
                     <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
                        <input id="id_firma" type="file"  name="firma_digital" style=" float:left; margin-left: 40px;"><br>
                 </div><br>
@@ -86,6 +86,11 @@
         }
     }
     function verificarJefes(){
+        var user = document.getElementById("id_tipo_usuario");
+        if(user.value=='3'){
+            document.getElementById("alertJefe").style.display = 'none';
+        }
+        else{
         var a = {{ jefes|safe  }};
         var dep = document.getElementById("id_departamento");
         var sel = document.getElementById("alertJefe");
@@ -97,6 +102,7 @@
                 sel.style.display = 'none';
             }
         }
+    }
     }
     </script>
     {% endblock %}

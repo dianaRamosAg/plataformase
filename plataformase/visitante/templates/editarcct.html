@@ -87,6 +87,10 @@
                                                         {% if UsuarioInstitucion.sector == 'Privado' %}
                                                         <option value="{{ UsuarioInstitucion.sector }}">{{ UsuarioInstitucion.sector }}</option>
                                                         <option value="Público"> Público </option>
+														{%endif%}
+														{% if UsuarioInstitucion.sector != 'Público' and UsuarioInstitucion.sector != 'Privado' %}
+														<option value="Público"> Público </option>
+                                                        <option value="Privado"> Privado </option>
                                                         {%endif%}
 	                                                
 	                                            	</select>
@@ -99,17 +103,22 @@
                                                         {% if UsuarioInstitucion.nivel_educativo == '1' %}
                                                         <option value="{{ UsuarioInstitucion.nivel_educativo }}">Media Superior</option>
                                                         <option value="2"> Superior </option>
-	                                                	<option value="3"> Ambas </option>
+	                                                	<option value="3"> Ambos </option>
                                                         {%endif%}
                                                         {% if UsuarioInstitucion.nivel_educativo == '2' %}
                                                         <option value="{{ UsuarioInstitucion.nivel_educativo }}">Superior</option>
                                                         <option value="1">  Media Superior </option>
-	                                                	<option value="3"> Ambas </option>
+	                                                	<option value="3"> Ambos </option>
                                                         {%endif%}
                                                         {% if UsuarioInstitucion.nivel_educativo == '3' %}
-                                                        <option value="{{ UsuarioInstitucion.nivel_educativo }}">Ambas</option>
+                                                        <option value="{{ UsuarioInstitucion.nivel_educativo }}">Ambos</option>
                                                         <option value="1"> Media Superior </option>
 	                                                	<option value="2"> Superior </option>
+														{%endif%}
+														{% if UsuarioInstitucion.nivel_educativo != 'Media Superior' and UsuarioInstitucion.nivel_educativo != 'Superior' and UsuarioInstitucion.nivel_educativo != 'Ambos' %}
+                                                        <option value="1"> Media Superior </option>
+														<option value="2"> Superior </option>
+														<option value="3"> Ambos </option>
                                                         {%endif%}
 	                                            	</select>
 		                                        </div>

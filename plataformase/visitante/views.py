@@ -25,7 +25,10 @@ def menuadmin(request):
         return render(request,'menuadmin.html')
 
 def menudepartamento(request):
-    return render(request,'menudepartamento.html')
+    if request.user.departamento_id == '1':
+        return render(request,'menudepartamento_ce.html')
+    else:
+        return render(request,'menudepartamento.html')
 
 def control(request):
     return render(request,'menudepartamento_ce.html')
@@ -188,6 +191,8 @@ def regUser(request, email):
         usr.save()
         email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
         email.send()
+        
+        #send_mail('Subject here', 'Here is the message.', 'sigssemssicyt@gmail.com', ['dianalaura.lee@gmail.com'], fail_silently=False)
         if usrV.tipo_usuario == '1':
             customUsr = CustomUser.objects.get(id=usr.id)
             usrInst = UsuarioInstitucion(id_usuariobase=customUsr, cct=usrV.inst_cct, nombredirector=usrV.inst_nombredirector,
