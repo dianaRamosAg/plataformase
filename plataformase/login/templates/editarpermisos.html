@@ -24,18 +24,18 @@
                 <input class="form-control" readonly style="width: 30%;"  type="text" name="email"required id="id_email" value="{{CustomUser.username}}"><br>
                 
                 <label class="ml-2" for="id_tipo_usuario" style="float: left;">Tipo de usuario :</label>
-                <select class="custom-select col-3 " style="float: left; margin-left: 20px;" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+                <select class="custom-select col-4 " style="float: left; margin-left: 20px;" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
                     <option value="1" selected disabled>Seleccione</option>
                     <option value="2">Jefe de departamento</option>
                     <option value="3">Subordinados de departamento</option>
                     <option value="4">Administrtador de la página</option>
                 </select><br><br>
                 <div class="form-group" style="text-align:left; display: none;" id="firma"  >
-                    <label class="ml-2 col-1" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
+                    <label class="ml-2 col-4" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
                        <input id="id_firma" type="file"  name="firma_digital" style=" float:left; margin-left: 40px;"><br>
-                </div><br>
+                </div><br><br>
                 <label class="ml-1" for="id_departamento" id="lbl_departamento" style="float: left;">Departamento :</label>
-                <select class="custom-select col-3" name="departamento" style="float: left; margin-left: 30px;" id="id_departamento" onchange="verificarJefes()">
+                <select class="custom-select col-4" name="departamento" style="float: left; margin-left: 30px;" id="id_departamento" onchange="verificarJefes()">
                     <option value="0" disabled selected>Seleccione</option>
                     {% for entry in departamentos %}
                     <option value="{{ entry.id }}">{{ entry.nombre }}</option>
@@ -52,8 +52,8 @@
 
             <br><br>
         <div class="text-center">
-            <a class="btn btn-secondary col-2" href="{% url 'usuarios' %}">Regresar</a>
-            <button class="btn btn-primary col-2 mx-auto" type="submit">Actualizar</button>
+            <a class="btn btn-secondary col-5" href="{% url 'usuarios' %}">Regresar</a>
+            <button class="btn btn-primary col-6 " type="submit">Actualizar</button>
         </div>
         <br><br>
     </div>
