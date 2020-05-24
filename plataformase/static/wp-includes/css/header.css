@@ -1,0 +1,56 @@
+
+	 
+	.nav li a:hover {
+        background:#0fbfc6;
+        }
+        .nav li ul {
+            display:none;
+            position:absolute;
+            min-width:140px;
+            }
+        .nav li:hover > ul {
+                display:block;
+                }
+#main-header {
+	background: #333;
+	color: white;
+	height: 80px;
+}	
+	#main-header a {
+		color: white;
+	}
+
+#logo-header {
+	float: left;
+	padding: 15px 0 0 20px;
+	text-decoration: none;
+}
+	#logo-header:hover {
+		color: #0b76a6;
+	}
+	
+	#logo-header .site-name {
+		display: block;
+		font-weight: 700;
+		font-size: 1.2em;
+	}
+	
+	#logo-header .site-desc {
+		display: block;
+		font-weight: 300;
+		font-size: 0.8em;
+		color: #999;
+	}
+
+nav {
+	float: right;
+}
+
+.nav > li {
+	float:left;
+	}
+	 
+	.nav li a {
+	display:block;
+	padding:10px 12px;
+	}
