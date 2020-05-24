@@ -9,13 +9,13 @@
         <div class="container mb-3">
             <div class="container col-md-5 text-center">
                 <label for="select_nivel_educativo">Nivel Educativo</label>
-                {% if nivel == 3 %}
+                {% if nivel == '3' %}
                 <select class="form-control" name="nivel" id="select_nivel_educativo" required>
                     <option selected disabled hidden>Seleccione el nivel educativo de su solicitud</option>
                     <option value=1>Media Superior</option>
                     <option value=2>Superior</option>
                 </select>
-                {% elif nivel == 1 %}
+                {% elif nivel == '1' %}
                 <select class="form-control" name="nivel" id="select_nivel_educativo" required>
                     <option selected value=1>Media Superior</option>
                 </select>
