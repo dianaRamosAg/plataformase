@@ -82,18 +82,33 @@ WSGI_APPLICATION = 'plataformase.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'plataforma',
-        'USER': 'postgres',
-        'PASSWORD': 'diana',
-        #'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if os.getenv('GAE_APPLICATION', None):
+    # Running on production App Engine, so connect to Google Cloud SQL using
+    # the unix socket at /cloudsql/<your-cloudsql-connection string>
+    DATABASES = {
+        'default': {
+            'ENGINE'  : 'django.db.backends.postgresql_psycopg2',
+            'HOST'    : '/cloudsql/plataformase:us-west2:plataforma',
+            'USER'    : 'postgres',
+            'PASSWORD': 'admin',
+            'NAME'    : 'plataforma',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
+            'NAME'     : 'plataforma',
+            'USER'     : 'postgres',
+            #'PASSWORD': 'diana',
+            'PASSWORD' : 'admin',
+            'HOST'     : 'localhost',
+            #'PORT'    : '5432',
+            'PORT'     : '3306',
+        }
+    }
+
+    
 
 
 # Password validation
@@ -147,8 +162,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'SETyRS/static'),
 ]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if os.getenv('GAE_APPLICATION', None):
+    DEFAULT_FILE_STORAGE = 'django_gcloud_storage.DjangoGCloudStorage'
+    GCS_PROJECT = "plataformase"
+    GCS_BUCKET = "plataformase.appspot.com"
+    GCS_CREDENTIALS_FILE_PATH = "key.json"
+    MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
