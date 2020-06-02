@@ -14,8 +14,28 @@ class Solicitud(models.Model):
     salud = models.CharField(max_length=1)#Indica si la solicitud es del área de la solicitud
     customuser = models.ForeignKey('login.CustomUser', on_delete=models.CASCADE,)#Usuario al que le pertenece la solicitud
     completado = models.IntegerField(default='1',)
+    
     """completado: -1 = Cancelada, 0 = Completado, 1 = Institucional, 2 = Curricular,
     3 = Academica, 4 = Media Superior, 10 = Documentos recibidos, 11 = Terminó revisión digital"""
+    
+    ciclonum = models.IntegerField(null=True, blank=True)
+    ciclo = models.TextField(blank=True, null=True)
+    otro = models.TextField(blank=True, null=True)
+    duracion = models.FloatField(blank=True, null=True)
+    nombre = models.TextField(blank=True, null=True, max_length=100)#Nombre de persona fisica
+    apellidos = models.TextField(blank=True, null=True)
+    libro_inscripcion = models.IntegerField(null=True, blank=True)
+    fecha = models.DateField(null=True, blank=True)
+    lugar = models.TextField(null=True, blank=True)
+    objeto_social = models.TextField(blank=True, null=True)
+    org_cop_acta = models.CharField(max_length=2, blank= True, null = True)
+    identificacion = models.TextField(blank=True, null=True)
+    org_cop_identificacion = models.CharField(max_length=2, blank= True, null = True)
+    folio_id = models.TextField(null=True, blank=True)
+    dom_particular = models.TextField(null=True, blank=True)
+    celular = models.TextField(null=True, blank=True)
+    curp_rfc = models.TextField(null=True, blank=True)
+    email = models.TextField(null=True, blank=True)
     estatus = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='1')
     """estatus: Define el departamnto en el que se encuentra"""
     noInstrumentoNotarial = models.IntegerField(blank=True, null=True)#Número de instrumento notarial
@@ -23,8 +43,7 @@ class Solicitud(models.Model):
     noNotario = models.IntegerField(blank=True, null=True)#Número de notario público
     nombreRepresentante = models.TextField(blank=True, null=True)#Nombre del representante legal
     nombreSolicitud = models.TextField(blank=True, null=True)#Nombre de la solicitud
-    cct = models.TextField(blank=True, null=True)#Clave de centro de trabajo a la que esta vinculada la solicitud
-
+    
     def __str__(self):
         return u'{0}'.format(self.id)
         #Cadena para representar el objeto solicitud (en el sitio de Admin, etc.)

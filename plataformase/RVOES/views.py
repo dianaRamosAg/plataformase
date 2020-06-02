@@ -169,28 +169,101 @@ def solicitud_insert(request):
             modalidad = request.POST["modalidad"]
             opcion = request.POST["opcion"]
             salud = str(request.POST["salud"])
+            ciclonum = request.POST["ciclonum"]
+            ciclo = request.POST["ciclo"]
+            #Sí se selecciona otro tipo de ciclo, expecificar cual
+            if ciclo == 'Otro':
+                otro = request.POST["otro"]
+            else:
+                otro = None
+            duracion = request.POST["duracion"]
             customuser_id = (request.user.id)
-            noInstrumentoNotarial = request.POST["noInstrumentoNotarial"]
-            nombreNotario = request.POST["nombreNotario"]
-            noNotario = request.POST["noNotario"]
-            nombreRepresentante = request.POST["nombreRepresentante"]
-            nombreSolicitud = request.POST["nombreSolicitud"]
+            
+            if nivel == '2' : #Nivel Superior
+                identificacion = request.POST["identificacion"]
+                org_cop_identificacion = request.POST["org_cop_identificacion"]
+                folio_id = request.POST["folio_id"]
+                dom_particular = request.POST["dom_particular"]
+                celular = request.POST["celular"]
+                curp_rfc = request.POST["curp_rfc"]
+                email = request.POST["email"]
+                
+                if request.user.tipo_persona == '2': # Persona Moral
+                    nombre = None
+                    apellidos = None
+                    libro_inscripcion = request.POST["libro_inscripcion"]
+                    fecha = request.POST["fecha"]
+                    lugar = request.POST["lugar"]
+                    objeto_social = request.POST["objeto_social"]
+                    org_cop_acta = request.POST["org_cop_acta"]
+
+                if request.user.tipo_persona == '1': # Persona Fisica
+                    libro_inscripcion = None
+                    fecha = None
+                    lugar = None
+                    objeto_social = None
+                    org_cop_acta = None
+                    nombre = request.POST["first_name"]
+                    apellidos = request.POST["last_name"]
+
+            
+
+
+            #Información Legal
+            if request.user.tipo_persona =='2' and nivel == '2' :
+                noInstrumentoNotarial = request.POST["noInstrumentoNotarial"]
+                nombreNotario = request.POST["nombreNotario"]
+                noNotario = request.POST["noNotario"]
+                nombreRepresentante = request.POST["nombreRepresentante"]
+                nombreSolicitud = request.POST["nombreSolicitud"]
+            if request.user.tipo_persona =='1' and nivel == '2':
+                noInstrumentoNotarial = request.POST["noInstrumentoNotarialM"]
+                nombreNotario = request.POST["nombreNotarioM"]
+                noNotario = request.POST["noNotarioM"]
+                nombreRepresentante = request.POST["nombreRepresentanteM"]
+                nombreSolicitud = request.POST["nombreSolicitudM"]
+            if request.user.tipo_persona =='2' and nivel == '1':
+                noInstrumentoNotarial = request.POST["noInstrumentoNotarialM"]
+                nombreNotario = request.POST["nombreNotarioM"]
+                noNotario = request.POST["noNotarioM"]
+                nombreRepresentante = request.POST["nombreRepresentanteM"]
+                nombreSolicitud = request.POST["nombreSolicitudM"]
+            
+            if nivel == '1':
+                noInstrumentoNotarial = request.POST["noInstrumentoNotarialM"]
+                nombreNotario = request.POST["nombreNotarioM"]
+                noNotario = request.POST["noNotarioM"]
+                nombreRepresentante = request.POST["nombreRepresentanteM"]
+                nombreSolicitud = request.POST["nombreSolicitudM"]
             fechaRegistro = datetime.datetime.now()#Obtenemos la fecha actual
             estatus = Departamento.objects.get(id=1)#Obtenemos el primer departamento al que debe pasar
-            #Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
-            if request.user.tipo_usuario == '1':
-                cct = request.POST["cct"]
-            else:
-                cct = None
+            
             # Se generá la plantilla para inserción de solicitud
-            solicitud = Solicitud(nivel=nivel, modalidad=modalidad, opcion=opcion,
+            if nivel == '2' :
+                solicitud = Solicitud(nivel=nivel, modalidad=modalidad, opcion=opcion,
                                 salud=salud, customuser_id=customuser_id,
                                 fechaRegistro=fechaRegistro, estatus=estatus,
                                 noInstrumentoNotarial=noInstrumentoNotarial,
                                 nombreNotario=nombreNotario, noNotario=noNotario,
                                 nombreRepresentante=nombreRepresentante,
-                                nombreSolicitud=nombreSolicitud, cct=cct)
-            solicitud.save()#Guarda la solicitud
+                                nombreSolicitud=nombreSolicitud, ciclonum=ciclonum,ciclo= ciclo,
+                                otro=otro, duracion=duracion,nombre=nombre,apellidos=apellidos,
+                                libro_inscripcion=libro_inscripcion,lugar=lugar,
+                                objeto_social=objeto_social,org_cop_acta=org_cop_acta,
+                                identificacion=identificacion, org_cop_identificacion=org_cop_identificacion,
+                                folio_id=folio_id,dom_particular=dom_particular,celular=celular,
+                                curp_rfc=curp_rfc,email=email)
+                solicitud.save()#Guarda la solicitud
+            if nivel == '1' :
+                solicitud = Solicitud(nivel=nivel, modalidad=modalidad, opcion=opcion,
+                                salud=salud, customuser_id=customuser_id,
+                                fechaRegistro=fechaRegistro, estatus=estatus,
+                                noInstrumentoNotarial=noInstrumentoNotarial,
+                                nombreNotario=nombreNotario, noNotario=noNotario,
+                                nombreRepresentante=nombreRepresentante,
+                                nombreSolicitud=nombreSolicitud, ciclonum=ciclonum,ciclo= ciclo,
+                                otro=otro, duracion=duracion)
+                solicitud.save()#Guarda la solicitud
             if nivel == '1':#Si el nivel es uno, redirecciona a la URL para subir archivos de solicitudes de media superior
                 return redirect('medSuperior')
             else:#Si el nivel no es uno, redirecciona a la URL para subir archivos de solicitudes de superior

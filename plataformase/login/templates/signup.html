@@ -90,7 +90,7 @@
      
           <div class="col-12"  id="firma" style="float:left; display: none;" >
           <label class="col-4" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital:</label>
-             <input id="id_firma" type="file" class="col-12" name="firma_digital" >
+             <input id="id_firma" type="file" class="col-12" name="firma_digital"  accept="application/pdf">
       <br><br>
             </div>
       <br>
@@ -226,14 +226,15 @@
                     </small><br>
                     <br>
                     <input class="form-control col" type="password" name="password2" minlength="8" maxlength="20" onblur="verificar2()" required id="id_password2" placeholder="Confirmar contraseña">*
-                </div>
-                <div class="row">
-                    <div class="alert alert-warning col-md-4 "  role="alert" id="diferente" style="width: 100%; float:left; display: none;">
+               
+<br></div>
+                    <div class="alert alert-warning  text-center"  role="alert" id="diferente" style="width: 100%; float:left; display: none;">
                     <small><strong> ¡ Las contraseñas son diferentes !</strong>
-                    </small> </div>
+                    </small> 
                 </div>
-            </div>
-            <div class="text-center">
+            <br>
+        </div>
+            <div class="text-center"><br>
                 <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
                 <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar</button>
             </div>

@@ -14,46 +14,148 @@
                         <div class="card-body">
                             <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
                                 <main role="main" class="inner cover">
-                                    <h2 class="cover-heading">Registro de Nueva Solicitud</h2>
-
-                                    <div id="div_cct">
-                                        <label class="my-1 mr-2 lead" for="id_cct">Clave de Centro de Trabajo:</label>
-                                        <select class="custom-select mr-sm-2 col-3" name="cct" id="id_cct" onchange="activaNivel();">
-                                            {% for element in cct %}
-                                                <option value="{{element.cct}}">{{element.cct}}</option>
-                                            {% endfor %}
-                                        </select><br>
-                                    </div>
-
-                                    <label class="my-1 mr-2 lead" for="id_nivel" id="id_lblNivel">Nivel:</label>
+                                    <h3 class="cover-heading">Registro de Nueva Solicitud</h3>
+                                  <small class="pull-center"> Complete los campos requeridos</small>
+                                  <br>
+                                    <label class="my-1 mr-2 lead" for="id_nivel" id="id_lblNivel">Nivel Educativo :</label>
                                     <div id="div_nivel">
                                         <select required class="custom-select mr-sm-2 col-4" name="nivel" id="id_nivel" onchange="activaModalidades();">
-                                            <option selected>Seleccionar...</option>
+                                            <option selected disabled>Seleccionar</option>
                                             <option value="1">Media Superior</option>
                                             <option value="2">Superior</option>
                                         </select>
                                     </div><br>
-
-                                    <label class="my-1 mr-2 lead" for="id_modalidad">Modalidad:</label>
-                                    <select required class="custom-select mr-sm-2 col-4" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
-                                        <option selected>Seleccionar...</option>
+                                    <div class=" row col-md-12">
+                                     <select required class="custom-select mr-sm-2 col-4 ml-1" style="float: left; text-align: left;" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
+                                        <option selected disabled>Modalidad</option>
                                         <option value="1">Mixta</option>
                                         <option value="2">Escolarizada</option>
                                         <option value="3">No escolarizada</option>
                                     </select><br>
-
-                                    <label class="my-1 mr-2 lead" for="id_opcion">Opción:</label>
-                                    <select required class="custom-select mr-sm-2 col-4" disabled="true" name="opcion" id="id_opcion">
-                                        <option selected>Seleccionar...</option>
+                                      <select required class="custom-select mr-sm-2 col-4 ml-1" disabled="true" name="opcion" id="id_opcion">
+                                        <option selected disabled>Opción</option>
                                     </select><br>
-
                                     <div class="custom-control custom-checkbox">
-                                      <input type="checkbox" class="custom-control-input" id="idcheckbox">
-                                      <label class="custom-control-label" for="idcheckbox" id="lblidcheckbox">Es área de la salud</label>
+                                        <input type="checkbox" class="custom-control-input" id="idcheckbox">
+                                        <label class="custom-control-label" for="idcheckbox" id="lblidcheckbox">Es área de la salud</label>
+                                      </div>
+  
+                                      <input type="text" hidden name="salud" id="id_salud" value="0">
+                                      <input type="text" hidden name="customuser_id" required id="id_customuser_id" value="{{ user.id }}"> 
+  
+                                </div>
+                                   <br>
+    
+                                    <div class=" row col-md-12"style="float: left; text-align: left;">
+                                    <label class="ml-3" for="id_ciclo" id="ciclo" >Ciclo :</label>
+                                    <input  class="form-control ml-1 col-2" type="number" name="ciclonum" required id="id_ciclo_num" >
+                                    <select required class="custom-select col-4 ml-2" name="ciclo" id="id_ciclo" onchange="dura();">
+                                        <option selected disabled>Seleccione</option>
+                                        <option value="Cuatrimestre(s)">Cuatrimestre(s)</option>
+                                        <option value="Semestre(s)">Semestre(s)</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                <input  placeholder="Indique otro " class="form-control  col-4 ml-2" style="display: none;" type="text" name="otro" required id="id_otro" >
+                                <br><br>
+                                <div class="row col-md-12">
+                                    <label class="ml-3" for="id_duracion" id="duracion">Duración :</label>
+                                    <input  class="form-control col-2 ml-1" type="number" name="duracion" required id="id_duracion" >
+                                <label class="ml-2">años</label>
+                                <hr><br>
+                                </div>
+                                      <!---Pedir siguiente información en caso de ser nivel SUPERIOR-->
+                                    <br>
+                                    <br>
+                                    <div id="superior" class="col-md-12" style="float: left; text-align: left; display: none;">
+                                    {% if user.tipo_persona == '1' %}
+                                    <hr>
+                                   
+                                    <label class="" for="id_first_name" id="lblnombres">Nombre:</label>
+                                    <input readonly class="form-control col-10 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">
+                                       
+                                    <label class="" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                                    <input  readonly class="form-control col-10 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
+                                <br>
+                                    
+                                    {% endif %}
+                                    <!--Personas Morales-->
+                                    {% if user.tipo_persona == '2' %}
+                                    <hr>
+                                    <h6 class="pull-center"> Datos de Acta Constitutiva</h6>
+                                    <div class=" row col-md-12">
+                                    <label class="col-8" for="id_inst_notarial" id="inst_notarial">Número de instrumento notarial :</label>
+                                    <input  class="form-control  col-4" type="text" name="inst_notarial" required id="id_noInstrumentoNotarial"  onblur="notario();" >
                                     </div>
+                                    <div class=" row col-md-12">
+                                    <label class="col-8" for="id_libro_inscripcion" id="libro_inscripcion">Número de Libro de inscripción :</label>
+                                    <input  class="form-control  col-4" type="text" name="libro_inscripcion" required id="id_libro_inscripcion" >
+                                    </div>
+                                    <label class="" for="id_nombreNotario">Nombre de notario : </label>
+                                    
+                                    <input class="form-control col-12" type="text" required name="nombreNotario1" id="id_nombreNotario" onblur="notario();">
+                                  
+                                    <label class="" for="id_noNotario">Número de notario : </label>
+                                    <input class="form-control col-6" type="number" required name="noNotario1" id="id_noNotario" onblur="notario();">
+                               
+                                    <label for="start">Fecha y lugar de expedición :</label>
+                                    <div class=" row col-md-12">
+                                    <input class="form-control  col-5" type="date" id="id_fecha" name="fecha" required value="2020-07-01" min="2018-01-01" max="2030-12-31">
+                                    <input  class="form-control  col-6 ml-2"  type="text" name="lugar" required id="id_lugar" >
+                                    </div>
+                                    <label class="" for="id_objeto_social" id="id_obj_so">Objeto social :</label>
+                                    <input  class="form-control  col-12" type="text" name="objeto_social" required id="id_objeto_social" >
+<hr>
+                                    <h6>Datos de Estatutos Vigentes</h6>
+                                    <label class="" for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de su acta constitutiva y estatutos vigentes? :</label>
+                                    <select required class="custom-select mr-sm-2 col-5" name="org_cop_acta" id="id_org_cop_acta" >
+                                        <option selected disabled>Seleccione</option>
+                                        <option value="Sí">Sí</option>
+                                        <option value="No">No</option>
+                                    </select><br>
+                                    <label class="" for="id_libro_inscripcion" id="libro_inscripcion">Nombre del representante legal : </label>
+                                    <input  class="form-control  col-12" type="text" name="nombreRepresentante" required id="id_nombreRepresentante" onblur="notario();" >
+                                    <hr>
+                                    <h6>  {% if user.tipo_persona == '2' %}Datos del poder Notarial del representante legal {% endif %}{% if user.tipo_persona == '1' %}Datos legal del Particular{% endif %}</h6>
+                                   
+                                    {% endif %}
 
-                                    <input type="text" hidden name="salud" id="id_salud" value="0">
-                                    <input type="text" hidden name="customuser_id" required id="id_customuser_id" value="{{ user.id }}">
+                                    <!--Datos fisico y Moral-->
+                                    <div class=" row col-md-12">
+                                     <select required class="custom-select mr-sm-2 col-6" name="identificacion" id="id_identificacion" >
+                                        <option selected disabled>Tipo de identificación oficial</option>
+                                        <option value="Credencial para Votar">Credencial para Votar</option>
+                                        <option value="Pasaporte">Pasaporte</option>
+                                        <option value="Cartilla Militar">Cartilla Militar</option>
+                                        <option value="Cédula Profesional">Cédula Profesional</option>
+                                        <option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
+                                    </select>
+                                    <label class="ml-1" for="id_folio" id="folio">Núm. de folio:</label>
+                                    <input  class="form-control ml-2  col-3" type="text" name="folio_id" required id="id_folio_identificacion" >
+                                </div>
+                                    <label class="" required for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de identificación oficial? :</label>
+                                    <select required class="custom-select mr-sm-2 col-5" name="org_cop_identificacion" id="id_org_cop_identificacion" >
+                                        <option selected disabled>Seleccione</option>
+                                        <option value="Sí">Sí</option>
+                                        <option value="No">No</option>
+                                    </select>
+<br>
+                                    <label class="" for="id_dom_particular" id="particular">Domicilio legal del particular :</label>
+                                    <input readonly class="form-control col-11" type="text" name="dom_particular" required id="id_dom_particular" value="{{user.colonia}}, {{user.calle}}, {{user.municipio}}">
+                                    <br>
+                                    <div class=" row col-md-12">
+                                       
+                                    <label class="" for="id_celular">Teléfono/Celular :</label>
+                                    <input readonly  class="form-control col-3 ml-1" required type="text" name="celular" id="id_celular" value="{{user.celular}}">
+
+                                    <label class="ml-2" for="id_curp_rfc" id="lblcurp">{% if user.tipo_persona == '1' %}CURP :{% else %}RFC :{% endif %}</label>
+                                    <input readonly  class="form-control col-4 ml-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{user.curp_rfc}}">
+                                </div>
+                                    <label style="text-align: left;">Correo electrónico para recibir notificaciones :</label>
+                                    <input  readonly class="form-control col-11 "  type="text" name="email"required id="id_email" value="{{user.email}}" >
+                                
+                                    
+
+                                    </div>
 
                                 </main>
                             </div>
@@ -63,33 +165,68 @@
                     <div class="card card-primary mt-2">
                         <div class="card-body">
                             <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-                                <main role="main" class="inner cover">
+                          
+                             
+                                <main role="main" class="inner cover" id="Superioril" style="display: none;">
                                     <h2 class="cover-heading">Información legal</h2>
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
-                                        <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud">
+                                        <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud2">
                                     </div>
-
+<div style="text-align: left;">
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_noInstrumentoNotarial">Número de instrumento notarial: </label>
-                                        <input class="form-control col-6 mx-auto" type="number" required name="noInstrumentoNotarial" id="id_noInstrumentoNotarial">
+                                        <input class="form-control col-6 " type="number" required name="noInstrumentoNotarial" id="id_noInstrumentoNotarial2"readonly>
                                     </div>
 
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_nombreNotario">Nombre de notario: </label>
-                                        <input class="form-control" type="text" required name="nombreNotario" id="id_nombreNotario">
+                                        <input class="form-control" readonly type="text" required name="nombreNotario" id="id_nombreNotario2" >
                                     </div>
 
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_noNotario">Número de notario: </label>
-                                        <input class="form-control col-6 mx-auto" type="number" required name="noNotario" id="id_noNotario">
+                                        <input class="form-control col-6 " type="number" required name="noNotario" readonly id="id_noNotario2">
                                     </div>
 
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_nombreRepresentante">Nombre de representante legal: </label>
-                                        <input class="form-control" type="text" required name="nombreRepresentante" id="id_nombreRepresentante">
+                                        <input class="form-control" type="text" required name="nombreRepresentante" id="id_nombreRepresentante2" readonly>
                                     </div>
+                                </div>
                                 </main>
+                               
+                                <main role="main" class="inner cover" id="mediaSuperior" style="display: none;">
+                            
+                                    <h2 class="cover-heading">Información legal</h2>
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
+                                        <input class="form-control" type="text" required name="nombreSolicitudM" id="id_nombreSolicitudM">
+                                    </div>
+
+                                    <div style="text-align: left;">
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_noInstrumentoNotarial">Número de instrumento notarial: </label>
+                                        <input class="form-control col-6 " type="number" required name="noInstrumentoNotarialM" id="id_noInstrumentoNotarialM">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_nombreNotario">Nombre de notario: </label>
+                                        <input class="form-control" type="text" required name="nombreNotarioM" id="id_nombreNotarioM">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_noNotario">Número de notario: </label>
+                                        <input class="form-control col-6" type="number" required name="noNotarioM" id="id_noNotarioM">
+                                    </div>
+
+                                    <div>
+                                        <label class="my-1 mr-2 lead" for="id_nombreRepresentante">Nombre de representante legal: </label>
+                                        <input class="form-control" type="text" required name="nombreRepresentanteM" id="id_nombreRepresentanteM">
+                                    </div>
+                                </div>
+                                </main>
+                              
                             </div>
                         </div>
                     </div>
@@ -110,6 +247,36 @@
     document.getElementById("id_modalidad").disabled = true;
     document.getElementById("id_opcion").disabled = true;
 
+function dura(){
+    dur = document.getElementById("id_ciclo");
+    if(dur.value=='Otro')
+    {
+        console.log("Hola");
+        document.getElementById("id_otro").style.display = 'inline';
+    }
+    else{
+        document.getElementById("id_otro").removeAttribute("required");
+        document.getElementById("id_otro").style.display = 'none';
+
+    
+   }
+}
+function notario()
+{
+       
+    instrumento = document.getElementById("id_noInstrumentoNotarial").value;
+    instrumentoN = document.getElementById("id_noInstrumentoNotarial2").value=instrumento;
+
+    nombre = document.getElementById("id_nombreNotario").value;
+    nombreN = document.getElementById("id_nombreNotario2").value=nombre;
+
+   
+    noNotario2 = document.getElementById("id_noNotario").value;
+    noNotario2N = document.getElementById("id_noNotario2").value=noNotario2;
+    
+    repre = document.getElementById("id_nombreRepresentante").value;
+    repreN = document.getElementById("id_nombreRepresentante2").value=repre;
+}
     function opciones () {
         mod = document.getElementById("id_modalidad");
         opc = document.getElementById("id_opcion");
@@ -225,6 +392,80 @@
         niv = document.getElementById("id_nivel");
         mod = document.getElementById("id_modalidad");
         opc = document.getElementById("id_opcion");
+        
+        tipoPer = "{{request.user.tipo_persona}}";
+        if(niv.value=='2')
+        {
+            document.getElementById("superior").style.display = 'inline';
+        if (tipoPer == "1"){
+        console.log("tipo 2"+tipoPer);
+        document.getElementById("Superioril").style.display = 'none';
+        document.getElementById("mediaSuperior").style.display = 'inline';
+
+        document.getElementById("id_nombreSolicitud2").removeAttribute("required");
+            
+        document.getElementById("id_noInstrumentoNotarial2").removeAttribute("required");
+            
+        document.getElementById("id_nombreNotario2").removeAttribute("required");
+            
+        document.getElementById("id_nombreRepresentante2").removeAttribute("required");
+            
+            document.getElementById("id_noNotario2").removeAttribute("required");
+        }
+        else{
+            
+            document.getElementById("mediaSuperior").style.display = 'none';
+            document.getElementById("Superioril").style.display = 'inline';
+            console.log("superior");
+            document.getElementById("id_nombreSolicitudM").removeAttribute("required");
+            
+            document.getElementById("id_noInstrumentoNotarialM").removeAttribute("required");
+            
+            document.getElementById("id_nombreNotarioM").removeAttribute("required");
+            
+            document.getElementById("id_nombreRepresentanteM").removeAttribute("required");
+            
+            document.getElementById("id_noNotarioM").removeAttribute("required");
+        }
+        }
+        else{
+            if(niv.value == "1"){
+        document.getElementById("Superioril").style.display = 'none';
+        document.getElementById("superior").style.display = 'none';
+       
+        document.getElementById("mediaSuperior").style.display = 'inline';
+        
+        document.getElementById("id_nombreSolicitud2").removeAttribute("required");
+            
+        document.getElementById("id_noInstrumentoNotarial2").removeAttribute("required");
+            
+        document.getElementById("id_nombreNotario2").removeAttribute("required");
+            
+        document.getElementById("id_nombreRepresentante2").removeAttribute("required");
+            
+        document.getElementById("id_noNotario2").removeAttribute("required");
+            // document.getElementById("id_fecha").setAttribute("value", "");
+            // document.getElementById("id_dom_particular").setAttribute("value", "");
+            // document.getElementById("id_celular").setAttribute("value", "");
+            // document.getElementById("id_curp_rfc").setAttribute("value", "");
+            // document.getElementById("id_email").setAttribute("value", "");
+    
+            // document.getElementById("id_libro_inscripcion").removeAttribute("required");
+            // document.getElementById("id_lugar").removeAttribute("required");
+            document.getElementById("id_folio_identificacion").removeAttribute("required");
+            // document.getElementById("id_objeto_social").removeAttribute("required");
+            // document.getElementById("id_fecha").removeAttribute("required");
+            // document.getElementById("id_dom_particular").removeAttribute("required");
+            // document.getElementById("id_celular").removeAttribute("required");
+            // document.getElementById("id_curp_rfc").removeAttribute("required");
+            // document.getElementById("id_email").removeAttribute("required");
+            // document.getElementById("id_identificacion").removeAttribute("required");
+            // document.getElementById("id_org_cop_acta").removeAttribute("required");
+            // document.getElementById("id_org_cop_identificacion").removeAttribute("required");
+            // document.getElementById("id_fecha").removeAttribute("required");
+        }
+        }
+    
         if( niv.value == 'Seleccionar...' ){
             document.getElementById("id_modalidad").disabled = true;
             document.getElementById("id_opcion").disabled = true;
