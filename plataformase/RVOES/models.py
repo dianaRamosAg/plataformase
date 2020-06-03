@@ -43,7 +43,7 @@ class Solicitud(models.Model):
     noNotario = models.IntegerField(blank=True, null=True)#Número de notario público
     nombreRepresentante = models.TextField(blank=True, null=True)#Nombre del representante legal
     nombreSolicitud = models.TextField(blank=True, null=True)#Nombre de la solicitud
-
+    cct = models.TextField(null=True, blank=True)
     def __str__(self):
         return u'{0}'.format(self.id)
         #Cadena para representar el objeto solicitud (en el sitio de Admin, etc.)

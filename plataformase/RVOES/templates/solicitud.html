@@ -15,8 +15,15 @@
                             <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
                                 <main role="main" class="inner cover">
                                     <h3 class="cover-heading">Registro de Nueva Solicitud</h3>
-                                  <small class="pull-center"> Complete los campos requeridos</small>
-                                  <br>
+                                  <small class="pull-center"> Complete los campos requeridos</small><br>
+                                  <div id="div_cct"><br>
+                                    <label class="my-1 mr-2 lead" for="id_cct">Clave de Centro de Trabajo:</label>
+                                    <select class="custom-select mr-sm-2 col-3" name="cct" id="id_cct" onchange="activaNivel();">
+                                        {% for element in cct %}
+                                            <option value="{{element.cct}}">{{element.cct}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                                     <label class="my-1 mr-2 lead" for="id_nivel" id="id_lblNivel">Nivel Educativo :</label>
                                     <div id="div_nivel">
                                         <select required class="custom-select mr-sm-2 col-4" name="nivel" id="id_nivel" onchange="activaModalidades();">
@@ -25,7 +32,7 @@
                                             <option value="2">Superior</option>
                                         </select>
                                     </div><br>
-                                    <div class=" row col-md-12">
+                                    <div class=" row col-md-12"><br>
                                      <select required class="custom-select mr-sm-2 col-4 ml-1" style="float: left; text-align: left;" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
                                         <option selected disabled>Modalidad</option>
                                         <option value="1">Mixta</option>
@@ -63,18 +70,18 @@
                                 <label class="ml-2">años</label>
                                 <hr><br>
                                 </div>
-                                      <!---Pedir siguiente información en caso de ser nivel SUPERIOR-->
+                                      <!---Pedir siguiente información en caso de ser persona FISICA-->
                                     <br>
                                     <br>
-                                    <div id="superior" class="col-md-12" style="float: left; text-align: left; display: none;">
+                                    <div  class="col-md-12" style="float: left; text-align: left; ">
                                     {% if user.tipo_persona == '1' %}
                                     <hr>
                                    
                                     <label class="" for="id_first_name" id="lblnombres">Nombre:</label>
-                                    <input readonly class="form-control col-10 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">
+                                    <input readonly class="form-control col-12 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">
                                        
                                     <label class="" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                                    <input  readonly class="form-control col-10 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
+                                    <input  readonly class="form-control col-12 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
                                 <br>
                                     
                                     {% endif %}
@@ -140,7 +147,7 @@
                                     </select>
 <br>
                                     <label class="" for="id_dom_particular" id="particular">Domicilio legal del particular :</label>
-                                    <input readonly class="form-control col-11" type="text" name="dom_particular" required id="id_dom_particular" value="{{user.colonia}}, {{user.calle}}, {{user.municipio}}">
+                                    <input readonly class="form-control col-12" type="text" name="dom_particular" required id="id_dom_particular" value="{{user.colonia}}, {{user.calle}}, {{user.municipio}}">
                                     <br>
                                     <div class=" row col-md-12">
                                        
@@ -151,7 +158,7 @@
                                     <input readonly  class="form-control col-4 ml-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{user.curp_rfc}}">
                                 </div>
                                     <label style="text-align: left;">Correo electrónico para recibir notificaciones :</label>
-                                    <input  readonly class="form-control col-11 "  type="text" name="email"required id="id_email" value="{{user.email}}" >
+                                    <input  readonly class="form-control col-8 "  type="text" name="email"required id="id_email" value="{{user.email}}" >
                                 
                                     
 
@@ -161,13 +168,13 @@
                             </div>
                         </div>
                     </div>
-
+                    {% if user.tipo_persona == '2' %} 
                     <div class="card card-primary mt-2">
                         <div class="card-body">
                             <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
                           
-                             
-                                <main role="main" class="inner cover" id="Superioril" style="display: none;">
+                               
+                                <main role="main" class="inner cover" id="Superioril" >
                                     <h2 class="cover-heading">Información legal</h2>
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
@@ -195,9 +202,18 @@
                                     </div>
                                 </div>
                                 </main>
-                               
-                                <main role="main" class="inner cover" id="mediaSuperior" style="display: none;">
-                            
+                         
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if user.tipo_persona == '1' %} 
+                    <div class="card card-primary mt-2">
+                        <div class="card-body">
+                            <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                       
+                                <main role="main" class="inner cover" id="mediaSuperior" >
+                                    
                                     <h2 class="cover-heading">Información legal</h2>
                                     <div>
                                         <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
@@ -224,12 +240,17 @@
                                         <label class="my-1 mr-2 lead" for="id_nombreRepresentante">Nombre de representante legal: </label>
                                         <input class="form-control" type="text" required name="nombreRepresentanteM" id="id_nombreRepresentanteM">
                                     </div>
-                                </div>
+                                </div>     
                                 </main>
-                              
+                         
                             </div>
                         </div>
                     </div>
+                    {% endif %}
+
+
+
+
 
                         <div class="text-center m-3">
                             <a class="btn btn-secondary" href="{% url 'inicio'  %}">Regresar</a>
@@ -393,78 +414,7 @@ function notario()
         mod = document.getElementById("id_modalidad");
         opc = document.getElementById("id_opcion");
         
-        tipoPer = "{{request.user.tipo_persona}}";
-        if(niv.value=='2')
-        {
-            document.getElementById("superior").style.display = 'inline';
-        if (tipoPer == "1"){
-        console.log("tipo 2"+tipoPer);
-        document.getElementById("Superioril").style.display = 'none';
-        document.getElementById("mediaSuperior").style.display = 'inline';
-
-        document.getElementById("id_nombreSolicitud2").removeAttribute("required");
-            
-        document.getElementById("id_noInstrumentoNotarial2").removeAttribute("required");
-            
-        document.getElementById("id_nombreNotario2").removeAttribute("required");
-            
-        document.getElementById("id_nombreRepresentante2").removeAttribute("required");
-            
-            document.getElementById("id_noNotario2").removeAttribute("required");
-        }
-        else{
-            
-            document.getElementById("mediaSuperior").style.display = 'none';
-            document.getElementById("Superioril").style.display = 'inline';
-            console.log("superior");
-            document.getElementById("id_nombreSolicitudM").removeAttribute("required");
-            
-            document.getElementById("id_noInstrumentoNotarialM").removeAttribute("required");
-            
-            document.getElementById("id_nombreNotarioM").removeAttribute("required");
-            
-            document.getElementById("id_nombreRepresentanteM").removeAttribute("required");
-            
-            document.getElementById("id_noNotarioM").removeAttribute("required");
-        }
-        }
-        else{
-            if(niv.value == "1"){
-        document.getElementById("Superioril").style.display = 'none';
-        document.getElementById("superior").style.display = 'none';
        
-        document.getElementById("mediaSuperior").style.display = 'inline';
-        
-        document.getElementById("id_nombreSolicitud2").removeAttribute("required");
-            
-        document.getElementById("id_noInstrumentoNotarial2").removeAttribute("required");
-            
-        document.getElementById("id_nombreNotario2").removeAttribute("required");
-            
-        document.getElementById("id_nombreRepresentante2").removeAttribute("required");
-            
-        document.getElementById("id_noNotario2").removeAttribute("required");
-            // document.getElementById("id_fecha").setAttribute("value", "");
-            // document.getElementById("id_dom_particular").setAttribute("value", "");
-            // document.getElementById("id_celular").setAttribute("value", "");
-            // document.getElementById("id_curp_rfc").setAttribute("value", "");
-            // document.getElementById("id_email").setAttribute("value", "");
-    
-            // document.getElementById("id_libro_inscripcion").removeAttribute("required");
-            // document.getElementById("id_lugar").removeAttribute("required");
-            document.getElementById("id_folio_identificacion").removeAttribute("required");
-            // document.getElementById("id_objeto_social").removeAttribute("required");
-            // document.getElementById("id_fecha").removeAttribute("required");
-            // document.getElementById("id_dom_particular").removeAttribute("required");
-            // document.getElementById("id_celular").removeAttribute("required");
-            // document.getElementById("id_curp_rfc").removeAttribute("required");
-            // document.getElementById("id_email").removeAttribute("required");
-            // document.getElementById("id_identificacion").removeAttribute("required");
-            // document.getElementById("id_org_cop_acta").removeAttribute("required");
-            // document.getElementById("id_org_cop_identificacion").removeAttribute("required");
-            // document.getElementById("id_fecha").removeAttribute("required");
-        }
-        }
     
         if( niv.value == 'Seleccionar...' ){
             document.getElementById("id_modalidad").disabled = true;
