@@ -72,7 +72,21 @@
                             </div>
                         </td>
                     <td>
-                            {{ element.tipo_usuario }}
+                        {% if element.tipo_usuario == '1' %}
+                            <label>Institución</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '2' %}
+                            <label>Jefe de departamento</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '3' %}
+                            <label>Subordinado de departamento</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '4' %}
+                            <label>Administrador de sitio</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '5' %}
+                            <label>Particular</label>
+                        {% endif %}
                     </td>
                     <td>
                         <button type="button" data-toggle="modal" href="">Editar</button>

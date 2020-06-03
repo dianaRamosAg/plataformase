@@ -72,6 +72,9 @@
         {% if rechazada == 0 and comentario == '1' %}
             <a class="ml-3 btn btn-secondary" href="subirArchivos">Corregir solicitud</a>
         {% endif %}
+        {% if rechazada == 9 %}
+            <a class="ml-3 btn btn-info" href="{% url 'informacionPago' solicitud %}">Añadir información del pago</a>
+        {% endif %}
     </div>
 </div>
 

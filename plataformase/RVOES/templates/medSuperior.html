@@ -22,74 +22,10 @@
                     <h4 class="">Solo son validos los archivos PDF</h4>
                     <form method="post" enctype="multipart/form-data" id="formulario">
                         {% csrf_token %}
-                        <div class="form-group custom-file p-3 mt-2">
-                            <label class="font-weight-bold" for="id_solicitud">Formato de solicitud</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
-                        </div>
-                        {% if form.errors %}
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    {% if field.name == 'solicitud' %}
-                                        <div class="col-md-12 mt-2">
-                                            <div class="alert alertt-danger w-25">
-                                                <label>{{ error }}</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endfor %}
-                        {% endif %}
-
-                        <div class="form-group custom-file p-3 mt-2">
-                            <label class="font-weight-bold" for="id_pago">Recibo de pago</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
-                            <p class="m-1">Introduce los siguientes datos del pago:</p>
-                            <div class="row">
-                                <label class="font-weight-normal m-2 pl-4" for="id_folio_pago">
-                                    Folio de pago:
-                                </label>
-                                <input type="text" class="form-control form-control-sm w-25 p-2" required
-                                       name="folio_pago" id="id_folio_pago">
-                            </div>
-                            <div class="row">
-                                <label class="font-weight-normal m-2 pl-4" for="id_monto_pago">
-                                    Monto de pago:
-                                </label>
-                                <input type="text" class="form-control form-control-sm w-25 p-2" required
-                                       name="monto_pago" id="id_monto_pago">
-                            </div>
-                            <div class="row">
-                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_pago">
-                                    Fecha en que se realizó el pago:
-                                </label>
-                                <input type="date" class="form-control col-2" id="id_fecha_pago" required name="fecha_pago"
-                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
-                            </div>
-                        </div>
-                        {% if form.errors %}
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    {% if field.name == 'pago' %}
-                                        <div class="col-md-12 mt-2">
-                                            <div class="alert alert-danger w-25">
-                                                <label>{{ error }}</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                    {% if field.name == 'folio_pago' %}
-                                        <div class="col-md-12 mt-2">
-                                            <div class="alert alert-danger w-25">
-                                                <label>Este folio ya se encuentra registrado junto con una solicitud.</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endfor %}
-                        {% endif %}
 
                         <div class="form-group custom-file p-3 mt-2" >
                             <label class="font-weight-bold" for="id_identificacion" id="lblidentificacion">Identificación oficial con fotografía</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
                         </div>
                         {% if form.errors %}
                                 {% for field in form %}
@@ -107,7 +43,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" >
                             <label class="font-weight-bold" for="id_perDocente">Manifiesto de compromiso  de incorporar al personal docente</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="perDocente" id="id_perDocente">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="perDocente" id="id_perDocente">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -126,7 +62,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" id="div_virtual">
                             <label class="font-weight-bold" for="id_equipamiento">Tecnología y equipamiento para la opción educativa virtual</label>
-                            <input type="file" class="form-control-file w-50 p-3" name="equipamiento" id="id_equipamiento">
+                            <input type="file" accept="application/pdf" class="form-control-file w-50 p-3" name="equipamiento" id="id_equipamiento">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -149,7 +85,7 @@
                                 <input type="radio" name="prog" onclick="ocultarProgEstudio()" value="1" checked> Plan y programa de estudios federal <br>
                                 <input type="radio" name="prog" onclick="mostrarProgEstudio()" value="2"> Plan y programa de estudios propio
                             </div>
-                            <input type="file" class="form-control-file mt-2 w-50 p-3" name="progEstuio" id="id_progEstuio">
+                            <input type="file" accept="application/pdf" class="form-control-file mt-2 w-50 p-3" name="progEstuio" id="id_progEstuio">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -167,7 +103,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" id="div_salud">
                             <label class="font-weight-bold" for="id_cifrhs">Opinión favorable de CIFRHS</label>
-                            <input type="file" class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                            <input type="file" accept="application/pdf" class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -185,7 +121,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" id="div_salud2">
                             <label class="font-weight-bold" for="id_carta">Carta de intención</label>
-                            <input type="file" class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                            <input type="file" accept="application/pdf" class="form-control-file w-50 p-3" name="carta" id="id_carta">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -203,7 +139,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_instalaciones">Formato No. 6 "Instalaciones"</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="instalaciones" id="id_instalaciones">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="instalaciones" id="id_instalaciones">
                             <div id="accordion" role="tablist" aria-multiselectable="true" class="col-6 mb-2">
                                 <div class="card">
                                     <div class="card-header" role="tab" id="headingOne">

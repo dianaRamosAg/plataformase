@@ -4,7 +4,7 @@ from django.views.generic.base import View
 from .models import *
 from login.models import CustomUser, UsuarioInstitucion
 from django.db.models.expressions import RawSQL
-from .forms import ArchivosInstForm, ArchivosCCurrForm, ArchivosCAcadForm, ArchivosMedSupForm, ComentariosForms
+from .forms import *
 from django.contrib.auth.hashers import make_password
 from django.template.loader import render_to_string
 
@@ -18,7 +18,7 @@ Todos los métodos (menos class Pdf(View)) incluyen el siguiente código:
 #Si el tipo de usuario que hizo la solicitud es (1: institución, 2-3: personal del departamento)
 if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
     #Código del método
-    ....
+    ...
 #Si no corresponde el tipo de usuario lo manda a su página principal o login por defecto
 else:
     return redirect('perfil')
@@ -176,7 +176,7 @@ def solicitud_insert(request):
             nombreRepresentante = request.POST["nombreRepresentante"]
             nombreSolicitud = request.POST["nombreSolicitud"]
             fechaRegistro = datetime.datetime.now()#Obtenemos la fecha actual
-            estatus = Departamento.objects.get(id=1)#Obtenemos el primer departamento al que debe pasar
+            estatus = Departamento.objects.get(id=2)#Obtenemos el primer departamento al que debe pasar
             #Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
             if request.user.tipo_usuario == '1':
                 cct = request.POST["cct"]
@@ -218,11 +218,13 @@ def SInstitucional(request):
         request.POST["id_solicitud"] = Solicitud.objects.values_list('id').order_by('id').last()[0]#Pasamos el id de la solicitud en caso
         id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Es solo para inicializar el valor ya que el uso de la misma lo exige
         if request.method == 'POST':#Si el request fue realizado con el método POST
+            '''
             #Se hace una consulta sobre si existe el número de folio de pago ya ingresado en el sistema
             folioPago = CMedSuperior.objects.filter(folio_pago=request.POST["folio_pago"]).exists()
             if folioPago:#Si existe, se borra para marcar que el folio es inválido, ya que este no se puede repetir.
                 request.POST["folio_pago"] = None
                 print("pago existe")
+            '''
             form = ArchivosInstForm(request.POST, request.FILES)#Se añaden los archivos y los campos de texto ingresados al sistema
             if form.is_valid():#Si el formulario es válido, lo guarda en la base de datos y redirige a la siguiente vista para que guarde los archivos de la siguente carpeta
                 print("formulario valido")
@@ -323,18 +325,13 @@ def SMedSuperior(request):
      carpeta de media superior.
     """
     if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
-        id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]
-        #id_solicitud = getUltSolicitud(request.user.id)#Es solo para inicializar el valor ya que el uso de la misma lo exige
+        id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Es solo para inicializar el valor ya que el uso de la misma lo exige
         salud = Solicitud.objects.values_list('salud').get(id=id_solicitud)[0]#Obtiene si la solicitud pertenece al área de la salud
         virtual = Solicitud.objects.values_list('opcion').get(id=id_solicitud)[0]#Obtiene la opción a la que pertence la solicitud
         mod = Solicitud.objects.values_list('modalidad').get(id=id_solicitud)[0]#Obtiene la modalidad a la que pertence la solicitud
         request.POST._mutable = True#Activando esta opción podremos editar los datos que vienen del método POST
         request.POST["id_solicitud"] = Solicitud.objects.values_list('id').order_by('id').last()[0]#Pasamos el id de la solicitud en caso
         if request.method == 'POST':#Si el request fue realizado con el método POST
-            # Se hace una consulta sobre si existe el número de folio de pago ya ingresado en el sistema
-            folioPago = CMedSuperior.objects.filter(folio_pago=request.POST["folio_pago"]).exists()
-            if folioPago:  # Si existe, se borra para marcar que el folio es inválido, ya que este no se puede repetir.
-                request.POST["folio_pago"] = None
             form = ArchivosMedSupForm(request.POST, request.FILES)#Se añaden los archivos y los campos de texto ingresados al sistema
             if form.is_valid():#Si el formulario es válido, lo guarda en la base de datos y redirige a la siguiente vista para mostrarle el número de seguimiento de esa solicitud que es su ID
                 form.save()
@@ -868,6 +865,115 @@ def terminarSubArchivos(request, usuario, solicitud):
     else:
         return redirect('perfil')
 
+def informacionPago(request, id):
+    if request.user.tipo_usuario == '1' or request.user.tipo_usuario == '5':
+        # Activando esta opción podremos editar los datos que vienen del método POST
+        #request.POST._mutable = True
+        #Obtenemos la solicitud a la cual se le va a registrar el pago
+        solicitud = Solicitud.objects.get(id=id)
+        from datetime import datetime
+        fecha = datetime.today().strftime('%Y-%m-%d')
+        error = False
+        if request.method == 'POST':
+            if solicitud.nivel == '1':
+                form = ActPagoMedSupForm(request.POST, request.FILES)
+                if form.is_valid():
+                    med = CMedSuperior.objects.get(id_solicitud=id)
+                    newMed = CMedSuperior(pago=request.FILES["pago"],
+                                          folio_pago=request.POST["folio_pago"], monto_pago=request.POST["monto_pago"],
+                                          fecha_pago=request.POST["fecha_pago"], id_solicitud=solicitud,
+                                          identificacion=med.identificacion,
+                                          perDocente=med.perDocente, instalaciones=med.instalaciones,
+                                          dictamen_suelo=med.dictamen_suelo, expediente_suelo=med.expediente_suelo,
+                                          fecha_suelo=med.fecha_suelo, firma_suelo=med.firma_suelo,
+                                          dictamen_estructural=med.dictamen_estructural,
+                                          fecha_estructural=med.fecha_estructural,
+                                          arqui_dictamen_estructural=med.arqui_dictamen_estructural,
+                                          noCedula_dictamen_estructural=med.noCedula_dictamen_estructural,
+                                          DRO_dictamen_estructural=med.DRO_dictamen_estructural,
+                                          dictamen_proteccion=med.dictamen_proteccion,
+                                          fecha_dictamen_proteccion=med.fecha_dictamen_proteccion,
+                                          firma_dictamen_proteccion=med.firma_dictamen_proteccion,
+                                          folio_inife=med.folio_inife, fecha_inife=med.fecha_inife,
+                                          firma_inife=med.firma_inife, equipamiento=med.equipamiento,
+                                          progEstuio=med.progEstuio, cifrhs=med.cifrhs, carta=med.carta)
+                    med.delete()
+                    newMed.save()
+                    actualizar2Fase(solicitud.id, request.user.id)
+                else:
+                    error = True
+                    return render(request, 'informacionPago.html', {'solicitud': solicitud,
+                                                                    'fecha': fecha, 'error': error})
+            if solicitud.nivel == '2':
+                form = ActPagoSupForm(request.POST, request.FILES)
+                if form.is_valid():
+                    inst = CInstitucional.objects.get(id_solicitud=id)
+                    newInst = CInstitucional(id_solicitud=solicitud, pago=request.FILES["pago"],
+                                             folio_pago=request.POST["folio_pago"], monto_pago=request.POST["monto_pago"],
+                                             fecha_pago=request.POST["fecha_pago"],
+                                             acredita_personalidad=inst.acredita_personalidad,
+                                             acredita_inmueble=inst.acredita_inmueble, licencia_suelo=inst.licencia_suelo,
+                                             dictamen_suelo=inst.dictamen_suelo, expediente_suelo=inst.expediente_suelo,
+                                             fecha_suelo=inst.fecha_suelo, firma_suelo=inst.firma_suelo,
+                                             constancia_estructural=inst.constancia_estructural,
+                                             dictamen_estructural=inst.dictamen_estructural,
+                                             fecha_estructural=inst.fecha_estructural,
+                                             arqui_dictamen_estructural=inst.arqui_dictamen_estructural,
+                                             noCedula_dictamen_estructural=inst.noCedula_dictamen_estructural,
+                                             DRO_dictamen_estructural=inst.DRO_dictamen_estructural,
+                                             constancia_proteccion=inst.constancia_proteccion,
+                                             dictamen_proteccion=inst.dictamen_proteccion,
+                                             fecha_dictamen_proteccion=inst.fecha_dictamen_proteccion,
+                                             firma_dictamen_proteccion=inst.firma_dictamen_proteccion,
+                                             inife=inst.inife, folio_inife=inst.folio_inife, fecha_inife=inst.fecha_inife,
+                                             firma_inife=inst.firma_inife, des_instalacion=inst.des_instalacion,
+                                             planos=inst.planos, biblio=inst.biblio)
+                    inst.delete()
+                    newInst.save()
+                    actualizar2Fase(solicitud.id, request.user.id)
+                else:
+                    error = True
+                    return render(request, 'informacionPago.html', {'solicitud': solicitud,
+                                                                    'fecha': fecha, 'error': error})
+            return redirect('estado',request.user.id,'G')
+        return render(request, 'informacionPago.html', {'solicitud': solicitud,
+                                                        'fecha': fecha, 'error': error })
+    return redirect('perfil')
+
+def actualizar2Fase(solicitud, user):
+    import datetime
+    # Si ya se registro el pago, pasa a la revisión de la segunda fase
+    # Si anteriomente fue revisado por el ultimo departamento, le toca a control escolar recibir documentos
+    Solicitud.objects.filter(id=solicitud).update(completado=10, estatus=1)
+    # Obtenemos la institución a la que le pertence la solicitud.
+    usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]
+    # Registramos la notificación para la institución sepa que su solicitud ya fue aceptada por todos los departamentos.
+    notificacionU = Notificacion(solicitud_id=solicitud,
+                                 descripcion="Tu solicitud ya pasó por todas las áreas de revisión. Ahora entrega tus documentos a ventanilla única",
+                                 leida='0',
+                                 fechaNotificacion=datetime.datetime.now(),
+                                 tipo_notificacion='H',
+                                 usuario_id=usuario)
+    notificacionU.save()
+    # Registramos la actividad de que la solicitud ya fue aceptada por todos los departamentos.
+    actividad = Actividades(usuario_id=user,
+                            descripcion='La solicitud ya fue aprobada por la última área de revisión',
+                            fecha=datetime.datetime.now(),
+                            solicitud_id=solicitud)
+    actividad.save()
+    from django.db.models import Q
+    # Se obtienen todos los usuarios de personal de los departamentos (jefes(2) y subordinados(3) departamento).
+    usuariosAdmin = CustomUser.objects.filter(Q(tipo_usuario=2) | Q(tipo_usuario=3))
+    # Se le notifica a todo el personal que la solicitud fue aceptada por todas las áreas.
+    for element in usuariosAdmin:
+        notificacionA = Notificacion(solicitud_id=solicitud,
+                                     descripcion='La institución ya añadió información del pago',
+                                     leida='0',
+                                     fechaNotificacion=datetime.datetime.now(),
+                                     tipo_notificacion='P',
+                                     usuario_id=element.id)
+        notificacionA.save()
+
 # --------------------------------- Vistas de usuario para "Personal del departamento" ---------------------------------------------
 
 def administrador(request):
@@ -908,7 +1014,7 @@ def administrador(request):
                 notificacionU.save()#Guarda el registro de la notificación para el usuario 'institución' al que le pertenece la solicitud.
         from django.db.models import Q
         #Consulta de todas las solicitudes que han terminado de subir archivos (completado:0) o que hayan terminado el proceso de revisión digital (completado:10) o que ya se recibieron documentos en físico.
-        Solicitudes = Solicitud.objects.filter(Q(completado='0') | Q(completado='10') | Q(completado='11') | Q(completado='-1')).order_by('id')
+        Solicitudes = Solicitud.objects.filter(Q(completado='0') | Q(completado='9') | Q(completado='10') | Q(completado='11') | Q(completado='-1')).order_by('id')
         #Cantidad de notificaciones que no han sido leídas.
         TotalNotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='P',
                                                         usuario_id=request.user.id).count()
@@ -1062,10 +1168,12 @@ def revisionCInstitucional(request, solicitud):
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
         #Cuenta las notificaciones no leídas pertenecientes al usuario que hizo la solicitud.
-        totalnotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='P',
-                                                        usuario_id=request.user.id).count()
+        totalnotificaciones = Notificacion.objects.filter(leida='0',
+                                                          tipo_notificacion='P',
+                                                          usuario_id=request.user.id).count()
         #Obtiene la solicitud correspondientes al departamento que pertenece el usuario y que tengan el ID de solicitud recibido.
-        records = Solicitud.objects.filter(estatus=request.user.departamento_id, id=int(solicitud))
+        records = Solicitud.objects.filter(estatus=request.user.departamento_id,
+                                           id=int(solicitud))
         #Obtiene el nombre del departamento al que pertenece el usuario.
         NombreDepartamento = Departamento.objects.values_list('nombre').get(id=request.user.departamento_id)
         #Obtiene el departamento en el que se encuentra la solicitud (Podría cambiarse por records.estatus)
@@ -1219,7 +1327,7 @@ def revisionCAcademica(request, solicitud):
 
 def revisionCMedSuperior(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
-    curricular y hacer comentarios.
+    de media superior y hacer comentarios.
 
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
@@ -1231,23 +1339,27 @@ def revisionCMedSuperior(request, solicitud):
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
         #Cuenta las notificaciones no leídas pertenecientes al usuario que hizo la solicitud.
-        totalnotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='P',
-                                                        usuario_id=request.user.id).count()
+        totalnotificaciones = Notificacion.objects.filter(leida='0',
+                                                          tipo_notificacion='P',
+                                                          usuario_id=request.user.id).count()
         #Obtiene el nombre del departamento al que pertenece el usuario.
         NombreDepartamento = Departamento.objects.values_list('nombre').get(id=request.user.departamento_id)
         #Obtiene la solicitudes correspondientes al departamento que pertenece el usuario y que tengan el ID de solicitud recibido.
-        records = Solicitud.objects.filter(estatus=request.user.departamento_id, id=int(solicitud)).exclude(completado=11)
+        records = Solicitud.objects.filter(estatus=request.user.departamento_id,
+                                           id=int(solicitud)).exclude(completado=11)
         #Obtiene el departamento en el que se encuentra la solicitud (Podría cambiarse por records.estatus)
         solicitudDepartamento = Solicitud.objects.values_list('estatus').get(id=solicitud)[0]
         #Obtiene los comentarios recibidos de la solicitud que fueron hechos por el departamento del usuario correspondiente.
         ComentarioArchivo = Comentarios.objects.values_list("archivo").filter(solicitud_id=solicitud,
-                                                                            departamento=solicitudDepartamento)
+                                                                              departamento=solicitudDepartamento)
         #Obtiene los comentarios que no han sido mostrados a la institución
-        ComentarioArchivoNoMostrado = Comentarios.objects.filter(solicitud_id=solicitud, departamento=solicitudDepartamento,
-                                                                mostrado='0')
+        ComentarioArchivoNoMostrado = Comentarios.objects.filter(solicitud_id=solicitud,
+                                                                 departamento=solicitudDepartamento,
+                                                                 mostrado='0')
         #Obtiene los comentarios que ya han sido mostrados a la institución.
-        ComentarioArchivoMostrado = Comentarios.objects.filter(solicitud_id=solicitud, departamento=solicitudDepartamento,
-                                                            mostrado='1')
+        ComentarioArchivoMostrado = Comentarios.objects.filter(solicitud_id=solicitud,
+                                                               departamento=solicitudDepartamento,
+                                                               mostrado='1')
         #Obtiene si la solicitud ya se le realizaron comentarios (0:No ha recibido comentarios, 1:Tiene comentarios, 2:Actualizó archivos)
         estadoComentario = Solicitud.objects.values_list("comentario").get(id=solicitud)[0]
         #Se obtiene la solicitud por ID
@@ -1432,6 +1544,7 @@ def comentariosTerminado(request, solicitud):
                                         fecha=datetime.datetime.now(),
                                         solicitud_id=solicitud)
                 actividad.save()
+                '''
                 #Si el departamento que hizo pasar la solicitud al siguiente departamento es "dirección"
                 if ((siguienteDepartamento - 1) == 2):
                     #Se le notifica a la institución que ya puede cargar su documento de admisión de trámite.
@@ -1443,38 +1556,42 @@ def comentariosTerminado(request, solicitud):
                                             tipo_notificacion='H',
                                             usuario_id=usuario)
                     notAdmision.save()
+                '''
             #Si el siguiente departamento es 5 (no existe un departamento 5)
             else:
-                #Si anteriomente fue revisado por el ultimo departamento, le toca a control escolar recibir documentos
-                Solicitud.objects.filter(id=solicitud).update(completado=(10), estatus=1, comentario=0)
-                #Obtenemos la institución a la que le pertence la solicitud.
-                usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]
-                #Registramos la notificación para la institución sepa que su solicitud ya fue aceptada por todos los departamentos.
-                notificacionU = Notificacion(solicitud_id=solicitud,
-                                            descripcion="Tu solicitud ya pasó por todas las áreas de revisión",
-                                            leida='0',
-                                            fechaNotificacion=datetime.datetime.now(),
-                                            tipo_notificacion='H',
-                                            usuario_id=usuario)
-                notificacionU.save()
-                #Registramos la actividad de que la solicitud ya fue aceptada por todos los departamentos.
-                actividad = Actividades(usuario_id=request.user.id,
-                                        descripcion='La solicitud ya fue aprobada por la última área de revisión',
-                                        fecha=datetime.datetime.now(),
-                                        solicitud_id=solicitud)
-                actividad.save()
-                from django.db.models import Q
-                #Se obtienen todos los usuarios de personal de los departamentos (jefes(2) y subordinados(3) departamento).
-                usuariosAdmin = CustomUser.objects.filter(Q(tipo_usuario=2) | Q(tipo_usuario=3))
-                #Se le notifica a todo el personal que la solicitud fue aceptada por todas las áreas.
-                for element in usuariosAdmin:
-                    notificacionA = Notificacion(solicitud_id=solicitud,
-                                                descripcion='La solicitud ya fue aprobada por la última área de revisión',
-                                                leida='0',
-                                                fechaNotificacion=datetime.datetime.now(),
-                                                tipo_notificacion='P',
-                                                usuario_id=element.id)
-                    notificacionA.save()
+                #Si ya pasó por la primera fase (revisado digitalmente por dirección y el nivel)
+                if completado == 0:
+                    #Establecemos la solicitud para petición de pago
+                    Solicitud.objects.filter(id=solicitud).update(completado=9, comentario=0)
+                    # Obtenemos la institución a la que le pertence la solicitud.
+                    usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]
+                    # Registramos la notificación para la institución sepa que su solicitud ya fue aceptada por todos los departamentos y ahora introduzca información del pago.
+                    notificacionU = Notificacion(solicitud_id=solicitud,
+                                                 descripcion="Tu solicitud ha sido aceptada en la revisión digital. "
+                                                             "Favor de introducir información del pago",
+                                                 leida='0',
+                                                 fechaNotificacion=datetime.datetime.now(),
+                                                 tipo_notificacion='H',
+                                                 usuario_id=usuario)
+                    notificacionU.save()
+                    # Registramos la actividad de que se le pidió el pagó a la institución.
+                    actividad = Actividades(usuario_id=request.user.id,
+                                            descripcion='Se ha pedido el pago para continuar con el proceso de la solicitud',
+                                            fecha=datetime.datetime.now(),
+                                            solicitud_id=solicitud)
+                    actividad.save()
+                    from django.db.models import Q
+                    #Se obtienen todos los usuarios de personal de los departamentos (jefes(2) y subordinados(3) departamento).
+                    usuariosAdmin = CustomUser.objects.filter(Q(tipo_usuario=2) | Q(tipo_usuario=3))
+                    # Se le notifica a todos los jefes que la solicitud fue aceptada por todas las áreas.
+                    for element in usuariosAdmin:
+                        notificacionA = Notificacion(solicitud_id=solicitud,
+                                                     descripcion='La solicitud ya fue aprobada por la última área de revisión y se solicitó el pagó',
+                                                     leida='0',
+                                                     fechaNotificacion=datetime.datetime.now(),
+                                                     tipo_notificacion='P',
+                                                     usuario_id=element.id)
+                        notificacionA.save()
         return redirect('admin')
     else:
         return redirect('perfil')

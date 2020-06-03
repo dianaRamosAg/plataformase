@@ -38,7 +38,7 @@
         </div>
 
         <div class="row">
-            <div class="col-10 mx-auto mt-3">
+            <div class="col-11 mx-auto mt-3">
                 <div id="general">
                     <table id="example" class="table table-striped table-bordered" style="width:100%" >
                         <thead>
@@ -61,7 +61,7 @@
                                     <td>
                                         {% if element.completado == 10 %}
                                             {% if element.estatus.id == 1 %}
-                                                En espera de documentos<br>(Control Escolar)
+                                                En espera de documentos<br>(Ventanilla única)
                                             {% else %}
                                                 {% if element.estatus.id == 2 %}
                                                     En espera de documentos<br>(Dirección)
@@ -70,20 +70,27 @@
                                                 {% endif %}
                                             {% endif %}
                                         {% else %}
-                                            {% if element.completado == 11 %}
-                                                Proceso digital completo
+                                            {% if element.completado == 9 %}
+                                                En espera de información de pago
                                             {% else %}
-                                                {% if element.completado == -1 %}
-                                                    Rechazada
+                                                {% if element.completado == 11 %}
+                                                    Proceso digital completo
                                                 {% else %}
-                                                    {{element.estatus.nombre}}
+                                                    {% if element.completado == -1 %}
+                                                        Rechazada
+                                                    {% else %}
+                                                        En proceso de revisión por<br>el departamento <strong>{{element.estatus.nombre}}</strong>
+                                                    {% endif %}
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}
                                     </td>
                                     <td>{{element.fechaRegistro}}</td>
-                                    <td>{% if element.estatus.id == 3 or element.estatus.id == 4 or element.completado == 10 or element.completado == 11 %}
-                                        <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
+                                    <td>
+                                        {% if element.estatus.id >= 2 %}
+                                            {% if element.completado == 10 or element.completado == 11 %}
+                                                <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
+                                            {% endif %}
                                         {% endif %}
                                     </td>
                                 </tr>

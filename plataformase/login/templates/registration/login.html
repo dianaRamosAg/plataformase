@@ -73,18 +73,14 @@
                                     {% if form.errors %}
                                     {% for field in form %}
                                         {% for error in field.errors %}
-                                        <p>{{error}}</p>
                                             <div class="alert alert-danger">
-                                                <label>Por favor ingrese un nombre de usuario y contraseña correctos.</label>
-                                                <!--p>Considere que ambos campos son sensibles al uso de mayúsculas.</p-->
+                                                <label>{{error}}</label>
                                             </div>
                                         {% endfor %}
                                     {% endfor %}
                                     {% for error in form.non_field_errors %}
-                                    <p>{{error}}</p>
                                         <div class="alert alert-danger">
-                                            <label>Por favor ingrese un nombre de usuario y contraseña correctos.</label>
-                                            <!--p>Considere que ambos campos son sensibles al uso de mayúsculas.</p-->
+                                            <label>{{error}}</label>
                                         </div>
                                     {% endfor %}
                                     {% endif %}

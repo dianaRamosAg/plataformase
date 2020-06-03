@@ -15,6 +15,7 @@ urlpatterns = [
     path('solicitud/enviada', views.finSolicitud, name='finSolicitud'),
     path('acuerdos', views.acuerdos, name='acuerdos'),
 
+    path('estadoSolicitud/informacionPago/<id>', views.informacionPago, name='informacionPago'),
     path('estadoSolicitud/<usuario>/<solicitud>', views.estatus, name='estado'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/', views.historial, name='historial'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/archivos', views.verArchivos,name='verArchivos'),

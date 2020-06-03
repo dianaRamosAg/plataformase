@@ -24,7 +24,7 @@
                         {% csrf_token %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_rec_bibliograficos">Relación de recursos bibliográficos</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="rec_bibliograficos" id="id_rec_bibliograficos">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="rec_bibliograficos" id="id_rec_bibliograficos">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -42,7 +42,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_rec_didacticos">Relación de recursos didácticos</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="rec_didacticos" id="id_rec_didacticos">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="rec_didacticos" id="id_rec_didacticos">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -60,7 +60,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" >
                             <label class="font-weight-bold" for="id_talleres">Talleres</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="talleres" id="id_talleres">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="talleres" id="id_talleres">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -78,7 +78,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_apoyo_informatico">Infraestructura de apoyo informático</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="apoyo_informatico" id="id_apoyo_informatico">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="apoyo_informatico" id="id_apoyo_informatico">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -96,7 +96,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_apoyo_comunicaciones">Apoyo de comunicaciones</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="apoyo_comunicaciones" id="id_apoyo_comunicaciones">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="apoyo_comunicaciones" id="id_apoyo_comunicaciones">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -114,7 +114,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_personal">Personal</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="personal" id="id_personal">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="personal" id="id_personal">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}

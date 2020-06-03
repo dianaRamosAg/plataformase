@@ -15,8 +15,8 @@ class Solicitud(models.Model):
     customuser = models.ForeignKey('login.CustomUser', on_delete=models.CASCADE,)#Usuario al que le pertenece la solicitud
     completado = models.IntegerField(default='1',)
     """completado: -1 = Cancelada, 0 = Completado, 1 = Institucional, 2 = Curricular,
-    3 = Academica, 4 = Media Superior, 10 = Documentos recibidos, 11 = Terminó revisión digital"""
-    estatus = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='1')
+    3 = Academica, 4 = Media Superior, 9 = Petición de pago, 10 = Documentos recibidos, 11 = Terminó revisión digital"""
+    estatus = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='2')
     """estatus: Define el departamnto en el que se encuentra"""
     noInstrumentoNotarial = models.IntegerField(blank=True, null=True)#Número de instrumento notarial
     nombreNotario = models.TextField(blank=True, null=True)#Nombre del notario público
@@ -46,10 +46,10 @@ class CMedSuperior(models.Model):
     id_solicitud = models.ForeignKey('Solicitud',
                                     on_delete=models.CASCADE,)
     pago = models.FileField(upload_to='Archivos/MedSuperior', blank=True, null=True, validators=[valid_extension])#Ubicación de archivo de pago
-    folio_pago = models.TextField(unique=True, default='0')#Folio de pago no se puede repetir (incluido con los de superior)
+    folio_pago = models.TextField(unique=True, default='0', blank=True, null=True)#Folio de pago no se puede repetir (incluido con los de superior)
     monto_pago = models.TextField(blank=True, null=True)#Monto de pago
     fecha_pago = models.DateField(blank=True, null=True, auto_now_add=False,)#Fecha en que se realizó el pagó
-    solicitud = models.FileField(upload_to='Archivos/MedSuperior', validators=[valid_extension])#Ubicación de archivo de solicitud
+    #solicitud = models.FileField(upload_to='Archivos/MedSuperior', validators=[valid_extension])#Ubicación de archivo de solicitud
     identificacion = models.FileField(upload_to='Archivos/MedSuperior', validators=[valid_extension])#Ubicación de archivo de identificación oficial
     perDocente = models.FileField(upload_to='Archivos/MedSuperior', validators=[valid_extension])#Ubicación de archivo de personal docente
     instalaciones = models.FileField(upload_to='Archivos/MedSuperior', validators=[valid_extension])#Ubicación de archivo de Formato No. 6 "Instalaciones"
@@ -86,8 +86,8 @@ class CInstitucional(models.Model):
     #Solicitud a la que le pertenecen los archivos
     id_solicitud = models.ForeignKey('Solicitud',
                                     on_delete=models.CASCADE,)
-    solicitud = models.FileField(upload_to='Archivos/Institucional', validators=[valid_extension],)#Ubicación de archivo de solicitud
-    folio_pago = models.TextField(unique=True, default='0')#Folio de pago no se puede repetir (incluido con los de superior)
+    #solicitud = models.FileField(upload_to='Archivos/Institucional', validators=[valid_extension], blank=True, null=True)#Ubicación de archivo de solicitud
+    folio_pago = models.TextField(unique=True, default='0', blank=True, null=True)#Folio de pago no se puede repetir (incluido con los de superior)
     monto_pago = models.TextField(blank=True, null=True)#Monto de pago
     fecha_pago = models.DateField(blank=True, null=True, auto_now_add=False,)#Fecha en que se realizó el pagó
     pago = models.FileField(upload_to='Archivos/Institucional', blank=True, null=True, validators=[valid_extension],)#Ubicación de archivo de pago
