@@ -8,8 +8,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
+
         <title>Plataforma SSEMSSICyT</title>
         <link rel="icon" type="image/x-icon" href="{% static '/img/se.png' %}" />
         <!-- Font Awesome icons (free version)-->
@@ -19,11 +18,11 @@
         <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        
+
         <link href="../../static/login/css/style.css" rel="stylesheet" type="text/css" />
-        
+
         <link rel='stylesheet'   href="{% static '/css/logincss.css' %}" type='text/css' media='all' />
-        
+
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -34,7 +33,7 @@
                     <ul class="navbar-nav text-uppercase ml-auto">
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">SSEMSSICyT</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Servicios</a></li>
-                        
+
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contacto</a></li>
                        </ul>
                 </div>
@@ -42,7 +41,7 @@
         </nav>
         <!-- Masthead-->
         <header class="masthead">
-            
+
             <div class="container">
                 <div class="masthead-subheading">SSEMSSICyT</div>
                 <h5 class="my-3">Plataforma de servicios digitales.</h5>
@@ -57,7 +56,7 @@
                             <div class="card-body">
                                 <form method="post">
                                     {% csrf_token %}
-                                    
+
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Correo electrónico</label>
                                         <input type="text" style="background-color: white;" class="form-control " name="username" id="id_username" required   autocapitalize="off" >
@@ -69,16 +68,18 @@
                                      <div class="input-group form-group">
                                         <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info btn-lg btn-block" value="Acceder">Acceder </button>
 						             </div>
-                  
+
                                     {% if form.errors %}
                                     {% for field in form %}
                                         {% for error in field.errors %}
+
                                             <div class="alert alert-danger">
                                                 <label>{{error}}</label>
                                             </div>
                                         {% endfor %}
                                     {% endfor %}
                                     {% for error in form.non_field_errors %}
+
                                         <div class="alert alert-danger">
                                             <label>{{error}}</label>
                                         </div>
@@ -94,12 +95,12 @@
                                 <div class="d-flex justify-content-center">
                                     <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
                                 </div>
-               
+
                             </div>
                            </div>
+                           <br> <br>
             </div>
-           
-           
+           </div> </div>
         </header>
         <!-- Services-->
         <section class="page-section" id="services">
@@ -107,22 +108,34 @@
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">SSEMSSICyT</h2>
                     <h3 class="section-subheading text-muted">Subsecretaría de Educación Media Superior, Superior e Investigación Científica y Tecnológica de Nayarit.</h3>
-                    <small>Es la dependencia competente para establecer la normativa, 
-                        requisitos, trámites y procedimientos administrativos a los que deberá sujetarse el otorgamiento, revocación, suspensión o retiro de la autorización o del reconocimiento de validez oficial de estudios a los planes y programas de estudio a los particulares que participen en el proceso educativo 
+                    <small>Es la dependencia competente para establecer la normativa,
+                        requisitos, trámites y procedimientos administrativos a los que deberá sujetarse el otorgamiento, revocación, suspensión o retiro de la autorización o del reconocimiento de validez oficial de estudios a los planes y programas de estudio a los particulares que participen en el proceso educativo
                         estatal de educación medio superior y superior, de conformidad a lo establecido a la legislación en la materia.</small>
                 </div>
                 <div class="row text-center">
-                    <div class="col-md-4">
-                        <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-school fa-stack-1x fa-inverse"></i></span>
-                        <h4 class="my-3">Departamento de Educación Media Superior</h4>
+                    <div class="col-md-12 portafolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-chalkboard-teacher fa-stack-1x fa-inverse"></i></span>
+                        </a>
+                            <h5 class="my-2">Dirección de Educación Media Superior y Superior</h5>
+
+                         </div>
+                   <br>
+                </div>
+
+                <div class="row text-center"><br>
+                    <div class="col-md-4 portafolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#portfolioModal1" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-school fa-stack-1x fa-inverse"></i></span>
+                        </a>
+                            <h5 class="my-2">Departamento de Educación Media Superior</h5>
+
                          </div>
                     <div class="col-md-4">
                         <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-laptop fa-stack-1x fa-inverse"></i></span>
-                        <h4 class="my-3">Departamento de Investigación Científica y Tecnológica</h4>
+                        <h5 class="my-2">Departamento de Investigación Científica y Tecnológica</h5>
                           </div>
                     <div class="col-md-4">
                         <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-university fa-stack-1x fa-inverse"></i></span>
-                        <h4 class="my-3">Departamento de Educación Superior</h4>
+                        <h5 class="my-2">Departamento de Educación Superior</h5>
                           </div>
                 </div>
             </div>
@@ -223,8 +236,8 @@
                 </div>
             </div>
         </section>
-        
-     
+
+
         <!-- Contact-->
         <section class="page-section" id="contact">
             <div class="container">
@@ -240,7 +253,7 @@
                             </p>
                             </div>
                     </div>
-    
+
                         <div class="col-lg-4">
                             <div class="team-member">
                                 <img class="mx-auto rounded-circle" src="{% static '/img/comentario.png'%}" alt="" style="width: 20%; height: 20%;" />
@@ -249,7 +262,7 @@
                                 </p>
                                 </div>
                         </div>
-                    
+
                             <div class="col-lg-4">
                                 <div class="team-member">
                                     <img class="mx-auto rounded-circle" src="{% static '/img/facebook.png'%}" alt="" style="width: 20%; height: 20%;" />
@@ -261,7 +274,7 @@
                             </div>
                              <!--ROW-->
             </div>
-          
+
         </section>
         <!-- Footer-->
         <footer class="footer py-4">
@@ -437,17 +450,14 @@
                 </div>
             </div>
         </div>
-        
+
 {% endif %}
         <!-- Bootstrap core JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
         <!-- Third party plugin JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-        <!-- Contact form JS-->
-        <script src="assets/mail/jqBootstrapValidation.js"></script>
-        <script src="assets/mail/contact_me.js"></script>
-        <!-- Core theme JS-->
+
         <script src="{% static '/js/scripts.js' %}"></script>
     </body>
 </html>
