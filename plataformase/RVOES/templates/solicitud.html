@@ -90,16 +90,12 @@
 
                             <label class="" for="id_last_name" id="lblapellidos">Apellidos:</label>
                             <input  readonly class="form-control col-12 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
-
+                            <br>
                             <div class=" row col-md-12">
-                                <select required class="custom-select mr-sm-2 col-6" name="identificacion" id="id_identificacion" >
-                                    <option selected disabled>Tipo de identificación oficial</option>
-                                    <option value="Credencial para Votar">Credencial para Votar</option>
-                                    <option value="Pasaporte">Pasaporte</option>
-                                    <option value="Cartilla Militar">Cartilla Militar</option>
-                                    <option value="Cédula Profesional">Cédula Profesional</option>
-                                    <option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
-                                </select>
+                                <label class="ml-3" for="id_folio_identificacion" id="folio">Identificación:</label>
+                               
+                                <input required class="form-control ml-2 col-3" name="identificacion" id="id_identificacion" value="{{user.identificacion}}" READONLY>
+                                 
                                 <label class="ml-3" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
                                 <input  class="form-control ml-2 col-3" type="text" name="folio_id" required id="id_folio_identificacion" value="{{user.folio_id}}" READONLY>
                             </div>
@@ -165,7 +161,12 @@
                             </select-->
                             <br>
                             <label class="mt-2" for="id_dom_particular" id="particular">Domicilio legal del particular:</label>
+                            {% if user.tipo_persona == '2' %}
                             <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="{{user.dom_legal_part}}">
+                            {% endif %}
+                            {% if user.tipo_persona == '1' %}
+                            <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, {{user.municipio}}, Nayarit. ">
+                            {% endif %}
                             <label class="mt-2" for="id_celular">Teléfono/Celular:</label>
                             <input readonly  class="form-control col-3 mt-2 d-inline"  type="text" name="celular" id="id_celular" value="{{user.celular}}">
                             <br>
@@ -334,7 +335,7 @@
                             <label class="" for="id_nombreSolicitud">Nombre completo del plan y programas de estudio:</label>
                             <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud">
                             <label class="mt-2" for="id_domcilio">Domicilio de impartición:</label>
-                            <input class="form-control" type="text" readonly name="domcilio" id="id_domcilio" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, Municipio {{user.municipio}}, Nayarit.">
+                            <input class="form-control" type="text" readonly name="domcilio" id="id_domcilio" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, {{user.municipio}}, Nayarit.">
                             {%if request.user.tipo_usuario == '5' %}
                             <label class="mt-2">Denominación de la institución y del Plantel en que se impartirá:</label>
                             <small>Asentar propuestas de denominaciones en orden de preferencia.</small>

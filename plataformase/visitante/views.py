@@ -217,30 +217,48 @@ def actualizarperfilusr(request):
 
     if request.method == 'POST':
         first_name = request.POST["first_name"]
+
         if request.user.tipo_persona=='1':
             last_name = request.POST["last_name"]
         else:
             last_name=""
+
+        if request.user.tipo_usuario =='1' or request.user.tipo_usuario =='5':
+            identificacion = request.POST["identificacion"]
+            folio_id = request.POST["folio_id"]
+            marca_educativa = request.POST["marca"] 
+            nombre_representante = None
+            dom_legal_part = None
+            if request.user.tipo_persona=='2':
+                nombre_representante = request.POST["nombre_representante"] 
+                dom_legal_part = request.POST["dom_legal_part"] 
+                identificacion = request.POST["identificacion"]
+                folio_id = request.POST["folio_id"]
+                marca_educativa = request.POST["marca"] 
+               
+
+        if request.user.tipo_usuario !='1' and request.user.tipo_usuario =='5':
+            identificacion = None
+            folio_id = None
+            marca_educativa = None
+            nombre_representante = None
+            dom_legal_part = None
+
         email = request.POST["email"]
         curp_rfc = request.POST["curp_rfc"]
         calle = request.POST["calle"]
-        #password = make_password(request.POST["password2"])
         noexterior = request.POST["noexterior"]
         nointerior = request.POST["nointerior"]
         codigopostal = request.POST["codigopostal"]
         municipio = request.POST["municipio"]
         colonia = request.POST["colonia"]
         celular = request.POST["celular"]
-  
-
         
         CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
-        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name)
-        # if request.user.tipo_usuario=='1':
-        #     UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id).update(cct = inst_cct,
-        #                                      nombredirector = inst_nombredirector, sector=sector,
-        #                                      nivel_educativo=nivel_educativo)
-
+        codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name,
+        identificacion=identificacion,folio_id=folio_id,marca_educativa=marca_educativa,nombre_representante=nombre_representante,
+        dom_legal_part=dom_legal_part)
+   
   
     return redirect('perfiluser') 
 
