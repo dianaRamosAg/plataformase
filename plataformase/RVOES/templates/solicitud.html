@@ -100,8 +100,8 @@
                                     <option value="Cédula Profesional">Cédula Profesional</option>
                                     <option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
                                 </select>
-                                <label class="ml-1" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
-                                <input  class="form-control ml-2 col-3" type="text" name="folio_id" required id="id_folio_identificacion" >
+                                <label class="ml-3" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
+                                <input  class="form-control ml-2 col-3" type="text" name="folio_id" required id="id_folio_identificacion" value="{{user.folio_id}}" READONLY>
                             </div>
                             <br>
                             {% endif %}
@@ -143,22 +143,17 @@
                                 <option value="No">No</option>
                             </select><br-->
                             <label class="mt-2" for="id_nombreRepresentante">Nombre del representante legal:</label>
-                            <input readonly class="form-control col-12" type="text" name="nombreRepresentante" required id="id_nombreRepresentante">
+                            <input readonly class="form-control col-12" type="text" name="nombreRepresentante" required id="id_nombreRepresentante" value="{{user.nombre_representante}}">
 
                             <label class="mt-2" for="id_poderNotarial">Datos del Poder Notarial del Representante Legal:</label>
                             <textarea class="form-control" name="poderNotarial" id="id_poderNotarial" rows="2" required></textarea>
-
+                            <br>
                             <div class="row col-md-12 mt-2">
-                                <select required class="custom-select mr-sm-2 col-6" name="identificacion" id="id_identificacion" >
-                                    <option selected disabled>Tipo de identificación oficial</option>
-                                    <option value="Credencial para Votar">Credencial para Votar</option>
-                                    <option value="Pasaporte">Pasaporte</option>
-                                    <option value="Cartilla Militar">Cartilla Militar</option>
-                                    <option value="Cédula Profesional">Cédula Profesional</option>
-                                    <option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
-                                </select>
+                                <label class="ml-1" for="id_folio_identificacion" id="folio">Identificación:</label>
+                                <input required class="form-control ml-2 col-4" readonly name="identificacion" id="id_identificacion" value="{{user.identificacion}}">
+                                   
                                 <label class="ml-1" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
-                                <input  class="form-control ml-2 col-3" type="text" name="folio_id" required id="id_folio_identificacion" >
+                                <input  class="form-control ml-2 col-3" type="text" name="folio_id"  readonly required id="id_folio_identificacion" value="{{user.folio_id}}" >
                             </div>
                             {% endif %}
                             <!--Datos fisico y Moral-->
@@ -170,12 +165,12 @@
                             </select-->
                             <br>
                             <label class="mt-2" for="id_dom_particular" id="particular">Domicilio legal del particular:</label>
-                            <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="{{user.colonia}}, {{user.calle}}, {{user.municipio}}">
+                            <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="{{user.dom_legal_part}}">
                             <label class="mt-2" for="id_celular">Teléfono/Celular:</label>
                             <input readonly  class="form-control col-3 mt-2 d-inline"  type="text" name="celular" id="id_celular" value="{{user.celular}}">
                             <br>
                             <label class="mt-2" for="id_rfc" id="lblcurp">Registro Federal de Contribuyentes:</label>
-                            <input readonly  class="form-control col-4 d-inline" type="text" name="rfc" id="id_rfc" value="">
+                            <input readonly  class="form-control col-4 d-inline" type="text" name="rfc" id="id_rfc" value="{{user.curp_rfc}}">
                             <label >Correo electrónico para recibir notificaciones:</label>
                             <input  readonly class="form-control col-6 d-inline"  type="text" name="email" id="id_email" value="{{user.email}}" >
                             <hr>
@@ -339,7 +334,7 @@
                             <label class="" for="id_nombreSolicitud">Nombre completo del plan y programas de estudio:</label>
                             <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud">
                             <label class="mt-2" for="id_domcilio">Domicilio de impartición:</label>
-                            <input class="form-control" type="text" readonly name="domcilio" id="id_domcilio">
+                            <input class="form-control" type="text" readonly name="domcilio" id="id_domcilio" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, Municipio {{user.municipio}}, Nayarit.">
                             {%if request.user.tipo_usuario == '5' %}
                             <label class="mt-2">Denominación de la institución y del Plantel en que se impartirá:</label>
                             <small>Asentar propuestas de denominaciones en orden de preferencia.</small>
@@ -348,7 +343,7 @@
                             <input type="text" class="form-control" name="opcion3" id="id_opcion3" placeholder="Opcion 3">
                             {% endif %}
                             <label class="mt-2" for="id_nombreComercial">Nombre comercial o marca de la institución educativa:</label>
-                            <input class="form-control" type="text" readonly name="nombreComercial" id="id_nombreComercial">
+                            <input class="form-control" type="text" readonly name="nombreComercial" id="id_nombreComercial" value="{{user.marca_educativa}}">
                             <label class="mt-2" for="id_horarioDias">Horiario y días en que lo impartirá:</label>
                             <input class="form-control" type="text" name="horarioDias" id="id_horarioDias">
                             <label class="mt-2" for="id_areaFormacion">Área o campo de formación:</label>
