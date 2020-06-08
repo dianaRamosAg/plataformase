@@ -8,13 +8,13 @@ class CustomUser(AbstractUser):
     pass
     curp_rfc = models.CharField(max_length=18, blank=True, null=True)#Guarda la CURP o el RFC del usuario
     calle = models.TextField(blank=True, null=True)#
-    noexterior = models.IntegerField(blank=True, null=True)
-    nointerior = models.IntegerField(blank=True, null=True)
+    noexterior = models.IntegerField(blank=True, null=True,default=0)
+    nointerior = models.IntegerField(blank=True, null=True,default=0)
     codigopostal = models.IntegerField(blank=True, null=True)
     municipio = models.TextField(blank=True, null=True)
     colonia = models.TextField(blank=True, null=True)
     celular = models.TextField(blank=True, null=True)
-    tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador, 5:particular
+    tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador
     tipo_persona = models.CharField(max_length=1, default='1')#1: Física, 2:Moral
     #Departamento al que pertenece el usuario (El modelo esta en aplicación usuarios)
     departamento = models.ForeignKey("RVOES.Departamento", on_delete=models.CASCADE, blank=True, null=True)
@@ -22,6 +22,11 @@ class CustomUser(AbstractUser):
     registro = models.ForeignKey("CustomUser", on_delete=models.CASCADE, blank=True, null=True)#Usuario que registro a este usuario
     firma_digital = models.ImageField(upload_to ='firmas_digitales/', blank=True, null=True)
     localidad = models.TextField(blank=True, null=True)
+    identificacion = models.TextField(blank=True, null=True)
+    folio_id = models.TextField(null=True, blank=True)
+    dom_legal_part = models.TextField(null=True, blank=True)
+    nombre_representante = models.TextField(null=True, blank=True)
+    marca_educativa = models.TextField(null=True, blank=True)
     #Campo que funciona por defecto como email
     #USERNAME_FIELD = 'username'
     #Campos requeridos para la creación de usuario (principalmente para el usuario root)

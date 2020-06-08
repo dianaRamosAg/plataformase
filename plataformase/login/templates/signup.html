@@ -59,9 +59,9 @@
         <div class="col-6">
             <p class=" pull-center">Información de usuario</p>
             <div class="form-row mb-3">
-          <label class="ml-2" for="id_tipo_usuario">Tipo de usuario :</label>
-          <select class="custom-select col-3"  required name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
-              <option value="" selected disabled>Seleccione</option>
+          
+          <select class="custom-select col-6"  required name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
+              <option value="" selected disabled>Seleccione Tipo de Usuario</option>
               <option value="1"title="Tipo Institución ,cuenta con uno o más CCT (Clave de centro de trabajo)." >
                   Institución</option>
               <option value="2"title="Encargado oficial de un departamento." >
@@ -70,12 +70,12 @@
               <option value="4" title="Tipo administrador,Maneja recursos de la plataforma">Administrtador de la página</option>
               <option value="5" title="Particular, no cuenta con cct puede solicitar rvoe">Particular</option>
           </select>
-          <label class="ml-1" for="id_tipo_persona">Tipo persona :</label>
-          <select class="custom-select col-3" name="tipo_persona"  required id="id_tipo_persona" onchange="pmoral()">
-              <option value=""  disabled selected>Seleccione</option>
+         
+          <select class="custom-select col-6 " name="tipo_persona"  required id="id_tipo_persona" onchange="pmoral()">
+              <option value=""  disabled selected>Seleccione Tipo de persona</option>
               <option value="1" >Persona física</option>
               <option value="2">Persona moral</option>
-          </select><br><br>
+          </select><br><br><br>
           <label class="ml-2" for="id_departamento" id="lbl_departamento">Departamento :</label>
           <select class="custom-select col-4" name="departamento" id="id_departamento" onchange="verificarJefes()">
           {% for entry in departamentos %}
@@ -88,58 +88,85 @@
               </small> </div>
           </div>
      
-          <div class="col-12"  id="firma" style="float:left; display: none;" >
-          <label class="col-4" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital:</label>
-             <input id="id_firma" type="file" class="col-12" name="firma_digital"  accept="application/pdf">
-      <br><br>
-            </div>
+          <div class="col-12"  id="firma" style="float:left; display: none;" ><br>
+          <label class="" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital:</label>
+             <input id="id_firma" type="file" class="col-9" name="firma_digital"  accept="img/png, .jpg, .jpeg">
       <br>
-<div class=" col-12"></div>
+            </div>
+    
 
-      <div class="col-12">
+
+      <div class="col-md-12">
           <label  for="id_first_name" id="lblnombres" style="float: left;" >Nombre(s):</label>
           <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"name="first_name" required id="id_first_name" class="form-control ">
           
       </div>
       <div class="col-12">
           <label class="" for="id_last_name" id="lblapellidos" style="float: left;">Apellidos:</label>
-          <input class="form-control " required pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">
-                          
+          <input class="form-control " required pattern ="[a-zA-ZáéíóúÁÉÍÓñÚ\s]{1,40}" type="text" name="last_name"  id="id_last_name">                   
       </div>
 
-      <div class="col-12">
+      <div class=" col-12">
           <label class="" for="id_curp_rfc" id="lblcurp" style="float: left;">CURP:</label>
           <input class="form-control " type="text" minlength="10" maxlength="18" name="curp_rfc" required id="id_curp_rfc">
-          <button type="button" style="float: left;" class="btn btn-info"  onclick="location.href='http://consultas.curp.gob.mx'" id="acurp" target="_blank">Consulta CURP</button>
-      </div>
-      <div class="col-6">
-          <label class=" " for="id_celular" style="float: left;">Teléfono celular:</label>
-          <input class="form-control " required type="text" pattern="[0-9]{10}" name="celular" id="id_celular" >                             
-     <br>
-        </div>
-    
+          <button type="button" style="float: left;" class="btn btn-info"  onclick="location.href='http://consultas.curp.gob.mx'" id="acurp" target="_blank">Consulta CURP</button>  
+    </div>
 
-      <div class="col-12" id="datos_inst">
-          <p class=" pull-center">Datos de institución</p>
-          
-          <label class="" for="id_cct"  style="float: left;" style="text-align: left;">Clave del centro de trabajo (CCT):</label>
-          <input type="text" name="cct"  id="id_cct" class="form-control "  >
-      
-          <label class="" style="float: left;" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
-          <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control " placeholder="" >
+      <div class="col-12" style="float: left;">
+          <label class="" for="id_celular" style="float: left;">Teléfono celular:</label>
+          <input class="form-control"required type="text" pattern="[0-9]{10}" name="celular" id="id_celular" >                             
+        </div>
+<!---Persona Moral-->
+<div class="col-12" id="moral" style="display: none;">
+    <label  style="float: left;" >Nombre de representante legal:</label>
+    <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"name="nombre_representante" required id="id_nombre_representante" class="form-control">
+    
+    <label  style="float: left;" >Domicilio legal del Particular:</label>
+    <input type="text" name="dom_legal_part" required id="id_dom_legal_part" class="form-control">
+    
+</div>
+<!----Persona Moral/Fisica de Inst o Particular----------->
+<div class="moralyfisicaIP" style="display: none;" id="ip">
+<br>
+<div class=" row col-12">
+        <select required class="custom-select col-6" name="identificacion" id="id_identificacion" >
+           <option selected disabled>Tipo de identificación oficial</option>
+           <option value="Credencial para Votar">Credencial para Votar</option>
+           <option value="Pasaporte">Pasaporte</option>
+           <option value="Cartilla Militar">Cartilla Militar</option>
+           <option value="Cédula Profesional">Cédula Profesional</option>
+           <option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
+       </select>
+       <label class="ml-3" for="id_folio" id="folio">No. de folio:</label>
+       <input  class="form-control col-3 ml-2" type="text" name="folio_id" required id="id_folio_identificacion" >
+        <br><br>
+
+    <label  style="float: left;" >Nombre comercial o Marca de la institución educativa:</label>
+    <input type="text" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"name="marca_educativa" required id="id_marca" class="form-control col-12">
+
+</div>
+</div>
+
+
+      <div class="col-md-12" id="datos_inst" style="float: left;"><hr>
+          <p class=" pull-center col-12">Datos de institución</p>
+
+          <label class="" for="id_cct"  style="float: left;" style="text-align: left;" >Clave del centro de trabajo (CCT):</label>
+          <input type="text" name="cct"  id="id_cct" class="form-control col-6"  title="En caso de contar con más de 1 CCT, el usuario podrá agregarlo en su Perfil">
+      <br>
+          <label class="" style="float: left;" for="id_nombre_director" style="text-align: left;">Nombre del director :</label>
+          <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control col-8" placeholder="" >
           <br>
-          <div class="row">
+          <div class="row col-md-12">
               <br>
-          <label class="col-2" for="id_sector" style="text-align: left;">Sector:</label>
-          <select  class="form-control col-3" name="sector" id="id_sector" required>
-              <option disabled="" selected="">Seleccione</option>
+           <select  class="form-control col-5" name="sector" id="id_sector" required>
+              <option disabled="" selected="">Seleccione Sector</option>
               <option value="Publico"> Público </option>
               <option value="Privado"> Privado </option>
           </select>
           
-          <label class="col-3" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
-          <select  class="form-control col-3" name="nivel_educativo" id="id_nivel_educativo" required onchange="fmod()">
-              <option disabled="" selected="">Seleccione</option>
+          <select  class="form-control col-6 ml-4" name="nivel_educativo" id="id_nivel_educativo" required onchange="fmod()">
+              <option disabled="" selected="">Seleccione Nivel Educativo</option>
               <option value="1"> Media superior </option>
               <option value="2"> Superior </option>
               <option value="3"> Ambos </option>
@@ -154,17 +181,21 @@
                       <option value="1"> Sí </option>
                   </select>
               </div>
-              <br>
+             
       </div>
-<br><br>
 
-<div class="row" style="float: left;">
+<div class="col-12">    
+    <hr>
+<p class="pull-center text-center">Dirección</p>
+</div>
+
+<div class="row col-md-12" style="float: left;">
     <label class="col-2" for="id_colonia" style="float: left;">Colonia:</label>
     <input class="form-control col-3" required type="text" name="colonia" id="id_colonia" ><br>
  
-    <label class="col-3 " for="id_municipio">Municipio:</label>
-    <select  class="form-control col-3 " name="municipio" id="id_municipio" required>
-        <option disabled=""  value="" selected="">Seleccione</option>
+   
+    <select  class="form-control col-6 ml-2" name="municipio" id="id_municipio" required>
+        <option disabled=""  value="" selected="">Seleccione Municipio</option>
         <option value="Acaponeta"> Acaponeta </option>
         <option value="Ahucatlán"> Ahucatlán </option>
         <option value="Amatlán de Cañas"> Amatlán de Cañas </option>
@@ -188,15 +219,17 @@
     </select>
    </div>
 <br>
-      <div class="row" style="float: left;">
+
+<br>
+      <div class="row col-md-12  "style="float: left;">
         <br>
         <label class="col-2" for="id_calle" style="float: left;">Calle:</label>
         <input class="form-control col-3" required type="text" name="calle" id="id_calle"  >
 
-        <label class="col-3 ml-4" for="id_codigopostal">Código postal:</label>
-        <input class="form-control col-2 ml-4" required type="number" minlength="5" maxlength="5"  name="codigopostal" placeholder="00000" id="id_codigopostal" value="63000"><br>
+        <label class=" ml-2" for="id_codigopostal">Código Postal:</label>
+        <input class="form-control col-3 ml-4" required type="number" minlength="5" maxlength="5"  name="codigopostal" placeholder="00000" id="id_codigopostal" value="63000"><br>
         <br>
-        <label class="col-3" for="id_nointerior" >No. Interior:</label>
+        <label class="col-3 ml-1" for="id_nointerior" >No. Interior:</label>
         <input class="form-control col-2 " required type="number" name="nointerior" id="id_nointerior" value="0"><br>
 
         <label class="col-3 ml-4"for="id_noexterior">No. Exterior:</label>
@@ -207,7 +240,7 @@
     <br>
            </div>
         </div>
- 
+  
         <div class="col-6">
          
             <p class=" pull-center">Información de inicio de sesión</p>
@@ -235,8 +268,8 @@
             <br>
         </div>
             <div class="text-center"><br>
-                <button class="btn btn-secondary col-2" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
-                <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar</button>
+                <button class="btn btn-secondary col-3" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
+                <button class="btn btn-primary col-3 mx-auto" type="submit">Registrar</button>
             </div>
             </div>
             
@@ -261,14 +294,28 @@
         var borrado = 0;
         function pmoral(){
             var per = document.getElementById('id_tipo_persona');
+            var usr = document.getElementById('id_tipo_usuario');
+            if(usr.value == '1' || per.value == '5')
+            {
+                document.getElementById('ip').style.display = 'inline';
+
+                if (per.value == '1'){
+                document.getElementById('moral').style.display = 'none';
+                document.getElementById('id_dom_legal_part').removeAttribute("required");
+                document.getElementById('id_nombre_representante').removeAttribute("required");
+
+                }
+            }
+
             if (per.value == '2'){
+                document.getElementById('moral').style.display = 'inline';
                 document.getElementById('id_last_name').style.display = 'none';
                 document.getElementById("id_last_name").removeAttribute("required");
                 document.getElementById("id_last_name").setAttribute("required", "false");
                 ap = document.getElementById('id_last_name').value;
                 document.getElementById("id_last_name").setAttribute("value", " ");
                 document.getElementById('lblapellidos').style.display = 'none';
-                document.getElementById('lblnombres').innerHTML= 'Nombre de la institución:';
+                document.getElementById('lblnombres').innerHTML= 'Denominación o Razon Social:';
                 document.getElementById('lblcurp').innerHTML= 'RFC:';
                 document.getElementById('acurp').innerHTML= 'Consulta RFC';
                 // document.getElementById("lblnombres").setAttribute("class", "ml-2 col-2");
@@ -297,6 +344,9 @@
         }
     
         function funcion(){
+            
+            document.getElementById('moral').style.display = 'none';
+            document.getElementById('ip').style.display = 'none';
             var user = document.getElementById("id_tipo_usuario");
             var per = document.getElementById("id_tipo_persona");
             if (user.value != '1')
@@ -305,8 +355,12 @@
             }
             if (user.value != '1' && user.value != '5'){
                 console.log("dif")
-              
-               
+                document.getElementById('id_dom_legal_part').removeAttribute("required");
+                document.getElementById('id_marca').removeAttribute("required");
+                document.getElementById('id_nombre_representante').removeAttribute("required");
+                document.getElementById('id_identificacion').removeAttribute("required");
+                document.getElementById('id_folio_identificacion').removeAttribute("required");
+
                 if(borrado == 0){
                     aBorrar = per.options[per.length-1];
                     aBorrar.parentNode.removeChild(aBorrar);

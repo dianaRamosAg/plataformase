@@ -82,6 +82,24 @@ def regUser(request):
                 else:modalidad = "0"
 
             departamento = int(request.POST["departamento"])
+            if tipo_usuario=='1' or tipo_usuario=='5': #Institución o Particular
+                identificacion = request.POST["identificacion"]
+                folio_id = request.POST["folio_id"]
+                marca_educativa = request.POST["marca_educativa"]
+
+                if tipo_persona == '2': # Tipo moral en Institución o Particular
+                    nombre_representante = request.POST["nombre_representante"]
+                    dom_legal_part = request.POST["dom_legal_part"]
+                else:
+                    nombre_representante = None
+                    dom_legal_part = None
+            else:
+                identificacion = None
+                folio_id = None
+                marca_educativa = None
+                nombre_representante = None
+                dom_legal_part = None
+                
 
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
             if tipo_usuario == '2':
@@ -111,7 +129,10 @@ def regUser(request):
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
-                            date_joined=datetime.datetime.now(), firma_digital=firma_digital)
+                            date_joined=datetime.datetime.now(), firma_digital=firma_digital, 
+                            identificacion=identificacion,dom_legal_part=dom_legal_part,
+                            folio_id=folio_id,nombre_representante=nombre_representante,
+                            marca_educativa=marca_educativa)
             usr.save()
             if tipo_usuario == '1':
                 usrInst = UsuarioInstitucion(id_usuariobase=usr, cct = inst_cct,
