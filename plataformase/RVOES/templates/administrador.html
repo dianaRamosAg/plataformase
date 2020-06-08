@@ -87,7 +87,7 @@
                                     </td>
                                     <td>{{element.fechaRegistro}}</td>
                                     <td>
-                                        {% if element.estatus.id >= 2 %}
+                                        {% if element.estatus.id > 2 %}
                                             {% if element.completado == 10 or element.completado == 11 %}
                                                 <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
                                             {% endif %}

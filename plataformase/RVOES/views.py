@@ -134,14 +134,16 @@ def solicitud(request):
     -:return: Retorna la plantilla "solicitud.html" para que el usuario empiece el proceso de solicitud de RVOE.
     """
     if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
+        from datetime import datetime
         #record obtiene de la última solicitud del usuario, el valor de los campos "completado" e "id"
         record = Solicitud.objects.values_list('completado', 'id').filter(customuser=request.user.id).last()
+        fecha = datetime.today().strftime('%Y-%m-%d')
         if record:#Si se obtuvo algún resultado
             if record[1] != -1:#Si el id es diferente a -1 (Posible borrado de esta línea)
                 if record[0] >= 1 and record[0] <= 4:#Si la solicitud se encuentra pediente en alguna carpeta
                     Solicitud.objects.filter(id=record[1]).delete()#Borra la solicitud de la base de datos.
         cct = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
-        return render(request, 'solicitud.html', {'cct': cct})#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
+        return render(request, 'solicitud.html', {'cct': cct, 'fecha': fecha})#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
     else:
         return redirect('perfil')
 
@@ -165,76 +167,144 @@ def solicitud_insert(request):
         if request.method == 'POST':#Si el request fue realizada con el método POST
             import datetime#Librería para guardar la fecha
             #Según los datos introducidos en "solicitud.html" y enviados por el método POST se guardan en una variable
+            fechaRegistro = datetime.datetime.now()  # Obtenemos la fecha actual
+            estatus = Departamento.objects.get(id=2)#Obtenemos el primer departamento al que debe pasar
+            # Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
+            if request.user.tipo_usuario == '1':
+                cct = request.POST["cct"]
+            else:
+                cct = None
             nivel = request.POST["nivel"]
+            if nivel == '2':
+                nivelSuperior = request.POST["nivelSuperior"]
+            else:
+                nivelSuperior = None
             modalidad = request.POST["modalidad"]
             opcion = request.POST["opcion"]
             salud = str(request.POST["salud"])
+            customuser_id = (request.user.id)
             ciclonum = request.POST["ciclonum"]
             ciclo = request.POST["ciclo"]
-            identificacion = request.POST["identificacion"]
-            folio_id = request.POST["folio_id"]
-            org_cop_identificacion = request.POST["org_cop_identificacion"]
-            dom_particular = request.POST["dom_particular"]
-            celular = request.POST["celular"]
-            curp_rfc = request.POST["curp_rfc"]
-            email = request.POST["email"]
             #Sí se selecciona otro tipo de ciclo, expecificar cual
             if ciclo == 'Otro':
                 otro = request.POST["otro"]
             else:
                 otro = None
             duracion = request.POST["duracion"]
-            customuser_id = (request.user.id)
+            identificacion = request.POST["identificacion"]
+            folio_id = request.POST["folio_id"]
+            nomPerAut1 = request.POST["nomPerAut1"]
+            apMatPerAut1 = request.POST["apMatPerAut1"]
+            apPatPerAut1 = request.POST["apPatPerAut1"]
+            emailPerAut1 = request.POST["emailPerAut1"]
+            telPerAut1 = request.POST["telPerAut1"]
+
+            nomPerAut2 = request.POST["nomPerAut2"]
+            apMatPerAut2 = request.POST["apMatPerAut2"]
+            apPatPerAut2 = request.POST["apPatPerAut2"]
+            emailPerAut2 = request.POST["emailPerAut2"]
+            telPerAut2 = request.POST["telPerAut2"]
+
+            nomPerAut3 = request.POST["nomPerAut3"]
+            apMatPerAut3 = request.POST["apMatPerAut3"]
+            apPatPerAut3 = request.POST["apPatPerAut3"]
+            emailPerAut3 = request.POST["emailPerAut3"]
+            telPerAut3 = request.POST["telPerAut3"]
+
+            nomPerAut4 = request.POST["nomPerAut4"]
+            apMatPerAut4 = request.POST["apMatPerAut4"]
+            apPatPerAut4 = request.POST["apPatPerAut4"]
+            emailPerAut4 = request.POST["emailPerAut4"]
+            telPerAut4 = request.POST["telPerAut4"]
+
+            nomPerAut5 = request.POST["nomPerAut5"]
+            apMatPerAut5 = request.POST["apMatPerAut5"]
+            apPatPerAut5 = request.POST["apPatPerAut5"]
+            emailPerAut5 = request.POST["emailPerAut5"]
+            telPerAut5 = request.POST["telPerAut5"]
+
+            nomPerAut6 = request.POST["nomPerAut6"]
+            apMatPerAut6 = request.POST["apMatPerAut6"]
+            apPatPerAut6 = request.POST["apPatPerAut6"]
+            emailPerAut6 = request.POST["emailPerAut6"]
+            telPerAut6 = request.POST["telPerAut6"]
+
+            nomApLegal1 = request.POST["nomApLegal1"]
+            apMatApLegal1 = request.POST["apMatApLegal1"]
+            apPatApLegal1 = request.POST["apPatApLegal1"]
+            emailApLegal1 = request.POST["emailApLegal1"]
+            telApLegal1 = request.POST["telApLegal1"]
+            poderNotApLegal1 = request.POST["poderNotApLegal1"]
+
+            nomApLegal2 = request.POST["nomApLegal2"]
+            apMatApLegal2 = request.POST["apMatApLegal2"]
+            apPatApLegal2 = request.POST["apPatApLegal2"]
+            emailApLegal2 = request.POST["emailApLegal2"]
+            telApLegal2 = request.POST["telApLegal2"]
+            poderNotApLegal2 = request.POST["poderNotApLegal2"]
+
+            perPrograma = request.POST["perPrograma"]
+            nombreSolicitud = request.POST["nombreSolicitud"]
+            if request.user.tipo_usuario == '5':
+                opcion1 = request.POST["opcion1"]
+                opcion2 = request.POST["opcion2"]
+                opcion3 = request.POST["opcion3"]
+            else:
+                opcion1 = None
+                opcion2 = None
+                opcion3 = None
+            horarioDias = request.POST["horarioDias"]
+            areaFormacion = request.POST["areaFormacion"]
+
+            #celular = request.POST["celular"]
+            #curp_rfc = request.POST["curp_rfc"]
+            #email = request.POST["email"]
             #Tipo de persona FISICA 
             if request.user.tipo_persona == '1':
-                nombre = request.POST["first_name"]
-                apellidos = request.POST["last_name"]
-                noInstrumentoNotarial = request.POST["noInstrumentoNotarialM"]
-                nombreNotario = request.POST["nombreNotarioM"]
-                noNotario = request.POST["noNotarioM"]
-                nombreRepresentante = request.POST["nombreRepresentanteM"]
-                nombreSolicitud = request.POST["nombreSolicitudM"]
+                noInstrumentoNotarial = None
                 libro_inscripcion = None
+                nombreNotario = None
+                noNotario = None
                 fecha = None
                 lugar = None
                 objeto_social = None
-                org_cop_acta = None
+                estatutosVigentes = None
+                nombreRepresentante = None
+                poderNotarial = None
             #Tipo de persona MORAL
-            if request.user.tipo_persona == '2':  
-                nombre = None
-                apellidos = None
+            if request.user.tipo_persona == '2':
+                noInstrumentoNotarial = request.POST["inst_notarial"]
                 libro_inscripcion = request.POST["libro_inscripcion"]
+                nombreNotario = request.POST["nombreNotario"]
+                noNotario = request.POST["noNotario"]
                 fecha = request.POST["fecha"]
                 lugar = request.POST["lugar"]
                 objeto_social = request.POST["objeto_social"]
-                org_cop_acta = request.POST["org_cop_acta"]
-                noInstrumentoNotarial = request.POST["noInstrumentoNotarial"]
-                nombreNotario = request.POST["nombreNotario"]
-                noNotario = request.POST["noNotario"]
+                estatutosVigentes = request.POST["estatutosVigentes"]
                 nombreRepresentante = request.POST["nombreRepresentante"]
-                nombreSolicitud = request.POST["nombreSolicitud"]
+                poderNotarial = request.POST["poderNotarial"]
 
-            fechaRegistro = datetime.datetime.now()#Obtenemos la fecha actual
-            estatus = Departamento.objects.get(id=2)#Obtenemos el primer departamento al que debe pasar
-            #Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
-            if request.user.tipo_usuario == '1':
-                cct = request.POST["cct"]
-            else:
-                cct = None
             # Se generá la plantilla para inserción de solicitud
-            solicitud = Solicitud(cct=cct,nivel=nivel, modalidad=modalidad, opcion=opcion,
-                                salud=salud, customuser_id=customuser_id,
-                                fechaRegistro=fechaRegistro, estatus=estatus,
-                                noInstrumentoNotarial=noInstrumentoNotarial,
-                                nombreNotario=nombreNotario, noNotario=noNotario,
-                                nombreRepresentante=nombreRepresentante,
-                                nombreSolicitud=nombreSolicitud, ciclonum=ciclonum,ciclo= ciclo,
-                                otro=otro, duracion=duracion,nombre=nombre,apellidos=apellidos,
-                                libro_inscripcion=libro_inscripcion,lugar=lugar,
-                                objeto_social=objeto_social,org_cop_acta=org_cop_acta,
-                                identificacion=identificacion, org_cop_identificacion=org_cop_identificacion,
-                                folio_id=folio_id,dom_particular=dom_particular,celular=celular,
-                                curp_rfc=curp_rfc,email=email,fecha=fecha)
+            solicitud = Solicitud(fechaRegistro=fechaRegistro, estatus=estatus, cct=cct,
+                                  nivel=nivel, nivelSuperior=nivelSuperior, modalidad=modalidad,
+                                  opcion=opcion, salud=salud, customuser_id=customuser_id,
+                                  ciclonum=ciclonum, ciclo=ciclo, otro=otro, duracion=duracion,
+                                  identificacion=identificacion, folio_id=folio_id,
+                                  nomPerAut1=nomPerAut1, apMatPerAut1=apMatPerAut1, apPatPerAut1=apPatPerAut1, emailPerAut1=emailPerAut1, telPerAut1=telPerAut1,
+                                  nomPerAut2=nomPerAut2, apMatPerAut2=apMatPerAut2, apPatPerAut2=apPatPerAut2, emailPerAut2=emailPerAut2, telPerAut2=telPerAut2,
+                                  nomPerAut3=nomPerAut3, apMatPerAut3=apMatPerAut3, apPatPerAut3=apPatPerAut3, emailPerAut3=emailPerAut3, telPerAut3=telPerAut3,
+                                  nomPerAut4=nomPerAut4, apMatPerAut4=apMatPerAut4, apPatPerAut4=apPatPerAut4, emailPerAut4=emailPerAut4, telPerAut4=telPerAut4,
+                                  nomPerAut5=nomPerAut5, apMatPerAut5=apMatPerAut5, apPatPerAut5=apPatPerAut5, emailPerAut5=emailPerAut5, telPerAut5=telPerAut5,
+                                  nomPerAut6=nomPerAut6, apMatPerAut6=apMatPerAut6, apPatPerAut6=apPatPerAut6, emailPerAut6=emailPerAut6, telPerAut6=telPerAut6,
+                                  nomApLegal1=nomApLegal1, apMatApLegal1=apMatApLegal1, apPatApLegal1=apPatApLegal1, emailApLegal1=emailApLegal1, telApLegal1=telApLegal1, poderNotApLegal1=poderNotApLegal1,
+                                  nomApLegal2=nomApLegal2, apMatApLegal2=apMatApLegal2, apPatApLegal2=apPatApLegal2, emailApLegal2=emailApLegal2, telApLegal2=telApLegal2, poderNotApLegal2=poderNotApLegal2,
+                                  perPrograma=perPrograma, nombreSolicitud=nombreSolicitud, opcion1=opcion1,
+                                  opcion2=opcion2, opcion3=opcion3, horarioDias=horarioDias,
+                                  areaFormacion=areaFormacion, noInstrumentoNotarial=noInstrumentoNotarial,
+                                  libro_inscripcion=libro_inscripcion, nombreNotario=nombreNotario,
+                                  noNotario=noNotario, fecha=fecha,lugar=lugar,
+                                  objeto_social=objeto_social, estatutosVigentes=estatutosVigentes,
+                                  nombreRepresentante=nombreRepresentante, poderNotarial=poderNotarial)
             solicitud.save()#Guarda la solicitud
 
             if nivel == '1':#Si el nivel es uno, redirecciona a la URL para subir archivos de solicitudes de media superior

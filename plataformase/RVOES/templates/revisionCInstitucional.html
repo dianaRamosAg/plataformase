@@ -47,7 +47,7 @@
 
         {% for archivo in archivos %}
 
-        <div class="col-3 mt-1">
+        <!--div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="2_1" action="../comentarios/2_1/institucional">
                     {% csrf_token %}
@@ -64,8 +64,8 @@
                     {% endif %}
                 </form>
             </div>
-        </div>
-
+        </div-->
+        {% if solicitud.completado > 9 %}
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="2_2" action="../comentarios/2_2/institucional">
@@ -84,6 +84,7 @@
                 </form>
             </div>
         </div>
+        {% endif %}
 
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
@@ -266,7 +267,8 @@
                 <th>DICTAMEN PROTECCIÓN CIVIL</th>
                 <th>CONSTANCIA DE USO DE SUELO</th>
                 <th>DICTAMEN INIFE</th>
-                <th>FECHA DE PAGO DE DERECHOS</th>
+                {% if solicitud.completado > 9 %}
+                <th>FECHA DE PAGO DE DERECHOS</th>{% endif %}
             </tr>
             <tr class="text-center">
                 <td>{{ archivo.dictamen_estructural }} {{ archivo.fecha_estructural }}
@@ -279,7 +281,9 @@
                     {{ archivo.fecha_suelo }} Firmado por: {{ archivo.firma_suelo }}</td>
                 <td>{{ archivo.folio_inife }} {{ archivo.fecha_inife }} Firmado por:
                     {{ archivo.firma_inife }}</td>
-                <td>Recibo oficial: {{ archivo.folio_pago }} {{ archivo.fecha_pago }} ${{ archivo.monto_pago }}</td>
+                {% if solicitud.completado > 9 %}
+                <td>Recibo oficial: {{ archivo.folio_pago }}<br>{{ archivo.fecha_pago }}<br>${{ archivo.monto_pago }}</td>
+                {% endif %}
             </tr>
         </table>
 

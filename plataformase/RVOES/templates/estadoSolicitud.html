@@ -103,14 +103,14 @@
                                                 {% if element.completado == -1 %}
                                                     Rechazada
                                                 {% else %}
-                                                    En proceso de revisión por<br>el departamento {{element.estatus.nombre}}
+                                                    En proceso de revisión por<br>el departamento <strong>{{element.estatus.nombre}}</strong>
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if element.estatus.id >= 2 %}
+                                    {% if element.estatus.id > 2 %}
                                         {% if element.completado == 10 or element.completado == 11 %}
                                             <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
                                         {% endif %}
