@@ -162,58 +162,74 @@
         {% endfor %}
     </div>
 
+    <embed class="mt-4" src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+
+
+    <div class="m-3">
+    {% if solicitud.estatus_id == 1 %}
+        {% if solicitud.customuser.tipo_persona == '1' %}
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
+                <label class="custom-control-label" for="id_org_cop_identificacion">¿Presenta original y copia simple de identificación oficial?</label>
+            </div>
+        {% endif %}
+        {% if solicitud.customuser.tipo_persona == '2' %}
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="org_cop_acta" id="id_org_cop_acta">
+                <label class="custom-control-label" for="id_org_cop_acta">¿Presenta original y copia simple de su acta constitutiva y estatutos vigentes?</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
+                <label class="custom-control-label" for="id_org_cop_identificacion">¿Presenta original y copia simple del poder notarial vigente e identificación oficial de su representante legal?</label>
+        </div>
+        {% endif %}
+    {% endif %}
+    </div>
     <form method="post" action="../../../finProceso/{{ solicitud.id }}/">
-      {% csrf_token %}
-      {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
-
-      <div class="col-5 mt-2 mx-auto">
-          <div class="card-body border border-dark text-center">
-                    <p class="card-text" >Observaciones de la visita a la institución<br></p>
-                    <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
-          </div>
-      </div>
-      <div class="col mt-3 mb-3 text-center">
-          <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
-              {% if solicitud.estatus_id == 3 %}
-                  <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
-                  <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
-              {% endif %}
-            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
-      </div>
-
-      {% else %}
-
-      <div class="col mt-3 mb-3 text-center">
-          <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
-          {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
-              {% if comentarios == "" %}
-                  <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-              {% else %}
-                  {% if comentarioMostrado %}
-                      {% if comentarioNoMostrado %}
-                          <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                      {% else %}
-                          <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                      {% endif %}
-                  {% else %}
-                      <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                  {% endif %}
-              {% endif %}
-          {% endif %}
-
-          <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
-
-          <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
-          {% if solicitud.completado == 10 %}
-            {% if solicitud.estatus.id == 1 %}
-                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+        {% csrf_token %}
+        {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
+        <div class="col-5 mt-2 mx-auto">
+            <div class="card-body border border-dark text-center">
+                <p class="card-text" >Observaciones de la visita a la institución<br></p>
+                <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
+            </div>
+        </div>
+        <div class="col mt-3 mb-3 text-center">
+            <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+            {% if solicitud.estatus_id == 3 %}
+            <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
+            <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
             {% endif %}
-          {% endif %}
-          <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
-      </div>
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+        </div>
+        {% else %}
+        <div class="col mt-3 mb-3 text-center">
+            <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
+            {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
+                {% if comentarios == "" %}
+                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                {% else %}
+                    {% if comentarioMostrado %}
+                        {% if comentarioNoMostrado %}
+                        <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                        {% else %}
+                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                        {% endif %}
+                    {% else %}
+                    <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
 
-      {% endif %}
-
+            <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
+            {% if solicitud.completado == 10 %}
+                {% if solicitud.estatus.id == 1 %}
+                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+                {% endif %}
+            {% endif %}
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
+        </div>
+        {% endif %}
     </form>
 
 </div>

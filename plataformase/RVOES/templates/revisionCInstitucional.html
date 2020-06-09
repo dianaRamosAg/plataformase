@@ -47,7 +47,7 @@
 
         {% for archivo in archivos %}
 
-        <!--div class="col-3 mt-1">
+        <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="2_1" action="../comentarios/2_1/institucional">
                     {% csrf_token %}
@@ -64,7 +64,7 @@
                     {% endif %}
                 </form>
             </div>
-        </div-->
+        </div>
         {% if solicitud.completado > 9 %}
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
@@ -194,7 +194,7 @@
                     {% else %}
                     <p class="card-text">INIFE</p>
                     {% endif %}
-                    <p class="card-text">Licencia: {{ archivo.inife }}</p>
+                    <p class="card-text">Licencia: {{ archivo.folio_inife }}</p>
                     <textarea placeholder="Comentario..." id="inife" name="descripcion"></textarea>
                     <button onclick="mostrarPDF('{{ archivo.inife }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
@@ -290,6 +290,8 @@
         {% endfor %}
 
         <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+
+        <embed class="mt-4" src="{% url 'datosSolicitud' solicitud.id %}" type="" id="datosSolicitud" width="100%" height="600px" />
 
     </div>
 

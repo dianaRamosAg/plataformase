@@ -1092,6 +1092,10 @@ def actualizar2Fase(solicitud, user):
 
 # --------------------------------- Vistas de usuario para "Personal del departamento" ---------------------------------------------
 
+def datosSolicitud(request, id):
+    solicitud = Solicitud.objects.get(id=id)
+    return render(request, 'datosSolicitud.html', {'solicitud':solicitud})
+
 def administrador(request):
     """Muestra al usuario la pantalla principal correspondiente al personal departamento. En esta vista,
     el personal del departamento podrá observar una vista rápida de como va el proceso de cada solicitud de
