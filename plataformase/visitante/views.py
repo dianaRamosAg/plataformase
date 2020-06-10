@@ -137,25 +137,29 @@ def regVisit(request):
             inst_nombredirector = request.POST["nombre_director"]
             sector = request.POST["sector"]
             nivel_educativo = request.POST["nivel_educativo"]
-            modalidad = request.POST["modalidad"]
-            visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
+            if nivel_educativo == 'Media Superior':
+                modalidad = request.POST["modalidad"]
+            else:
+                modalidad = "No aplica"
+        else:
+            inst_cct = None
+            inst_nombredirector = None
+            sector = None
+            nivel_educativo = None
+            modalidad = None
+           
+
+        visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
                             email=email, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular,
                             tipo_usuario=tipo_usuario,tipo_persona=tipo_persona,
                             inst_cct=inst_cct, inst_nombredirector=inst_nombredirector,
                             sector=sector, nivel_educativo=nivel_educativo,modalidad=modalidad)
-        # Si es tipo de usuario particular guardamos con los datos vacicos
-        else:
-            visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
-                            email=email, curp_rfc=curp_rfc, calle=calle,
-                            noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
-                            municipio=municipio, colonia=colonia, celular=celular,
-                            tipo_usuario=tipo_usuario,tipo_persona=tipo_persona)
+        
         visit.save()
-        return redirect('solicitudenviada') #mandar pagina con mensaje de esperar
-    # else:
-    #     return redirect('solicitudcuenta')
+    return redirect('solicitudenviada') #mandar pagina con mensaje de esperar
+
 
 def modal(request):
     return render(request,'modal.html')
