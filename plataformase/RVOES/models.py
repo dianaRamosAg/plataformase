@@ -13,6 +13,7 @@ class Solicitud(models.Model):
         3 = Academica, 4 = Media Superior, 9 = Petición de pago, 10 = Documentos recibidos, 11 = Terminó revisión digital"""
     estatus = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='1')
     """estatus: Define el departamnto en el que se encuentra"""
+    noOficioAdmision = models.TextField(null=True, blank=True, default=None)#Número de oficio de admisión de trámite
 
     cct = models.TextField(null=True, blank=True)#Clave de Centro de Trabajo
     nivel = models.CharField(max_length=1)#Nivel Educativo (1: Media superior, 2: Superior)
@@ -244,6 +245,7 @@ class Comentarios(models.Model):
     mostrado = models.CharField(max_length=1, blank=True, null=True,)#Identifica si el comentario ya se mostro a la institución (0:no, 1:sí)
     archivo = models.TextField(blank=True, null=True,)#Identifica a que archivo le corresponde el comentario (ver usuarios/views.py -> terminarSubArchivos)
     departamento = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='1')#Identifica que departamento realizó el comentario
+    atendida = models.BooleanField(default=False)
 
 class Actividades(models.Model):
     usuario = models.ForeignKey("login.CustomUser", on_delete=models.CASCADE)#Usuario que realizó la actividad

@@ -34,7 +34,8 @@
                             <h4 class="">Solo son validos los archivos PDF</h4>
                         </div>
 
-                        {% if "1_1" in comentarios %}
+                        {% for element in coment %}
+                        {% if "1_1" in comentarios and element.archivo == "1_1" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" >Formato de solicitud</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
@@ -43,7 +44,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_1" %}
+                                        {% if element.archivo == "1_1" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -53,7 +54,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_2" in comentarios %}
+                        {% if "1_2" in comentarios and element.archivo == "1_2" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" >Recibo de pago</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
@@ -83,7 +84,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_2" %}
+                                        {% if element.archivo == "1_2" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -93,7 +94,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_3" in comentarios %}
+                        {% if "1_3" in comentarios and element.archivo == "1_3" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_3">
                             <label class="font-weight-bold" >Identificación oficial con fotografía</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
@@ -102,7 +103,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_3" %}
+                                        {% if element.archivo == "1_3" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -112,7 +113,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_4" in comentarios %}
+                        {% if "1_4" in comentarios and element.archivo == "1_4" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="id_4">
                             <label class="font-weight-bold" >Manifiesto de compromiso  de incorporar al personal docente</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="perDocente" id="id_perDocente">
@@ -121,7 +122,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_4" %}
+                                        {% if element.archivo == "1_4" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -131,7 +132,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_5" in comentarios %}
+                        {% if "1_5" in comentarios and element.archivo == "1_5" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_5">
                             <label class="font-weight-bold" >Instalaciones</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="instalaciones" id="id_instalaciones">
@@ -249,7 +250,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_5" %}
+                                        {% if element.archivo == "1_5" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -259,7 +260,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_6" in comentarios %}
+                        {% if "1_6" in comentarios and element.archivo == "1_6" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_6">
                             <label class="card-text" >Tecnología y equipamiento para la opción educativa virtual</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="equipamiento" id="id_equipamiento">
@@ -268,7 +269,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_6" %}
+                                        {% if element.archivo == "1_6" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -278,7 +279,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_7" in comentarios %}
+                        {% if "1_7" in comentarios and element.archivo == "1_7" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_7">
                             <label class="font-weight-bold"  >Planes y Programas de Estudio<br></label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="progEstuio" id="id_progEstuio">
@@ -287,7 +288,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_7" %}
+                                        {% if element.archivo == "1_7" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -297,7 +298,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_8" in comentarios %}
+                        {% if "1_8" in comentarios and element.archivo == "1_8" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="id_8">
                             <label class="font-weight-bold" >Opinión favorable de CIFRHS</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
@@ -306,7 +307,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_8" %}
+                                        {% if element.archivo == "1_8" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -316,7 +317,7 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_9" in comentarios %}
+                        {% if "1_9" in comentarios and element.archivo == "1_9" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="id_9">
                             <label class="font-weight-bold" >Carta de intención</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="carta" id="id_carta">
@@ -325,7 +326,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_9" %}
+                                        {% if element.archivo == "1_9" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -334,7 +335,7 @@
                             </div>
                         </div>
                         {% endif %}
-
+                        {% endfor %}
                         <div class="form-group custom-file p-3 m-3 text-center">
                             <button class="btn btn-secondary">Actualizar archivos</button>
                         </div>

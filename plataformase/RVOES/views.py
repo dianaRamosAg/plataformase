@@ -692,53 +692,54 @@ def terminarSubArchivos(request, usuario, solicitud):
         if request.method == 'POST':#Si la solicitud es con el método POST
             request.POST._mutable = True#Permitimos la edición de lo que se recibe por el método POST
             IsLoSolicitud = Solicitud.objects.get(id=solicitud)#Solicitud que recibirá la actualización de documentos.
-            Coment = Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus)#Obtenemos los comentarios correspondientes a la solicitud y dadas por su departamento actual.
+            Comenta = Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus)#Obtenemos los comentarios correspondientes a la solicitud y dadas por su departamento actual.
             comentario = ""#Inicializa variable "comentario" en vacío.
-            for element in Coment:#Ciclo que recorre todos los registros que se tienen en la variable "Coment"
+            for element in Comenta:#Ciclo que recorre todos los registros que se tienen en la variable "Coment"
                 comentario = comentario + str(element.archivo)#Concatena cuales son los archivos que tienen comentarios de forma "2_12_22_3", donde cada archivo seria {2_1, 2_2, 2_3}
             if IsLoSolicitud.nivel == '1':#Si la solicitud es de nivel media superior
                 medSup = CMedSuperior.objects.get(id_solicitud=solicitud)#Obtenemos la carpeta de media superior de la solicitud correspondiente.
-                if not ("1_1" in comentario):#Si el archivo de solicitud (1_1) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
-                    request.FILES["solicitud"] = medSup.solicitud
-                if not ("1_2" in comentario):#Si el archivo de solicitud (1_2) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
-                    request.FILES["pago"] = medSup.pago
-                    request.POST["folio_pago"] = medSup.folio_pago
-                    request.POST["monto_pago"] = medSup.monto_pago
-                    request.POST["fecha_pago"] = medSup.fecha_pago
-                if not ("1_3" in comentario):
-                    request.FILES["identificacion"] = medSup.identificacion
-                if not ("1_4" in comentario):
-                    request.FILES["perDocente"] = medSup.perDocente
-                if not ("1_5" in comentario):
-                    request.FILES["instalaciones"] = medSup.instalaciones
-                    request.POST["dictamen_suelo"] = medSup.dictamen_suelo
-                    request.POST["expediente_suelo"] = medSup.expediente_suelo
-                    request.POST["fecha_suelo"] = medSup.fecha_suelo
-                    request.POST["firma_suelo"] = medSup.firma_suelo
-                    request.POST["dictamen_estructural"] = medSup.dictamen_estructural
-                    request.POST["fecha_estructural"] = medSup.fecha_estructural
-                    request.POST["arqui_dictamen_estructural"] = medSup.arqui_dictamen_estructural
-                    request.POST["noCedula_dictamen_estructural"] = medSup.noCedula_dictamen_estructural
-                    request.POST["DRO_dictamen_estructural"] = medSup.DRO_dictamen_estructural
-                    request.POST["dictamen_proteccion"] = medSup.dictamen_proteccion
-                    request.POST["fecha_dictamen_proteccion"] = medSup.fecha_dictamen_proteccion
-                    request.POST["firma_dictamen_proteccion"] = medSup.firma_dictamen_proteccion
-                    request.POST["folio_inife"] = medSup.folio_inife
-                    request.POST["fecha_inife"] = medSup.fecha_inife
-                    request.POST["firma_inife"] = medSup.firma_inife
-                if not ("1_6" in comentario):
-                    request.FILES["equipamiento"] = medSup.equipamiento
-                if not ("1_7" in comentario):#Si el archivo de solicitud (1_7) no tiene comentarios
-                    if medSup.progEstuio == None:#Si en la carpeta de media superior no tiene un documento de planes y programas de estudio
-                        progEstuio = None#Se deja igual, ya que si no tiene comentarios quiere decir que no hace falta guardar este documento.
-                    else:#Si en la carpeta de media superior tiene un documento de planes y programas de estudio
-                        progEstuio = medSup.progEstuio#Se guarda el archivo que se tenía antes en la carpeta de media superior
-                else:#Si el archivo de solicitud (1_7) sí tiene comentarios
-                    progEstuio = request.FILES["progEstuio"]#Se guarda el documento que viene desde el request
-                if not ("1_8" in comentario):
-                    request.FILES["cifrhs"] = medSup.cifrhs
-                if not ("1_9" in comentario):
-                    request.FILES["carta"] = medSup.carta
+                for Coment in Comenta:
+                    if not ("1_1" in comentario and Coment.archivo == "1_1" and Coment.atendida == False):#Si el archivo de solicitud (1_1) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
+                        request.FILES["solicitud"] = medSup.solicitud
+                    if not ("1_2" in comentario and Coment.archivo == "1_2" and Coment.atendida == False):#Si el archivo de solicitud (1_2) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
+                        request.FILES["pago"] = medSup.pago
+                        request.POST["folio_pago"] = medSup.folio_pago
+                        request.POST["monto_pago"] = medSup.monto_pago
+                        request.POST["fecha_pago"] = medSup.fecha_pago
+                    if not ("1_3" in comentario and Coment.archivo == "1_3" and Coment.atendida == False):
+                        request.FILES["identificacion"] = medSup.identificacion
+                    if not ("1_4" in comentario and Coment.archivo == "1_4" and Coment.atendida == False):
+                        request.FILES["perDocente"] = medSup.perDocente
+                    if not ("1_5" in comentario and Coment.archivo == "1_5" and Coment.atendida == False):
+                        request.FILES["instalaciones"] = medSup.instalaciones
+                        request.POST["dictamen_suelo"] = medSup.dictamen_suelo
+                        request.POST["expediente_suelo"] = medSup.expediente_suelo
+                        request.POST["fecha_suelo"] = medSup.fecha_suelo
+                        request.POST["firma_suelo"] = medSup.firma_suelo
+                        request.POST["dictamen_estructural"] = medSup.dictamen_estructural
+                        request.POST["fecha_estructural"] = medSup.fecha_estructural
+                        request.POST["arqui_dictamen_estructural"] = medSup.arqui_dictamen_estructural
+                        request.POST["noCedula_dictamen_estructural"] = medSup.noCedula_dictamen_estructural
+                        request.POST["DRO_dictamen_estructural"] = medSup.DRO_dictamen_estructural
+                        request.POST["dictamen_proteccion"] = medSup.dictamen_proteccion
+                        request.POST["fecha_dictamen_proteccion"] = medSup.fecha_dictamen_proteccion
+                        request.POST["firma_dictamen_proteccion"] = medSup.firma_dictamen_proteccion
+                        request.POST["folio_inife"] = medSup.folio_inife
+                        request.POST["fecha_inife"] = medSup.fecha_inife
+                        request.POST["firma_inife"] = medSup.firma_inife
+                    if not ("1_6" in comentario and Coment.archivo == "1_6" and Coment.atendida == False):
+                        request.FILES["equipamiento"] = medSup.equipamiento
+                    if not ("1_7" in comentario and Coment.archivo == "1_7" and Coment.atendida == False):#Si el archivo de solicitud (1_7) no tiene comentarios
+                        if medSup.progEstuio == None:#Si en la carpeta de media superior no tiene un documento de planes y programas de estudio
+                            progEstuio = None#Se deja igual, ya que si no tiene comentarios quiere decir que no hace falta guardar este documento.
+                        else:#Si en la carpeta de media superior tiene un documento de planes y programas de estudio
+                            progEstuio = medSup.progEstuio#Se guarda el archivo que se tenía antes en la carpeta de media superior
+                    else:#Si el archivo de solicitud (1_7) sí tiene comentarios
+                        progEstuio = request.FILES["progEstuio"]#Se guarda el documento que viene desde el request
+                    if not ("1_8" in comentario and Coment.archivo == "1_8" and Coment.atendida == False):
+                        request.FILES["cifrhs"] = medSup.cifrhs
+                    if not ("1_9" in comentario and Coment.archivo == "1_9" and Coment.atendida == False):
+                        request.FILES["carta"] = medSup.carta
                 #Se crean variables con los valores actualizados para crear un nuevo registro y borrar el anterior
                 sol = request.FILES["solicitud"]
                 pago = request.FILES["pago"]
@@ -792,46 +793,47 @@ def terminarSubArchivos(request, usuario, solicitud):
                         "2_7" in comentario) or ("2_8" in comentario) or ("2_9" in comentario) or (
                         "2_10" in comentario) or ("2_11" in comentario):
                     inst = CInstitucional.objects.get(id_solicitud=solicitud)
-                    if not ("2_1" in comentario):
-                        request.FILES["solicitud"] = inst.solicitud.url
-                    if not ("2_2" in comentario):
-                        request.FILES["pago"] = inst.pago.url
-                        request.POST["folio_pago"] = inst.folio_pago
-                        request.POST["monto_pago"] = inst.monto_pago
-                        request.POST["fecha_pago"] = inst.fecha_pago
-                    if not ("2_3" in comentario):
-                        request.FILES["acredita_personalidad"] = inst.acredita_personalidad.url
-                    if not ("2_4" in comentario):
-                        request.FILES["acredita_inmueble"] = inst.acredita_inmueble.url
-                    if not ("2_5" in comentario):
-                        request.FILES["licencia_suelo"] = inst.licencia_suelo.url
-                        request.POST["dictamen_suelo"] = inst.dictamen_suelo
-                        request.POST["expediente_suelo"] = inst.expediente_suelo
-                        request.POST["fecha_suelo"] = inst.fecha_suelo
-                        request.POST["firma_suelo"] = inst.firma_suelo
-                    if not ("2_6" in comentario):
-                        request.FILES["constancia_estructural"] = inst.constancia_estructural.url
-                        request.POST["dictamen_estructural"] = inst.dictamen_estructural
-                        request.POST["fecha_estructural"] = inst.fecha_estructural
-                        request.POST["arqui_dictamen_estructural"] = inst.arqui_dictamen_estructural
-                        request.POST["noCedula_dictamen_estructural"] = inst.noCedula_dictamen_estructural
-                        request.POST["DRO_dictamen_estructural"] = inst.DRO_dictamen_estructural
-                    if not ("2_7" in comentario):
-                        request.FILES["constancia_proteccion"] = inst.constancia_proteccion.url
-                        request.POST["dictamen_proteccion"] = inst.dictamen_proteccion
-                        request.POST["fecha_dictamen_proteccion"] = inst.fecha_dictamen_proteccion
-                        request.POST["firma_dictamen_proteccion"] = inst.firma_dictamen_proteccion
-                    if not ("2_8" in comentario):
-                        request.FILES["inife"] = inst.inife.url
-                        request.POST["folio_inife"] = inst.folio_inife
-                        request.POST["fecha_inife"] = inst.fecha_inife
-                        request.POST["firma_inife"] = inst.firma_inife
-                    if not ("2_9" in comentario):
-                        request.FILES["des_instalacion"] = inst.des_instalacion.url
-                    if not ("2_10" in comentario):
-                        request.FILES["planos"] = inst.planos.url
-                    if not ("2_11" in comentario):
-                        request.FILES["biblio"] = inst.biblio.url
+                    for Coment in Comenta:
+                        if not ("2_1" in comentario and Coment.archivo == "2_1" and Coment.atendida == False):
+                            request.FILES["solicitud"] = inst.solicitud.url
+                        if not ("2_2" in comentario and Coment.archivo == "2_2" and Coment.atendida == False):
+                            request.FILES["pago"] = inst.pago.url
+                            request.POST["folio_pago"] = inst.folio_pago
+                            request.POST["monto_pago"] = inst.monto_pago
+                            request.POST["fecha_pago"] = inst.fecha_pago
+                        if not ("2_3" in comentario and Coment.archivo == "2_3" and Coment.atendida == False):
+                            request.FILES["acredita_personalidad"] = inst.acredita_personalidad.url
+                        if not ("2_4" in comentario and Coment.archivo == "2_4" and Coment.atendida == False):
+                            request.FILES["acredita_inmueble"] = inst.acredita_inmueble.url
+                        if not ("2_5" in comentario and Coment.archivo == "2_5" and Coment.atendida == False):
+                            request.FILES["licencia_suelo"] = inst.licencia_suelo.url
+                            request.POST["dictamen_suelo"] = inst.dictamen_suelo
+                            request.POST["expediente_suelo"] = inst.expediente_suelo
+                            request.POST["fecha_suelo"] = inst.fecha_suelo
+                            request.POST["firma_suelo"] = inst.firma_suelo
+                        if not ("2_6" in comentario and Coment.archivo == "2_6" and Coment.atendida == False):
+                            request.FILES["constancia_estructural"] = inst.constancia_estructural.url
+                            request.POST["dictamen_estructural"] = inst.dictamen_estructural
+                            request.POST["fecha_estructural"] = inst.fecha_estructural
+                            request.POST["arqui_dictamen_estructural"] = inst.arqui_dictamen_estructural
+                            request.POST["noCedula_dictamen_estructural"] = inst.noCedula_dictamen_estructural
+                            request.POST["DRO_dictamen_estructural"] = inst.DRO_dictamen_estructural
+                        if not ("2_7" in comentario and Coment.archivo == "2_7" and Coment.atendida == False):
+                            request.FILES["constancia_proteccion"] = inst.constancia_proteccion.url
+                            request.POST["dictamen_proteccion"] = inst.dictamen_proteccion
+                            request.POST["fecha_dictamen_proteccion"] = inst.fecha_dictamen_proteccion
+                            request.POST["firma_dictamen_proteccion"] = inst.firma_dictamen_proteccion
+                        if not ("2_8" in comentario and Coment.archivo == "2_8" and Coment.atendida == False):
+                            request.FILES["inife"] = inst.inife.url
+                            request.POST["folio_inife"] = inst.folio_inife
+                            request.POST["fecha_inife"] = inst.fecha_inife
+                            request.POST["firma_inife"] = inst.firma_inife
+                        if not ("2_9" in comentario and Coment.archivo == "2_9" and Coment.atendida == False):
+                            request.FILES["des_instalacion"] = inst.des_instalacion.url
+                        if not ("2_10" in comentario and Coment.archivo == "2_10" and Coment.atendida == False):
+                            request.FILES["planos"] = inst.planos.url
+                        if not ("2_11" in comentario and Coment.archivo == "2_11" and Coment.atendida == False):
+                            request.FILES["biblio"] = inst.biblio.url
                     sol = request.FILES["solicitud"]
                     pago = request.FILES["pago"]
                     folio_pago = request.POST["folio_pago"]
@@ -888,35 +890,36 @@ def terminarSubArchivos(request, usuario, solicitud):
                         "3_4" in comentario) or ("3_5" in comentario) or ("3_6" in comentario) or (
                         "3_7" in comentario):
                     curr = CCurricular.objects.get(id_solicitud=solicitud)
-                    if not ("3_1" in comentario):
-                        request.FILES["estudio"] = curr.estudio.url
-                    if not ("3_2" in comentario):
-                        request.FILES["plan"] = curr.plan.url
-                    if not ("3_3" in comentario):
-                        request.FILES["mapa"] = curr.mapa.url
-                    if not ("3_4" in comentario):
-                        request.FILES["programa"] = curr.programa.url
-                    if not ("3_5" in comentario):
-                        if curr.metodologia == None:
-                            metodologia = None
+                    for Coment in Comenta:
+                        if not ("3_1" in comentario and Coment.archivo == "3_1" and Coment.atendida == False):
+                            request.FILES["estudio"] = curr.estudio.url
+                        if not ("3_2" in comentario and Coment.archivo == "3_2" and Coment.atendida == False):
+                            request.FILES["plan"] = curr.plan.url
+                        if not ("3_3" in comentario and Coment.archivo == "3_3" and Coment.atendida == False):
+                            request.FILES["mapa"] = curr.mapa.url
+                        if not ("3_4" in comentario and Coment.archivo == "3_4" and Coment.atendida == False):
+                            request.FILES["programa"] = curr.programa.url
+                        if not ("3_5" in comentario and Coment.archivo == "3_5" and Coment.atendida == False):
+                            if curr.metodologia == None:
+                                metodologia = None
+                            else:
+                                metodologia = curr.metodologia
                         else:
-                            metodologia = curr.metodologia
-                    else:
-                        metodologia = request.FILES["metodologia"]
-                    if not ("3_6" in comentario):
-                        if curr.cifrhs == None:
-                            cifrhs = None
+                            metodologia = request.FILES["metodologia"]
+                        if not ("3_6" in comentario and Coment.archivo == "3_6" and Coment.atendida == False):
+                            if curr.cifrhs == None:
+                                cifrhs = None
+                            else:
+                                cifrhs = curr.cifrhs
                         else:
-                            cifrhs = curr.cifrhs
-                    else:
-                        cifrhs = request.FILES["cifrhs"]
-                    if not ("3_7" in comentario):
-                        if curr.carta == None:
-                            carta = None
+                            cifrhs = request.FILES["cifrhs"]
+                        if not ("3_7" in comentario and Coment.archivo == "3_7" and Coment.atendida == False):
+                            if curr.carta == None:
+                                carta = None
+                            else:
+                                carta = curr.carta
                         else:
-                            carta = curr.carta
-                    else:
-                        carta = request.FILES["carta"]
+                            carta = request.FILES["carta"]
                     estudio = request.FILES["estudio"]
                     plan = request.FILES["plan"]
                     mapa = request.FILES["mapa"]
@@ -931,18 +934,19 @@ def terminarSubArchivos(request, usuario, solicitud):
                 if ("4_1" in comentario) or ("4_2" in comentario) or ("4_3" in comentario) or (
                         "4_4" in comentario) or ("4_5" in comentario) or ("4_6" in comentario):
                     acad = CAcademica.objects.get(id_solicitud=solicitud)
-                    if not ("4_1" in comentario):
-                        request.FILES["rec_bibliograficos"] = acad.rec_bibliograficos.url
-                    if not ("4_2" in comentario):
-                        request.FILES["rec_didacticos"] = acad.rec_didacticos.url
-                    if not ("4_3" in comentario):
-                        request.FILES["talleres"] = acad.talleres.url
-                    if not ("4_4" in comentario):
-                        request.FILES["apoyo_informatico"] = acad.apoyo_informatico.url
-                    if not ("4_5" in comentario):
-                        request.FILES["apoyo_comunicaciones"] = acad.apoyo_comunicaciones.url
-                    if not ("4_6" in comentario):
-                        request.FILES["personal"] = acad.personal.url
+                    for Coment in Comenta:
+                        if not ("4_1" in comentario and Coment.archivo == "4_1" and Coment.atendida == False):
+                            request.FILES["rec_bibliograficos"] = acad.rec_bibliograficos.url
+                        if not ("4_2" in comentario and Coment.archivo == "4_2" and Coment.atendida == False):
+                            request.FILES["rec_didacticos"] = acad.rec_didacticos.url
+                        if not ("4_3" in comentario and Coment.archivo == "4_3" and Coment.atendida == False):
+                            request.FILES["talleres"] = acad.talleres.url
+                        if not ("4_4" in comentario and Coment.archivo == "4_4" and Coment.atendida == False):
+                            request.FILES["apoyo_informatico"] = acad.apoyo_informatico.url
+                        if not ("4_5" in comentario and Coment.archivo == "4_5" and Coment.atendida == False):
+                            request.FILES["apoyo_comunicaciones"] = acad.apoyo_comunicaciones.url
+                        if not ("4_6" in comentario and Coment.archivo == "4_6" and Coment.atendida == False):
+                            request.FILES["personal"] = acad.personal.url
                     rec_bibliograficos = request.FILES["rec_bibliograficos"]
                     rec_didacticos = request.FILES["rec_didacticos"]
                     talleres = request.FILES["talleres"]
@@ -957,14 +961,16 @@ def terminarSubArchivos(request, usuario, solicitud):
                                         personal=personal)
                     newAcad.save()
             import datetime
-            Solicitud.objects.filter(id=solicitud).update(comentario='2')#Actualiza el campo comentario de la solicitud a 2, para tener referencia de que la solicitud ya ha pasado por el proceso de actualización de documentos, ya que solo puede actualizar una vez los archivos por departamento.
+            #Solicitud.objects.filter(id=solicitud).update(comentario='2')#Actualiza el campo comentario de la solicitud a 2, para tener referencia de que la solicitud ya ha pasado por el proceso de actualización de documentos, ya que solo puede actualizar una vez los archivos por departamento.
+            Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus).update(atendida=True)
+            Solicitud.objects.filter(id=solicitud).update(comentario='0') # Actualiza el campo comentario de la solicitud a 0, para tener referencia de que la solicitud ya ha pasado por el proceso de actualización de documentos.
             usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]#Obtiene el ID del usuario correspondiente a la solicitud (Creo que también se puede borrar y utilizar el que se cibe de parametro).
             notificacionU = Notificacion(solicitud_id=solicitud,
                                         descripcion="Subiste nuevamente los archivos requeridos.",
                                         leida='0',
                                         fechaNotificacion=datetime.datetime.now(),
                                         tipo_notificacion='H',
-                                        usuario_id=usuario)#Crea plantilla de registro de notificación para la institución.
+                                        usuario_id=usuario) # Crea plantilla de registro de notificación para la institución.
             notificacionU.save()#Guarda el registro de la notificación para la institución.
             Estatus = Solicitud.objects.values_list("estatus").get(id=solicitud)[0]#Se obtiene en que departamento se encuentra dicha solicitud.
             JefeSigDept = CustomUser.objects.values_list('id').get(jefe='1', departamento_id=Estatus)[0]#Extrae el id del jefe del área en que está la solicitud
@@ -1784,7 +1790,7 @@ def historialActividades(request):
         return redirect('perfil')
 
 def entregoDocumentosFisicos(request, solicitud):
-    """Define que la institución ya entregó los documentos en físico al departamento de control escolar.
+    """Define que la institución ya entregó los documentos en físico a los departamentos.
 
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
@@ -1802,13 +1808,17 @@ def entregoDocumentosFisicos(request, solicitud):
         NombreDepartamento = Departamento.objects.values_list('nombre').get(id=estatusSolicitud)[0]
         #Inicializamos la variable para establecer el siguiente departamento que revisará la solicitud.
         siguienteDepartamento = 0
-        #Si la solicitud se encuentra en el departamento Dirección y es de media superior
-        if (estatusSolicitud == 2 and nivelSolicitud == '1'):
-            #Establecemos que el siguiente departamento a revisar será Media superior
-            siguienteDepartamento = 4
-        else:
-            #La solicitud pasa al siguiente departamento en lista (Control escolar->Dirección->Superior)
-            siguienteDepartamento = estatusSolicitud + 1
+        #Si la solicitud se encuentra en el departamento Dirección
+        if estatusSolicitud == 2:
+            #Guardamos el número de oficio de admisión de trámite
+            Solicitud.objects.filter(id=solicitud).update(noOficioAdmision=request.POST["noOficioAdmision"])
+            #Si la solicitud se encuentra en el departamento Dirección y es de media superior
+            if nivelSolicitud == '1':
+                #Establecemos que el siguiente departamento a revisar será Media superior
+                siguienteDepartamento = 4
+            else:
+                #La solicitud pasa al siguiente departamento en lista (Control escolar->Dirección->Superior)
+                siguienteDepartamento = estatusSolicitud + 1
         #Actualizamos que la solicitud ahora le corresponde la revisión al departamento de dirección.
         Solicitud.objects.filter(id=solicitud).update(estatus=siguienteDepartamento)
         #Obtiene el ID de la institución a la que le pertenece la solicitud.

@@ -56,7 +56,9 @@
                     {% else %}
                     <p class="card-text" >Estudio de factibilidad</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="estudio" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.estudio }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -75,7 +77,9 @@
                     {% else %}
                     <p class="card-text" >Plan de estudios</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="plan" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.plan }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -94,7 +98,9 @@
                     {% else %}
                     <p class="card-text" >Mapa curricular</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="mapa" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.mapa }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -113,7 +119,9 @@
                     {% else %}
                     <p class="card-text" >Programas de estudios</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="programa" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.programa }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -133,7 +141,9 @@
                     {% else %}
                     <p class="card-text" >Metodología de modalidad</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="metodologia" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.metodologia }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -155,7 +165,9 @@
                     {% else %}
                     <p class="card-text" >Opinión favorable de CIFRHS</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="cifrhs" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.cifrhs }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -166,7 +178,6 @@
         {% endif %}
 
         {% if archivo.carta %}
-
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="3_7" action="../comentarios/3_7/curricular">
@@ -177,7 +188,9 @@
                     {% else %}
                     <p class="card-text" >Carta de intención</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="carta" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.carta }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -189,7 +202,7 @@
 
         {% endfor %}
 
-        <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
+        <embed class="mt-4" src="" type="application/pdf" id="pdf" width="100%" height="600px" />
 
         {% if solicitud.estatus == 3 or solicitud.estatus == 4 %}
         <embed class="mt-4" src="{% url 'datosSolicitud' solicitud.id %}" type="" id="datosSolicitud" width="100%" height="600px" />

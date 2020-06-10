@@ -73,7 +73,7 @@
 <body>
     <div class="cuerpo">
         <div class="fecha">
-            <p><strong>Oficio:</strong> {{ solicitud.id }}<br>
+            <p><strong>Oficio:</strong> {{ solicitud.noOficioAdmision }}<br>
                 Tepic, Nayarit, a {{ fecha }}<br>
                 <strong>Asunto:</strong> Revisión de Planes y Programas de Estudio
             </p>
@@ -97,7 +97,7 @@
                         electrónico para recibir notificaciones <u style="color:blue">{{ solicitud.customuser.email }}</u> a la solicitud de Reconocimiento de
                         Validez Oficial (RVOE) de <strong>{{ solicitud.nombreSolicitud }}, MODALIDAD {{ mod }}, ALUMNADO
                         {{ opc }},</strong> recibida a través de ventanilla única el {{ solicitud.fechaRegistro }} y remitida a esta Dirección el
-                        <strong>{{ fecha }}</strong> con Oficio No. {{ solicitud.id }} del Departamento de Control Escolar y Estadística, para
+                        <strong>{{ fecha }}</strong> con Oficio No. {{ solicitud.noOficioAdmision }} del Departamento de Control Escolar y Estadística, para
                         la revisión de las formalidades jurídicas, mismas que detallo a continuación:
             </p>
         </div>
