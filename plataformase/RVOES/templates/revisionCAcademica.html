@@ -236,8 +236,15 @@
             <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
             {% if solicitud.completado == 10 %}
                 {% if solicitud.estatus.id == 1 %}
-                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+                
+        {% if solicitud.customuser.tipo_persona == '1' %}
+        <a class="btn btn-secondary" href="../entregoDocumentos" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, la casilla de original y copia de Identificación no esta marcada, en caso de no haberlas entregado no puede continuar.\nSi fueron entregadas, favor de marcar la casilla.');}" >Entregó documentos</a>
                 {% endif %}
+                {% if solicitud.customuser.tipo_persona == '2' %}
+                <a class="btn btn-secondary" href="../entregoDocumentos" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');}" >Entregó documentos</a>
+                        {% endif %}
+                     
+                  {% endif %}
             {% endif %}
             <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
         </div>
@@ -259,6 +266,17 @@
       document.getElementById('finProceso2').style.display='inline';
     }
   }
+
+//---------------------------
+function org(evt) {
+    identif = document.getElementById('id_org_cop_identificacion');
+    if(identif.checked == true){
+        console.log("checked")
+        evt.preventDefault();
+    }
+
+}
+
 </script>
 {% endif %}
 
