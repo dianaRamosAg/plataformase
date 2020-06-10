@@ -274,11 +274,13 @@
 
                             <h6>Apoderados legales</h6>
                             <div class="custom-control custom-switch">
-                                <input type="checkbox" checked class="custom-control-input" id="customSwitch1">
+                            <input type="checkbox" checked class="custom-control-input" id="customSwitch1" onclick="if (document.getElementById('customSwitch1').checked == false) 
+                            {document.getElementById('apoderados_leg').style.display = 'inline';} else { document.getElementById('apoderados_leg').style.display = 'none';}">
+
                                 <label class="custom-control-label" for="customSwitch1">¿Firma el representante legal?</label>
                             </div>
 
-                            <div>
+                            <div id="apoderados_leg" style="display: none;">
                                 <table class="table table-borderless">
                                     <tbody>
                                     <tr class="text-center">
