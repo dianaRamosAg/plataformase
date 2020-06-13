@@ -346,28 +346,39 @@
     {% else %}
 
     <div class="col mt-3 mb-3 text-center">
-          <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
-        {% if noHaPasadoPorTodasLasAreas and estadoComentario == '0' or estadoComentario == '2' %}
-            {% if comentarios == "" %}
-                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-            {% else %}
-                {% if comentarioMostrado %}
-                    {% if comentarioNoMostrado %}
-                        <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
-                    {% else %}
-                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
-                    {% endif %}
+        <form method="post" id="id_form" action="">
+            {% csrf_token %}
+            {% if solicitud.completado == 10 and solicitud.estatus.id == 2 %}
+            <div class="m">
+                <label>Número de oficio de admisión de trámite:</label>
+                <input class="form-control d-inline col-2" required type="text" name="noOficioAdmision" id="id_noOficioAdmision">
+            </div>
+            <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+            {% if noHaPasadoPorTodasLasAreas and estadoComentario == '0' or estadoComentario == '2' %}
+                {% if comentarios == "" %}
+                    <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
                 {% else %}
-                    <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                    {% if comentarioMostrado %}
+                        {% if comentarioNoMostrado %}
+                            <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                        {% else %}
+                            <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                        {% endif %}
+                    {% else %}
+                        <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                    {% endif %}
                 {% endif %}
             {% endif %}
-        {% endif %}
-        {% if solicitud.completado == 10 %}
-            {% if solicitud.estatus.id == 1 or solicitud.estatus.id == 2 %}
-                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+            {% if solicitud.completado == 10 %}
+                {% if solicitud.estatus.id == 1 %}
+                    <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+                {% endif %}
+                {% if solicitud.estatus.id == 2 %}
+                    <button type="submit" onclick="entregoDocumentos()" class="btn btn-secondary" id="id_entregoDocumentos">Entregó documentos</button>
+                {% endif %}
             {% endif %}
-        {% endif %}
-          <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+        </form>
     </div>
 
     {% endif %}
@@ -378,6 +389,15 @@
 
 {% if solicitud.estatus_id == 4 and solicitud.completado == 10 %}
 <script type="text/javascript">
+    function entregoDocumentos(){
+        if(document.getElementById("id_noOficioAdmision").value == ''){
+            alert('Coloque un número de oficio de admisión de trámite');
+            document.getElementById("id_entregoDocumentos").href = "#id_noOficioAdmision";
+        }else{
+            document.getElementById("id_form").action = "../entregoDocumentos";
+        }
+    }
+
   document.getElementById('finProceso2').style.display='none';
   function cambiarBoton(){
     var txtObsVisita = document.getElementById("id_observacionesVisita");

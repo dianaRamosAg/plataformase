@@ -56,7 +56,9 @@
                     {% else %}
                     <p class="card-text" >Relación de recursos bibliográficos</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="rec_bibliograficos" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.rec_bibliograficos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -75,7 +77,9 @@
                     {% else %}
                     <p class="card-text" >Relación de recursos didácticos</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="rec_didacticos" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.rec_didacticos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -94,7 +98,9 @@
                     {% else %}
                     <p class="card-text" >Talleres</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="talleres" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.talleres }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -113,7 +119,9 @@
                     {% else %}
                     <p class="card-text" >Infraestructura de apoyo informático</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="apoyo_informatico" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.apoyo_informatico }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -132,7 +140,9 @@
                     {% else %}
                     <p class="card-text" >Apoyo de comunicaciones</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="apoyo_comunicaciones" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.apoyo_comunicaciones }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -151,7 +161,9 @@
                     {% else %}
                     <p class="card-text" >Personal</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="personal" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.personal }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
