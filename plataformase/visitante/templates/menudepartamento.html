@@ -34,7 +34,14 @@
 		<!-- / #logo-header -->
 		<nav>
 			<ul class="nav">
-				<li><a href="#" style="pointer-events: none;">Bienvenido! {{ user.first_name }} {{ user.last_name }} </a>
+				<li><a href="#" style="pointer-events: none;">Bienvenido(a): {% if user.tipo_usuario == '2'%} Jefe de departamento {% endif%} 
+					{% if user.departamento_id == 2 %} Direción {% endif%}
+					{% if user.tipo_usuario == '3'%} Subordinado de departamento {% endif%} 
+					{% if user.departamento_id == 3 %} Superior {% endif%}
+					{% if user.departamento_id == 4 %} Media Superior {% endif%}
+					
+					 , {{ user.first_name }} {{ user.last_name }} </a>
+					 
 				<li class="nav-item dropdown ml-auto">
 					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/us2.png' %}"/></a>
 					<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">

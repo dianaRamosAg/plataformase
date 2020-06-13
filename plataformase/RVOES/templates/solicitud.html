@@ -84,6 +84,7 @@
                             <h4 class="text-center">Información General</h4>
                             <small>Si la información no modificable que se muestra no coincide con la real actualice su perfil.</small>
                             <!--Personas Físicas-->
+                            <br>
                             {% if user.tipo_persona == '1' %}
                             <label class="" for="id_first_name" id="lblnombres">Nombre:</label>
                             <input readonly class="form-control col-12 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">

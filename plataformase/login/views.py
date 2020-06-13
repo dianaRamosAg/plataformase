@@ -302,9 +302,9 @@ def actualizarusr(request):
                  return redirect('usuarios')
             if tipo_usuario=='2':
                 firma = request.POST["firma_digital"]
-                if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists() :
+                if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists():
                     #Se le hace usuario normal
-                    CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
+                    CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0', tipo_usuario='3')
                     CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1,firma_digital='firmas_digitales/'+firma)
                     
                 else:
