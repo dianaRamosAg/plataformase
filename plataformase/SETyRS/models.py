@@ -20,8 +20,8 @@ class SolicitudExamen(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     fecha = models.DateField('fecha de publicacion')
     nivel_educativo = models.IntegerField(default=1)
-    fecha_exa = models.DateField('fecha de publicacion')
-    lugar_exa = models.CharField(max_length=50)
+    fecha_exa = models.DateField(default='2020-06-06',, blank=True)
+    lugar_exa = models.CharField(max_length=50,default='Algun lugar', blank=True)
 
     class Meta:
         db_table = 'SETyRS_solicitud_examen'
@@ -32,8 +32,8 @@ class Alumnos(models.Model):
     nombre_alumno = models.CharField(max_length=50)
     CURP = models.CharField(max_length=50)
     id_solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
-    folio_pago = models.CharField(max_length=50)
-    carrera = models.CharField(max_length=100)
+    folio_pago = models.CharField(max_length=50,default='1234', blank=True)
+    carrera = models.CharField(max_length=100,default='Carrera', blank=True)
 
 
     def __str__(self):
