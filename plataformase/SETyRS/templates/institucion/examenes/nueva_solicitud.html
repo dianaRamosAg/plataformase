@@ -83,7 +83,7 @@
                 <label>VOCAL</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="vocal" id="selectVocal" required>
+                <select class="form-control" name="vocal" id="selectVocal" reqired>
                     <option  selected hidden>Seleccionar</option>
                     {% if sinodales %}
                         {% for s in sinodales %}
@@ -94,6 +94,25 @@
                     {% endif %}
               </select>
             </div>
+        
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <label class="form-check-label col-2" for="date">Fecha de Examen</label>
+               
+            </div>
+            <div class="col-md-4">
+                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" value="" required>
+            </div>
+            
+            <div class="col-md-2">
+                <label>Lugar de Examen</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="Lugar_exa" required>
+            </div>
+
+
         </div>
         <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
         <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>

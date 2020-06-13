@@ -20,6 +20,8 @@ class SolicitudExamen(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     fecha = models.DateField('fecha de publicacion')
     nivel_educativo = models.IntegerField(default=1)
+    fecha_exa = models.DateField('fecha de publicacion')
+    lugar_exa = models.CharField(max_length=50)
 
     class Meta:
         db_table = 'SETyRS_solicitud_examen'
@@ -30,6 +32,9 @@ class Alumnos(models.Model):
     nombre_alumno = models.CharField(max_length=50)
     CURP = models.CharField(max_length=50)
     id_solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
+    folio_pago = models.CharField(max_length=50)
+    carrera = models.CharField(max_length=100)
+
 
     def __str__(self):
         return self.nombre_alumno
@@ -97,6 +102,7 @@ class ArchivosAlumnos(models.Model):
     servicio_social = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
     inscripcion_ctrl_escolar = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
     recibo_pago = models.FileField(upload_to='SETyRS/archivos/alumnos', validators=[validate_file_extension], blank=True, null=True)
+    comprobante_exp = models.FileField(upload_to='SETyRS/archivos/alumnos', validators=[validate_file_extension], blank=True, null=True)
 
     class Meta:
         db_table = 'SETyRS_documentos_alumnos'
