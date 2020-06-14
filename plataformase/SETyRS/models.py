@@ -20,7 +20,8 @@ class SolicitudExamen(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     fecha = models.DateField('fecha de publicacion')
     nivel_educativo = models.IntegerField(default=1)
-    fecha_exa = models.DateField(default='2020-06-06',, blank=True)
+    
+    fecha_exa = models.DateField(default='2020-06-06',blank=True)
     lugar_exa = models.CharField(max_length=50,default='Algun lugar', blank=True)
 
     class Meta:
