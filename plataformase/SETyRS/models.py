@@ -10,7 +10,7 @@ from .validators import validate_file_extension
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
     categoria = models.IntegerField()
-    institucion = models.ForeignKey(UsuarioInstitucion, on_delete=models.CASCADE)
+    institucion = models.IntegerField(default=1)
     area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
     id_secretario = models.IntegerField()
