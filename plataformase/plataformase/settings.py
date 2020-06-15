@@ -89,14 +89,15 @@ if os.getenv('GAE_APPLICATION', None):
             'HOST'    : '/cloudsql/plataformase:us-west2:plataforma',
             'USER'    : 'postgres',
             'PASSWORD': 'admin',
-            'NAME'    : 'plataforma',
+            'NAME'    : 'plataformaSE',
         }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-            'NAME'     : 'plataforma',
+            'NAME'     : 'plataformaSE',
+            #'NAME'     : 'plataforma',
             'USER'     : 'postgres',
             'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
