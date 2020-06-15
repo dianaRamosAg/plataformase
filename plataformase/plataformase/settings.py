@@ -89,7 +89,7 @@ if os.getenv('GAE_APPLICATION', None):
             'HOST'    : '/cloudsql/plataformase:us-west2:plataforma',
             'USER'    : 'postgres',
             'PASSWORD': 'admin',
-            'NAME'    : 'plataforma',
+            'NAME'    : 'plataformaSE',
         }
     }
 else:
@@ -98,10 +98,10 @@ else:
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
-            'PASSWORD': 'diana',
+            'PASSWORD' : 'diana',
             'HOST'     : 'localhost',
-            'PORT'    : '5432',
-            #'PORT'     : '3306',
+            'PORT'     : '3306',
+           # 'PORT'     : '8000',
         }
     }
 

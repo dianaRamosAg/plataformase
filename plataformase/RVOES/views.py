@@ -1,3 +1,4 @@
+  
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.views.generic.base import View
@@ -33,7 +34,6 @@ class Pdf(View):
         """Parámetros
         -:param request: Contiene información del navegador del usuario que está realizando la petición.
         -:param id: Es el id de la solicitud para saber sobre que solicitud se va a generar el archivo PDF
-
         Retorna
         -:return: Regresa el pdf de planes y programas de estudio.
         """
@@ -46,10 +46,8 @@ def index_user(request):
     'TotalNotificaciones' es una variable que almacena el resultado de un QuerySet que cuenta los registros
     (que simulan notificaciones) de tipo "Historial" pertenecientes al usuario, que no han sido leídas (leida=0). Esta
     variable es enviada a plantilla para su mostrar su valor dentro de la plantilla.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "Inicio.html" (página principal del usuario).
     """
@@ -66,10 +64,8 @@ def acuerdos(request):
     correspondientes a su nivel. Estos acuerdos son subidos por el admnistrador del sistema.
     La variable docsMS obtiene todos los acuerdos correspondientes al nivel Media Superior (1).
     La variable docsS obtiene todos los acuerdos correspondientes al nivel Superior (2).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "acuerdos.html" en la cual la institución visualiza los acuerdos para realizar una
     solicitud de RVOE
@@ -90,10 +86,8 @@ def validacion(request):
     De existir alguna solicitud pendiente, le informa a la institución, mediante la plantilla "faltaArchivos.html",
     para que decida si quiere continuar con esa solicitud o si quiere comenzar una nueva. De no existir alguna
     solicitud  pendiente, redirige al usuario a la URL con llamada "solicitud".
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return redirect: Redirige a la página solicitud.
     -:return render: Retorna la plantilla "faltaArchivos.html" para preguntar a la institución si quiere continuar con la
@@ -126,22 +120,22 @@ def solicitud(request):
     La variable "record" obtiene el "id" de la última solicitud ingresada al sistema por el usuario y el valor
     "completado" para definir en qué carpeta quedo la solicitud (Carpetas: -1 = Cancelada, 0 = Completado, 1 = Institucional,
     2 = Curricular, 3 = Académica, 4 = Media Superior, 11 = Terminó revisión digital).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "solicitud.html" para que el usuario empiece el proceso de solicitud de RVOE.
     """
     if request.user.tipo_usuario == '1'or request.user.tipo_usuario == '5':
+        from datetime import datetime
         #record obtiene de la última solicitud del usuario, el valor de los campos "completado" e "id"
         record = Solicitud.objects.values_list('completado', 'id').filter(customuser=request.user.id).last()
+        fecha = datetime.today().strftime('%Y-%m-%d')
         if record:#Si se obtuvo algún resultado
             if record[1] != -1:#Si el id es diferente a -1 (Posible borrado de esta línea)
                 if record[0] >= 1 and record[0] <= 4:#Si la solicitud se encuentra pediente en alguna carpeta
                     Solicitud.objects.filter(id=record[1]).delete()#Borra la solicitud de la base de datos.
         cct = UsuarioInstitucion.objects.filter(id_usuariobase=request.user.id)
-        return render(request, 'solicitud.html', {'cct': cct})#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
+        return render(request, 'solicitud.html', {'cct': cct, 'fecha': fecha})#Llama a la plantilla de "solicitud.html" para que el usuario la visualice.
     else:
         return redirect('perfil')
 
@@ -151,10 +145,8 @@ def solicitud_insert(request):
     Si la informaion viene en un request con método de envío de datos diferente a POST, redirecciona a la URL con con el
     nombre "solicitd". Si la información se recibe con el método POST, entonces se guarda en la base de datos y según el
     nivel de la solicitud se le redirge a la URL especifica, si nivel = 1: Media Superior, nivel = 2: Superior.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return redirect('medSuperior'): Redirige a la URL de Media Superior para que la institución pueda subir los archivos correspondientes.
     -:return redirect('institucionalSup'): Redirige a la URL de Superior para que la institución pueda subir los archivos correspondientes.
@@ -165,76 +157,144 @@ def solicitud_insert(request):
         if request.method == 'POST':#Si el request fue realizada con el método POST
             import datetime#Librería para guardar la fecha
             #Según los datos introducidos en "solicitud.html" y enviados por el método POST se guardan en una variable
+            fechaRegistro = datetime.datetime.now()  # Obtenemos la fecha actual
+            estatus = Departamento.objects.get(id=2)#Obtenemos el primer departamento al que debe pasar
+            # Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
+            if request.user.tipo_usuario == '1':
+                cct = request.POST["cct"]
+            else:
+                cct = None
             nivel = request.POST["nivel"]
+            if nivel == '2':
+                nivelSuperior = request.POST["nivelSuperior"]
+            else:
+                nivelSuperior = None
             modalidad = request.POST["modalidad"]
             opcion = request.POST["opcion"]
             salud = str(request.POST["salud"])
+            customuser_id = (request.user.id)
             ciclonum = request.POST["ciclonum"]
             ciclo = request.POST["ciclo"]
-            identificacion = request.POST["identificacion"]
-            folio_id = request.POST["folio_id"]
-            org_cop_identificacion = request.POST["org_cop_identificacion"]
-            dom_particular = request.POST["dom_particular"]
-            celular = request.POST["celular"]
-            curp_rfc = request.POST["curp_rfc"]
-            email = request.POST["email"]
             #Sí se selecciona otro tipo de ciclo, expecificar cual
             if ciclo == 'Otro':
                 otro = request.POST["otro"]
             else:
                 otro = None
             duracion = request.POST["duracion"]
-            customuser_id = (request.user.id)
+            identificacion = request.POST["identificacion"]
+            folio_id = request.POST["folio_id"]
+            nomPerAut1 = request.POST["nomPerAut1"]
+            apMatPerAut1 = request.POST["apMatPerAut1"]
+            apPatPerAut1 = request.POST["apPatPerAut1"]
+            emailPerAut1 = request.POST["emailPerAut1"]
+            telPerAut1 = request.POST["telPerAut1"]
+
+            nomPerAut2 = request.POST["nomPerAut2"]
+            apMatPerAut2 = request.POST["apMatPerAut2"]
+            apPatPerAut2 = request.POST["apPatPerAut2"]
+            emailPerAut2 = request.POST["emailPerAut2"]
+            telPerAut2 = request.POST["telPerAut2"]
+
+            nomPerAut3 = request.POST["nomPerAut3"]
+            apMatPerAut3 = request.POST["apMatPerAut3"]
+            apPatPerAut3 = request.POST["apPatPerAut3"]
+            emailPerAut3 = request.POST["emailPerAut3"]
+            telPerAut3 = request.POST["telPerAut3"]
+
+            nomPerAut4 = request.POST["nomPerAut4"]
+            apMatPerAut4 = request.POST["apMatPerAut4"]
+            apPatPerAut4 = request.POST["apPatPerAut4"]
+            emailPerAut4 = request.POST["emailPerAut4"]
+            telPerAut4 = request.POST["telPerAut4"]
+
+            nomPerAut5 = request.POST["nomPerAut5"]
+            apMatPerAut5 = request.POST["apMatPerAut5"]
+            apPatPerAut5 = request.POST["apPatPerAut5"]
+            emailPerAut5 = request.POST["emailPerAut5"]
+            telPerAut5 = request.POST["telPerAut5"]
+
+            nomPerAut6 = request.POST["nomPerAut6"]
+            apMatPerAut6 = request.POST["apMatPerAut6"]
+            apPatPerAut6 = request.POST["apPatPerAut6"]
+            emailPerAut6 = request.POST["emailPerAut6"]
+            telPerAut6 = request.POST["telPerAut6"]
+
+            nomApLegal1 = request.POST["nomApLegal1"]
+            apMatApLegal1 = request.POST["apMatApLegal1"]
+            apPatApLegal1 = request.POST["apPatApLegal1"]
+            emailApLegal1 = request.POST["emailApLegal1"]
+            telApLegal1 = request.POST["telApLegal1"]
+            poderNotApLegal1 = request.POST["poderNotApLegal1"]
+
+            nomApLegal2 = request.POST["nomApLegal2"]
+            apMatApLegal2 = request.POST["apMatApLegal2"]
+            apPatApLegal2 = request.POST["apPatApLegal2"]
+            emailApLegal2 = request.POST["emailApLegal2"]
+            telApLegal2 = request.POST["telApLegal2"]
+            poderNotApLegal2 = request.POST["poderNotApLegal2"]
+
+            perPrograma = request.POST["perPrograma"]
+            nombreSolicitud = request.POST["nombreSolicitud"]
+            if request.user.tipo_usuario == '5':
+                opcion1 = request.POST["opcion1"]
+                opcion2 = request.POST["opcion2"]
+                opcion3 = request.POST["opcion3"]
+            else:
+                opcion1 = None
+                opcion2 = None
+                opcion3 = None
+            horarioDias = request.POST["horarioDias"]
+            areaFormacion = request.POST["areaFormacion"]
+
+            #celular = request.POST["celular"]
+            #curp_rfc = request.POST["curp_rfc"]
+            #email = request.POST["email"]
             #Tipo de persona FISICA 
             if request.user.tipo_persona == '1':
-                nombre = request.POST["first_name"]
-                apellidos = request.POST["last_name"]
-                noInstrumentoNotarial = request.POST["noInstrumentoNotarialM"]
-                nombreNotario = request.POST["nombreNotarioM"]
-                noNotario = request.POST["noNotarioM"]
-                nombreRepresentante = request.POST["nombreRepresentanteM"]
-                nombreSolicitud = request.POST["nombreSolicitudM"]
+                noInstrumentoNotarial = None
                 libro_inscripcion = None
+                nombreNotario = None
+                noNotario = None
                 fecha = None
                 lugar = None
                 objeto_social = None
-                org_cop_acta = None
+                estatutosVigentes = None
+                nombreRepresentante = None
+                poderNotarial = None
             #Tipo de persona MORAL
-            if request.user.tipo_persona == '2':  
-                nombre = None
-                apellidos = None
+            if request.user.tipo_persona == '2':
+                noInstrumentoNotarial = request.POST["inst_notarial"]
                 libro_inscripcion = request.POST["libro_inscripcion"]
+                nombreNotario = request.POST["nombreNotario"]
+                noNotario = request.POST["noNotario"]
                 fecha = request.POST["fecha"]
                 lugar = request.POST["lugar"]
                 objeto_social = request.POST["objeto_social"]
-                org_cop_acta = request.POST["org_cop_acta"]
-                noInstrumentoNotarial = request.POST["noInstrumentoNotarial"]
-                nombreNotario = request.POST["nombreNotario"]
-                noNotario = request.POST["noNotario"]
+                estatutosVigentes = request.POST["estatutosVigentes"]
                 nombreRepresentante = request.POST["nombreRepresentante"]
-                nombreSolicitud = request.POST["nombreSolicitud"]
+                poderNotarial = request.POST["poderNotarial"]
 
-            fechaRegistro = datetime.datetime.now()#Obtenemos la fecha actual
-            estatus = Departamento.objects.get(id=2)#Obtenemos el primer departamento al que debe pasar
-            #Si tipo de usuario es institución guarda la clave de centro de trabajo, de lo contrario no es necesario
-            if request.user.tipo_usuario == '1':
-                cct = request.POST["cct"]
-            else:
-                cct = None
             # Se generá la plantilla para inserción de solicitud
-            solicitud = Solicitud(cct=cct,nivel=nivel, modalidad=modalidad, opcion=opcion,
-                                salud=salud, customuser_id=customuser_id,
-                                fechaRegistro=fechaRegistro, estatus=estatus,
-                                noInstrumentoNotarial=noInstrumentoNotarial,
-                                nombreNotario=nombreNotario, noNotario=noNotario,
-                                nombreRepresentante=nombreRepresentante,
-                                nombreSolicitud=nombreSolicitud, ciclonum=ciclonum,ciclo= ciclo,
-                                otro=otro, duracion=duracion,nombre=nombre,apellidos=apellidos,
-                                libro_inscripcion=libro_inscripcion,lugar=lugar,
-                                objeto_social=objeto_social,org_cop_acta=org_cop_acta,
-                                identificacion=identificacion, org_cop_identificacion=org_cop_identificacion,
-                                folio_id=folio_id,dom_particular=dom_particular,celular=celular,
-                                curp_rfc=curp_rfc,email=email,fecha=fecha)
+            solicitud = Solicitud(fechaRegistro=fechaRegistro, estatus=estatus, cct=cct,
+                                  nivel=nivel, nivelSuperior=nivelSuperior, modalidad=modalidad,
+                                  opcion=opcion, salud=salud, customuser_id=customuser_id,
+                                  ciclonum=ciclonum, ciclo=ciclo, otro=otro, duracion=duracion,
+                                  identificacion=identificacion, folio_id=folio_id,
+                                  nomPerAut1=nomPerAut1, apMatPerAut1=apMatPerAut1, apPatPerAut1=apPatPerAut1, emailPerAut1=emailPerAut1, telPerAut1=telPerAut1,
+                                  nomPerAut2=nomPerAut2, apMatPerAut2=apMatPerAut2, apPatPerAut2=apPatPerAut2, emailPerAut2=emailPerAut2, telPerAut2=telPerAut2,
+                                  nomPerAut3=nomPerAut3, apMatPerAut3=apMatPerAut3, apPatPerAut3=apPatPerAut3, emailPerAut3=emailPerAut3, telPerAut3=telPerAut3,
+                                  nomPerAut4=nomPerAut4, apMatPerAut4=apMatPerAut4, apPatPerAut4=apPatPerAut4, emailPerAut4=emailPerAut4, telPerAut4=telPerAut4,
+                                  nomPerAut5=nomPerAut5, apMatPerAut5=apMatPerAut5, apPatPerAut5=apPatPerAut5, emailPerAut5=emailPerAut5, telPerAut5=telPerAut5,
+                                  nomPerAut6=nomPerAut6, apMatPerAut6=apMatPerAut6, apPatPerAut6=apPatPerAut6, emailPerAut6=emailPerAut6, telPerAut6=telPerAut6,
+                                  nomApLegal1=nomApLegal1, apMatApLegal1=apMatApLegal1, apPatApLegal1=apPatApLegal1, emailApLegal1=emailApLegal1, telApLegal1=telApLegal1, poderNotApLegal1=poderNotApLegal1,
+                                  nomApLegal2=nomApLegal2, apMatApLegal2=apMatApLegal2, apPatApLegal2=apPatApLegal2, emailApLegal2=emailApLegal2, telApLegal2=telApLegal2, poderNotApLegal2=poderNotApLegal2,
+                                  perPrograma=perPrograma, nombreSolicitud=nombreSolicitud, opcion1=opcion1,
+                                  opcion2=opcion2, opcion3=opcion3, horarioDias=horarioDias,
+                                  areaFormacion=areaFormacion, noInstrumentoNotarial=noInstrumentoNotarial,
+                                  libro_inscripcion=libro_inscripcion, nombreNotario=nombreNotario,
+                                  noNotario=noNotario, fecha=fecha,lugar=lugar,
+                                  objeto_social=objeto_social, estatutosVigentes=estatutosVigentes,
+                                  nombreRepresentante=nombreRepresentante, poderNotarial=poderNotarial)
             solicitud.save()#Guarda la solicitud
 
             if nivel == '1':#Si el nivel es uno, redirecciona a la URL para subir archivos de solicitudes de media superior
@@ -251,10 +311,8 @@ def SInstitucional(request):
     Este método almacena los documentos que han sido cargados en la plantilla "institucionalSup.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta Institucional. Además este método actualiza el estado
     de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Institucional [completado=1]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "institucionalSup.html" para que la institución pueda subir los archivos correspondientes
      a la carpeta institucional.
@@ -295,10 +353,8 @@ def SCurricular(request):
     Este método almacena los documentos que han sido cargados en la plantilla "curricularSup.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta Curricular. Además este método actualiza el estado
     de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Curricular [completado=2]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "curricularSup.html" para que la institución  pueda subir los archivos correspondientes
      a la carpeta curricular.
@@ -330,10 +386,8 @@ def SAcademica(request):
     Este método almacena los documentos que han sido cargados en la plantilla "academicaSup.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta Academica. Además este método actualiza el estado
     de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Académica [completado=3]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "academicaSup.html" para que la institución  pueda subir los archivos correspondientes
      a la carpeta académica.
@@ -362,10 +416,8 @@ def SMedSuperior(request):
     Este método almacena los documentos que han sido cargados en la plantilla "medSuperior.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta única de Media Superior. Además este método actualiza
     el estado de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Media Superior [completado=4]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "medSuperior.html" para que la institución pueda subir los archivos correspondientes a la
      carpeta de media superior.
@@ -404,10 +456,8 @@ def finSolicitud(request):
     una nueva solicitud y a la vez se le informa al usuario 'institución' que su solicitud se ha registrado.
     Finalmente se le muestra la plantilla "finSolicitud.html" la cual le dice cuál es el folio de seguimiento de esa
     solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "finSolicitud.html" para decirle a la institución que ahí acaba el proceso de subida de
      archivos y comienza el proceso de revisión.
@@ -440,13 +490,11 @@ def finSolicitud(request):
 def estatus(request, usuario, solicitud):
     """Muestra al usuario 'institución' todas las solicitudes que ha realizado. También sirve para mostrar una solicitud
      específica pasando como parámetro de búsqueda su ID.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Se recibe el id del usuario mediante la URL
     -:param solicitud: Determina el tipo de solicitudes a mostrar, si soliciutd = "G": Muestra todas las solicitudes de ese
          usuario. Si solicitud = X(Cualquier otro número), muestra solo la solicitud que tenga ID = X.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá observar solicitudes que ha ingresado anteriormente.
     """
@@ -468,12 +516,10 @@ def historial(request, usuario, solicitud):
     """Muestra a la institución información más detallada de la solicitud que ha seleccionado,
      a través de un par de tablas que muestran el historial de notificaciones realizadas a esa
      solicitud y todos las observaciones a los documentos subidos a la misma.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Se recibe el id del usuario mediante la URL
     -:param solicitud: ID de la solicitud a consultar.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá observar información del proceso de la solicitud
     """
@@ -499,10 +545,8 @@ def historial(request, usuario, solicitud):
 
 def notificacionUsuario(request):
     """Muestra al usuario las notificaciones que tiene como no leídas.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar las notificaciones que tiene que no han sido leídas.
     """
@@ -519,10 +563,8 @@ def notificacionUsuario(request):
 
 def historialNotificacionesUsuario(request):
     """Muestra al usuario todas las notificaciones que ha recibido.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar todas las notificaciones que ha recibido.
     """
@@ -538,12 +580,10 @@ def historialNotificacionesUsuario(request):
 
 def verArchivos(request, usuario, solicitud):
     """Muestra al usuario los archivos subidos a la solicitud seleccionada.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Contiene el ID del usuario que está hacinedo la consulta.
     -:param solicitud: Contiene el ID de la solicitud que se ha seleccionado para ver sus archivos.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver los documentos subidos ordenados por carpeta.
     """
@@ -566,12 +606,10 @@ def verArchivos(request, usuario, solicitud):
 def subirArchivos(request, usuario, solicitud):
     """Muestra al usuario los comentarios que ha recibido en su respectiva solicitud y
     se le solicita que vuelva a subir los archivos necesarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
     -:param usuario: Contiene el ID del usuario que está hacinedo la consulta.
     -:param solicitud: Contiene el ID de la solicitud que ha seleccionado para volver a subir los archivos corregidos.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver los comentarios dados por el personal de los departamentos hacia la solicitud.
     """
@@ -599,18 +637,14 @@ def terminarSubArchivos(request, usuario, solicitud):
     ya no tiene comentarios (por haber actualizado los archivos) y notifica al personal del departamento
     correspondiente que han actualizado los archivos de esa solicitud y se le notifica al mismo usuario
     que sus modificaciones han sido enviadas.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Contiene el ID de la institución y se utiliza para notificar a la insitución que se han enviado sus modificaciones.
     -:param solicitud: Contiene el ID de la solicitud que ha seleccionado para volver a subir los archivos corregidos.
-
     Retorna
     -:return redirect 'estado': Regresa la vista en la cual el usuario podrá ver la pantalla en la que aparecerá su solicitud en forma de lista.
     -:return redirect 'subirArchivos': Regresa la vista en la cual el usuario podrá ver los comentarios dados por el personal de los departamentos hacia la solicitud y pueda actualizar los documentos.
-
     *EXPLICACIÓN DE IDENTIFICACIÓN DE ARCHIVO DE LOS COMENTARIOS
-
     Los comentarios en el modelo vienen con un campo llamado "archivo" el cual es una representación del
     método de identificación individual del documento que se ideo para una fácil identificación. En este
     campo se incluyen 2 valores númericos separados por un guión bajo (#_#). El primero número representa
@@ -622,53 +656,54 @@ def terminarSubArchivos(request, usuario, solicitud):
         if request.method == 'POST':#Si la solicitud es con el método POST
             request.POST._mutable = True#Permitimos la edición de lo que se recibe por el método POST
             IsLoSolicitud = Solicitud.objects.get(id=solicitud)#Solicitud que recibirá la actualización de documentos.
-            Coment = Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus)#Obtenemos los comentarios correspondientes a la solicitud y dadas por su departamento actual.
+            Comenta = Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus)#Obtenemos los comentarios correspondientes a la solicitud y dadas por su departamento actual.
             comentario = ""#Inicializa variable "comentario" en vacío.
-            for element in Coment:#Ciclo que recorre todos los registros que se tienen en la variable "Coment"
+            for element in Comenta:#Ciclo que recorre todos los registros que se tienen en la variable "Coment"
                 comentario = comentario + str(element.archivo)#Concatena cuales son los archivos que tienen comentarios de forma "2_12_22_3", donde cada archivo seria {2_1, 2_2, 2_3}
             if IsLoSolicitud.nivel == '1':#Si la solicitud es de nivel media superior
                 medSup = CMedSuperior.objects.get(id_solicitud=solicitud)#Obtenemos la carpeta de media superior de la solicitud correspondiente.
-                if not ("1_1" in comentario):#Si el archivo de solicitud (1_1) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
-                    request.FILES["solicitud"] = medSup.solicitud
-                if not ("1_2" in comentario):#Si el archivo de solicitud (1_2) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
-                    request.FILES["pago"] = medSup.pago
-                    request.POST["folio_pago"] = medSup.folio_pago
-                    request.POST["monto_pago"] = medSup.monto_pago
-                    request.POST["fecha_pago"] = medSup.fecha_pago
-                if not ("1_3" in comentario):
-                    request.FILES["identificacion"] = medSup.identificacion
-                if not ("1_4" in comentario):
-                    request.FILES["perDocente"] = medSup.perDocente
-                if not ("1_5" in comentario):
-                    request.FILES["instalaciones"] = medSup.instalaciones
-                    request.POST["dictamen_suelo"] = medSup.dictamen_suelo
-                    request.POST["expediente_suelo"] = medSup.expediente_suelo
-                    request.POST["fecha_suelo"] = medSup.fecha_suelo
-                    request.POST["firma_suelo"] = medSup.firma_suelo
-                    request.POST["dictamen_estructural"] = medSup.dictamen_estructural
-                    request.POST["fecha_estructural"] = medSup.fecha_estructural
-                    request.POST["arqui_dictamen_estructural"] = medSup.arqui_dictamen_estructural
-                    request.POST["noCedula_dictamen_estructural"] = medSup.noCedula_dictamen_estructural
-                    request.POST["DRO_dictamen_estructural"] = medSup.DRO_dictamen_estructural
-                    request.POST["dictamen_proteccion"] = medSup.dictamen_proteccion
-                    request.POST["fecha_dictamen_proteccion"] = medSup.fecha_dictamen_proteccion
-                    request.POST["firma_dictamen_proteccion"] = medSup.firma_dictamen_proteccion
-                    request.POST["folio_inife"] = medSup.folio_inife
-                    request.POST["fecha_inife"] = medSup.fecha_inife
-                    request.POST["firma_inife"] = medSup.firma_inife
-                if not ("1_6" in comentario):
-                    request.FILES["equipamiento"] = medSup.equipamiento
-                if not ("1_7" in comentario):#Si el archivo de solicitud (1_7) no tiene comentarios
-                    if medSup.progEstuio == None:#Si en la carpeta de media superior no tiene un documento de planes y programas de estudio
-                        progEstuio = None#Se deja igual, ya que si no tiene comentarios quiere decir que no hace falta guardar este documento.
-                    else:#Si en la carpeta de media superior tiene un documento de planes y programas de estudio
-                        progEstuio = medSup.progEstuio#Se guarda el archivo que se tenía antes en la carpeta de media superior
-                else:#Si el archivo de solicitud (1_7) sí tiene comentarios
-                    progEstuio = request.FILES["progEstuio"]#Se guarda el documento que viene desde el request
-                if not ("1_8" in comentario):
-                    request.FILES["cifrhs"] = medSup.cifrhs
-                if not ("1_9" in comentario):
-                    request.FILES["carta"] = medSup.carta
+                for Coment in Comenta:
+                    if not ("1_1" in comentario and Coment.archivo == "1_1" and Coment.atendida == False):#Si el archivo de solicitud (1_1) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
+                        request.FILES["solicitud"] = medSup.solicitud
+                    if not ("1_2" in comentario and Coment.archivo == "1_2" and Coment.atendida == False):#Si el archivo de solicitud (1_2) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
+                        request.FILES["pago"] = medSup.pago
+                        request.POST["folio_pago"] = medSup.folio_pago
+                        request.POST["monto_pago"] = medSup.monto_pago
+                        request.POST["fecha_pago"] = medSup.fecha_pago
+                    if not ("1_3" in comentario and Coment.archivo == "1_3" and Coment.atendida == False):
+                        request.FILES["identificacion"] = medSup.identificacion
+                    if not ("1_4" in comentario and Coment.archivo == "1_4" and Coment.atendida == False):
+                        request.FILES["perDocente"] = medSup.perDocente
+                    if not ("1_5" in comentario and Coment.archivo == "1_5" and Coment.atendida == False):
+                        request.FILES["instalaciones"] = medSup.instalaciones
+                        request.POST["dictamen_suelo"] = medSup.dictamen_suelo
+                        request.POST["expediente_suelo"] = medSup.expediente_suelo
+                        request.POST["fecha_suelo"] = medSup.fecha_suelo
+                        request.POST["firma_suelo"] = medSup.firma_suelo
+                        request.POST["dictamen_estructural"] = medSup.dictamen_estructural
+                        request.POST["fecha_estructural"] = medSup.fecha_estructural
+                        request.POST["arqui_dictamen_estructural"] = medSup.arqui_dictamen_estructural
+                        request.POST["noCedula_dictamen_estructural"] = medSup.noCedula_dictamen_estructural
+                        request.POST["DRO_dictamen_estructural"] = medSup.DRO_dictamen_estructural
+                        request.POST["dictamen_proteccion"] = medSup.dictamen_proteccion
+                        request.POST["fecha_dictamen_proteccion"] = medSup.fecha_dictamen_proteccion
+                        request.POST["firma_dictamen_proteccion"] = medSup.firma_dictamen_proteccion
+                        request.POST["folio_inife"] = medSup.folio_inife
+                        request.POST["fecha_inife"] = medSup.fecha_inife
+                        request.POST["firma_inife"] = medSup.firma_inife
+                    if not ("1_6" in comentario and Coment.archivo == "1_6" and Coment.atendida == False):
+                        request.FILES["equipamiento"] = medSup.equipamiento
+                    if not ("1_7" in comentario and Coment.archivo == "1_7" and Coment.atendida == False):#Si el archivo de solicitud (1_7) no tiene comentarios
+                        if medSup.progEstuio == None:#Si en la carpeta de media superior no tiene un documento de planes y programas de estudio
+                            progEstuio = None#Se deja igual, ya que si no tiene comentarios quiere decir que no hace falta guardar este documento.
+                        else:#Si en la carpeta de media superior tiene un documento de planes y programas de estudio
+                            progEstuio = medSup.progEstuio#Se guarda el archivo que se tenía antes en la carpeta de media superior
+                    else:#Si el archivo de solicitud (1_7) sí tiene comentarios
+                        progEstuio = request.FILES["progEstuio"]#Se guarda el documento que viene desde el request
+                    if not ("1_8" in comentario and Coment.archivo == "1_8" and Coment.atendida == False):
+                        request.FILES["cifrhs"] = medSup.cifrhs
+                    if not ("1_9" in comentario and Coment.archivo == "1_9" and Coment.atendida == False):
+                        request.FILES["carta"] = medSup.carta
                 #Se crean variables con los valores actualizados para crear un nuevo registro y borrar el anterior
                 sol = request.FILES["solicitud"]
                 pago = request.FILES["pago"]
@@ -722,46 +757,47 @@ def terminarSubArchivos(request, usuario, solicitud):
                         "2_7" in comentario) or ("2_8" in comentario) or ("2_9" in comentario) or (
                         "2_10" in comentario) or ("2_11" in comentario):
                     inst = CInstitucional.objects.get(id_solicitud=solicitud)
-                    if not ("2_1" in comentario):
-                        request.FILES["solicitud"] = inst.solicitud.url
-                    if not ("2_2" in comentario):
-                        request.FILES["pago"] = inst.pago.url
-                        request.POST["folio_pago"] = inst.folio_pago
-                        request.POST["monto_pago"] = inst.monto_pago
-                        request.POST["fecha_pago"] = inst.fecha_pago
-                    if not ("2_3" in comentario):
-                        request.FILES["acredita_personalidad"] = inst.acredita_personalidad.url
-                    if not ("2_4" in comentario):
-                        request.FILES["acredita_inmueble"] = inst.acredita_inmueble.url
-                    if not ("2_5" in comentario):
-                        request.FILES["licencia_suelo"] = inst.licencia_suelo.url
-                        request.POST["dictamen_suelo"] = inst.dictamen_suelo
-                        request.POST["expediente_suelo"] = inst.expediente_suelo
-                        request.POST["fecha_suelo"] = inst.fecha_suelo
-                        request.POST["firma_suelo"] = inst.firma_suelo
-                    if not ("2_6" in comentario):
-                        request.FILES["constancia_estructural"] = inst.constancia_estructural.url
-                        request.POST["dictamen_estructural"] = inst.dictamen_estructural
-                        request.POST["fecha_estructural"] = inst.fecha_estructural
-                        request.POST["arqui_dictamen_estructural"] = inst.arqui_dictamen_estructural
-                        request.POST["noCedula_dictamen_estructural"] = inst.noCedula_dictamen_estructural
-                        request.POST["DRO_dictamen_estructural"] = inst.DRO_dictamen_estructural
-                    if not ("2_7" in comentario):
-                        request.FILES["constancia_proteccion"] = inst.constancia_proteccion.url
-                        request.POST["dictamen_proteccion"] = inst.dictamen_proteccion
-                        request.POST["fecha_dictamen_proteccion"] = inst.fecha_dictamen_proteccion
-                        request.POST["firma_dictamen_proteccion"] = inst.firma_dictamen_proteccion
-                    if not ("2_8" in comentario):
-                        request.FILES["inife"] = inst.inife.url
-                        request.POST["folio_inife"] = inst.folio_inife
-                        request.POST["fecha_inife"] = inst.fecha_inife
-                        request.POST["firma_inife"] = inst.firma_inife
-                    if not ("2_9" in comentario):
-                        request.FILES["des_instalacion"] = inst.des_instalacion.url
-                    if not ("2_10" in comentario):
-                        request.FILES["planos"] = inst.planos.url
-                    if not ("2_11" in comentario):
-                        request.FILES["biblio"] = inst.biblio.url
+                    for Coment in Comenta:
+                        if not ("2_1" in comentario and Coment.archivo == "2_1" and Coment.atendida == False):
+                            request.FILES["solicitud"] = inst.solicitud.url
+                        if not ("2_2" in comentario and Coment.archivo == "2_2" and Coment.atendida == False):
+                            request.FILES["pago"] = inst.pago.url
+                            request.POST["folio_pago"] = inst.folio_pago
+                            request.POST["monto_pago"] = inst.monto_pago
+                            request.POST["fecha_pago"] = inst.fecha_pago
+                        if not ("2_3" in comentario and Coment.archivo == "2_3" and Coment.atendida == False):
+                            request.FILES["acredita_personalidad"] = inst.acredita_personalidad.url
+                        if not ("2_4" in comentario and Coment.archivo == "2_4" and Coment.atendida == False):
+                            request.FILES["acredita_inmueble"] = inst.acredita_inmueble.url
+                        if not ("2_5" in comentario and Coment.archivo == "2_5" and Coment.atendida == False):
+                            request.FILES["licencia_suelo"] = inst.licencia_suelo.url
+                            request.POST["dictamen_suelo"] = inst.dictamen_suelo
+                            request.POST["expediente_suelo"] = inst.expediente_suelo
+                            request.POST["fecha_suelo"] = inst.fecha_suelo
+                            request.POST["firma_suelo"] = inst.firma_suelo
+                        if not ("2_6" in comentario and Coment.archivo == "2_6" and Coment.atendida == False):
+                            request.FILES["constancia_estructural"] = inst.constancia_estructural.url
+                            request.POST["dictamen_estructural"] = inst.dictamen_estructural
+                            request.POST["fecha_estructural"] = inst.fecha_estructural
+                            request.POST["arqui_dictamen_estructural"] = inst.arqui_dictamen_estructural
+                            request.POST["noCedula_dictamen_estructural"] = inst.noCedula_dictamen_estructural
+                            request.POST["DRO_dictamen_estructural"] = inst.DRO_dictamen_estructural
+                        if not ("2_7" in comentario and Coment.archivo == "2_7" and Coment.atendida == False):
+                            request.FILES["constancia_proteccion"] = inst.constancia_proteccion.url
+                            request.POST["dictamen_proteccion"] = inst.dictamen_proteccion
+                            request.POST["fecha_dictamen_proteccion"] = inst.fecha_dictamen_proteccion
+                            request.POST["firma_dictamen_proteccion"] = inst.firma_dictamen_proteccion
+                        if not ("2_8" in comentario and Coment.archivo == "2_8" and Coment.atendida == False):
+                            request.FILES["inife"] = inst.inife.url
+                            request.POST["folio_inife"] = inst.folio_inife
+                            request.POST["fecha_inife"] = inst.fecha_inife
+                            request.POST["firma_inife"] = inst.firma_inife
+                        if not ("2_9" in comentario and Coment.archivo == "2_9" and Coment.atendida == False):
+                            request.FILES["des_instalacion"] = inst.des_instalacion.url
+                        if not ("2_10" in comentario and Coment.archivo == "2_10" and Coment.atendida == False):
+                            request.FILES["planos"] = inst.planos.url
+                        if not ("2_11" in comentario and Coment.archivo == "2_11" and Coment.atendida == False):
+                            request.FILES["biblio"] = inst.biblio.url
                     sol = request.FILES["solicitud"]
                     pago = request.FILES["pago"]
                     folio_pago = request.POST["folio_pago"]
@@ -818,35 +854,36 @@ def terminarSubArchivos(request, usuario, solicitud):
                         "3_4" in comentario) or ("3_5" in comentario) or ("3_6" in comentario) or (
                         "3_7" in comentario):
                     curr = CCurricular.objects.get(id_solicitud=solicitud)
-                    if not ("3_1" in comentario):
-                        request.FILES["estudio"] = curr.estudio.url
-                    if not ("3_2" in comentario):
-                        request.FILES["plan"] = curr.plan.url
-                    if not ("3_3" in comentario):
-                        request.FILES["mapa"] = curr.mapa.url
-                    if not ("3_4" in comentario):
-                        request.FILES["programa"] = curr.programa.url
-                    if not ("3_5" in comentario):
-                        if curr.metodologia == None:
-                            metodologia = None
+                    for Coment in Comenta:
+                        if not ("3_1" in comentario and Coment.archivo == "3_1" and Coment.atendida == False):
+                            request.FILES["estudio"] = curr.estudio.url
+                        if not ("3_2" in comentario and Coment.archivo == "3_2" and Coment.atendida == False):
+                            request.FILES["plan"] = curr.plan.url
+                        if not ("3_3" in comentario and Coment.archivo == "3_3" and Coment.atendida == False):
+                            request.FILES["mapa"] = curr.mapa.url
+                        if not ("3_4" in comentario and Coment.archivo == "3_4" and Coment.atendida == False):
+                            request.FILES["programa"] = curr.programa.url
+                        if not ("3_5" in comentario and Coment.archivo == "3_5" and Coment.atendida == False):
+                            if curr.metodologia == None:
+                                metodologia = None
+                            else:
+                                metodologia = curr.metodologia
                         else:
-                            metodologia = curr.metodologia
-                    else:
-                        metodologia = request.FILES["metodologia"]
-                    if not ("3_6" in comentario):
-                        if curr.cifrhs == None:
-                            cifrhs = None
+                            metodologia = request.FILES["metodologia"]
+                        if not ("3_6" in comentario and Coment.archivo == "3_6" and Coment.atendida == False):
+                            if curr.cifrhs == None:
+                                cifrhs = None
+                            else:
+                                cifrhs = curr.cifrhs
                         else:
-                            cifrhs = curr.cifrhs
-                    else:
-                        cifrhs = request.FILES["cifrhs"]
-                    if not ("3_7" in comentario):
-                        if curr.carta == None:
-                            carta = None
+                            cifrhs = request.FILES["cifrhs"]
+                        if not ("3_7" in comentario and Coment.archivo == "3_7" and Coment.atendida == False):
+                            if curr.carta == None:
+                                carta = None
+                            else:
+                                carta = curr.carta
                         else:
-                            carta = curr.carta
-                    else:
-                        carta = request.FILES["carta"]
+                            carta = request.FILES["carta"]
                     estudio = request.FILES["estudio"]
                     plan = request.FILES["plan"]
                     mapa = request.FILES["mapa"]
@@ -861,18 +898,19 @@ def terminarSubArchivos(request, usuario, solicitud):
                 if ("4_1" in comentario) or ("4_2" in comentario) or ("4_3" in comentario) or (
                         "4_4" in comentario) or ("4_5" in comentario) or ("4_6" in comentario):
                     acad = CAcademica.objects.get(id_solicitud=solicitud)
-                    if not ("4_1" in comentario):
-                        request.FILES["rec_bibliograficos"] = acad.rec_bibliograficos.url
-                    if not ("4_2" in comentario):
-                        request.FILES["rec_didacticos"] = acad.rec_didacticos.url
-                    if not ("4_3" in comentario):
-                        request.FILES["talleres"] = acad.talleres.url
-                    if not ("4_4" in comentario):
-                        request.FILES["apoyo_informatico"] = acad.apoyo_informatico.url
-                    if not ("4_5" in comentario):
-                        request.FILES["apoyo_comunicaciones"] = acad.apoyo_comunicaciones.url
-                    if not ("4_6" in comentario):
-                        request.FILES["personal"] = acad.personal.url
+                    for Coment in Comenta:
+                        if not ("4_1" in comentario and Coment.archivo == "4_1" and Coment.atendida == False):
+                            request.FILES["rec_bibliograficos"] = acad.rec_bibliograficos.url
+                        if not ("4_2" in comentario and Coment.archivo == "4_2" and Coment.atendida == False):
+                            request.FILES["rec_didacticos"] = acad.rec_didacticos.url
+                        if not ("4_3" in comentario and Coment.archivo == "4_3" and Coment.atendida == False):
+                            request.FILES["talleres"] = acad.talleres.url
+                        if not ("4_4" in comentario and Coment.archivo == "4_4" and Coment.atendida == False):
+                            request.FILES["apoyo_informatico"] = acad.apoyo_informatico.url
+                        if not ("4_5" in comentario and Coment.archivo == "4_5" and Coment.atendida == False):
+                            request.FILES["apoyo_comunicaciones"] = acad.apoyo_comunicaciones.url
+                        if not ("4_6" in comentario and Coment.archivo == "4_6" and Coment.atendida == False):
+                            request.FILES["personal"] = acad.personal.url
                     rec_bibliograficos = request.FILES["rec_bibliograficos"]
                     rec_didacticos = request.FILES["rec_didacticos"]
                     talleres = request.FILES["talleres"]
@@ -887,14 +925,16 @@ def terminarSubArchivos(request, usuario, solicitud):
                                         personal=personal)
                     newAcad.save()
             import datetime
-            Solicitud.objects.filter(id=solicitud).update(comentario='2')#Actualiza el campo comentario de la solicitud a 2, para tener referencia de que la solicitud ya ha pasado por el proceso de actualización de documentos, ya que solo puede actualizar una vez los archivos por departamento.
+            #Solicitud.objects.filter(id=solicitud).update(comentario='2')#Actualiza el campo comentario de la solicitud a 2, para tener referencia de que la solicitud ya ha pasado por el proceso de actualización de documentos, ya que solo puede actualizar una vez los archivos por departamento.
+            Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus).update(atendida=True)
+            Solicitud.objects.filter(id=solicitud).update(comentario='0') # Actualiza el campo comentario de la solicitud a 0, para tener referencia de que la solicitud ya ha pasado por el proceso de actualización de documentos.
             usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]#Obtiene el ID del usuario correspondiente a la solicitud (Creo que también se puede borrar y utilizar el que se cibe de parametro).
             notificacionU = Notificacion(solicitud_id=solicitud,
                                         descripcion="Subiste nuevamente los archivos requeridos.",
                                         leida='0',
                                         fechaNotificacion=datetime.datetime.now(),
                                         tipo_notificacion='H',
-                                        usuario_id=usuario)#Crea plantilla de registro de notificación para la institución.
+                                        usuario_id=usuario) # Crea plantilla de registro de notificación para la institución.
             notificacionU.save()#Guarda el registro de la notificación para la institución.
             Estatus = Solicitud.objects.values_list("estatus").get(id=solicitud)[0]#Se obtiene en que departamento se encuentra dicha solicitud.
             JefeSigDept = CustomUser.objects.values_list('id').get(jefe='1', departamento_id=Estatus)[0]#Extrae el id del jefe del área en que está la solicitud
@@ -1022,6 +1062,10 @@ def actualizar2Fase(solicitud, user):
 
 # --------------------------------- Vistas de usuario para "Personal del departamento" ---------------------------------------------
 
+def datosSolicitud(request, id):
+    solicitud = Solicitud.objects.get(id=id)
+    return render(request, 'datosSolicitud.html', {'solicitud':solicitud})
+
 def administrador(request):
     """Muestra al usuario la pantalla principal correspondiente al personal departamento. En esta vista,
     el personal del departamento podrá observar una vista rápida de como va el proceso de cada solicitud de
@@ -1030,10 +1074,8 @@ def administrador(request):
     a cabo un análisis de todas las solicitudes, que nos permitirá determinar si alguna, que ya tenga comentarios
     y a la que no se haya vuelto a subir los documentos requeridos, excedió el tiempo establecido para realizar
     esta subida. De exceder el tiempo, la solicitud será cancelada.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver las solicitudes posibles a revisar.
     """
@@ -1081,10 +1123,8 @@ def administrador(request):
 
 def diasHabiles(x):
     """Calcula los días hábiles restantes para que la institución pueda actualizar los archivos.
-
     Parámetros
     -:param x: Contiene la fecha actual.
-
     Retorna
     -:return: Regresa la fecha límite.
     """
@@ -1096,11 +1136,9 @@ def diasHabiles(x):
 
 def administradorSolicitud(request, solicitud):
     """Este método muestra la solicitud que se buscó en la vista "administrador(request)".
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se desea visualizar.
-
     Retorna
     -:return: Regresa la plantilla "administrador.html" en la cuál le va a mostrar (de existir) la solicitud de su busqueda.
     """
@@ -1117,10 +1155,8 @@ def administradorSolicitud(request, solicitud):
 
 def notificacionAdministrador(request):
     """Esta vista hace una consulta de todas las notificaciones no leídas del usuario tipo administrador
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "notificacionAdministrador.html" que muestra las notificaciones del personal departamento.
     """
@@ -1144,10 +1180,8 @@ def notificacionAdministrador(request):
 
 def historialNotificacionesAdmin(request):
     """Esta vista hace una consulta de todas las notificaciones del usuario
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "notificacionAdministrador.html" que muestra la notificaciones del personal departamento.
     """
@@ -1169,11 +1203,9 @@ def historialNotificacionesAdmin(request):
 def revision(request, solicitud):
     """Este método te redirige a la vista correspondiente para que el personal del departamento
     pueda revisar la solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return redirect 'revMedSuperior': Muestra al usuario la carpeta de media superior para su revisión.
     -:return redirect 'revInstitucional': Muestra al usuario la carpeta insitucional para su revisión.
@@ -1203,11 +1235,9 @@ def revision(request, solicitud):
 def revisionCInstitucional(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     institucional y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
-
     Retorna
     -:return render 'revisionCInstitucional.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1265,11 +1295,9 @@ def revisionCInstitucional(request, solicitud):
 def revisionCCurricular(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     curricular y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return render 'revisionCCurricular.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1314,11 +1342,9 @@ def revisionCCurricular(request, solicitud):
 def revisionCAcademica(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     académica y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return render 'revisionCAcademica.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1374,11 +1400,9 @@ def revisionCAcademica(request, solicitud):
 def revisionCMedSuperior(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     de media superior y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return render 'revisionCMedSuperior.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1438,13 +1462,11 @@ def revisionCMedSuperior(request, solicitud):
 
 def comentariosSolicitud(request, solicitud, idArchivo, carpeta):
     """Este método se utiliza para añadir los comentarios a cada archivo de su correspondiente carpeta.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
     -:param idArchivo: Contiene el identificador del archivo (#_#: carpeta_archivo) sobre el cuál se va a realizar el comentario.
     -:param carpeta: Nos indica la carpeta en la que se encuentra el usuario haciendo la revisión.
-
     Retorna
     -:return redirect: Redirige a la vista en la que el usuario estaba haciendo la revisión.
     """
@@ -1472,11 +1494,9 @@ def comentariosTerminado(request, solicitud):
     2. De tener comentarios le muestra los comentarios a la institución.
     3. De no tener comentarios pasa la solicitud a la siguiente área.
     Además en cada opción se registra la actividad realizada por el usuario.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     :return redirect: Redirige a la pantalla principal del personal del departamento.
     """
@@ -1644,12 +1664,10 @@ def comentariosTerminado(request, solicitud):
 
 def comentariosMostrar(request, solicitud, carpeta):
     """Muestra las comentarios que han sido ingresados por el personal a la solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
     -:param carpeta: Nos indica la carpeta en la que se encuentra el usuario haciendo la revisión.
-
     Retorna
     :return render: Muestra la pantalla en la que visualiza los comentarios pertenecientes a la solicitud que se esta revisando.
     """
@@ -1671,13 +1689,11 @@ def comentariosMostrar(request, solicitud, carpeta):
 
 def comentariosEliminar(request, solicitud, idArchivo, carpeta):
     """Borra un comentario específico de la solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
     -:param idArchivo: Contiene el id del Comentario que se desea borrar
     -:param carpeta: Nos indica la carpeta en la que se encuentra el usuario haciendo la revisión.
-
     Retorna
     :return redirect: Regresa a la pantalla en la que estaba haciendo la revisión.
     """
@@ -1689,10 +1705,8 @@ def comentariosEliminar(request, solicitud, idArchivo, carpeta):
 
 def historialActividades(request):
     """Muestra todas las acciones que ha tenido el personal del departamento sobre las solicitudes.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     :return render: Regresa la plantilla en la que se muestran todas las actividades que han sido realizadas por el departamento.
     """
@@ -1710,12 +1724,10 @@ def historialActividades(request):
         return redirect('perfil')
 
 def entregoDocumentosFisicos(request, solicitud):
-    """Define que la institución ya entregó los documentos en físico al departamento de control escolar.
-
+    """Define que la institución ya entregó los documentos en físico a los departamentos.
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
-
     Retorna
     :return redirect: Redirige a la pantalla principal del personal del departamento.
     """
@@ -1728,13 +1740,17 @@ def entregoDocumentosFisicos(request, solicitud):
         NombreDepartamento = Departamento.objects.values_list('nombre').get(id=estatusSolicitud)[0]
         #Inicializamos la variable para establecer el siguiente departamento que revisará la solicitud.
         siguienteDepartamento = 0
-        #Si la solicitud se encuentra en el departamento Dirección y es de media superior
-        if (estatusSolicitud == 2 and nivelSolicitud == '1'):
-            #Establecemos que el siguiente departamento a revisar será Media superior
-            siguienteDepartamento = 4
-        else:
-            #La solicitud pasa al siguiente departamento en lista (Control escolar->Dirección->Superior)
-            siguienteDepartamento = estatusSolicitud + 1
+        #Si la solicitud se encuentra en el departamento Dirección
+        if estatusSolicitud == 2:
+            #Guardamos el número de oficio de admisión de trámite
+            Solicitud.objects.filter(id=solicitud).update(noOficioAdmision=request.POST["noOficioAdmision"])
+            #Si la solicitud se encuentra en el departamento Dirección y es de media superior
+            if nivelSolicitud == '1':
+                #Establecemos que el siguiente departamento a revisar será Media superior
+                siguienteDepartamento = 4
+            else:
+                #La solicitud pasa al siguiente departamento en lista (Control escolar->Dirección->Superior)
+                siguienteDepartamento = estatusSolicitud + 1
         #Actualizamos que la solicitud ahora le corresponde la revisión al departamento de dirección.
         Solicitud.objects.filter(id=solicitud).update(estatus=siguienteDepartamento)
         #Obtiene el ID de la institución a la que le pertenece la solicitud.
@@ -1777,11 +1793,9 @@ def entregoDocumentosFisicos(request, solicitud):
 
 def finProceso(request, solicitud):
     """Define que el proceso digital a terminado.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
-
     Retorna
     :return redirect: Redirige a la pantalla principal del personal del departamento.
     """
