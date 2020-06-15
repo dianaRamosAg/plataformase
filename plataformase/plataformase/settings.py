@@ -98,10 +98,17 @@ else:
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
+<<<<<<< HEAD
             'PASSWORD' : 'diana',
             'HOST'     : 'localhost',
             'PORT'     : '3306',
            # 'PORT'     : '8000',
+=======
+            'PASSWORD' : 'admin',
+            'HOST'     : 'localhost',
+            #'PORT'    : '5432',
+            'PORT'     : '3306',
+>>>>>>> 32ce085e1a4f68f91279db3f58fa8b1a1d2a09c4
         }
     }
 

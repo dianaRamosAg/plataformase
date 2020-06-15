@@ -1,13 +1,4 @@
 /media/
 *.pyc
-/plataformase/env
-/plataformase/login/migrations
-/plataformase/RVOES/migrations
-/plataformase/TBC/migrations
-/plataformase/SETyRS/migrations
-/plataformase/visitante/migrations
-/plataformase/TBC/__pycache__
-/plataformase/SigApp/__pycache__
-/plataformase/SETyRS/__pycache__
-/plataformase/login/__pycache__
-/plataformase/RVOES/__pycache__
+*/migrations/
+*/__pycache__/
