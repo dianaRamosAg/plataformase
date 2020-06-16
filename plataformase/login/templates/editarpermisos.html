@@ -1,7 +1,7 @@
 {% extends 'base5.html' %}
 {% block title %}Cambiar permisos{% endblock %}
    {% block content %}
-   <form action="../actualizarusr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
+   <form action="../actualizarusr/" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" enctype="multipart/form-data" >
     {% csrf_token %}
     <div class="container">
         <div class="row m-2">
