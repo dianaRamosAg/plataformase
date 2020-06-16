@@ -204,7 +204,7 @@
 
         <embed class="mt-4" src="" type="application/pdf" id="pdf" width="100%" height="600px" />
 
-        {% if solicitud.estatus == 3 or solicitud.estatus == 4 %}
+        {% if solicitud.estatus.id == 3 %}
         <embed class="mt-4" src="{% url 'datosSolicitud' solicitud.id %}" type="" id="datosSolicitud" width="100%" height="600px" />
         {% endif %}
 

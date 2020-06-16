@@ -46,6 +46,12 @@
                     - Nivel: Media Superior
             </h3>
         </div>
+        {% if solicitud.completado == 12 %}
+        <div class="col-12 text-center mb-1">
+            Dirección {%if solicitud.aceptArchivoNivel%}Aceptó{%else%}Rechazó{%endif%} el archivo subido por el nivel.
+            <button onclick="mostrarPDF('{{ solicitud.archivoNivel }}')" type="button" class="btn btn-secondary m-2">Ver archivo subido por el nivel</button>
+        </div>
+        {%endif%}
 
         {% for archivo in archivos %}
 
@@ -53,7 +59,7 @@
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_1" action="../comentarios/1_1/medSuperior">
                     {% csrf_token %}
-                    {% if "1_1" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_1" in comentarios and solicitud.completado == 0 %}
                         <p class="card-text text-danger" >Formato de solicitud<br>
                                 <small>*Este archivo tiene observaciones</small>
                         </p>
@@ -61,12 +67,12 @@
                         <p class="card-text" >Formato de solicitud</p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <textarea placeholder="Comentario..." id="solicitud" name="descripcion"></textarea>
                     {% endif %}
 
                     <button onclick="mostrarPDF('{{ archivo.solicitud }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
@@ -77,7 +83,7 @@
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_2" action="../comentarios/1_2/medSuperior">
                     {% csrf_token %}
-                    {% if "1_2" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_2" in comentarios %}
                         <p class="card-text text-danger" >Recibo de pago<br>
                                 <small>*Este archivo tiene observaciones</small>
                         </p>
@@ -85,12 +91,12 @@
                         <p class="card-text" >Recibo de pago</p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 10 and solicitud.estatus.id == 1 %}
                         <textarea placeholder="Comentario..." id="pago" name="descripcion"></textarea>
                     {% endif %}
 
                     <button onclick="mostrarPDF('{{ archivo.pago }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 10 and solicitud.estatus.id == 1 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
@@ -101,7 +107,7 @@
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_3" action="../comentarios/1_3/medSuperior">
                     {% csrf_token %}
-                    {% if "1_3" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_3" in comentarios and solicitud.completado == 0 %}
                         <p class="card-text text-danger" >Identificación oficial con fotografía<br>
                                 <small>*Este archivo tiene observaciones</small>
                         </p>
@@ -109,22 +115,23 @@
                         <p class="card-text" >Identificación oficial con fotografía</p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                     <textarea placeholder="Comentario..." id="identificacion" name="descripcion"></textarea>
                     {% endif %}
 
                     <button onclick="mostrarPDF('{{ archivo.identificacion }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
             </div>
         </div>
+
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_4" action="../comentarios/1_4/medSuperior">
                     {% csrf_token %}
-                    {% if "1_4" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_4" in comentarios and solicitud.completado == 0 %}
                         <p class="card-text text-danger" >Manifiesto de compromiso  de incorporar al personal docente<br>
                                 <small>*Este archivo tiene observaciones</small>
                         </p>
@@ -132,24 +139,23 @@
                         <p class="card-text" >Manifiesto de compromiso  de incorporar al personal docente</p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <textarea placeholder="Comentario..." id="perDocente" name="descripcion"></textarea>
                     {% endif %}
 
                     <button onclick="mostrarPDF('{{ archivo.perDocente }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
             </div>
         </div>
 
-
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_5" action="../comentarios/1_5/medSuperior">
                     {% csrf_token %}
-                    {% if "1_5" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_5" in comentarios and solicitud.completado == 0 %}
                         <p class="card-text text-danger" >Formato No. 6 "Instalaciones"<br>
                         {% if not archivo.progEstuio %}
                             <small>Formato No. 6 "Instalaciones"</small>
@@ -165,12 +171,12 @@
                     </p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <textarea placeholder="Comentario..." id="instalaciones" name="descripcion" ></textarea>
                     {% endif %}
 
                     <button onclick="mostrarPDF('{{ archivo.instalaciones }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
@@ -182,7 +188,7 @@
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_6" action="../comentarios/1_6/medSuperior">
                     {% csrf_token %}
-                    {% if "1_6" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_6" in comentarios and solicitud.completado == 0 %}
                         <p class="card-text text-danger" >Tecnología y equipamiento para la opción educativa virtual<br>
                                 <small>*Este archivo tiene observaciones</small>
                         </p>
@@ -190,12 +196,12 @@
                         <p class="card-text" >Tecnología y equipamiento para la opción educativa virtual</p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <textarea placeholder="Comentario..." id="equipamiento" name="descripcion"></textarea>
                     {% endif %}
 
                     <button onclick="mostrarPDF('{{ archivo.equipamiento }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
@@ -207,7 +213,7 @@
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_7" action="../comentarios/1_7/medSuperior">
                     {% csrf_token %}
-                    {% if "1_7" in comentarios and noHaPasadoPorTodasLasAreas %}
+                    {% if "1_7" in comentarios and solicitud.completado == 0 %}
                     <p class="card-text text-danger" >Planes y Programas de Estudio<br>
                         {% if not archivo.progEstuio %}
                             <small>Plan y programa de estudios federal</small>
@@ -223,13 +229,13 @@
                     </p>
                     {% endif %}
 
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <textarea placeholder="Comentario..." id="progEstudio" name="descripcion" ></textarea>
                     {% endif %}
                     {% if archivo.progEstuio %}
                         <button onclick="mostrarPDF('{{ archivo.progEstuio }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% endif %}
-                    {% if noHaPasadoPorTodasLasAreas %}
+                    {% if solicitud.completado == 0 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
@@ -241,7 +247,7 @@
                     <div class="card-body border border-dark text-center">
                         <form method="post" id="1_8" action="../comentarios/1_8/medSuperior">
                             {% csrf_token %}
-                            {% if "1_8" in comentarios and noHaPasadoPorTodasLasAreas %}
+                            {% if "1_8" in comentarios and solicitud.completado == 0 %}
                                 <p class="card-text text-danger" >Opinión favorable de CIFRHS<br>
                                         <small>*Este archivo tiene observaciones</small>
                                 </p>
@@ -249,12 +255,12 @@
                                 <p class="card-text" >Opinión favorable de CIFRHS</p>
                             {% endif %}
 
-                            {% if noHaPasadoPorTodasLasAreas %}
+                            {% if solicitud.completado == 0 %}
                                 <textarea placeholder="Comentario..." id="cifrhs" name="descripcion"></textarea>
                             {% endif %}
 
                             <button onclick="mostrarPDF('{{ archivo.cifrhs }}')" type="button" class="btn btn-secondary">Ver</button>
-                            {% if noHaPasadoPorTodasLasAreas %}
+                            {% if solicitud.completado == 0 %}
                                 <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                             {% endif %}
                         </form>
@@ -267,7 +273,7 @@
                     <div class="card-body border border-dark text-center">
                         <form method="post" id="1_9" action="../comentarios/1_9/medSuperior">
                             {% csrf_token %}
-                            {% if "1_9" in comentarios and noHaPasadoPorTodasLasAreas %}
+                            {% if "1_9" in comentarios and solicitud.completado == 0 %}
                                 <p class="card-text text-danger" >Carta de intención<br>
                                         <small>*Este archivo tiene observaciones</small>
                                 </p>
@@ -275,12 +281,12 @@
                                 <p class="card-text" >Carta de intención</p>
                             {% endif %}
 
-                            {% if noHaPasadoPorTodasLasAreas %}
+                            {% if solicitud.completado == 0 %}
                                 <textarea placeholder="Comentario..." id="carta" name="descripcion"></textarea>
                             {% endif %}
 
                             <button onclick="mostrarPDF('{{ archivo.carta }}')" type="button" class="btn btn-secondary">Ver</button>
-                            {% if noHaPasadoPorTodasLasAreas %}
+                            {% if solicitud.completado == 0 %}
                                 <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                             {% endif %}
                         </form>
@@ -322,68 +328,131 @@
 
     </div>
 
-    <form method="post" action="../../../finProceso/{{ solicitud.id }}/">
-    {% csrf_token %}
     {% if solicitud.estatus_id == 4 and solicitud.completado == 10 %}
-    <div class="col-5 mt-1 mx-auto">
-        <div class="card-body border border-dark text-center">
-                  <p class="card-text" >Observaciones de la visita a la institución<br></p>
-                  <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
+    <form method="post" class="m-3" enctype="multipart/form-data" action="../../../finProceso/{{ solicitud.id }}/">
+        {% csrf_token %}
+        <div class="col-5 mt-1 mx-auto">
+            <div class="card-body border border-dark text-center">
+                <p class="card-text" >Archivo de validación de turno<br></p>
+                <input class="form-control-file m-2" type="file" required name="archivoNivel" id="id_archivoNivel" accept="application/pdf">
+                <!--textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea-->
+            </div>
         </div>
-    </div>
-    <div class="col mt-3 mb-3 text-center">
-        <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
-            {% if solicitud.estatus.id == 1 or solicitud.estatus.id == 2 %}
-                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
-            {% endif %}
-            {% if solicitud.estatus_id == 4 %}
-                <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
-                <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
-            {% endif %}
-          <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
-    </div>
-
+        <div class="col mt-3 mb-3 text-center">
+            <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+            <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
+            <!--button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button-->
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+        </div>
+    </form>
     {% else %}
 
-    <div class="col mt-3 mb-3 text-center">
-        <form method="post" id="id_form" action="">
+        {% if solicitud.estatus_id == 2 and solicitud.completado == 11 %}
+        <form method="post" class="m-3" action="#" id="id_form_archivoNivel">
             {% csrf_token %}
-            {% if solicitud.completado == 10 and solicitud.estatus.id == 2 %}
-            <div class="m">
-                <label>Número de oficio de admisión de trámite:</label>
-                <input class="form-control d-inline col-2" required type="text" name="noOficioAdmision" id="id_noOficioAdmision">
+            <div class="col-4 mt-1 mx-auto">
+                <div class="card-body border border-dark text-center">
+                    <input type="text" hidden name="archivoNivel" id="id_valor" value="True">
+                    <button onclick="mostrarPDF('{{ solicitud.archivoNivel }}')" type="button" class="btn btn-secondary m-2">Ver archivo subido por el nivel</button>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="id_validar" checked onclick="aceptReject()">
+                        <label class="custom-control-label" for="id_validar" id="lbl_validar">Aceptar solicitud</label>
+                    </div>
+                </div>
             </div>
-            <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
-            {% if noHaPasadoPorTodasLasAreas and estadoComentario == '0' or estadoComentario == '2' %}
-                {% if comentarios == "" %}
-                    <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                {% else %}
-                    {% if comentarioMostrado %}
-                        {% if comentarioNoMostrado %}
-                            <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
-                        {% else %}
-                            <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
-                        {% endif %}
+            <div class="col mt-3 mb-3 text-center">
+                <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+                <button class="btn btn-primary" id="finProcesoValidar" onclick="asegurar()">Finalizar revisión</button>
+                <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+            </div>
+        </form>
+        {% else %}
+
+            <div class="m-3">
+            {% if solicitud.estatus_id == 1 and solicitud.completado == 10 %}
+                {% if solicitud.customuser.tipo_persona == '1' %}
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
+                        <label class="custom-control-label" for="id_org_cop_identificacion">¿Presenta original y copia simple de identificación oficial?</label>
+                    </div>
+                {% endif %}
+                {% if solicitud.customuser.tipo_persona == '2' %}
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" name="org_cop_acta" id="id_org_cop_acta">
+                        <label class="custom-control-label" for="id_org_cop_acta">¿Presenta original y copia simple de su acta constitutiva y estatutos vigentes?</label>
+                    </div>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
+                        <label class="custom-control-label" for="id_org_cop_identificacion">¿Presenta original y copia simple del poder notarial vigente e identificación oficial de su representante legal?</label>
+                </div>
+                {% endif %}
+            {% endif %}
+            </div>
+
+            <div class="col mt-3 mb-3 text-center">
+                {% if solicitud.completado == 10 and solicitud.estatus.id == 2 %}
+                <div class="m-2">
+                    <form method="post" id="id_form" action="../entregoDocumentos">
+                    {% csrf_token %}
+                        <input type="text" hidden name="hayComentariosNoAtendidos" id="id_hayComentariosNoAtendidos" value="{{hayComentariosNoAtendidos}}">
+                        <label>Número de oficio de admisión de trámite:</label>
+                        <input class="form-control d-inline col-2" required type="text" name="noOficioAdmision" id="id_noOficioAdmision">
+                        <br>
+                        <button type="submit" class="btn btn-secondary mt-2">Entregó documentos</button>
+                    </form>
+                </div>
+                {% endif %}
+                <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+                {% if solicitud.completado != 12 %}
+                {% if noHaPasadoPorTodasLasAreas and estadoComentario == '0' or estadoComentario == '2' %}
+                    {% if comentarios == "" %}
+                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
                     {% else %}
-                        <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                        {% if comentarioMostrado %}
+                            {% if comentarioNoMostrado %}
+                                <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                            {% else %}
+                                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                            {% endif %}
+                        {% else %}
+                            <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="#" >Terminar revisión</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
-            {% endif %}
-            {% if solicitud.completado == 10 %}
-                {% if solicitud.estatus.id == 1 %}
-                    <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+                {%endif%}
+                {% if solicitud.completado == 10 %}
+                    {% if solicitud.estatus.id == 1 %}
+                        <form class="d-inline" method="post" id="id_form2" action="../entregoDocumentos">
+                        {% csrf_token %}
+                        <input type="text" hidden name="hayComentariosNoAtendidos" id="id_hayComentariosNoAtendidos" value="{{hayComentariosNoAtendidos}}">
+                        {% if solicitud.customuser.tipo_persona == '1' %}
+                            {% if hayComentariosNoAtendidos == False %}
+                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false ){
+                                event.preventDefault();
+                                alert('¡ATENCIÓN!, la casilla de original y copia de Identificación no esta marcada, en caso de no haberlas entregado no puede continuar.\nSi fueron entregadas, favor de marcar la casilla.');
+                                }" > Entregó documentos</button>
+                            {% endif %}
+                            {%if hayComentariosNoAtendidos == True %}
+                                <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
+                            {% endif %}
+                        {% endif %}
+                        {% if solicitud.customuser.tipo_persona == '2' %}
+                            {% if hayComentariosNoAtendidos == False %}
+                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');}" >Entregó documentos {% else %}</button>
+                            {% endif %}
+                            {%if hayComentariosNoAtendidos == True %}
+                                <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
+                            {% endif %}
+                        {% endif %}
+                        </form>
+                    {% endif %}
                 {% endif %}
-                {% if solicitud.estatus.id == 2 %}
-                    <button type="submit" onclick="entregoDocumentos()" class="btn btn-secondary" id="id_entregoDocumentos">Entregó documentos</button>
-                {% endif %}
-            {% endif %}
-            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
-        </form>
-    </div>
+                <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+            </div>
+
+        {% endif %}
 
     {% endif %}
-
-    </form>
 
 </div>
 
@@ -397,7 +466,7 @@
             document.getElementById("id_form").action = "../entregoDocumentos";
         }
     }
-
+    /*
   document.getElementById('finProceso2').style.display='none';
   function cambiarBoton(){
     var txtObsVisita = document.getElementById("id_observacionesVisita");
@@ -407,12 +476,54 @@
     }else {
       document.getElementById('finProceso').style.display='none';
       document.getElementById('finProceso2').style.display='inline';
-    }
+    }*/
   }
 </script>
 {% endif %}
 
+{% if solicitud.estatus_id == 2 and solicitud.completado == 11 %}
 <script type="text/javascript">
+    var btnAceptReject = document.getElementById("id_valor");
+    var btnFinProcesoValidar = document.getElementById("finProcesoValidar");
+    var lbl_validar = document.getElementById("lbl_validar");
+
+    function aceptReject(){
+        if (btnAceptReject.value=="True"){
+            btnAceptReject.value = "False";
+            lbl_validar.innerHTML = "Rechazar solicitud"
+        }else{
+            btnAceptReject.value = "True";
+            lbl_validar.innerHTML = "Aceptar solicitud"
+        }
+    }
+
+    function asegurar(){
+        if (btnAceptReject.value=="True"){
+            var opcion = confirm("Indicará a ventanilla única que la solicitud fue aceptada ¿Desea continuar?");
+            if (opcion == true) {
+                document.getElementById("id_form_archivoNivel").action = "../../../finProceso/{{ solicitud.id }}/";
+            }else{
+                document.getElementById("id_form_archivoNivel").action = "#lbl_validar";
+            }
+        }else{
+            var opcion = confirm("Indicará a ventanilla única que la solicitud fue rechazada ¿Desea continuar?");
+            if (opcion == true) {
+                document.getElementById("id_form_archivoNivel").action = "../../../finProceso/{{ solicitud.id }}/";
+            }else{
+                document.getElementById("id_form_archivoNivel").action = "#lbl_validar";
+            }
+        }
+    }
+</script>
+{% endif %}
+
+<script type="text/javascript">
+
+    function hayComentarios(){
+    var hayComentariosNoAtendidos = "{{hayComentariosNoAtendidos}}";
+    alert(hayComentariosNoAtendidos);
+    return hayComentariosNoAtendidos;
+    }
 
     function terminar(estado){
         var btnTerminar = document.getElementById("TRevision")

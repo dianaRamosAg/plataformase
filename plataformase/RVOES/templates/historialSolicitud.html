@@ -69,8 +69,10 @@
 <div class="row mt-2">
     <div class="col-4 mx-auto text-center">
         <a class=" btn btn-secondary" href="../../G">Regresar</a>
-        {% if rechazada == 0 and comentario == '1' %}
+        {% if rechazada > 4 or rechazada == 0 %}
+            {% if comentario == '1' %}
             <a class="ml-3 btn btn-secondary" href="subirArchivos">Corregir solicitud</a>
+            {% endif %}
         {% endif %}
         {% if rechazada == 9 %}
             <a class="ml-3 btn btn-info" href="{% url 'informacionPago' solicitud %}">Añadir información del pago</a>
