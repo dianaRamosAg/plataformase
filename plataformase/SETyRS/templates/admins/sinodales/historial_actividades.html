@@ -33,7 +33,6 @@
     <table class="table table-striped table-hover" id="sinodales">
         <thead>
             <tr>
-
                 <th scope="col">Solicitud</th>
                 <th scope="col">Sinodal</th>
                 <th scope="col">RFC</th>
@@ -48,7 +47,7 @@
             {% if historial %}
             {% for h in historial %}
             <tr>
-                <td>{{h.solicitud_id}}</td>
+                <td><a href="{% url 'SETyRS_revisar_solicitud_sinodal' h.solicitud_id %}">{{h.solicitud_id}}</a></td>
                 <td>{{h.sinodal.nombre_sinodal}}</td>
                 <td>{{h.sinodal.rfc}}</td>
                 <td>{{h.sinodal.institucion}}</td>

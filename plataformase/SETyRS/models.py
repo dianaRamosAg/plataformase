@@ -10,7 +10,7 @@ from .validators import validate_file_extension
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
     categoria = models.IntegerField()
-    institucion = models.ForeignKey(UsuarioInstitucion, on_delete=models.CASCADE)
+    institucion = models.IntegerField(default=1)
     area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
     id_secretario = models.IntegerField()
@@ -20,6 +20,8 @@ class SolicitudExamen(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     fecha = models.DateField('fecha de publicacion')
     nivel_educativo = models.IntegerField(default=1)
+    fecha_exa = models.DateField(default='2020-06-06')
+    lugar_exa = models.CharField(max_length=50,default='Algun lugar')
 
     class Meta:
         db_table = 'SETyRS_solicitud_examen'
@@ -30,6 +32,9 @@ class Alumnos(models.Model):
     nombre_alumno = models.CharField(max_length=50)
     CURP = models.CharField(max_length=50)
     id_solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
+    folio_pago = models.CharField(max_length=50,default='1234', blank=True)
+    carrera = models.CharField(max_length=100,default='Carrera', blank=True)
+
 
     def __str__(self):
         return self.nombre_alumno
@@ -97,6 +102,7 @@ class ArchivosAlumnos(models.Model):
     servicio_social = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
     inscripcion_ctrl_escolar = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
     recibo_pago = models.FileField(upload_to='SETyRS/archivos/alumnos', validators=[validate_file_extension], blank=True, null=True)
+    comprobante_exp = models.FileField(upload_to='SETyRS/archivos/alumnos', validators=[validate_file_extension], blank=True, null=True)
 
     class Meta:
         db_table = 'SETyRS_documentos_alumnos'

@@ -40,7 +40,45 @@ function mostrarBA() {
     ba = document.getElementById("BA")
     if (checkba.checked) {
         ba.style.display='block'
-    } else ba.style.display='none'
+        document.getElementById("date").value="";
+        document.getElementById("institucion").value="";
+    } else {
+        ba.style.display='none'
+        var select, table;
+    select = $('#select').val();
+    table = document.getElementById("solicitudes");
+    tr = table.getElementsByTagName("tr");
+
+    console.log(select)
+
+    if(select==1){
+        for(i=0;i<tr.length;i++) {
+            tr[i].style.display = "";
+        }
+    } else if(select==2) {
+        for(i=0;i<tr.length;i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if(td) {
+                if (td.innerHTML.toUpperCase() == "PENDIENTE") {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    } else if(select==3) {
+        for(i=0;i<tr.length;i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if(td) {
+                if (td.innerHTML.toUpperCase() == "REVISADA") {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        } 
+    }
+}
 }
 
 function buscar() {

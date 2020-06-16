@@ -381,9 +381,11 @@ def index_institucion(request):
 # funcion que retorna la plantilla de nueva solicitud de sinodal
 def nueva_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+        nivel = datos_escuela.nivel_educativo
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
-        context = {'notificacion':notificacion,'notificaciones':num_notifi}
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'nivel':nivel}
         return render(request, 'institucion/sinodales/nueva_solicitud.html', context)
     else:
         raise Http404("El usuario no tiene permiso de ver esta página")
@@ -392,13 +394,15 @@ def nueva_solicitud_sinodal(request):
 #Recibe el id de la solicitud
 def detalle_solicitud_sinodal(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+        nivel = datos_escuela.nivel_educativo
         solicitud = get_object_or_404(SolicitudSinodal, pk=id)
         if solicitud.user_id == request.user.id:
             notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
             num_notifi = contarNotificaciones(request.user.id)
             lista_sinodales = Sinodales.objects.filter(id_solicitud_id=id).order_by('nombre_sinodal')
             archivos = ArchivosSinodales.objects.filter(solicitud_id=id).order_by('id')
-            context = {'lista_sinodales': lista_sinodales, 'solicitud':solicitud, 'archivos':archivos, 'notificacion':notificacion,'notificaciones':num_notifi}
+            context = {'nivel':nivel,'lista_sinodales': lista_sinodales, 'solicitud':solicitud, 'archivos':archivos, 'notificacion':notificacion,'notificaciones':num_notifi}
             if solicitud.fase == 1:
                 return render(request, 'institucion/sinodales/agregar_sinodales.html', context)
             elif solicitud.fase == 2:
@@ -456,8 +460,9 @@ def crear_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         if request.method == 'POST':
             user_id = request.user.id
-            datos_escuela = get_object_or_404(UsuarioInstitucion, id_usuariobase_id=user_id)
-            solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=datos_escuela.nivel_educativo)
+            datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+            nivel = datos_escuela.nivel_educativo
+            solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
             solicitud.save()
             msg = 'Nueva solicitud de sinodales. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2, user_id=user_id)
@@ -476,14 +481,18 @@ def agregar_sinodal(request, id):
             curp=request.POST["curp"]
             rfc=request.POST["rfc"]
             grado=request.POST["grado_academico"]
+            datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+            nivel = datos_escuela.nivel_educativo
+            sino_count = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name,estatus=2).count()
             comprobar_duplicidad = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name)
-            if comprobar_duplicidad:
+            if comprobar_duplicidad and sino_count>=1:
+            
                 error = 'Este sinodal ya existe en su registro'
                 messages.error(request, error)
                 return redirect('SETyRS_detalle_solicitud_sinodal',id)
             else:
                 datos_escuela = get_object_or_404(UsuarioInstitucion, id_usuariobase_id=request.user.id)
-                sinodal = Sinodales(nivel_educativo=datos_escuela.nivel_educativo,nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name)
+                sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name,nivel_educativo=nivel)
                 sinodal.save()
                 return redirect('SETyRS_detalle_solicitud_sinodal',id)
     else:
@@ -690,11 +699,13 @@ def crear_solicitud_examen(request):
             presidente = request.POST["presidente"]
             secretario = request.POST["secretario"]
             vocal = request.POST["vocal"]
-            #escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+            escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
             #if escuela.nivel_educativo == 3:
             nivel_educativo = request.POST['nivel']
+            fecha_e = request.POST["fecha_exa"]
+            lugar_e = request.POST["Lugar_exa"]
             solicitud = SolicitudExamen(categoria=categoria, id_presidente=presidente, id_secretario=secretario, id_vocal=vocal, 
-                                        institucion_id=request.user.id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo)
+                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e)
             solicitud.save()
             msg = 'Nueva solicitud de exámenes a titulo. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=1, user_id=request.user.id)
@@ -711,7 +722,9 @@ def agregar_alumno(request, id):
             nombre=request.POST["nombre"].upper()
             certificado=request.POST["certificado"].upper()
             curp=request.POST["curp"].upper()
-            alumno = Alumnos(no_certificado=certificado, nombre_alumno=nombre, CURP=curp, id_solicitud_id=id)
+            folio=request.POST["folio_pago"].upper()
+            carrera=request.POST["carrera"].upper()
+            alumno = Alumnos(no_certificado=certificado, nombre_alumno=nombre, CURP=curp, id_solicitud_id=id,folio_pago=folio,carrera=carrera)
             alumno.save()
             return redirect('SETyRS_detalle_solicitud_examen', id)
         else:
@@ -727,6 +740,7 @@ def editar_alumno(request):
             alumno.nombre_alumno = request.POST["nom"]
             alumno.no_certificado = request.POST["cert"]
             alumno.CURP = request.POST["curp"]
+            alumno.folio_pago = request.POST["folio_pago"]
             alumno.save()
             solicitud = alumno.id_solicitud_id
             return redirect('SETyRS_detalle_solicitud_examen', solicitud)

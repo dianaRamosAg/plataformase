@@ -297,18 +297,26 @@ def actualizarusr(request):
             email = request.POST["email"]
             tipo_usuario = request.POST["tipo_usuario"]
             departamento = int(request.POST["departamento"])
+            user = CustomUser.objects.get(email=email)
             if tipo_usuario=='3':
                  CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento)
                  return redirect('usuarios')
             if tipo_usuario=='2':
-                firma = request.POST["firma_digital"]
                 if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists() :
                     #Se le hace usuario normal
-                    CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
-                    CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1,firma_digital='firmas_digitales/'+firma)
-                    
+                    CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0', tipo_usuario='3')
+                    CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
+
                 else:
-                    CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1,firma_digital='firmas_digitales/'+firma)
+                    CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
+                if request.FILES:
+                    if 'firma_digital' in request.FILES:
+                        user.firma_digital.delete()
+                        user.firma_digital = request.FILES['firma_digital']
+                        user.tipo_usuario= tipo_usuario
+                        user.departamento_id=departamento
+                        user.jefe = 1
+                user.save()
                 return redirect('usuarios')
             if tipo_usuario=='4':
                 CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=None,jefe='0')
@@ -316,6 +324,14 @@ def actualizarusr(request):
 
         else:
                 return redirect('menuadmin')
+
+
+
+
+
+
+
+
 
 
 def ActUsr(request,email):

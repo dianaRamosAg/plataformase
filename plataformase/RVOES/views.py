@@ -1,3 +1,4 @@
+  
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.views.generic.base import View
@@ -33,7 +34,6 @@ class Pdf(View):
         """Parámetros
         -:param request: Contiene información del navegador del usuario que está realizando la petición.
         -:param id: Es el id de la solicitud para saber sobre que solicitud se va a generar el archivo PDF
-
         Retorna
         -:return: Regresa el pdf de planes y programas de estudio.
         """
@@ -46,10 +46,8 @@ def index_user(request):
     'TotalNotificaciones' es una variable que almacena el resultado de un QuerySet que cuenta los registros
     (que simulan notificaciones) de tipo "Historial" pertenecientes al usuario, que no han sido leídas (leida=0). Esta
     variable es enviada a plantilla para su mostrar su valor dentro de la plantilla.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "Inicio.html" (página principal del usuario).
     """
@@ -66,10 +64,8 @@ def acuerdos(request):
     correspondientes a su nivel. Estos acuerdos son subidos por el admnistrador del sistema.
     La variable docsMS obtiene todos los acuerdos correspondientes al nivel Media Superior (1).
     La variable docsS obtiene todos los acuerdos correspondientes al nivel Superior (2).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "acuerdos.html" en la cual la institución visualiza los acuerdos para realizar una
     solicitud de RVOE
@@ -91,10 +87,8 @@ def validacion(request):
     De existir alguna solicitud pendiente, le informa a la institución, mediante la plantilla "faltaArchivos.html",
     para que decida si quiere continuar con esa solicitud o si quiere comenzar una nueva. De no existir alguna
     solicitud  pendiente, redirige al usuario a la URL con llamada "solicitud".
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return redirect: Redirige a la página solicitud.
     -:return render: Retorna la plantilla "faltaArchivos.html" para preguntar a la institución si quiere continuar con la
@@ -127,10 +121,8 @@ def solicitud(request):
     La variable "record" obtiene el "id" de la última solicitud ingresada al sistema por el usuario y el valor
     "completado" para definir en qué carpeta quedo la solicitud (Carpetas: -1 = Cancelada, 0 = Completado, 1 = Institucional,
     2 = Curricular, 3 = Académica, 4 = Media Superior, 11 = Terminó revisión digital).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "solicitud.html" para que el usuario empiece el proceso de solicitud de RVOE.
     """
@@ -154,10 +146,8 @@ def solicitud_insert(request):
     Si la informaion viene en un request con método de envío de datos diferente a POST, redirecciona a la URL con con el
     nombre "solicitd". Si la información se recibe con el método POST, entonces se guarda en la base de datos y según el
     nivel de la solicitud se le redirge a la URL especifica, si nivel = 1: Media Superior, nivel = 2: Superior.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return redirect('medSuperior'): Redirige a la URL de Media Superior para que la institución pueda subir los archivos correspondientes.
     -:return redirect('institucionalSup'): Redirige a la URL de Superior para que la institución pueda subir los archivos correspondientes.
@@ -322,10 +312,8 @@ def SInstitucional(request):
     Este método almacena los documentos que han sido cargados en la plantilla "institucionalSup.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta Institucional. Además este método actualiza el estado
     de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Institucional [completado=1]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "institucionalSup.html" para que la institución pueda subir los archivos correspondientes
      a la carpeta institucional.
@@ -366,10 +354,8 @@ def SCurricular(request):
     Este método almacena los documentos que han sido cargados en la plantilla "curricularSup.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta Curricular. Además este método actualiza el estado
     de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Curricular [completado=2]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "curricularSup.html" para que la institución  pueda subir los archivos correspondientes
      a la carpeta curricular.
@@ -401,10 +387,8 @@ def SAcademica(request):
     Este método almacena los documentos que han sido cargados en la plantilla "academicaSup.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta Academica. Además este método actualiza el estado
     de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Académica [completado=3]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "academicaSup.html" para que la institución  pueda subir los archivos correspondientes
      a la carpeta académica.
@@ -433,10 +417,8 @@ def SMedSuperior(request):
     Este método almacena los documentos que han sido cargados en la plantilla "medSuperior.html", esta plantilla pide
     a la institución todos los archivos correspondientes a la carpeta única de Media Superior. Además este método actualiza
     el estado de en que carpeta se encuentra subiendo archivos actualmente (Carpeta Media Superior [completado=4]).
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "medSuperior.html" para que la institución pueda subir los archivos correspondientes a la
      carpeta de media superior.
@@ -475,10 +457,8 @@ def finSolicitud(request):
     una nueva solicitud y a la vez se le informa al usuario 'institución' que su solicitud se ha registrado.
     Finalmente se le muestra la plantilla "finSolicitud.html" la cual le dice cuál es el folio de seguimiento de esa
     solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Retorna la plantilla "finSolicitud.html" para decirle a la institución que ahí acaba el proceso de subida de
      archivos y comienza el proceso de revisión.
@@ -511,13 +491,11 @@ def finSolicitud(request):
 def estatus(request, usuario, solicitud):
     """Muestra al usuario 'institución' todas las solicitudes que ha realizado. También sirve para mostrar una solicitud
      específica pasando como parámetro de búsqueda su ID.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Se recibe el id del usuario mediante la URL
     -:param solicitud: Determina el tipo de solicitudes a mostrar, si soliciutd = "G": Muestra todas las solicitudes de ese
          usuario. Si solicitud = X(Cualquier otro número), muestra solo la solicitud que tenga ID = X.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá observar solicitudes que ha ingresado anteriormente.
     """
@@ -539,12 +517,10 @@ def historial(request, usuario, solicitud):
     """Muestra a la institución información más detallada de la solicitud que ha seleccionado,
      a través de un par de tablas que muestran el historial de notificaciones realizadas a esa
      solicitud y todos las observaciones a los documentos subidos a la misma.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Se recibe el id del usuario mediante la URL
     -:param solicitud: ID de la solicitud a consultar.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá observar información del proceso de la solicitud
     """
@@ -570,10 +546,8 @@ def historial(request, usuario, solicitud):
 
 def notificacionUsuario(request):
     """Muestra al usuario las notificaciones que tiene como no leídas.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar las notificaciones que tiene que no han sido leídas.
     """
@@ -590,10 +564,8 @@ def notificacionUsuario(request):
 
 def historialNotificacionesUsuario(request):
     """Muestra al usuario todas las notificaciones que ha recibido.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá revisar todas las notificaciones que ha recibido.
     """
@@ -609,12 +581,10 @@ def historialNotificacionesUsuario(request):
 
 def verArchivos(request, usuario, solicitud):
     """Muestra al usuario los archivos subidos a la solicitud seleccionada.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Contiene el ID del usuario que está hacinedo la consulta.
     -:param solicitud: Contiene el ID de la solicitud que se ha seleccionado para ver sus archivos.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver los documentos subidos ordenados por carpeta.
     """
@@ -637,12 +607,10 @@ def verArchivos(request, usuario, solicitud):
 def subirArchivos(request, usuario, solicitud):
     """Muestra al usuario los comentarios que ha recibido en su respectiva solicitud y
     se le solicita que vuelva a subir los archivos necesarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario esta realizando la petición.
     -:param usuario: Contiene el ID del usuario que está hacinedo la consulta.
     -:param solicitud: Contiene el ID de la solicitud que ha seleccionado para volver a subir los archivos corregidos.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver los comentarios dados por el personal de los departamentos hacia la solicitud.
     """
@@ -670,18 +638,14 @@ def terminarSubArchivos(request, usuario, solicitud):
     ya no tiene comentarios (por haber actualizado los archivos) y notifica al personal del departamento
     correspondiente que han actualizado los archivos de esa solicitud y se le notifica al mismo usuario
     que sus modificaciones han sido enviadas.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param usuario: Contiene el ID de la institución y se utiliza para notificar a la insitución que se han enviado sus modificaciones.
     -:param solicitud: Contiene el ID de la solicitud que ha seleccionado para volver a subir los archivos corregidos.
-
     Retorna
     -:return redirect 'estado': Regresa la vista en la cual el usuario podrá ver la pantalla en la que aparecerá su solicitud en forma de lista.
     -:return redirect 'subirArchivos': Regresa la vista en la cual el usuario podrá ver los comentarios dados por el personal de los departamentos hacia la solicitud y pueda actualizar los documentos.
-
     *EXPLICACIÓN DE IDENTIFICACIÓN DE ARCHIVO DE LOS COMENTARIOS
-
     Los comentarios en el modelo vienen con un campo llamado "archivo" el cual es una representación del
     método de identificación individual del documento que se ideo para una fácil identificación. En este
     campo se incluyen 2 valores númericos separados por un guión bajo (#_#). El primero número representa
@@ -1125,10 +1089,8 @@ def administrador(request):
     a cabo un análisis de todas las solicitudes, que nos permitirá determinar si alguna, que ya tenga comentarios
     y a la que no se haya vuelto a subir los documentos requeridos, excedió el tiempo establecido para realizar
     esta subida. De exceder el tiempo, la solicitud será cancelada.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la vista en la cual el usuario podrá ver las solicitudes posibles a revisar.
     """
@@ -1176,10 +1138,8 @@ def administrador(request):
 
 def diasHabiles(x):
     """Calcula los días hábiles restantes para que la institución pueda actualizar los archivos.
-
     Parámetros
     -:param x: Contiene la fecha actual.
-
     Retorna
     -:return: Regresa la fecha límite.
     """
@@ -1191,11 +1151,9 @@ def diasHabiles(x):
 
 def administradorSolicitud(request, solicitud):
     """Este método muestra la solicitud que se buscó en la vista "administrador(request)".
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se desea visualizar.
-
     Retorna
     -:return: Regresa la plantilla "administrador.html" en la cuál le va a mostrar (de existir) la solicitud de su busqueda.
     """
@@ -1212,10 +1170,8 @@ def administradorSolicitud(request, solicitud):
 
 def notificacionAdministrador(request):
     """Esta vista hace una consulta de todas las notificaciones no leídas del usuario tipo administrador
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "notificacionAdministrador.html" que muestra las notificaciones del personal departamento.
     """
@@ -1239,10 +1195,8 @@ def notificacionAdministrador(request):
 
 def historialNotificacionesAdmin(request):
     """Esta vista hace una consulta de todas las notificaciones del usuario
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     -:return: Regresa la plantilla "notificacionAdministrador.html" que muestra la notificaciones del personal departamento.
     """
@@ -1264,11 +1218,9 @@ def historialNotificacionesAdmin(request):
 def revision(request, solicitud):
     """Este método te redirige a la vista correspondiente para que el personal del departamento
     pueda revisar la solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return redirect 'revMedSuperior': Muestra al usuario la carpeta de media superior para su revisión.
     -:return redirect 'revInstitucional': Muestra al usuario la carpeta insitucional para su revisión.
@@ -1298,11 +1250,9 @@ def revision(request, solicitud):
 def revisionCInstitucional(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     institucional y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
-
     Retorna
     -:return render 'revisionCInstitucional.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1362,11 +1312,9 @@ def revisionCInstitucional(request, solicitud):
 def revisionCCurricular(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     curricular y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return render 'revisionCCurricular.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1411,11 +1359,9 @@ def revisionCCurricular(request, solicitud):
 def revisionCAcademica(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     académica y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return render 'revisionCAcademica.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1473,11 +1419,9 @@ def revisionCAcademica(request, solicitud):
 def revisionCMedSuperior(request, solicitud):
     """Este método muestra la vista en que el personal del despartamento puede revisar la carpeta
     de media superior y hacer comentarios.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     -:return render 'revisionCMedSuperior.html': Muestra a usuario la vista en la que puede revisar los documentos subidos y hacer sus respectivos comentarios.
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
@@ -1539,13 +1483,11 @@ def revisionCMedSuperior(request, solicitud):
 
 def comentariosSolicitud(request, solicitud, idArchivo, carpeta):
     """Este método se utiliza para añadir los comentarios a cada archivo de su correspondiente carpeta.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
     -:param idArchivo: Contiene el identificador del archivo (#_#: carpeta_archivo) sobre el cuál se va a realizar el comentario.
     -:param carpeta: Nos indica la carpeta en la que se encuentra el usuario haciendo la revisión.
-
     Retorna
     -:return redirect: Redirige a la vista en la que el usuario estaba haciendo la revisión.
     """
@@ -1573,11 +1515,9 @@ def comentariosTerminado(request, solicitud):
     2. De tener comentarios le muestra los comentarios a la institución.
     3. De no tener comentarios pasa la solicitud a la siguiente área.
     Además en cada opción se registra la actividad realizada por el usuario.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud que se quiere revisar.
-
     Retorna
     :return redirect: Redirige a la pantalla principal del personal del departamento.
     """
@@ -1746,12 +1686,10 @@ def comentariosTerminado(request, solicitud):
 
 def comentariosMostrar(request, solicitud, carpeta):
     """Muestra las comentarios que han sido ingresados por el personal a la solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
     -:param carpeta: Nos indica la carpeta en la que se encuentra el usuario haciendo la revisión.
-
     Retorna
     :return render: Muestra la pantalla en la que visualiza los comentarios pertenecientes a la solicitud que se esta revisando.
     """
@@ -1773,13 +1711,11 @@ def comentariosMostrar(request, solicitud, carpeta):
 
 def comentariosEliminar(request, solicitud, idArchivo, carpeta):
     """Borra un comentario específico de la solicitud.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
     -:param idArchivo: Contiene el id del Comentario que se desea borrar
     -:param carpeta: Nos indica la carpeta en la que se encuentra el usuario haciendo la revisión.
-
     Retorna
     :return redirect: Regresa a la pantalla en la que estaba haciendo la revisión.
     """
@@ -1791,10 +1727,8 @@ def comentariosEliminar(request, solicitud, idArchivo, carpeta):
 
 def historialActividades(request):
     """Muestra todas las acciones que ha tenido el personal del departamento sobre las solicitudes.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
-
     Retorna
     :return render: Regresa la plantilla en la que se muestran todas las actividades que han sido realizadas por el departamento.
     """
@@ -1813,11 +1747,13 @@ def historialActividades(request):
 
 def entregoDocumentosFisicos(request, solicitud):
     """Define que la institución ya entregó los documentos en físico a los departamentos.
+<<<<<<< HEAD
+=======
 
+>>>>>>> RVOES
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
-
     Retorna
     :return redirect: Redirige a la pantalla principal del personal del departamento.
     """
@@ -1889,11 +1825,9 @@ def entregoDocumentosFisicos(request, solicitud):
 
 def finProceso(request, solicitud):
     """Define que el proceso digital a terminado.
-
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
-
     Retorna
     :return redirect: Redirige a la pantalla principal del personal del departamento.
     """

@@ -140,7 +140,7 @@ def regVisit(request):
             if nivel_educativo == 'Media Superior':
                 modalidad = request.POST["modalidad"]
             else:
-                modalidad = "No aplica"
+                modalidad = None
         else:
             inst_cct = None
             inst_nombredirector = None
@@ -241,12 +241,13 @@ def actualizarperfilusr(request):
                 marca_educativa = request.POST["marca"] 
                
 
-        if request.user.tipo_usuario !='1' and request.user.tipo_usuario =='5':
+        if request.user.tipo_usuario !='1' and request.user.tipo_usuario !='5':
             identificacion = None
             folio_id = None
             marca_educativa = None
             nombre_representante = None
             dom_legal_part = None
+
 
         email = request.POST["email"]
         curp_rfc = request.POST["curp_rfc"]

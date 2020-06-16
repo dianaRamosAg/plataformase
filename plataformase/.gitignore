@@ -1,5 +1,6 @@
 /media/
 *.pyc
-/login/migrations/
-/RVOES/migrations/
-/visitante/migrations/
+
+*/migrations/
+*/__pycache__/
+

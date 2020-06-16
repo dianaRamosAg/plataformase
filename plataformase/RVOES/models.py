@@ -271,4 +271,4 @@ class NotificacionRegistro(models.Model):
     tipo_notificacion = models.CharField(max_length=2, default='C')# H: Historial, C: Comentario, P: Personal administrativo
     #Usuario al que le pertenece la notificación.
     usuario = models.ForeignKey('login.CustomUser',on_delete=models.CASCADE, blank=True, null=True)
-    tipo_usuario = models.CharField(max_length=1, default='4')#1: Institución, 2:jefe, 3:subordinado, 4:administrador
+    tipo_usuario = models.CharField(max_length=1, default='4')#1:

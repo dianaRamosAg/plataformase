@@ -13,6 +13,9 @@ function validar() {
     var secretario = document.getElementById("selectSecretario").value;
     var presidente = document.getElementById("selectPresidente").value;
     var vocal = document.getElementById("selectVocal").value;
+    var fecha = document.getElementById("fechaexa").value;
+    var hoy = new Date();
+    var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
 
     if (categoria == 'Seleccionar') {
         return false;
@@ -25,4 +28,6 @@ function validar() {
     }else if (secretario == presidente || secretario == vocal || presidente == vocal) {
         return false;
     } else return true;
+
+    
 }

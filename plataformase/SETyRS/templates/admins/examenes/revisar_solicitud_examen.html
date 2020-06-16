@@ -111,6 +111,7 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">No. Certificado</th>
                     <th scope="col">CURP</th>
+                    <th scope="col">Carrera</th>
                     <th scope="col">Certificado de Egreso</th>
                     <th scope="col">Servicio Social</th>
                     <th scope="col">Inscripción Control Escolar</th>
@@ -124,6 +125,7 @@
                     <td>{{a.alumno.nombre_alumno}}</td>
                     <td>{{a.alumno.no_certificado}}</td>
                     <td>{{a.alumno.CURP}}</td>
+                    <td>{{a.alumno.carrera}}</td>
                     <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.certificado_egreso}}')"><u>Ver archivo</u></a></td>
                     <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.servicio_social}}')"><u>Ver archivo</u></a></td>
                     <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{a.inscripcion_ctrl_escolar}}')"><u>Ver archivo</u></a></td>
