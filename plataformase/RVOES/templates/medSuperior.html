@@ -24,6 +24,25 @@
                         {% csrf_token %}
 
                         <div class="form-group custom-file p-3 mt-2" >
+                            <label class="font-weight-bold" for="id_solicitud" id="lblsolicitud">Solicitud de Reconocimiento de Validez Oficial de Estudios del Tipo Media Superior</label>
+                            <br><small>Recuerde que en este archivo debe incluir la misma información que introdujo anteriormente.</small>
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
+                        </div>
+                        {% if form.errors %}
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        {% if field.name == 'solicitud' %}
+                                            <div class="col-md-12 mt-2">
+                                                <div class="alert alertt-danger w-25">
+                                                    <label>{{ error }}</label>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="form-group custom-file p-3 mt-2" >
                             <label class="font-weight-bold" for="id_identificacion" id="lblidentificacion">Identificación oficial con fotografía</label>
                             <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
                         </div>

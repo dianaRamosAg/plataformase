@@ -94,7 +94,7 @@
                                 </select>
                                 <br>
                             </div><br><br><br><br><br><br><br>
-                        <button id="step-1-next" type="submit" class="btn btn-lg btn-primary nextBtn pull-right" onclick="checar()">Siguiente</button>
+                        <button id="step-1-next" type="submit" class="btn btn-lg btn-primary nextBtn pull-right" >Siguiente</button>
                         <br><br><br>
                     </div>
                 </div>
@@ -183,10 +183,10 @@
                                         <h3>Datos de institución</h3>*
                                         <small>Estos datos son obligatorios</small><br>
                                         <label class="ml-2 col-1" for="id_cct" style="text-align: left;">Clave del centro de trabajo :</label>
-                                        <input type="text" name="cct"  id="id_cct" class="form-control col-2" pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"  >
+                                        <input type="text" name="cct"  id="id_cct" class="form-control col-2" required pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"  >
 
                                         <label class="ml-2 col-1" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
-                                        <input type="text" name="nombre_director"  id="id_nombre_director"pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*" class="form-control ml-1 col-2"  >
+                                        <input type="text" name="nombre_director"  id="id_nombre_director" required pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*" class="form-control ml-1 col-2"  >
                                         
                                         <label class="ml-2 col-1" for="id_sector" style="text-align: left;">Sector:</label>
                                         <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
@@ -211,7 +211,7 @@
                                                 </div>
                                     </div>
                                 </div>
-                                <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right" type="submit">Enviar</button>
+                            <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right" type="submit" onclick="if(document.getElementById('id_password2').value == '') {event.preventDefault(); alert('Faltan campos por llenar en la Parte 1');}">Enviar</button>
                                 <a href="{% url 'login'%}"class="btn btn-lg  btn-danger pull-right" >Salir</a>
                         </div>
                         <br><br><br>   <br><br><br>
@@ -306,8 +306,9 @@
         var pass = document.getElementById("id_password2");
       
         if(pass.value=="")
-        {
+        { event.preventDefault();
             alert("¡No pueden quedar campos vacios!");
+           
         }
          
     }
@@ -360,11 +361,11 @@
         if (user.value != '1')
         {
             document.getElementById('datos_inst').style.display = 'none';
-            document.getElementById("id_modalidad").setAttribute("required", "false");
-            // document.getElementById("id_cct").setAttribute("required", "false");
-            // document.getElementById("id_nombre_director").setAttribute("required", "false");
-            document.getElementById("id_sector").setAttribute("required", "false");
-            document.getElementById("id_nivel_educativo").setAttribute("required", "false");
+            document.getElementById("id_modalidad").removeAttribute("required");
+            document.getElementById("id_cct").removeAttribute("required");
+            document.getElementById("id_nombre_director").removeAttribute("required");
+            document.getElementById("id_sector").removeAttribute("required");
+            document.getElementById("id_nivel_educativo").removeAttribute("required");
             
    
         }

@@ -307,8 +307,6 @@ def actualizarusr(request):
                     CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0', tipo_usuario='3')
                     CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
 
-
-
                 else:
                     CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
                 if request.FILES:

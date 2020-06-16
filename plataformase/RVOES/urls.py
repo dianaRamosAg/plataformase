@@ -44,4 +44,6 @@ urlpatterns = [
     path('admin/finProceso/<solicitud>/', views.finProceso, name='finProceso'),
     #path('admin/verpdf/', views.verpdf, name='verpdf'),
     path('generate/pdf/<id>', views.Pdf.as_view(), name='generate_pdf'),
+
+    path('datosSolicitud/<id>', views.datosSolicitud, name='datosSolicitud'),
 ]

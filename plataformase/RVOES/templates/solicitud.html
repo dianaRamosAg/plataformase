@@ -3,57 +3,61 @@
 {% block title %}Solicitud{% endblock %}
 
 {% block content %}
-
-<body class="text-center">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 mx-auto mt-5">
-                <form action="crear/" method="post" id="form">
-                    {% csrf_token %}
-                    <div class="card card-primary">
-                        <div class="card-body">
-                            <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-                                <main role="main" class="inner cover">
-                                    <h3 class="cover-heading">Registro de Nueva Solicitud</h3>
-                                  <small class="pull-center"> Complete los campos requeridos</small><br>
-                                  <div id="div_cct"><br>
+<div class="container-fluid text-center">
+    <div class="row">
+        <div class="col-md-7 mx-auto mt-5">
+            <form action="crear/" method="post" id="form">
+                {% csrf_token %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+                            <main role="main" class="inner cover">
+                                <h3 class="cover-heading">Registro de Nueva Solicitud</h3>
+                                <small class="pull-center"> Complete los campos requeridos</small><br>
+                                <div id="div_cct"><br>
                                     <label class="my-1 mr-2 lead" for="id_cct">Clave de Centro de Trabajo:</label>
                                     <select class="custom-select mr-sm-2 col-3" name="cct" id="id_cct" onchange="activaNivel();">
-                                        {% for element in cct %}
-                                            <option value="{{element.cct}}">{{element.cct}}</option>
-                                        {% endfor %}
+                                    {% for element in cct %}
+                                        <option value="{{element.cct}}">{{element.cct}}</option>
+                                    {% endfor %}
                                     </select>
                                 </div>
-                                    <label class="my-1 mr-2 lead" for="id_nivel" id="id_lblNivel">Nivel Educativo :</label>
-                                    <div id="div_nivel">
-                                        <select required class="custom-select mr-sm-2 col-4" name="nivel" id="id_nivel" onchange="activaModalidades();">
-                                            <option selected disabled>Seleccionar</option>
-                                            <option value="1">Media Superior</option>
-                                            <option value="2">Superior</option>
-                                        </select>
-                                    </div><br>
-                                    <div class=" row col-md-12"><br>
-                                     <select required class="custom-select mr-sm-2 col-4 ml-1" style="float: left; text-align: left;" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
+                                <label class="my-1 mr-2 lead" for="id_nivel" id="id_lblNivel">Nivel Educativo:</label>
+                                <div class="d-inline" id="div_nivel">
+                                    <select required class="custom-select col-4" name="nivel" id="id_nivel" onchange="activaModalidades();">
+                                        <option selected disabled>Seleccionar</option>
+                                        <option value="1">Media Superior</option>
+                                        <option value="2">Superior</option>
+                                    </select>
+                                </div>
+                                <div class="d-inline" id="div_nivelSup" style="visibility:hidden;">
+                                    <select required class="custom-select col-4" name="nivelSuperior" id="id_nivelSuperior">
+                                        <option selected disabled>Seleccionar</option>
+                                        <option value="1">Profesional asociado</option>
+                                        <option value="2">Licenciatura</option>
+                                        <option value="3">Especialidad</option>
+                                        <option value="4">Maestría</option>
+                                        <option value="5">Doctorado</option>
+                                    </select>
+                                </div><br>
+                                <div class=" row col-md-12 mt-2"><br>
+                                    <select required class="custom-select mr-sm-2 col-4 ml-1" style="float: left; text-align: left;" disabled="true" name="modalidad" id="id_modalidad" onchange="activaOpciones()">
                                         <option selected disabled>Modalidad</option>
                                         <option value="1">Mixta</option>
                                         <option value="2">Escolarizada</option>
                                         <option value="3">No escolarizada</option>
                                     </select><br>
-                                      <select required class="custom-select mr-sm-2 col-4 ml-1" disabled="true" name="opcion" id="id_opcion">
+                                    <select required class="custom-select mr-sm-2 col-4 ml-1" disabled="true" name="opcion" id="id_opcion">
                                         <option selected disabled>Opción</option>
                                     </select><br>
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="idcheckbox">
                                         <label class="custom-control-label" for="idcheckbox" id="lblidcheckbox">Es área de la salud</label>
-                                      </div>
-  
-                                      <input type="text" hidden name="salud" id="id_salud" value="0">
-                                      <input type="text" hidden name="customuser_id" required id="id_customuser_id" value="{{ user.id }}"> 
-  
-                                </div>
-                                   <br>
-    
-                                    <div class=" row col-md-12"style="float: left; text-align: left;">
+                                    </div>
+                                    <input type="text" hidden name="salud" id="id_salud" value="0">
+                                    <input type="text" hidden name="customuser_id" required id="id_customuser_id" value="{{ user.id }}">
+                                </div><br>
+                                <div class=" row col-md-12"style="float: left; text-align: left;">
                                     <label class="ml-3" for="id_ciclo" id="ciclo" >Ciclo :</label>
                                     <input  class="form-control ml-1 col-2" type="number" name="ciclonum" required id="id_ciclo_num" >
                                     <select required class="custom-select col-4 ml-2" name="ciclo" id="id_ciclo" onchange="dura();">
@@ -62,450 +66,539 @@
                                         <option value="Semestre(s)">Semestre(s)</option>
                                         <option value="Otro">Otro</option>
                                     </select>
-                                <input  placeholder="Indique otro " class="form-control  col-4 ml-2" style="display: none;" type="text" name="otro" required id="id_otro" >
-                                <br><br>
-                                <div class="row col-md-12">
-                                    <label class="ml-3" for="id_duracion" id="duracion">Duración :</label>
-                                    <input  class="form-control col-2 ml-1" type="number" name="duracion" required id="id_duracion" >
-                                <label class="ml-2">años</label>
-                                <hr><br>
+                                    <input  placeholder="Indique otro " class="form-control  col-4 ml-2" style="display: none;" type="text" name="otro" required id="id_otro" >
+                                    <div class="row col-md-12 mt-2">
+                                        <label class="ml-3" for="id_duracion" id="duracion">Duración :</label>
+                                        <input  class="form-control col-2 ml-1" type="number" name="duracion" required id="id_duracion" >
+                                        <label class="ml-2">años</label>
+                                    </div>
                                 </div>
-                                      <!---Pedir siguiente información en caso de ser persona FISICA-->
-                                    <br>
-                                    <br>
-                                    <div  class="col-md-12" style="float: left; text-align: left; ">
-                                    {% if user.tipo_persona == '1' %}
-                                    <hr>
-                                   
-                                    <label class="" for="id_first_name" id="lblnombres">Nombre:</label>
-                                    <input readonly class="form-control col-12 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">
-                                       
-                                    <label class="" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                                    <input  readonly class="form-control col-12 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
-                                <br>
-                                    
-                                    {% endif %}
-                                    <!--Personas Morales-->
-                                    {% if user.tipo_persona == '2' %}
-                                    <hr>
-                                    <h6 class="pull-center"> Datos de Acta Constitutiva</h6>
-                                    <div class=" row col-md-12">
-                                    <label class="col-8" for="id_inst_notarial" id="inst_notarial">Número de instrumento notarial :</label>
-                                    <input  class="form-control  col-4" type="text" name="inst_notarial" required id="id_noInstrumentoNotarial"  onblur="notario();" >
-                                    </div>
-                                    <div class=" row col-md-12">
-                                    <label class="col-8" for="id_libro_inscripcion" id="libro_inscripcion">Número de Libro de inscripción :</label>
-                                    <input  class="form-control  col-4" type="text" name="libro_inscripcion" required id="id_libro_inscripcion" >
-                                    </div>
-                                    <label class="" for="id_nombreNotario">Nombre de notario : </label>
-                                    
-                                    <input class="form-control col-12" type="text" required name="nombreNotario1" id="id_nombreNotario" onblur="notario();">
-                                  
-                                    <label class="" for="id_noNotario">Número de notario : </label>
-                                    <input class="form-control col-6" type="number" required name="noNotario1" id="id_noNotario" onblur="notario();">
-                               
-                                    <label for="start">Fecha y lugar de expedición :</label>
-                                    <div class=" row col-md-12">
-                                    <input class="form-control  col-5" type="date" id="id_fecha" name="fecha" required value="2020-07-01" min="2018-01-01" max="2030-12-31">
-                                    <input  class="form-control  col-6 ml-2"  type="text" name="lugar" required id="id_lugar" >
-                                    </div>
-                                    <label class="" for="id_objeto_social" id="id_obj_so">Objeto social :</label>
-                                    <input  class="form-control  col-12" type="text" name="objeto_social" required id="id_objeto_social" >
-<hr>
-                                    <h6>Datos de Estatutos Vigentes</h6>
-                                    <label class="" for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de su acta constitutiva y estatutos vigentes? :</label>
-                                    <select required class="custom-select mr-sm-2 col-5" name="org_cop_acta" id="id_org_cop_acta" >
-                                        <option selected disabled>Seleccione</option>
-                                        <option value="Sí">Sí</option>
-                                        <option value="No">No</option>
-                                    </select><br>
-                                    <label class="" for="id_libro_inscripcion" id="libro_inscripcion">Nombre del representante legal : </label>
-                                    <input  class="form-control  col-12" type="text" name="nombreRepresentante" required id="id_nombreRepresentante" onblur="notario();" >
-                                    <hr>
-                                    <h6>  {% if user.tipo_persona == '2' %}Datos del poder Notarial del representante legal {% endif %}{% if user.tipo_persona == '1' %}Datos legal del Particular{% endif %}</h6>
-                                   
-                                    {% endif %}
-
-                                    <!--Datos fisico y Moral-->
-                                    <div class=" row col-md-12">
-                                     <select required class="custom-select mr-sm-2 col-6" name="identificacion" id="id_identificacion" >
-                                        <option selected disabled>Tipo de identificación oficial</option>
-                                        <option value="Credencial para Votar">Credencial para Votar</option>
-                                        <option value="Pasaporte">Pasaporte</option>
-                                        <option value="Cartilla Militar">Cartilla Militar</option>
-                                        <option value="Cédula Profesional">Cédula Profesional</option>
-                                        <option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
-                                    </select>
-                                    <label class="ml-1" for="id_folio" id="folio">Núm. de folio:</label>
-                                    <input  class="form-control ml-2  col-3" type="text" name="folio_id" required id="id_folio_identificacion" >
-                                </div>
-                                    <label class="" required for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de identificación oficial? :</label>
-                                    <select required class="custom-select mr-sm-2 col-5" name="org_cop_identificacion" id="id_org_cop_identificacion" >
-                                        <option selected disabled>Seleccione</option>
-                                        <option value="Sí">Sí</option>
-                                        <option value="No">No</option>
-                                    </select>
-<br>
-                                    <label class="" for="id_dom_particular" id="particular">Domicilio legal del particular :</label>
-                                    <input readonly class="form-control col-12" type="text" name="dom_particular" required id="id_dom_particular" value="{{user.colonia}}, {{user.calle}}, {{user.municipio}}">
-                                    <br>
-                                    <div class=" row col-md-12">
-                                       
-                                    <label class="" for="id_celular">Teléfono/Celular :</label>
-                                    <input readonly  class="form-control col-3 ml-1" required type="text" name="celular" id="id_celular" value="{{user.celular}}">
-
-                                    <label class="ml-2" for="id_curp_rfc" id="lblcurp">{% if user.tipo_persona == '1' %}CURP :{% else %}RFC :{% endif %}</label>
-                                    <input readonly  class="form-control col-4 ml-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{user.curp_rfc}}">
-                                </div>
-                                    <label style="text-align: left;">Correo electrónico para recibir notificaciones :</label>
-                                    <input  readonly class="form-control col-8 "  type="text" name="email"required id="id_email" value="{{user.email}}" >
-                                
-                                    
-
-                                    </div>
-
-                                </main>
-                            </div>
+                            </main>
                         </div>
                     </div>
-                    {% if user.tipo_persona == '2' %} 
-                    <div class="card card-primary mt-2">
-                        <div class="card-body">
-                            <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-                          
-                               
-                                <main role="main" class="inner cover" id="Superioril" >
-                                    <h2 class="cover-heading">Información legal</h2>
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
-                                        <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud2">
-                                    </div>
-<div style="text-align: left;">
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_noInstrumentoNotarial">Número de instrumento notarial: </label>
-                                        <input class="form-control col-6 " type="number" required name="noInstrumentoNotarial" id="id_noInstrumentoNotarial2"readonly>
-                                    </div>
-
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_nombreNotario">Nombre de notario: </label>
-                                        <input class="form-control" readonly type="text" required name="nombreNotario" id="id_nombreNotario2" >
-                                    </div>
-
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_noNotario">Número de notario: </label>
-                                        <input class="form-control col-6 " type="number" required name="noNotario" readonly id="id_noNotario2">
-                                    </div>
-
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_nombreRepresentante">Nombre de representante legal: </label>
-                                        <input class="form-control" type="text" required name="nombreRepresentante" id="id_nombreRepresentante2" readonly>
-                                    </div>
-                                </div>
-                                </main>
-                         
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% if user.tipo_persona == '1' %} 
-                    <div class="card card-primary mt-2">
-                        <div class="card-body">
-                            <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-                       
-                                <main role="main" class="inner cover" id="mediaSuperior" >
-                                    
-                                    <h2 class="cover-heading">Información legal</h2>
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_nombreSolicitud">Nombre de RVOE: </label>
-                                        <input class="form-control" type="text" required name="nombreSolicitudM" id="id_nombreSolicitudM">
-                                    </div>
-
-                                    <div style="text-align: left;">
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_noInstrumentoNotarial">Número de instrumento notarial: </label>
-                                        <input class="form-control col-6 " type="number" required name="noInstrumentoNotarialM" id="id_noInstrumentoNotarialM">
-                                    </div>
-
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_nombreNotario">Nombre de notario: </label>
-                                        <input class="form-control" type="text" required name="nombreNotarioM" id="id_nombreNotarioM">
-                                    </div>
-
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_noNotario">Número de notario: </label>
-                                        <input class="form-control col-6" type="number" required name="noNotarioM" id="id_noNotarioM">
-                                    </div>
-
-                                    <div>
-                                        <label class="my-1 mr-2 lead" for="id_nombreRepresentante">Nombre de representante legal: </label>
-                                        <input class="form-control" type="text" required name="nombreRepresentanteM" id="id_nombreRepresentanteM">
-                                    </div>
-                                </div>     
-                                </main>
-                         
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-
-
-
-
-
-                        <div class="text-center m-3">
-                            <a class="btn btn-secondary" href="{% url 'inicio'  %}">Regresar</a>
-                            <button type="submit" class="btn btn-primary" name="button">Subir documentos</button>
-                        </div>
-                    </form>
                 </div>
-            </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="col-md-12 text-left">
+                            <h4 class="text-center">Información General</h4>
+                            <small>Si la información no modificable que se muestra no coincide con la real actualice su perfil.</small>
+                            <!--Personas Físicas-->
+                            <br>
+                            {% if user.tipo_persona == '1' %}
+                            <label class="" for="id_first_name" id="lblnombres">Nombre:</label>
+                            <input readonly class="form-control col-12 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">
+
+                            <label class="" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                            <input  readonly class="form-control col-12 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
+                            <br>
+                            <div class=" row col-md-12">
+                                <label class="ml-3" for="id_folio_identificacion" id="folio">Identificación:</label>
+                               
+                                <input required class="form-control ml-2 col-3" name="identificacion" id="id_identificacion" value="{{user.identificacion}}" READONLY>
+                                 
+                                <label class="ml-3" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
+                                <input  class="form-control ml-2 col-3" type="text" name="folio_id" required id="id_folio_identificacion" value="{{user.folio_id}}" READONLY>
+                            </div>
+                            <br>
+                            {% endif %}
+
+                            <!--Personas Morales-->
+                            {% if user.tipo_persona == '2' %}
+                            <label class="" for="id_razonSocial" id="lbl_razonSocial">Denominación o razón social:</label>
+                            <input readonly class="form-control col-12 ml-1" type="text" name="razonSocial" required id="id_razonSocial" value="{{user.first_name}} {{user.last_name}}" onfocus="funcion()">
+                            <br>
+                            <h6 class="pull-center"> Datos de Acta Constitutiva</h6>
+                            <div class=" row col-md-12">
+                                <label class="col-6" for="id_noInstrumentoNotarial" id="inst_notarial">Número de instrumento notarial:</label>
+                                <input  class="form-control col-5" type="number" name="inst_notarial" required id="id_noInstrumentoNotarial">
+                            </div>
+                            <div class=" row col-md-12">
+                                <label class="col-6" for="id_libro_inscripcion" id="lbl_libro_inscripcion">Número de Libro de inscripción:</label>
+                                <input  class="form-control col-5 mt-2" type="text" name="libro_inscripcion" required id="id_libro_inscripcion" >
+                            </div>
+                            <label class="col-4" for="id_nombreNotario">Nombre de notario: </label>
+                            <input class="form-control mt-2 d-inline col-7" type="text" required name="nombreNotario" id="id_nombreNotario">
+
+                            <label class="col-4" for="id_noNotario">Número de notario: </label>
+                            <input class="form-control mt-2 d-inline col-7" type="number" required name="noNotario" id="id_noNotario">
+
+                            <label class="mt-2">Fecha y lugar de expedición:</label>
+                            <div class=" row col-md-12">
+                                <input class="form-control  col-4" type="date" id="id_fecha" name="fecha" required value="{{ fecha }}" max="{{ fecha }}">
+                                <input  class="form-control  col-7 ml-2"  type="text" name="lugar" required id="id_lugar" placeholder="p. ej. Tepic, Nayarit">
+                            </div>
+                            <label class="mt-2" for="id_objeto_social" id="id_obj_so">Duración y objeto social:</label>
+                            <textarea rows="2" class="form-control col-12" name="objeto_social" required id="id_objeto_social"></textarea>
+
+                            <label class="mt-2" for="id_estatutosVigentes">Datos de Estatutos Vigentes</label>
+                            <input type="text" class="form-control" name="estatutosVigentes" id="id_estatutosVigentes">
+                            <!--label class="" for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de su acta constitutiva y estatutos vigentes? :</label>
+                            <select required class="custom-select mr-sm-2 col-5" name="org_cop_acta" id="id_org_cop_acta" >
+                                <option selected disabled>Seleccione</option>
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select><br-->
+                            <label class="mt-2" for="id_nombreRepresentante">Nombre del representante legal:</label>
+                            <input readonly class="form-control col-12" type="text" name="nombreRepresentante" required id="id_nombreRepresentante" value="{{user.nombre_representante}}">
+
+                            <label class="mt-2" for="id_poderNotarial">Datos del Poder Notarial del Representante Legal:</label>
+                            <textarea class="form-control" name="poderNotarial" id="id_poderNotarial" rows="2" required></textarea>
+                            <br>
+                            <div class="row col-md-12 mt-2">
+                                <label class="ml-1" for="id_folio_identificacion" id="folio">Identificación:</label>
+                                <input required class="form-control ml-2 col-4" readonly name="identificacion" id="id_identificacion" value="{{user.identificacion}}">
+                                   
+                                <label class="ml-1" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
+                                <input  class="form-control ml-2 col-3" type="text" name="folio_id"  readonly required id="id_folio_identificacion" value="{{user.folio_id}}" >
+                            </div>
+                            {% endif %}
+                            <!--Datos fisico y Moral-->
+                            <!--label class="" required for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de identificación oficial? :</label>
+                            <select required class="custom-select mr-sm-2 col-5" name="org_cop_identificacion" id="id_org_cop_identificacion" >
+                                <option selected disabled>Seleccione</option>
+                                <option value="Sí">Sí</option>
+                                <option value="No">No</option>
+                            </select-->
+                            <br>
+                            <label class="mt-2" for="id_dom_particular" id="particular">Domicilio legal del particular:</label>
+                            {% if user.tipo_persona == '2' %}
+                            <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="{{user.dom_legal_part}}">
+                            {% endif %}
+                            {% if user.tipo_persona == '1' %}
+                            <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, {{user.municipio}}, Nayarit. ">
+                            {% endif %}
+                            <label class="mt-2" for="id_celular">Teléfono/Celular:</label>
+                            <input readonly  class="form-control col-3 mt-2 d-inline"  type="text" name="celular" id="id_celular" value="{{user.celular}}">
+                            <br>
+                            <label class="mt-2" for="id_rfc" id="lblcurp">Registro Federal de Contribuyentes:</label>
+                            <input readonly  class="form-control col-4 d-inline" type="text" name="rfc" id="id_rfc" value="{{user.curp_rfc}}">
+                            <label >Correo electrónico para recibir notificaciones:</label>
+                            <input  readonly class="form-control col-6 d-inline"  type="text" name="email" id="id_email" value="{{user.email}}" >
+                            <hr>
+                            <h6>Personas autorizadas por el particular</h6>
+                            <p class="text-justify">En este acto, en términos de los artículos 15 y 19 de la Ley Federal
+                                de Procedimiento Administrativo autorizo a las personas que se indican en el presente
+                                para oír y recibir notificaciones, realizar trámites, gestiones y comparecencias que
+                                fueran necesarios para la tramitación de los procedimientos.</p>
+                            <table class="table table-borderless">
+                                <tbody>
+                                <tr class="text-center">
+                                    <td ><input class="form-control" type="text" name="nomPerAut1" id="id_perAut1" >Nombre(s)</td>
+                                    <td ><input class="form-control" type="text" name="apMatPerAut1" id="id_apMatPerAut1" >Primer Apellido</td>
+                                    <td ><input class="form-control" type="text" name="apPatPerAut1" id="id_apPatPerAut1" >Segundo Apellido</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-right">Correo electrónico:</td>
+                                    <td><input class="form-control" type="email" name="emailPerAut1" id="id_emailPerAut1" ></td>
+                                    <td class="justify-content-center">
+                                        <input class="form-control" type="text" name="telPerAut1" id="id_telPerAut1" placeholder="Teléfono de contacto" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><hr></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td ><input class="form-control" type="text" name="nomPerAut2" id="id_perAut2" >Nombre(s)</td>
+                                    <td ><input class="form-control" type="text" name="apMatPerAut2" id="id_apMatPerAut2" >Primer Apellido</td>
+                                    <td ><input class="form-control" type="text" name="apPatPerAut2" id="id_apPatPerAut2" >Segundo Apellido</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-right">Correo electrónico:</td>
+                                    <td><input class="form-control" type="email" name="emailPerAut2" id="id_emailPerAut2" ></td>
+                                    <td class="justify-content-center">
+                                        <input class="form-control" type="text" name="telPerAut2" id="id_telPerAut2" placeholder="Teléfono de contacto" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><hr></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td ><input class="form-control" type="text" name="nomPerAut3" id="id_perAut3" >Nombre(s)</td>
+                                    <td ><input class="form-control" type="text" name="apMatPerAut3" id="id_apMatPerAut3" >Primer Apellido</td>
+                                    <td ><input class="form-control" type="text" name="apPatPerAut3" id="id_apPatPerAut3" >Segundo Apellido</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-right">Correo electrónico:</td>
+                                    <td><input class="form-control" type="email" name="emailPerAut3" id="id_emailPerAut3" ></td>
+                                    <td class="justify-content-center">
+                                        <input class="form-control" type="text" name="telPerAut3" id="id_telPerAut3" placeholder="Teléfono de contacto" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><hr></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td ><input class="form-control" type="text" name="nomPerAut4" id="id_perAut4" >Nombre(s)</td>
+                                    <td ><input class="form-control" type="text" name="apMatPerAut4" id="id_apMatPerAut4" >Primer Apellido</td>
+                                    <td ><input class="form-control" type="text" name="apPatPerAut4" id="id_apPatPerAut4" >Segundo Apellido</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-right">Correo electrónico:</td>
+                                    <td><input class="form-control" type="email" name="emailPerAut4" id="id_emailPerAut4" ></td>
+                                    <td class="justify-content-center">
+                                        <input class="form-control" type="text" name="telPerAut4" id="id_telPerAut4" placeholder="Teléfono de contacto" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><hr></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td ><input class="form-control" type="text" name="nomPerAut5" id="id_perAut5" >Nombre(s)</td>
+                                    <td ><input class="form-control" type="text" name="apMatPerAut5" id="id_apMatPerAut5" >Primer Apellido</td>
+                                    <td ><input class="form-control" type="text" name="apPatPerAut5" id="id_apPatPerAut5" >Segundo Apellido</td>
+                                </tr>
+                                <tr class="">
+                                    <td class="text-right">Correo electrónico:</td>
+                                    <td><input class="form-control" type="email" name="emailPerAut5" id="id_emailPerAut5" ></td>
+                                    <td class="justify-content-center">
+                                        <input class="form-control" type="text" name="telPerAut5" id="id_telPerAut5" placeholder="Teléfono de contacto" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><hr></td>
+                                </tr>
+                                <tr class="text-center">
+                                    <td ><input class="form-control" type="text" name="nomPerAut6" id="id_perAut6" >Nombre(s)</td>
+                                    <td ><input class="form-control" type="text" name="apMatPerAut6" id="id_apMatPerAut6" >Primer Apellido</td>
+                                    <td ><input class="form-control" type="text" name="apPatPerAut6" id="id_apPatPerAut6" >Segundo Apellido</td>
+                                </tr>
+                                <tr >
+                                    <td class="text-right">Correo electrónico:</td>
+                                    <td><input class="form-control" type="email" name="emailPerAut6" id="id_emailPerAut6" ></td>
+                                    <td class="justify-content-center">
+                                        <input class="form-control" type="text" name="telPerAut6" id="id_telPerAut6" placeholder="Teléfono de contacto" >
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <h6>Apoderados legales</h6>
+                            <div class="custom-control custom-switch">
+                            <input type="checkbox" checked class="custom-control-input" id="customSwitch1" onclick="if (document.getElementById('customSwitch1').checked == false) 
+                            {document.getElementById('apoderados_leg').style.display = 'inline';} else { document.getElementById('apoderados_leg').style.display = 'none';}">
+
+                                <label class="custom-control-label" for="customSwitch1">¿Firma el representante legal?</label>
+                            </div>
+
+                            <div id="apoderados_leg" style="display: none;">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                    <tr class="text-center">
+                                        <td ><input class="form-control" type="text" name="nomApLegal1" id="id_nomApLegal1" >Nombre(s)</td>
+                                        <td ><input class="form-control" type="text" name="apMatApLegal1" id="id_apMatApLegal1" >Primer Apellido</td>
+                                        <td ><input class="form-control" type="text" name="apPatApLegal1" id="id_apPatApLegal1" >Segundo Apellido</td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class="text-right">Correo electrónico:</td>
+                                        <td><input class="form-control" type="email" name="emailApLegal1" id="id_emailApLegal1" ></td>
+                                        <td class="justify-content-center">
+                                            <input class="form-control" type="text" name="telApLegal1" id="id_telApLegal1" placeholder="Teléfono de contacto" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Datos del poder notarial:</td>
+                                        <td colspan="2"><input type="text" class="form-control" name="poderNotApLegal1" id="id_poderNotApLegal1"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"><hr></td>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <td ><input class="form-control" type="text" name="nomApLegal2" id="id_nomApLegal2" >Nombre(s)</td>
+                                        <td ><input class="form-control" type="text" name="apMatApLegal2" id="id_apMatApLegal2" >Primer Apellido</td>
+                                        <td ><input class="form-control" type="text" name="apPatApLegal2" id="id_apPatApLegal2" >Segundo Apellido</td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class="text-right">Correo electrónico:</td>
+                                        <td><input class="form-control" type="email" name="emailApLegal2" id="id_emailApLegal2" ></td>
+                                        <td class="text-right">
+                                            <input class="form-control" type="text" name="telApLegal2" id="id_telApLegal2" placeholder="Teléfono de contacto" >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Datos del poder notarial:</td>
+                                        <td colspan="2"><input type="text" class="form-control" name="poderNotApLegal2" id="id_poderNotApLegal2"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr>
+                            <h6>Pertenencia al programa de mejora institucional:</h6>
+                            <select required class="custom-select col-8" name="perPrograma" id="id_perPrograma">
+                                <option value="0" selected>No pertenece a ningún grupo</option>
+                                <option value="1">Grupo 1. Instituciones en proceso de acreditación</option>
+                                <option value="2">Grupo 2. Instituciones Acreditadas</option>
+                                <option value="3">Grupo 3. Instituciones Acreditadas Consolidadas</option>
+                            </select>
+                            <hr>
+
+                            <!-- comparar el modelo desde aquí -->
+                            <h6>Datos del plan y programas de estudios objeto de la solicitud</h6>
+                            <label class="" for="id_nombreSolicitud">Nombre completo del plan y programas de estudio:</label>
+                            <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud">
+                            <label class="mt-2" for="id_domcilio">Domicilio de impartición:</label>
+                            <input class="form-control" type="text" readonly name="domcilio" id="id_domcilio" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, {{user.municipio}}, Nayarit.">
+                            {%if request.user.tipo_usuario == '5' %}
+                            <label class="mt-2">Denominación de la institución y del Plantel en que se impartirá:</label>
+                            <small>Asentar propuestas de denominaciones en orden de preferencia.</small>
+                            <input type="text" class="form-control" name="opcion1" id="id_opcion1" placeholder="Opcion 1">
+                            <input type="text" class="form-control" name="opcion2" id="id_opcion2" placeholder="Opcion 2">
+                            <input type="text" class="form-control" name="opcion3" id="id_opcion3" placeholder="Opcion 3">
+                            {% endif %}
+                            <label class="mt-2" for="id_nombreComercial">Nombre comercial o marca de la institución educativa:</label>
+                            <input class="form-control" type="text" readonly name="nombreComercial" id="id_nombreComercial" value="{{user.marca_educativa}}">
+                            <label class="mt-2" for="id_horarioDias">Horiario y días en que lo impartirá:</label>
+                            <input class="form-control" type="text" name="horarioDias" id="id_horarioDias">
+                            <label class="mt-2" for="id_areaFormacion">Área o campo de formación:</label>
+                            <input class="form-control text-center" type="text" name="areaFormacion" id="id_areaFormacion">
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center m-3">
+                    <a class="btn btn-secondary" href="{% url 'inicio'  %}">Regresar</a>
+                    <button type="submit" class="btn btn-primary" name="button">Subir documentos</button>
+                </div>
+            </form>
         </div>
     </div>
-  </body>
+</div>
 
-  <script type="text/javascript">
-    
-    document.getElementById("id_modalidad").disabled = true;
-    document.getElementById("id_opcion").disabled = true;
+<script type="text/javascript">
+
+document.getElementById("id_modalidad").disabled = true;
+document.getElementById("id_opcion").disabled = true;
 
 function dura(){
     dur = document.getElementById("id_ciclo");
-    if(dur.value=='Otro')
-    {
-        console.log("Hola");
+    if(dur.value=='Otro'){
         document.getElementById("id_otro").style.display = 'inline';
-    }
-    else{
+    } else{
         document.getElementById("id_otro").removeAttribute("required");
         document.getElementById("id_otro").style.display = 'none';
-
-    
    }
 }
-function notario()
-{
-       
-    instrumento = document.getElementById("id_noInstrumentoNotarial").value;
-    instrumentoN = document.getElementById("id_noInstrumentoNotarial2").value=instrumento;
 
-    nombre = document.getElementById("id_nombreNotario").value;
-    nombreN = document.getElementById("id_nombreNotario2").value=nombre;
-
-   
-    noNotario2 = document.getElementById("id_noNotario").value;
-    noNotario2N = document.getElementById("id_noNotario2").value=noNotario2;
-    
-    repre = document.getElementById("id_nombreRepresentante").value;
-    repreN = document.getElementById("id_nombreRepresentante2").value=repre;
-}
-    function opciones () {
-        mod = document.getElementById("id_modalidad");
-        opc = document.getElementById("id_opcion");
-        niv = document.getElementById("id_nivel");
-        if ( opc.length > 0 ){
-            var i = opc.length;
-            while ( i > 0 ) {
-                opc.remove(opc.length-1);
-                i--;
-            }
+function opciones () {
+    mod = document.getElementById("id_modalidad");
+    opc = document.getElementById("id_opcion");
+    niv = document.getElementById("id_nivel");
+    if ( opc.length > 0 ){
+        var i = opc.length;
+        while ( i > 0 ) {
+            opc.remove(opc.length-1);
+            i--;
         }
-        if ( niv.value == '1' ){//nivel media superior
-            if ( mod.value == '1' ) {//modalidad mixta
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '1';
-                combo.options[0].innerText = 'Mixta';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '2';
-                combo.options[0].innerText = 'Auto-planeada';
-
-            } else if ( mod.value == '2' ) {//modalidad escolarizada
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '1';
-                combo.options[0].innerText = 'Intensiva';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '2';
-                combo.options[0].innerText = 'Presencial';
-
-            } else if ( mod.value == '3' ) { //modalidad no escolarizada
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '1';
-                combo.options[0].innerText = 'Certificación por evaluaciones parciales';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '2';
-                combo.options[0].innerText = 'Virtual';
-
-            }else{
-                document.getElementById("id_opcion").disabled = true;
-            }
-        } else{//nivel superior
-            if ( mod.value == '1' ) {//modalidad mixta
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '1';
-                combo.options[0].innerText = 'Dual';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '2';
-                combo.options[0].innerText = 'Abierta / Distancia';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '3';
-                combo.options[0].innerText = 'En linea / virtual';
-
-            } else if ( mod.value == '2' ) {//modalidad escolarizada
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '1';
-                combo.options[0].innerText = 'Presencial';
-                
-            } else if ( mod.value == '3' ) { //modalidad no escolarizada
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '1';
-                combo.options[0].innerText = 'Certificación por examen';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '2';
-                combo.options[0].innerText = 'Abierta / Distancia';
-
-                var combo = document.getElementById("id_opcion");
-                var option = document.createElement("option");
-                combo.options.add(option, 0);
-                combo.options[0].value = '3';
-                combo.options[0].innerText = 'En linea / virtual';
-
-            }else{
-                document.getElementById("id_opcion").disabled = true;
-            }
-        }
-        var combo = document.getElementById("id_opcion");
-        var option = document.createElement("option");
-        combo.options.add(option, 0);
-        combo.options[0].value = '0';
-        combo.options[0].innerText = 'Seleccionar...';
     }
-    
-    function activaModalidades(){
-        niv = document.getElementById("id_nivel");
-        mod = document.getElementById("id_modalidad");
-        opc = document.getElementById("id_opcion");
-        
-       
-    
-        if( niv.value == 'Seleccionar...' ){
-            document.getElementById("id_modalidad").disabled = true;
-            document.getElementById("id_opcion").disabled = true;
-            if ( opc.length > 1 ){
-                var i = opc.length;
-                while ( i > 1 ) {
-                    opc.remove(opc.length-1);
-                    i--;
-                }
-            }
-            mod.value = 'Seleccionar...';
+    if ( niv.value == '1' ){//nivel media superior
+        if ( mod.value == '1' ) {//modalidad mixta
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '1';
+            combo.options[0].innerText = 'Mixta';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '2';
+            combo.options[0].innerText = 'Auto-planeada';
+
+        } else if ( mod.value == '2' ) {//modalidad escolarizada
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '1';
+            combo.options[0].innerText = 'Intensiva';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '2';
+            combo.options[0].innerText = 'Presencial';
+
+        } else if ( mod.value == '3' ) { //modalidad no escolarizada
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '1';
+            combo.options[0].innerText = 'Certificación por evaluaciones parciales';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '2';
+            combo.options[0].innerText = 'Virtual';
+
         }else{
-            document.getElementById("id_modalidad").disabled = false;
+            document.getElementById("id_opcion").disabled = true;
+        }
+    } else{//nivel superior
+        if ( mod.value == '1' ) {//modalidad mixta
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '1';
+            combo.options[0].innerText = 'Dual';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '2';
+            combo.options[0].innerText = 'Abierta / Distancia';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '3';
+            combo.options[0].innerText = 'En linea / virtual';
+
+        } else if ( mod.value == '2' ) {//modalidad escolarizada
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '1';
+            combo.options[0].innerText = 'Presencial';
+
+        } else if ( mod.value == '3' ) { //modalidad no escolarizada
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '1';
+            combo.options[0].innerText = 'Certificación por examen';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '2';
+            combo.options[0].innerText = 'Abierta / Distancia';
+
+            var combo = document.getElementById("id_opcion");
+            var option = document.createElement("option");
+            combo.options.add(option, 0);
+            combo.options[0].value = '3';
+            combo.options[0].innerText = 'En linea / virtual';
+
+        }else{
+            document.getElementById("id_opcion").disabled = true;
         }
     }
+    var combo = document.getElementById("id_opcion");
+    var option = document.createElement("option");
+    combo.options.add(option, 0);
+    combo.options[0].value = '0';
+    combo.options[0].innerText = 'Seleccionar...';
+}
 
-    function activaNivel(){
-      tipoUsr = "{{request.user.tipo_usuario}}";
-      if (tipoUsr == "1"){
-      {% for element in cct %}
+function activaModalidades(){
+    niv = document.getElementById("id_nivel");
+    mod = document.getElementById("id_modalidad");
+    opc = document.getElementById("id_opcion");
+
+    if( niv.value != '1' && niv.value != '2'){
+        mod.disabled = true;
+    }else{
+        mod.disabled = false;
+    }
+
+    if ( opc.length > 1 ){
+        var i = opc.length;
+        while ( i > 1 ) {
+            opc.remove(opc.length-1);
+            i--;
+        }
+        opc.disabled = true;
+        mod.selectedIndex = 0;
+    }
+
+    if( niv.value == 'Seleccionar...' ){
+        mod.disabled = true;
+        opc.disabled = true;
+        mod.value = 'Seleccionar...';
+    }
+
+    if( niv.value == '2' ){
+        document.getElementById("div_nivelSup").style.visibility  = 'visible';
+    }else{
+        document.getElementById("div_nivelSup").style.visibility  = 'hidden';
+    }
+}
+
+function activaNivel(){
+    tipoUsr = "{{request.user.tipo_usuario}}";
+    if (tipoUsr == "1"){
+    {% for element in cct %}
         element = "{{element.cct}}";
         if(element == document.getElementById("id_cct").value){
-          switch({{ element.nivel_educativo }}){
-            case 1:
-                document.getElementById("id_nivel").value = '1';
-                document.getElementById("div_nivel").style.display = 'none';
-                document.getElementById("id_lblNivel").innerHTML = 'Nivel: Media Superior';
-                activaModalidades();
-                break;
-            case 2:
-                document.getElementById("id_nivel").value = '2';
-                document.getElementById("div_nivel").style.display = 'none';
-                document.getElementById("id_lblNivel").innerHTML = 'Nivel: Superior';
-                activaModalidades();
-                break;
-            case 3:
-                document.getElementById("id_nivel").value = 'Seleccionar...';
-                document.getElementById("div_nivel").style.display = 'block';
-                document.getElementById("id_lblNivel").innerHTML = 'Nivel:';
-                activaModalidades();
-                break;
-          }
-        }
-      {% endfor %}
-      }else{
-        document.getElementById("div_cct").style.display = 'none';
-      }
-    }
-    activaNivel();
-
-    function activaOpciones(){
-        document.getElementById("id_opcion").disabled = false;
-        opciones();
-    }
-
-    document.getElementById("form").addEventListener("submit", function(event){
-        if (validar() == false){ 
-                event.preventDefault();
-            return false; 
-        }
-    });
-    function validar(){
-        var nivel = document.getElementById("id_nivel");
-        var mod = document.getElementById("id_modalidad");
-        var opc = document.getElementById("id_opcion");
-        //Validación de select de nivel
-        if (nivel.value == 'Seleccionar...'){
-            alert('Favor de seleccionar un nivel de estudios.');
-            return false; 
-        }else
-        //Validación de select de modalidad
-        if (mod.value == 'Seleccionar...'){
-            alert('Favor de seleccionar una modalidad.');
-            return false; 
-        }else
-        //Validación de select de opcion
-        if(opc.value == 'Seleccionar...' ){
-            alert('Favor de seleccionar una opción.');
-            return false; 
-        }else{    
-            //Acomodo de campo salud
-            var checkBox = document.getElementById("idcheckbox");
-            var input = document.getElementById("id_salud");
-            if (checkBox.checked == true){
-                input.value = '1';
-            } else {
-                input.value = '0';
+            switch({{ element.nivel_educativo }}){
+                case 1:
+                    document.getElementById("id_nivel").value = '1';
+                    document.getElementById("div_nivel").style.display = 'none';
+                    document.getElementById("id_lblNivel").innerHTML = 'Nivel: Media Superior';
+                    activaModalidades();
+                    break;
+                case 2:
+                    document.getElementById("id_nivel").value = '2';
+                    document.getElementById("div_nivel").style.display = 'none';
+                    document.getElementById("id_lblNivel").innerHTML = 'Nivel: Superior';
+                    activaModalidades();
+                    break;
+                case 3:
+                    document.getElementById("id_nivel").value = 'Seleccionar...';
+                    document.getElementById("div_nivel").style.display = 'block';
+                    document.getElementById("id_lblNivel").innerHTML = 'Nivel:';
+                    activaModalidades();
+                    break;
             }
         }
+    {% endfor %}
+    }else{
+        document.getElementById("div_cct").style.display = 'none';
     }
+}
 
-  </script>
+activaNivel();
+
+function activaOpciones(){
+    document.getElementById("id_opcion").disabled = false;
+    opciones();
+}
+
+document.getElementById("form").addEventListener("submit", function(event){
+    if (validar() == false){
+            event.preventDefault();
+        return false;
+    }
+});
+
+function validar(){
+    var nivel = document.getElementById("id_nivel");
+    var mod = document.getElementById("id_modalidad");
+    var opc = document.getElementById("id_opcion");
+    //Validación de select de nivel
+    if (nivel.value == 'Seleccionar...'){
+        alert('Favor de seleccionar un nivel de estudios.');
+        return false;
+    }else
+    //Validación de select de modalidad
+    if (mod.value == 'Seleccionar...'){
+        alert('Favor de seleccionar una modalidad.');
+        return false;
+    }else
+    //Validación de select de opcion
+    if(opc.value == 'Seleccionar...' ){
+        alert('Favor de seleccionar una opción.');
+        return false;
+    }else{
+        //Acomodo de campo salud
+        var checkBox = document.getElementById("idcheckbox");
+        var input = document.getElementById("id_salud");
+        if (checkBox.checked == true){
+            input.value = '1';
+        } else {
+            input.value = '0';
+        }
+    }
+}
+</script>
 {% endblock %}
