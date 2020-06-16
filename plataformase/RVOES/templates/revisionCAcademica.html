@@ -178,7 +178,7 @@
 
 
     <div class="m-3">
-    {% if solicitud.estatus_id == 1 %}
+    {% if solicitud.estatus_id == 1 and solicitud.completado == 10 %}
         {% if solicitud.customuser.tipo_persona == '1' %}
             <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
@@ -197,13 +197,15 @@
         {% endif %}
     {% endif %}
     </div>
-    <form method="post" action="../../../finProceso/{{ solicitud.id }}/">
+
+
+    {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
+    <form method="post" enctype="multipart/form-data" action="../../../finProceso/{{ solicitud.id }}/">
         {% csrf_token %}
-        {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
         <div class="col-5 mt-2 mx-auto">
             <div class="card-body border border-dark text-center">
-                <p class="card-text" >Observaciones de la visita a la institución<br></p>
-                <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
+                <p class="card-text" >Archivo de validación de turno<br></p>
+                <input class="form-control-file m-2" type="file" required name="archivoNivel" id="id_archivoNivel" accept="application/pdf">
             </div>
         </div>
         <div class="col mt-3 mb-3 text-center">
@@ -214,9 +216,12 @@
             {% endif %}
             <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
         </div>
-        {% else %}
+    </form>
+    {% else %}
+
         <div class="col mt-3 mb-3 text-center">
             <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
+            {% if solicitud.completado != 12 %}
             {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
                 {% if comentarios == "" %}
                 <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
@@ -232,24 +237,39 @@
                     {% endif %}
                 {% endif %}
             {% endif %}
-
+            {% endif %}
             <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
+
             {% if solicitud.completado == 10 %}
                 {% if solicitud.estatus.id == 1 %}
-                
-        {% if solicitud.customuser.tipo_persona == '1' %}
-        <a class="btn btn-secondary" href="../entregoDocumentos" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, la casilla de original y copia de Identificación no esta marcada, en caso de no haberlas entregado no puede continuar.\nSi fueron entregadas, favor de marcar la casilla.');}" >Entregó documentos</a>
-                {% endif %}
-                {% if solicitud.customuser.tipo_persona == '2' %}
-                <a class="btn btn-secondary" href="../entregoDocumentos" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');}" >Entregó documentos</a>
+                    <form class="d-inline" method="post" id="id_form2" action="../entregoDocumentos">
+                    {% csrf_token %}
+                        <input type="text" hidden name="hayComentariosNoAtendidos" id="id_hayComentariosNoAtendidos" value="{{hayComentariosNoAtendidos}}">
+                        {% if solicitud.customuser.tipo_persona == '1' %}
+                            {% if hayComentariosNoAtendidos == False %}
+                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false ){
+                                event.preventDefault();
+                                alert('¡ATENCIÓN!, la casilla de original y copia de Identificación no esta marcada, en caso de no haberlas entregado no puede continuar.\nSi fueron entregadas, favor de marcar la casilla.');
+                                }" > Entregó documentos</button>
+                            {% endif %}
+                            {%if hayComentariosNoAtendidos == True %}
+                                <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
+                            {% endif %}
                         {% endif %}
-                     
-                  {% endif %}
+                        {% if solicitud.customuser.tipo_persona == '2' %}
+                            {% if hayComentariosNoAtendidos == False %}
+                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');}" >Entregó documentos</button>
+                            {% endif %}
+                            {%if hayComentariosNoAtendidos == True %}
+                                <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
+                            {% endif %}
+                        {% endif %}
+                    </form>
+                {% endif %}
             {% endif %}
             <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
         </div>
-        {% endif %}
-    </form>
+    {% endif %}
 
 </div>
 

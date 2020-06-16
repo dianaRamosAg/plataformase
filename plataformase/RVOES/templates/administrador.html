@@ -74,12 +74,16 @@
                                                 En espera de información de pago
                                             {% else %}
                                                 {% if element.completado == 11 %}
-                                                    Proceso digital completo
+                                                    En proceso de ratificación por dirección
                                                 {% else %}
-                                                    {% if element.completado == -1 %}
-                                                        Rechazada
+                                                    {% if element.completado == 12 %}
+                                                        Proceso digital completo
                                                     {% else %}
-                                                        En proceso de revisión por<br>el departamento <strong>{{element.estatus.nombre}}</strong>
+                                                        {% if element.completado == -1 %}
+                                                            Rechazada
+                                                        {% else %}
+                                                            En proceso de revisión por<br>el departamento <strong>{{element.estatus.nombre}}</strong>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endif %}
                                             {% endif %}
@@ -87,8 +91,10 @@
                                     </td>
                                     <td>{{element.fechaRegistro}}</td>
                                     <td>
-                                        {% if element.estatus.id > 2 %}
-                                            {% if element.completado == 10 or element.completado == 11 %}
+                                        {% if element.completado == 10 and element.estatus.id > 2 %}
+                                            <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
+                                        {% else %}
+                                            {% if element.completado > 10 %}
                                                 <a href="{% url 'generate_pdf' element.id %}" target="_blank">Descargar</a>
                                             {% endif %}
                                         {% endif %}

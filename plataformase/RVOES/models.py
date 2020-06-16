@@ -10,10 +10,13 @@ class Solicitud(models.Model):
     comentario = models.CharField(max_length=1, default='0',)#Indica si la solicitud tiene comentarios (0:no, 1:si, 2:ya actualizó archivos)
     completado = models.IntegerField(default='1',)#Estado en el que se encuentra la solicitud
     """completado: -1 = Cancelada, 0 = Completado, 1 = Institucional, 2 = Curricular,
-        3 = Academica, 4 = Media Superior, 9 = Petición de pago, 10 = Documentos recibidos, 11 = Terminó revisión digital"""
+        3 = Academica, 4 = Media Superior, 9 = Petición de pago, 10 = Documentos recibidos, 11 = Nivel subio archivo,
+        12 = Dirección aceptó/rechazo -> Fin del proceso (ir a Ventanilla única)"""
     estatus = models.ForeignKey(Departamento, on_delete=models.CASCADE, default='1')
     """estatus: Define el departamnto en el que se encuentra"""
     noOficioAdmision = models.TextField(null=True, blank=True, default=None)#Número de oficio de admisión de trámite
+    archivoNivel = models.FileField(upload_to='Archivos/Archivos_Nivel', default='', blank=True, null=True, validators=[valid_extension])#Archivo que sube el nivel al finalizar la revisión de la solicitud en la segunda etapa del proceso (Revisión física)
+    aceptArchivoNivel = models.BooleanField(default=False)#Indica si el archivo subido por el nivel fue aceptado (true) o rechazado (false)
 
     cct = models.TextField(null=True, blank=True)#Clave de Centro de Trabajo
     nivel = models.CharField(max_length=1)#Nivel Educativo (1: Media superior, 2: Superior)
