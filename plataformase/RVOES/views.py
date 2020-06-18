@@ -665,7 +665,141 @@ def terminarSubArchivos(request, usuario, solicitud):
                 medSup = CMedSuperior.objects.get(id_solicitud=solicitud)#Obtenemos la carpeta de media superior de la solicitud correspondiente.
                 for Coment in Comenta:
                     if not ("1_1" in comentario and Coment.archivo == "1_1" and Coment.atendida == False):#Si el archivo de solicitud (1_1) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
-                        request.FILES["solicitud"] = medSup.solicitud
+                        request.FILES["solicitud"] = medSup.solicitud.url
+                    else:
+                        identificacion = request.POST["identificacion"]
+                        folio_id = request.POST["folio_id"]
+                        nomPerAut1 = request.POST["nomPerAut1"]
+                        apMatPerAut1 = request.POST["apMatPerAut1"]
+                        apPatPerAut1 = request.POST["apPatPerAut1"]
+                        emailPerAut1 = request.POST["emailPerAut1"]
+                        telPerAut1 = request.POST["telPerAut1"]
+
+                        nomPerAut2 = request.POST["nomPerAut2"]
+                        apMatPerAut2 = request.POST["apMatPerAut2"]
+                        apPatPerAut2 = request.POST["apPatPerAut2"]
+                        emailPerAut2 = request.POST["emailPerAut2"]
+                        telPerAut2 = request.POST["telPerAut2"]
+
+                        nomPerAut3 = request.POST["nomPerAut3"]
+                        apMatPerAut3 = request.POST["apMatPerAut3"]
+                        apPatPerAut3 = request.POST["apPatPerAut3"]
+                        emailPerAut3 = request.POST["emailPerAut3"]
+                        telPerAut3 = request.POST["telPerAut3"]
+
+                        nomPerAut4 = request.POST["nomPerAut4"]
+                        apMatPerAut4 = request.POST["apMatPerAut4"]
+                        apPatPerAut4 = request.POST["apPatPerAut4"]
+                        emailPerAut4 = request.POST["emailPerAut4"]
+                        telPerAut4 = request.POST["telPerAut4"]
+
+                        nomPerAut5 = request.POST["nomPerAut5"]
+                        apMatPerAut5 = request.POST["apMatPerAut5"]
+                        apPatPerAut5 = request.POST["apPatPerAut5"]
+                        emailPerAut5 = request.POST["emailPerAut5"]
+                        telPerAut5 = request.POST["telPerAut5"]
+
+                        nomPerAut6 = request.POST["nomPerAut6"]
+                        apMatPerAut6 = request.POST["apMatPerAut6"]
+                        apPatPerAut6 = request.POST["apPatPerAut6"]
+                        emailPerAut6 = request.POST["emailPerAut6"]
+                        telPerAut6 = request.POST["telPerAut6"]
+
+                        nomApLegal1 = request.POST["nomApLegal1"]
+                        apMatApLegal1 = request.POST["apMatApLegal1"]
+                        apPatApLegal1 = request.POST["apPatApLegal1"]
+                        emailApLegal1 = request.POST["emailApLegal1"]
+                        telApLegal1 = request.POST["telApLegal1"]
+                        poderNotApLegal1 = request.POST["poderNotApLegal1"]
+
+                        nomApLegal2 = request.POST["nomApLegal2"]
+                        apMatApLegal2 = request.POST["apMatApLegal2"]
+                        apPatApLegal2 = request.POST["apPatApLegal2"]
+                        emailApLegal2 = request.POST["emailApLegal2"]
+                        telApLegal2 = request.POST["telApLegal2"]
+                        poderNotApLegal2 = request.POST["poderNotApLegal2"]
+
+                        perPrograma = request.POST["perPrograma"]
+                        nombreSolicitud = request.POST["nombreSolicitud"]
+                        if request.user.tipo_usuario == '5':
+                            opcion1 = request.POST["opcion1"]
+                            opcion2 = request.POST["opcion2"]
+                            opcion3 = request.POST["opcion3"]
+                        else:
+                            opcion1 = None
+                            opcion2 = None
+                            opcion3 = None
+                        horarioDias = request.POST["horarioDias"]
+                        areaFormacion = request.POST["areaFormacion"]
+                        # Tipo de persona FISICA
+                        if request.user.tipo_persona == '1':
+                            noInstrumentoNotarial = None
+                            libro_inscripcion = None
+                            nombreNotario = None
+                            noNotario = None
+                            fecha = None
+                            lugar = None
+                            objeto_social = None
+                            estatutosVigentes = None
+                            nombreRepresentante = None
+                            poderNotarial = None
+                        # Tipo de persona MORAL
+                        if request.user.tipo_persona == '2':
+                            noInstrumentoNotarial = request.POST["inst_notarial"]
+                            libro_inscripcion = request.POST["libro_inscripcion"]
+                            nombreNotario = request.POST["nombreNotario"]
+                            noNotario = request.POST["noNotario"]
+                            fecha = request.POST["fecha"]
+                            lugar = request.POST["lugar"]
+                            objeto_social = request.POST["objeto_social"]
+                            estatutosVigentes = request.POST["estatutosVigentes"]
+                            nombreRepresentante = request.POST["nombreRepresentante"]
+                            poderNotarial = request.POST["poderNotarial"]
+                        # Se actualizarán los datos del formato de solicitud
+                        Solicitud.objects.filter(id=solicitud).update(identificacion=identificacion, folio_id=folio_id,
+                                                                      nomPerAut1=nomPerAut1, apMatPerAut1=apMatPerAut1,
+                                                                      apPatPerAut1=apPatPerAut1,
+                                                                      emailPerAut1=emailPerAut1, telPerAut1=telPerAut1,
+                                                                      nomPerAut2=nomPerAut2, apMatPerAut2=apMatPerAut2,
+                                                                      apPatPerAut2=apPatPerAut2,
+                                                                      emailPerAut2=emailPerAut2, telPerAut2=telPerAut2,
+                                                                      nomPerAut3=nomPerAut3, apMatPerAut3=apMatPerAut3,
+                                                                      apPatPerAut3=apPatPerAut3,
+                                                                      emailPerAut3=emailPerAut3, telPerAut3=telPerAut3,
+                                                                      nomPerAut4=nomPerAut4, apMatPerAut4=apMatPerAut4,
+                                                                      apPatPerAut4=apPatPerAut4,
+                                                                      emailPerAut4=emailPerAut4, telPerAut4=telPerAut4,
+                                                                      nomPerAut5=nomPerAut5, apMatPerAut5=apMatPerAut5,
+                                                                      apPatPerAut5=apPatPerAut5,
+                                                                      emailPerAut5=emailPerAut5, telPerAut5=telPerAut5,
+                                                                      nomPerAut6=nomPerAut6, apMatPerAut6=apMatPerAut6,
+                                                                      apPatPerAut6=apPatPerAut6,
+                                                                      emailPerAut6=emailPerAut6, telPerAut6=telPerAut6,
+                                                                      nomApLegal1=nomApLegal1,
+                                                                      apMatApLegal1=apMatApLegal1,
+                                                                      apPatApLegal1=apPatApLegal1,
+                                                                      emailApLegal1=emailApLegal1,
+                                                                      telApLegal1=telApLegal1,
+                                                                      poderNotApLegal1=poderNotApLegal1,
+                                                                      nomApLegal2=nomApLegal2,
+                                                                      apMatApLegal2=apMatApLegal2,
+                                                                      apPatApLegal2=apPatApLegal2,
+                                                                      emailApLegal2=emailApLegal2,
+                                                                      telApLegal2=telApLegal2,
+                                                                      poderNotApLegal2=poderNotApLegal2,
+                                                                      perPrograma=perPrograma,
+                                                                      nombreSolicitud=nombreSolicitud, opcion1=opcion1,
+                                                                      opcion2=opcion2, opcion3=opcion3,
+                                                                      horarioDias=horarioDias,
+                                                                      areaFormacion=areaFormacion,
+                                                                      noInstrumentoNotarial=noInstrumentoNotarial,
+                                                                      libro_inscripcion=libro_inscripcion,
+                                                                      nombreNotario=nombreNotario,
+                                                                      noNotario=noNotario, fecha=fecha, lugar=lugar,
+                                                                      objeto_social=objeto_social,
+                                                                      estatutosVigentes=estatutosVigentes,
+                                                                      nombreRepresentante=nombreRepresentante,
+                                                                      poderNotarial=poderNotarial)
                     if IsLoSolicitud.completado > 9:
                         if not ("1_2" in comentario and Coment.archivo == "1_2" and Coment.atendida == False):#Si el archivo de solicitud (1_2) no tiene comentarios, manda lo existente en la carpeta media superior a su respectivo campo en la solicitud "request"
                             request.FILES["pago"] = medSup.pago
@@ -768,6 +902,112 @@ def terminarSubArchivos(request, usuario, solicitud):
                     for Coment in Comenta:
                         if not ("2_1" in comentario and Coment.archivo == "2_1" and Coment.atendida == False):
                             request.FILES["solicitud"] = inst.solicitud.url
+                        else:
+                            identificacion = request.POST["identificacion"]
+                            folio_id = request.POST["folio_id"]
+                            nomPerAut1 = request.POST["nomPerAut1"]
+                            apMatPerAut1 = request.POST["apMatPerAut1"]
+                            apPatPerAut1 = request.POST["apPatPerAut1"]
+                            emailPerAut1 = request.POST["emailPerAut1"]
+                            telPerAut1 = request.POST["telPerAut1"]
+
+                            nomPerAut2 = request.POST["nomPerAut2"]
+                            apMatPerAut2 = request.POST["apMatPerAut2"]
+                            apPatPerAut2 = request.POST["apPatPerAut2"]
+                            emailPerAut2 = request.POST["emailPerAut2"]
+                            telPerAut2 = request.POST["telPerAut2"]
+
+                            nomPerAut3 = request.POST["nomPerAut3"]
+                            apMatPerAut3 = request.POST["apMatPerAut3"]
+                            apPatPerAut3 = request.POST["apPatPerAut3"]
+                            emailPerAut3 = request.POST["emailPerAut3"]
+                            telPerAut3 = request.POST["telPerAut3"]
+
+                            nomPerAut4 = request.POST["nomPerAut4"]
+                            apMatPerAut4 = request.POST["apMatPerAut4"]
+                            apPatPerAut4 = request.POST["apPatPerAut4"]
+                            emailPerAut4 = request.POST["emailPerAut4"]
+                            telPerAut4 = request.POST["telPerAut4"]
+
+                            nomPerAut5 = request.POST["nomPerAut5"]
+                            apMatPerAut5 = request.POST["apMatPerAut5"]
+                            apPatPerAut5 = request.POST["apPatPerAut5"]
+                            emailPerAut5 = request.POST["emailPerAut5"]
+                            telPerAut5 = request.POST["telPerAut5"]
+
+                            nomPerAut6 = request.POST["nomPerAut6"]
+                            apMatPerAut6 = request.POST["apMatPerAut6"]
+                            apPatPerAut6 = request.POST["apPatPerAut6"]
+                            emailPerAut6 = request.POST["emailPerAut6"]
+                            telPerAut6 = request.POST["telPerAut6"]
+
+                            nomApLegal1 = request.POST["nomApLegal1"]
+                            apMatApLegal1 = request.POST["apMatApLegal1"]
+                            apPatApLegal1 = request.POST["apPatApLegal1"]
+                            emailApLegal1 = request.POST["emailApLegal1"]
+                            telApLegal1 = request.POST["telApLegal1"]
+                            poderNotApLegal1 = request.POST["poderNotApLegal1"]
+
+                            nomApLegal2 = request.POST["nomApLegal2"]
+                            apMatApLegal2 = request.POST["apMatApLegal2"]
+                            apPatApLegal2 = request.POST["apPatApLegal2"]
+                            emailApLegal2 = request.POST["emailApLegal2"]
+                            telApLegal2 = request.POST["telApLegal2"]
+                            poderNotApLegal2 = request.POST["poderNotApLegal2"]
+
+                            perPrograma = request.POST["perPrograma"]
+                            nombreSolicitud = request.POST["nombreSolicitud"]
+                            if request.user.tipo_usuario == '5':
+                                opcion1 = request.POST["opcion1"]
+                                opcion2 = request.POST["opcion2"]
+                                opcion3 = request.POST["opcion3"]
+                            else:
+                                opcion1 = None
+                                opcion2 = None
+                                opcion3 = None
+                            horarioDias = request.POST["horarioDias"]
+                            areaFormacion = request.POST["areaFormacion"]
+                            # Tipo de persona FISICA
+                            if request.user.tipo_persona == '1':
+                                noInstrumentoNotarial = None
+                                libro_inscripcion = None
+                                nombreNotario = None
+                                noNotario = None
+                                fecha = None
+                                lugar = None
+                                objeto_social = None
+                                estatutosVigentes = None
+                                nombreRepresentante = None
+                                poderNotarial = None
+                            # Tipo de persona MORAL
+                            if request.user.tipo_persona == '2':
+                                noInstrumentoNotarial = request.POST["inst_notarial"]
+                                libro_inscripcion = request.POST["libro_inscripcion"]
+                                nombreNotario = request.POST["nombreNotario"]
+                                noNotario = request.POST["noNotario"]
+                                fecha = request.POST["fecha"]
+                                lugar = request.POST["lugar"]
+                                objeto_social = request.POST["objeto_social"]
+                                estatutosVigentes = request.POST["estatutosVigentes"]
+                                nombreRepresentante = request.POST["nombreRepresentante"]
+                                poderNotarial = request.POST["poderNotarial"]
+
+                            # Se actualizarán los datos del formato de solicitud
+                            Solicitud.objects.filter(id=solicitud).update(identificacion=identificacion, folio_id=folio_id,
+                                      nomPerAut1=nomPerAut1, apMatPerAut1=apMatPerAut1, apPatPerAut1=apPatPerAut1, emailPerAut1=emailPerAut1, telPerAut1=telPerAut1,
+                                      nomPerAut2=nomPerAut2, apMatPerAut2=apMatPerAut2, apPatPerAut2=apPatPerAut2, emailPerAut2=emailPerAut2, telPerAut2=telPerAut2,
+                                      nomPerAut3=nomPerAut3, apMatPerAut3=apMatPerAut3, apPatPerAut3=apPatPerAut3, emailPerAut3=emailPerAut3, telPerAut3=telPerAut3,
+                                      nomPerAut4=nomPerAut4, apMatPerAut4=apMatPerAut4, apPatPerAut4=apPatPerAut4, emailPerAut4=emailPerAut4, telPerAut4=telPerAut4,
+                                      nomPerAut5=nomPerAut5, apMatPerAut5=apMatPerAut5, apPatPerAut5=apPatPerAut5, emailPerAut5=emailPerAut5, telPerAut5=telPerAut5,
+                                      nomPerAut6=nomPerAut6, apMatPerAut6=apMatPerAut6, apPatPerAut6=apPatPerAut6, emailPerAut6=emailPerAut6, telPerAut6=telPerAut6,
+                                      nomApLegal1=nomApLegal1, apMatApLegal1=apMatApLegal1, apPatApLegal1=apPatApLegal1, emailApLegal1=emailApLegal1, telApLegal1=telApLegal1, poderNotApLegal1=poderNotApLegal1,
+                                      nomApLegal2=nomApLegal2, apMatApLegal2=apMatApLegal2, apPatApLegal2=apPatApLegal2, emailApLegal2=emailApLegal2, telApLegal2=telApLegal2, poderNotApLegal2=poderNotApLegal2,
+                                      perPrograma=perPrograma, nombreSolicitud=nombreSolicitud, opcion1=opcion1, opcion2=opcion2, opcion3=opcion3, horarioDias=horarioDias,
+                                      areaFormacion=areaFormacion, noInstrumentoNotarial=noInstrumentoNotarial,
+                                      libro_inscripcion=libro_inscripcion, nombreNotario=nombreNotario,
+                                      noNotario=noNotario, fecha=fecha, lugar=lugar,
+                                      objeto_social=objeto_social, estatutosVigentes=estatutosVigentes,
+                                      nombreRepresentante=nombreRepresentante, poderNotarial=poderNotarial)
                         if IsLoSolicitud.completado > 9:
                             if not ("2_2" in comentario and Coment.archivo == "2_2" and Coment.atendida == False):
                                 request.FILES["pago"] = inst.pago.url
