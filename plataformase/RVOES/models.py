@@ -17,7 +17,6 @@ class Solicitud(models.Model):
     noOficioAdmision = models.TextField(null=True, blank=True, default=None)#Número de oficio de admisión de trámite
     archivoNivel = models.FileField(upload_to='Archivos/Archivos_Nivel', default='', blank=True, null=True, validators=[valid_extension])#Archivo que sube el nivel al finalizar la revisión de la solicitud en la segunda etapa del proceso (Revisión física)
     aceptArchivoNivel = models.BooleanField(default=False)#Indica si el archivo subido por el nivel fue aceptado (true) o rechazado (false)
-
     cct = models.TextField(null=True, blank=True)#Clave de Centro de Trabajo
     nivel = models.CharField(max_length=1)#Nivel Educativo (1: Media superior, 2: Superior)
     nivelSuperior = models.CharField(max_length=1, null=True, blank=True)#Nivel educativo especifico (Solo para nivel superior)
@@ -29,6 +28,8 @@ class Solicitud(models.Model):
     ciclo = models.TextField(blank=True, null=True)
     otro = models.TextField(blank=True, null=True)
     duracion = models.FloatField(blank=True, null=True)
+    
+  #  etapa= models.IntegerField(blank=True, null=True, default=0)
     #Ambos tipos de persona
     identificacion = models.TextField(blank=True, null=True)#Tipo de identificación oficial (Ambos)
     folio_id = models.TextField(null=True, blank=True)#Número de folio de identificación oficial (Ambos)

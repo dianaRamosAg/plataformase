@@ -70,7 +70,7 @@
             {% if error %}
                 <div class="row col-5 mt-4 ml-5">
                     <div class=" alert alert-danger">
-                        <label>El folio de pago ingresado ya se encunetra registrado.<br>
+                        <label>El folio de pago ingresado ya se encuentra registrado.<br>
                             <strong>El folio de pago debe ser único por solicitud.</strong>
                         </label>
                     </div>
@@ -84,6 +84,8 @@
         </form>
     </div>
 </div>
-
+<script>
+    window.history.forward();
+</script>
 
 {% endblock %}

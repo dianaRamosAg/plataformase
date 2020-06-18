@@ -10,6 +10,9 @@
                 <a class="nav-link ml-4" href="{% url 'notificacionAdmin' %}">Notificaciones {{total}}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'admin' %}">Regresar</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
             </li>
         </ul>
@@ -301,6 +304,7 @@ function org(evt) {
 {% endif %}
 
 <script>
+    window.history.forward();
     function terminar(estado){
         var btnTerminar = document.getElementById("TRevision")
         switch(estado){

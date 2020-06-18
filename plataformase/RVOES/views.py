@@ -1747,10 +1747,6 @@ def historialActividades(request):
 
 def entregoDocumentosFisicos(request, solicitud):
     """Define que la institución ya entregó los documentos en físico a los departamentos.
-<<<<<<< HEAD
-=======
-
->>>>>>> RVOES
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.

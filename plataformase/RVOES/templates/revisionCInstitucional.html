@@ -11,6 +11,9 @@
                 <a class="nav-link ml-4" href="{% url 'notificacionAdmin' %}">Notificaciones {{total}}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'admin' %}">Regresar</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
             </li>
         </ul>
@@ -428,6 +431,7 @@
 {% endif %}
 
 <script>
+    window.history.forward();
     function entregoDocumentos(){
         if(document.getElementById("id_noOficioAdmision").value == ''){
             alert('Coloque un número de oficio de admisión de trámite');
