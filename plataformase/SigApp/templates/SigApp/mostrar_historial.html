@@ -1,0 +1,157 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+  {% block content %}
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+    </style>
+    <div class="container-fluid">
+      <!--Panel general (derecho)-->
+      <div class="row bg-light m-2">
+        <!--Nav bar izquierdo-->
+        <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+          
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                Menú
+            </a>
+            <a href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/" class="list-group-item list-group-item-action">Solicitudes de Modificación</a>
+            <a href="/SigApp/listado_historial/" class="list-group-item list-group-item-action">Historial (Gral)</a>
+            <a href="/SigApp/listado_historialEst/" class="list-group-item list-group-item-action">Historial (Estad)</a>
+          </div>
+                
+        </div>
+        <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
+          <label style="font-size:20px;"><b>Historial de Modificaciones<br>Fecha:</b> {{ modificacion.fechamod|date:'DATE_FORMAT' }} </label>
+          <hr>
+          <p style="font-size:20px; margin-top: 25px; margin-left: 150px;"><b>Realizas por: </b> {{ modificacion.usuario_mod }}<p>
+          <p style="font-size:20px; margin-left: 150px;"><b>Aceptadas por:</b> {{ modificacion.usuario_dep }}<p>
+                
+          <div class="table-responsive container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 2%; margin-bottom: 5%; font-size:15px;">
+            {% if modificacion.tipo %}
+              <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Información Modificada</th>
+                    <th colspan="2">Información Aceptada</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Institución</th>
+                    <td>{{ modificacion.nombre_institucion_prev }}</td>
+                    <td>{{ modificacion.nombre_institucion_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Clave</th>
+                    <td>{{ modificacion.clave_centrotrabajo_prev }}</td>
+                    <td>{{ modificacion.clave_centrotrabajo_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Municipio</th>
+                    <td>{{ modificacion.municipio_prev }}</td>
+                    <td>{{ modificacion.municipio_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Localidad</th>
+                    <td>{{ modificacion.localidad_prev }}</td>
+                    <td>{{ modificacion.localidad_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Estatus</th>
+                    <td>{{ modificacion.status_prev }}</td>
+                    <td>{{ modificacion.status_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Director</th>
+                    <td>{{ modificacion.director_prev }}</td>
+                    <td>{{ modificacion.director_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Dirección</th>
+                    <td>{{ modificacion.direccion_prev }}</td>
+                    <td>{{ modificacion.direccion_new }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            {% else %}
+              <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Información Modificada</th>
+                    <th colspan="2">Información Rechazada</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Institución</th>
+                    <td>{{ modificacion.nombre_institucion_prev }}</td>
+                    <td>{{ modificacion.nombre_institucion_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Clave</th>
+                    <td>{{ modificacion.clave_centrotrabajo_prev }}</td>
+                    <td>{{ modificacion.clave_centrotrabajo_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Municipio</th>
+                    <td>{{ modificacion.municipio_prev }}</td>
+                    <td>{{ modificacion.municipio_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Localidad</th>
+                    <td>{{ modificacion.localidad_prev }}</td>
+                    <td>{{ modificacion.localidad_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Estatus</th>
+                    <td>{{ modificacion.status_prev }}</td>
+                    <td>{{ modificacion.status_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Director</th>
+                    <td>{{ modificacion.director_prev }}</td>
+                    <td>{{ modificacion.director_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Dirección</th>
+                    <td>{{ modificacion.direccion_prev }}</td>
+                    <td>{{ modificacion.direccion_new }}</td>
+                  </tr>
+                  <tr>
+                    <th>Comentarios</th>
+                    <td colspan="2">{{ modificacion.comentario }}</td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+</body>
+
+</html>

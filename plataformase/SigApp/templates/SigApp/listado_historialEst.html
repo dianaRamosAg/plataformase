@@ -1,0 +1,130 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+  {% block content %}
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }           
+                .centro{
+                    text-align: center;
+                }
+                .left{
+                    text-align: left;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+                .my-custom-scrollbar {
+                    position: relative;
+                    height: 500px;
+                    overflow: auto;
+                    margin-bottom:2%;
+                }
+                .table-wrapper-scroll-y {
+                    display: block;
+}
+  </style>
+  <div class="container-fluid">
+    <!--Panel general (derecho)-->
+    <div class="row bg-light m-2">
+      <!--Nav bar izquierdo-->
+      <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+        
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+              Menú
+          </a>
+          <a href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/" class="list-group-item list-group-item-action">Solicitudes de Modificación</a>
+          <a href="/SigApp/listado_historial/" class="list-group-item list-group-item-action">Historial (Gral)</a>
+          <a href="/SigApp/listado_historialEst/" class="list-group-item list-group-item-action">Historial (Estad)</a>
+        </div>
+        
+      </div>
+      {% if not historialEst %}
+        <div class="col-9 col-sm-5 col-md-7 col-lg-7 col-xl-9" style="height: 40x;">
+          <p style="font-size:20px; margin-bottom: 50px; margin-left: 35%; margin-top: 30%;">Sin modificaciones por el momento</p>
+        <div>   
+      {% else %}
+        <div class="col-8 bg-light mt-3" style="margin-left: 8%;">
+
+          <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%;">
+              <label style="font-size:20px; margin-left: -15%; text-align:center; margin-bottom: 5%; margin-top: 5%; ">
+                  Historial de Modificaciónes (Información Estadistica)<br> 
+              </label>
+          </div>
+
+          <div class="input-group" style=" padding:1%;">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Buscar</span>
+            </div>
+            <input class="form-control" id="myInput" type="text" placeholder="...">
+          </div>
+
+          <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table table-bordered table-striped mb-0 " style="text-align: center; ">
+              <thead class="thead-dark">
+                <tr>
+                  <th style="width:1%" scope="col">Clave Escuela</th>
+                  <th style="width:1%" scope="col">Clave Carrera</th>
+                  <th style="width:30%" scope="col">Nombre Carrera</th>
+                  <th style="width:20%" scope="col">Fecha</th>
+                  <th style="width:1%" scope="col">Est. Modif</th>
+                  <th style="width:1%" colspan="2">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="myTable">
+                {% for element in historialEst %}
+                  <tr>
+                    <td scope="row">{{ element.ClaveEscuela_prev }}</td>
+                    <td scope="row">{{ element.ClaveCarrera_prev }}</td>
+                    <td scope="row">{{ element.NombreCarrera_prev }}</td>
+                    <td scope="row">{{ element.fechamod|date:'d-m-Y' }}</td>
+                    <td scope="row">
+                      {% if element.tipo %}
+                        Aceptada
+                      {% else %}
+                        Rechazada
+                      {% endif %}
+                    </td>
+                    <td><a href="/SigApp/mostrar_historialEst/{{ element.id }}/" style="color:dodgerblue">Ir</a></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+      $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+      });
+      });
+
+    </script>
+
+
+{% endblock %}
+</html>

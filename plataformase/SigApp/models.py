@@ -144,9 +144,36 @@ class DatosTemporal(models.Model):
     director_temp = models.CharField(max_length=200)
     nombre_institucion = models.CharField(max_length=200)
     municipio = models.CharField(max_length=200)
-    localidad = models.CharField(max_length=200)
+    localidad =   models.CharField(max_length=200)
+    usuario_mod = models.CharField(max_length=50,blank=True,null=True)
     status = models.CharField(max_length=200)
+
     modificando = models.BooleanField()
+
+class HistorialMod(models.Model):
+    fechamod = models.DateTimeField()
+    departamento = models.CharField(max_length=50, blank=True, null=True)
+    usuario_dep = models.CharField(max_length=200)
+    usuario_mod = models.CharField(max_length=200)
+    tipo = models.BooleanField(blank=True, null=True) #True = Aceptada
+    comentario = models.CharField(max_length=500, blank=True, null=True)
+    #
+    clave_centrotrabajo_prev = models.CharField(max_length=200)
+    direccion_prev = models.CharField(max_length=200)
+    director_prev = models.CharField(max_length=200)
+    nombre_institucion_prev = models.CharField(max_length=200)
+    municipio_prev = models.CharField(max_length=200)
+    localidad_prev = models.CharField(max_length=200)
+    status_prev = models.CharField(max_length=200)
+    #
+    clave_centrotrabajo_new = models.CharField(max_length=200)
+    direccion_new = models.CharField(max_length=200)
+    director_new = models.CharField(max_length=200)
+    nombre_institucion_new = models.CharField(max_length=200)
+    municipio_new = models.CharField(max_length=200)
+    localidad_new = models.CharField(max_length=200)
+    status_new = models.CharField(max_length=200)
+
 
 #Modelo para catalogo
 class EscuelaC(models.Model):
@@ -202,4 +229,70 @@ class RVOES(models.Model):
     ClaveCarrera = models.CharField(max_length=30)
     Modalidad = models.CharField(max_length=25)
     Periodos = models.CharField(max_length=25)
+    modificando = models.BooleanField(default=False)
 
+
+
+class HistorialModEstadistica(models.Model):
+    fechamod = models.DateTimeField()
+
+    tipo = models.BooleanField(blank=True, null=True) #True = Aceptada
+    comentario = models.CharField(max_length=500, blank=True, null=True)
+    usuario_dep = models.CharField(max_length=200)
+    usuario_mod = models.CharField(max_length=200)
+    departamento = models.CharField(max_length=50, blank=True, null=True)
+
+    ClaveEscuela_prev = models.CharField(max_length=200)
+    ClaveCarrera_prev = models.CharField(max_length=30)
+    NombreCarrera_prev = models.CharField(max_length=200)
+
+    TotalAlumnos_prev = models.IntegerField(blank=True, null=True)
+    TotalPrimero_prev = models.IntegerField()
+    TotalSegundo_prev = models.IntegerField()
+    TotalTercero_prev = models.IntegerField()
+    TotalCuarto_prev = models.IntegerField()
+    TotalQuinto_prev = models.IntegerField()
+    TotalSexto_prev = models.IntegerField()
+    TotalHombres_prev = models.IntegerField()
+    TotalMujeres_prev = models.IntegerField()
+    Tipo_prev = models.CharField(max_length=50)
+    Area_prev = models.CharField(max_length=100, blank=True, null=True)
+    Modalidad_prev = models.CharField(max_length=25)
+    Periodos_prev = models.CharField(max_length=25)
+    #
+    ClaveEscuela_new = models.CharField(max_length=200)
+    ClaveCarrera_new = models.CharField(max_length=30)
+    NombreCarrera_new = models.CharField(max_length=200)
+
+    TotalAlumnos_new = models.IntegerField(blank=True, null=True)
+    TotalPrimero_new = models.IntegerField()
+    TotalSegundo_new = models.IntegerField()
+    TotalTercero_new = models.IntegerField()
+    TotalCuarto_new = models.IntegerField()
+    TotalQuinto_new = models.IntegerField()
+    TotalSexto_new = models.IntegerField()
+    TotalHombres_new = models.IntegerField()
+    TotalMujeres_new = models.IntegerField()
+    Tipo_new = models.CharField(max_length=50)
+    Area_new = models.CharField(max_length=100, blank=True, null=True)
+    Modalidad_new = models.CharField(max_length=25)
+    Periodos_new = models.CharField(max_length=25)
+
+class DatosTemporalEstadistica(models.Model):
+    ClaveEscuela_temp = models.CharField(max_length=200)
+    NombreCarrera_temp = models.CharField(max_length=200)
+    TotalPrimero_temp = models.IntegerField()
+    TotalSegundo_temp = models.IntegerField()
+    TotalTercero_temp = models.IntegerField()
+    TotalCuarto_temp = models.IntegerField()
+    TotalQuinto_temp = models.IntegerField()
+    TotalSexto_temp = models.IntegerField()
+    TotalHombres_temp = models.IntegerField()
+    TotalMujeres_temp = models.IntegerField()
+    Tipo_temp = models.CharField(max_length=50)
+    Area_temp = models.CharField(max_length=100, blank=True, null=True)
+    ClaveCarrera_temp = models.CharField(max_length=30)
+    Modalidad_temp = models.CharField(max_length=25)
+    Periodos_temp = models.CharField(max_length=25)
+    usuario_mod = models.CharField(max_length=50, blank=True,null=True)
+    modificando = models.BooleanField()

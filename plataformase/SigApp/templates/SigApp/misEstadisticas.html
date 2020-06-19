@@ -23,76 +23,326 @@
                 a:hover{
                     color:grey;
                 }
+                .my-custom-scrollbar {
+                    position: relative;
+                    height: 330px;
+                    overflow: auto;
+                    margin-bottom:2%;
+                }
+                .table-wrapper-scroll-y {
+                    display: block;
               </style>
     <div class="container-fluid">
         <!--Panel general (derecho)-->
         <div class="row bg-light m-2">
             <!--Nav bar izquierdo-->
             <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
-                <div class="row mt-4 ml-1">       
-                    <a href="/SigApp/miInstitucion/{{user.username.split|join:'-'}}/">Mi institución </a>     	
-                </div>
-                <div class="row mt-4 ml-1">
-                    <a href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/">Mis estadísticas</a> 
-                </div>
-            </div>
-            <div class="col-9 bg-light ml-1 mt-3" style="height: 40px;">
-                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Agregar información a la institución educativa: {{ user.first_name }}</p>
                 
-                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 20%; margin-top: 10%;">
-                    <div class="row">
-                        <div class="col-12 col-lg-5">
-                            <p style="font-size: 18px; font-weight: normal;">Cantidad de alumnos</p>
-                            <input class="centro" value="{{totalA}}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                        <div class="col-12 col-lg-5">
-                            <p style="font-size: 18px; font-weight: normal;">Alumnos indígenas</p>
-                            <input class="centro" value="{{totalAI}}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-5">
-                            <p style="font-size: 18px; font-weight: normal;">Alumnos sexo masculino</p>
-                            <input class="centro" value="{{totalAM}}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                        <div class="col-12 col-sm-5">
-                            <p style="font-size: 18px; font-weight: normal;">Alumnos indígenas masculinos</p>
-                            <input class="centro" value="{{totalAIM}}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-5">
-                            <p style="font-size: 18px; font-weight: normal;">Alumnos sexo femenino</p>
-                            <input class="centro" value="{{totalAF}}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                        <div class="col-12 col-sm-5">
-                            <p style="font-size: 18px; font-weight: normal;">Alumnos indígenas sexo femenino</p>
-                            <input class="centro" value="{{totalAIF}}" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class=" col-12 col-sm-5">
-                            <p style="font-size: 18px; font-weight: normal;">Cantidad de docentes</p>
-                            <input value="{{Institucion.totalDocentes}}" class="centro" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                        <div class="col-12 col-sm-5">
-                            <p style="font-size: 18px; font-weight: normal;">Cantidad de administrativos</p>
-                            <input value="{{Institucion.totalAdministrativos}}" class="centro" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                    </div>
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                        Menú
+                    </a>
+                    <a href="/SigApp/miInstitucion/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" class="list-group-item list-group-item-action">Información general</a>
+                    <a href="/SigApp/modEstadistica/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" class="list-group-item list-group-item-action">Información estadística</a>
+                    <a href="/SigApp/selectInstitucion2/{{ user.id }}/" class="list-group-item list-group-item-action " tabindex="-1" aria-disabled="true">Mis Instituciones</a>
                 </div>
-                <div class="col-11" style="text-align: right; margin-left: -2%; bottom: -150%;">
-                    <button class="btn btn-secondary">Limpiar</button>
-                    <button class="btn btn-primary">Guardar</button>
-                </div>
-            </div>
-            
-           
 
+            </div>
+            <form method="post" id="form" name="form" enctype="multipart/form-data" class="col-8 bg-light mt-3" style="margin-left: 8%;">
+            {% csrf_token %}
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; ">
+                    <label style="font-size:20px; margin-left: -15%; text-align:center; margin-bottom: 8%; margin-top: 5%; ">
+                        Realizar cambios sobre la información ESTADISTICA  de tu institución educativa:<br> 
+                        <b>{{ Escuela.NombreEscuela }}</b>
+                    </label>
+                </div>
             
+                <!--#####################################################################################-->
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>{{mensajeNuevo}}</strong> {{mensajeSinEstadistico}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                
+                {% for totales in totales %}
+                    <table class="table table-bordered table-striped mb-0" style="text-align: center;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Total Primer Año</th>
+                                <th scope="col">Total Segundo Año</th>
+                                <th scope="col">Total Tercer Año</th>
+                                <th scope="col">Total Cuarto Año</th>
+                                <th scope="col">Total Quinto Año</th>
+                                <th scope="col">Total Sexto Año</th>
+                                <!-- <th scope="col">Total Mujeres</th>
+                                <th scope="col">Total Hombres</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input disabled required type="number" min="0" style="text-align: center;" name="TotalPri" class="form-control" value="{{totales.TotalPrimero}}" placeholder="Total Primer Año" aria-label="Total primer año" aria-describedby="TotalPri"></td>
+                                <td><input disabled required type="number" min="0" style="text-align: center;" name="TotalSeg" class="form-control" value="{{totales.TotalSegundo}}" placeholder="Total Segundo Año" aria-label="Total Segundo Año" aria-describedby="TotalSeg"></td>
+                                <td><input disabled required type="number" min="0" style="text-align: center;" name="TotalTer" class="form-control" value="{{totales.TotalTercero}}" placeholder="Total Tercer Año" aria-label="Total Tercer Año" aria-describedby="TotalTer" ></td>
+                                <td><input disabled required type="number" min="0" style="text-align: center;" name="TotalCua" class="form-control" value="{{totales.TotalCuarto}}" placeholder="Total Cuarto Año" aria-label="Total Cuarto Año" aria-describedby="TotalCua" ></td>
+                                <td><input disabled required type="number" min="0" style="text-align: center;" name="TotalQui" class="form-control" value="{{totales.TotalQuinto}}" placeholder="Total Quinto Año" aria-label="Total Quinto Año" aria-describedby="TotalQui" ></td>
+                                <td><input disabled required type="number" min="0" style="text-align: center;" name="TotalSexto" class="form-control" value="{{totales.TotalSexto}}" placeholder="Total Sexto Año" aria-label="Total Sexto Año" aria-describedby="TotalSexto" ></td>
+                                <!-- <td><input required type="number" min="0" style="text-align: center;" name="TotalMujeres" class="form-control" value="{{totales.TotalMujeres}}" placeholder="Total Mujeres" aria-label="Total Mujeres" aria-describedby="TotalMujeres" ></td>
+                                <td><input required type="number" min="0" style="text-align: center;" name="TotalHombres" class="form-control" value="{{totales.TotalHombres}}" placeholder="Total Hombres" aria-label="Total Hombres" aria-describedby="TotalHombres" ></td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="TotalMujeres" name="TotalMujeres"> Total Mujeres </span>
+                        </div>
+                        <input disabled required type="number" min="0" name="TotalMujeres" class="form-control" value="{{totales.TotalMujeres}}" placeholder="Total Mujeres" aria-label="Total Mujeres" aria-describedby="TotalMujeres" >                    
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="TotalHombres" name="TotalHombres"> Total Hombres</span>
+                        </div>
+                        <input disabled required type="number" min="0" name="TotalHombres" class="form-control" value="{{totales.TotalHombres}}" placeholder="Total Hombres" aria-label="Total Hombres" aria-describedby="TotalHombres" >                    
+                    </div>
+                {% endfor %}
+
+
+                {% comment %} <div class="container col-2 col-lg-10 bg-light" style="margin-left: 3%; margin-bottom: 1%;">    
+                    <input  class="form-check-input" type="checkbox" name="defaultCheck1" id="defaultCheck1" >
+                    <label class="form-check-label" for="defaultCheck1" style="font: italic;" >
+                    Quiero realizar esta modificación
+                    </label> 
+                </div>    
+                <input onclick="a()" id="aceptar" type="button" class="btn btn-success btn-lg btn-block" value="Solicitar modificación" style="margin-bottom: 5%; "></input> {% endcomment %}
+                
+                {% if mensaje %}
+                    <div class="alert alert-primary" role="alert" >
+
+                        <div class="spinner-grow" role="status">
+                           <span class="sr-only">Loading...</span>
+                        </div>
+                        {{mensaje}}
+                    </div><hr>
+                {% endif %}
+                
+                <hr>
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">Continua Actualizado!</h4>
+                    <p>Sigue Actulizando la informacion de tu institución. Ahora tambien puedes consultar y modificar los datos de tus carreras, solo debes seleccionar y comenzar a llenar los campos.</p>
+                    <hr>
+                    <p class="mb-0">Recuerda es importante tener la información al dia.</p>
+                </div>
+            {% comment %} #######RVOES#######RVOES#######RVOES###################################################################### {% endcomment %}
+                {% if msuperior %}
+                    <div class="input-group" style="padding: 1%;"> 
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Buscar</span>
+                        </div>
+                        <input class="form-control" id="myInput" type="text" placeholder="...">
+                    </div>
+                    <table class="table table-bordered table-striped mb-0" style="text-align: center;">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th colspan="4">
+                                    <h4>MEDIA SUPERIOR</h4>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-bordered table-striped mb-0" style="text-align: center;">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Clave</th>
+                                    <th>Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                {% for element in rvoes %}
+                                    {% if element.Tipo == 'Bachillerato' %}
+                                        <tr>
+                                            <td>
+                                                {{element.NombreCarrera}}
+                                            </td>
+                                            <td>
+                                                {{element.ClaveCarrera}}
+                                            </td>
+                                            {% if element.modificando == True %}
+                                                <td>
+                                                    Es espera de aprobación...
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <a class="btn btn-link" type="button" href="/SigApp/estadistica/{{ element.ClaveCarrera }}/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" >Modificar</a>
+                                                </td>   
+                                            {% endif %}
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table><hr>
+                    </div>
+                {% else %}
+
+                {% endif %}
+
+                {% if superior %}
+                    <div class="input-group" style="padding: 1%;"> 
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Buscar</span>
+                        </div>
+                        <input class="form-control" id="myInput2" type="text" placeholder="...">
+                    </div>
+                    
+                    <table class="table table-bordered table-striped mb-0" style="text-align: center; ">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th colspan="4">
+                                    <h4>SUPERIOR</h4>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                        <table class="table table-bordered table-striped mb-0" style="text-align: center; ">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Clave</th>
+                                    <th>Estatus</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable2">
+                                {% for element in rvoes %}
+                                    {% if element.Tipo == 'CARRERA' or element.Tipo == 'POSGRADO' %}  
+                                        <tr>
+                                            <td>
+                                                {{element.NombreCarrera}}
+                                            </td>
+                                            <td>
+                                                {{element.ClaveCarrera}}
+                                            </td>
+                                            {% if element.modificando == True %}
+                                                <td>
+                                                    Es espera de aprobación...
+                                                </td>
+                                            {% else %}
+                                                <td>
+                                                    <a class="btn btn-link" type="button" href="/SigApp/estadistica/{{ element.ClaveCarrera }}/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" >Modificar</a>
+                                                </td>   
+                                            {% endif %}
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+
+                {% endif %}
+            </form>
         </div>
     </div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+     function a(){
+        var a = document.forms["form"]["TotalPri"].value;
+        var b = document.forms["form"]["TotalSeg"].value;
+        var c = document.forms["form"]["TotalTer"].value;
+        var d = document.forms["form"]["TotalCua"].value;
+        var e = document.forms["form"]["TotalQui"].value;
+        var f = document.forms["form"]["TotalSexto"].value;
+        var g = document.forms["form"]["TotalHombres"].value;
+        var h = document.forms["form"]["TotalMujeres"].value;
+        check = document.getElementById("defaultCheck1");
+        if (a != "" || b != "" || c != "" || d != "" || e != "" || f != "" || g != "" || h != "") {
+            if (check.checked){
+                if (confirm('¿Estas seguro de ACEPTAR este modificación?')){ 
+                    alert("¡La información se ha actualizado correctamente!");
+                    //return true;
+                    document.form.submit()
+                }else{
+                    $("#defaultCheck1").prop('checked', false);
+                }
+            }else{
+                alert("Completa los campos!");
+            }
+                
+        }else{
+            alert("Completa los campos!");
+        }
+    }
+    
+    function confirmacion(){
+      if (confirm('¿Estas seguro de ENVIAR esta modificación?')){ 
+        alert("Solicitud de modificación enviada. \n \nSe notificará vía por correo electronico el estado de su solicitud ");
+        document.form.submit()
+        //return true;
+      }
+    }
+    
+    $(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
+
+    $(document).ready(function(){
+    $("#myInput2").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable2 tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+    });
+
+</script>
+
+
 
 </body>
 {% endblock %}
 </html>
+{% comment %} 
+
+<table class="table table-bordered table-striped mb-0" style="text-align: center;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th colspan="4">
+                                <h4>SUPERIOR</h4>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="accordion" style="text-align: center;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Clave</th>
+                            <th>Estatus</th>
+                        </tr>
+                    </thead>
+                    {% for element in rvoes %}
+                        {% if element.Tipo == 'CARRERA' or element.Tipo == 'POSGRADO' %}  
+                            <tr>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2 class="mb-0">
+                                        <a class="btn btn-link" type="button" href="/SigApp/estadistica/{{ element.ClaveCarrera }}/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" >
+                                        {{element.NombreCarrera}} - {{element.ClaveCarrera}}
+                                        </a>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </div><hr> {% endcomment %}

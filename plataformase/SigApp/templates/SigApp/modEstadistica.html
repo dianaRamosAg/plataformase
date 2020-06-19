@@ -1,0 +1,218 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+              </style>
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+                
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                        Menú
+                    </a>
+                    <a href="/SigApp/miInstitucion/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" class="list-group-item list-group-item-action">Información general</a>
+                    <a href="/SigApp/modEstadistica/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" class="list-group-item list-group-item-action">Información estadística</a>
+                    <a href="/SigApp/selectInstitucion2/{{ user.id }}/" class="list-group-item list-group-item-action " tabindex="-1" aria-disabled="true">Mis Instituciones</a>
+                </div>
+
+            </div>
+            <form method="POST" id="form" name="form" enctype="multipart/form-data" class="col-8 bg-light mt-3" style="margin-left: 8%;">
+                {% csrf_token %}
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; ">
+                    <label style="font-size:20px; margin-left: -15%; text-align:center; margin-bottom: 8%; margin-top: 5%; ">
+                        Realizar cambios sobre la información ESTADISTICA  de tu institución educativa:<br> 
+                        <b>{{ Escuela.NombreEscuela }}</b><br>
+                        Carrera: 
+                        <b>{{ carrera.NombreCarrera }}</b>
+                    </label>
+                </div>
+            
+            
+        
+                {% comment %} #######RVOES#######RVOES#######RVOES###################################################################### {% endcomment %}
+                
+                <table class="table table-bordered table-striped mb-0" style="text-align: center;" >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Total Primer Año</th>
+                            <th scope="col">Total Segundo Año</th>
+                            <th scope="col">Total Tercer Año</th>
+                            <th scope="col">Total Cuarto Año</th>
+                            <th scope="col">Total Quinto Año</th>
+                            <th scope="col">Total Sexto Año</th>
+                            <!-- <th scope="col">Total Mujeres</th>
+                            <th scope="col">Total Hombres</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input required type="number"   min="0" style="text-align: center;" id="TotalPri" name="TotalPri" class="form-control" value="{{carrera.TotalPrimero}}" placeholder="Total Primer Año" aria-label="Total primer año" aria-describedby="TotalPri"></td>
+                            <td><input type="number" required  min="0" style="text-align: center;" id="TotalSeg" name="TotalSeg" class="form-control" value="{{carrera.TotalSegundo}}" placeholder="Total Segundo Año" aria-label="Total Segundo Año" aria-describedby="TotalSeg"></td>
+                            <td><input type="number" required  min="0" style="text-align: center;" id="TotalTer" name="TotalTer" class="form-control" value="{{carrera.TotalTercero}}" placeholder="Total Tercer Año" aria-label="Total Tercer Año" aria-describedby="TotalTer" ></td>
+                            <td><input type="number" required  min="0" style="text-align: center;" id="TotalCua" name="TotalCua" class="form-control" value="{{carrera.TotalCuarto}}" placeholder="Total Cuarto Año" aria-label="Total Cuarto Año" aria-describedby="TotalCua" ></td>
+                            <td><input type="number" required  min="0" style="text-align: center;" id="TotalQui" name="TotalQui" class="form-control" value="{{carrera.TotalQuinto}}" placeholder="Total Quinto Año" aria-label="Total Quinto Año" aria-describedby="TotalQui" ></td>
+                            <td><input type="number" required  min="0" style="text-align: center;" id="TotalSexto" name="TotalSexto" class="form-control" value="{{carrera.TotalSexto}}" placeholder="Total Sexto Año" aria-label="Total Sexto Año" aria-describedby="TotalSexto" ></td>
+                            <!-- <td><input type="number" required  min="0" style="text-align: center;" name="TotalMujeres" class="form-control" value="{{carrera.TotalMujeres}}" placeholder="Total Mujeres" aria-label="Total Mujeres" aria-describedby="TotalMujeres" ></td>
+                            <td><input type="number" required  min="0" style="text-align: center;" name="TotalHombres" class="form-control" value="{{carrera.TotalHombres}}" placeholder="Total Hombres" aria-label="Total Hombres" aria-describedby="TotalHombres" ></td> -->
+                        </tr>
+                    </tbody>
+                </table>  
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="TotalMujeres" name="TotalMujeres"> Total Mujeres </span>
+                    </div>
+                    <input type="number" required  min="0" name="TotalMujeres" class="form-control" value="{{carrera.TotalMujeres}}" placeholder="Total Mujeres" aria-label="Total Mujeres" aria-describedby="TotalMujeres" >                    
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="TotalHombres" name="TotalHombres"> Total Hombres</span>
+                    </div>
+                    <input type="number" required  min="0" name="TotalHombres" class="form-control" value="{{carrera.TotalHombres}}" placeholder="Total Hombres" aria-label="Total Hombres" aria-describedby="TotalHombres" >                    
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="tipo">Tipo</label>
+                    </div>
+                    <select class="custom-select" id="tipo" name="tipo">
+                        {% if carrera.Tipo == 'POSGRADO'%}
+                            <option value="{{carrera.Tipo}}">{{carrera.Tipo}}</option>
+                            <option value="CARRERA">CARRERA</option>
+                        {% endif %}
+                        {% if carrera.Tipo == 'CARRERA'%}
+                            <option value="{{carrera.Tipo}}">{{carrera.Tipo}}</option>
+                            <option value="POSGRADO">POSGRADO</option>
+                        {% endif %}
+                    </select>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="periodo">PERIODO</label>
+                    </div>
+                    <select class="custom-select" id="periodo" name="periodo">
+                        {% if carrera.Periodos == 'SEMESTRES'%}
+                            <option value="{{carrera.Periodos}}">{{carrera.Periodos}}</option>
+                            <option value="CUATRIMESTRES">CUATRIMESTRES</option>
+                            <option value="TRIMESTRES">TRIMESTRES</option>
+                            <option value="AÑOS">AÑOS</option>
+                        {% endif %}
+                        {% if carrera.Periodos == 'CUATRIMESTRES'%}
+                            <option value="{{carrera.Periodos}}">{{carrera.Periodos}}</option>
+                            <option value="SEMESTRES">SEMESTRES</option>
+                            <option value="TRIMESTRES">TRIMESTRES</option>
+                            <option value="AÑOS">AÑOS</option>
+                        {% endif %}
+                        {% if carrera.Periodos == 'TRIMESTRES'%}
+                            <option value="{{carrera.Periodos}}">{{carrera.Periodos}}</option>
+                            <option value="CUATRIMESTRES">CUATRIMESTRES</option>
+                            <option value="SEMESTRES">SEMESTRES</option>
+                            <option value="AÑOS">AÑOS</option>
+                        {% endif %}
+                        {% if carrera.Periodos == 'AÑOS'%}
+                            <option value="{{carrera.Periodos}}">{{carrera.Periodos}}</option>
+                            <option value="CUATRIMESTRES">CUATRIMESTRES</option>
+                            <option value="TRIMESTRES">TRIMESTRES</option>
+                            <option value="SEMESTRES">SEMESTRES</option>
+                        {% endif %}
+                        {% if carrera.Periodos == 'SIN DEFINIR'%}
+                            <option value="{{carrera.Periodos}}">{{carrera.Periodos}}</option>
+                            <option value="CUATRIMESTRES">CUATRIMESTRES</option>
+                            <option value="TRIMESTRES">TRIMESTRES</option>
+                            <option value="SEMESTRES">SEMESTRES</option>
+                            <option value="AÑOS">AÑOS</option>
+                        {% endif %}
+                    </select>
+
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="modalidad">MODALIDAD</label>
+                    </div>
+                    <select class="custom-select" id="modalidad" name="modalidad">
+                        {% if carrera.Modalidad|upper == 'ESCOLAR'%}
+                            <option value="{{carrera.Modalidad}}">{{carrera.Modalidad|upper}}</option>
+                            <option value="No Escolar">NO ESCOLAR</option>
+                            <option value="Mixto">MIXTO</option>
+                        {% endif %}
+                        {% if carrera.Modalidad|upper == 'NO ESCOLAR'%}
+                            <option value="{{carrera.Modalidad}}">{{carrera.Modalidad|upper}}</option>
+                            <option value="Escolar">ESCOLAR</option>
+                            <option value="Mixto">MIXTO</option>
+                        {% endif %}
+                        {% if carrera.Modalidad|upper == 'MIXTO'%}
+                            <option value="{{carrera.Modalidad}}">{{carrera.Modalidad|upper}}</option>
+                            <option value="No Escolar">NO ESCOLAR</option>
+                            <option value="Escolar">ESCOLAR</option>
+                        {% endif %}
+                    </select>
+                </div>  <hr>    
+
+                <div class="container col-2 col-lg-10 bg-light" style="margin-left: 3%; margin-bottom: 1%;">    
+                    <input  class="form-check-input" type="checkbox" name="defaultCheck1" id="defaultCheck1" >
+                        <label class="form-check-label" for="defaultCheck1" style="font: italic;" >
+                        Quiero realizar esta modificación
+                        </label> 
+                </div>    
+                {% if carrera.modificando %}
+                {% else %}
+                    <input onclick="a()" id="aceptar" type="button" class="btn btn-success btn-lg btn-block" value="Solicitar modificación"></input>
+                {% endif %}           
+            </form>
+        </div>
+    </div>
+<script>
+
+//onsubmit="return validateForm()"
+
+    function a(){
+        var a = document.forms["form"]["TotalPri"].value;
+        var b = document.forms["form"]["TotalSeg"].value;
+        var c = document.forms["form"]["TotalTer"].value;
+        var d = document.forms["form"]["TotalCua"].value;
+        var e = document.forms["form"]["TotalQui"].value;
+        var f = document.forms["form"]["TotalSexto"].value;
+        var g = document.forms["form"]["TotalHombres"].value;
+        var h = document.forms["form"]["TotalMujeres"].value;
+        check = document.getElementById("defaultCheck1");
+        if (a != "" || b != "" || c != "" || d != "" || e != "" || f != "" || g != "" || h != "") {
+            if (check.checked){
+                if (confirm('¿Estas seguro de SOLICITAR esta modificación?')){ 
+                    alert("¡La información se ha ENVIADO correctamente!");
+                    //return true;
+                    document.form.submit()
+                }else{
+                    $("#defaultCheck1").prop('checked', false);
+                }
+            }else{
+                alert("Completa los campos!");
+            }
+                
+        }else{
+            alert("Completa los campos!");
+        }
+    }
+//onsubmit="return showContent()"
+    
+
+</script>
+
+</body>
+{% endblock %}
+</html>

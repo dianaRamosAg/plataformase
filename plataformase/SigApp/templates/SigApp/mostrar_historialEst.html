@@ -1,0 +1,150 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+  {% block content %}
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+                .texto{
+                    font-family: "Montserrat", sans-serif;
+                }
+            
+                .centro{
+                    text-align: center;
+                }
+            
+                .centroItem{
+                    align-items: center;
+                }
+                a{
+                    color: black;
+                }
+                a:hover{
+                    color:grey;
+                }
+                .my-custom-scrollbar {
+                    position: relative;
+                    overflow: auto;
+                }
+                .table-wrapper-scroll-x {
+                    display: block;
+    </style>
+    <div class="container-fluid">
+      <!--Panel general (derecho)-->
+      <div class="row bg-light m-2">
+        <!--Nav bar izquierdo-->
+        <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+          
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                Menú
+            </a>
+            <a href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/" class="list-group-item list-group-item-action">Solicitudes de Modificación</a>
+            <a href="/SigApp/listado_historial/" class="list-group-item list-group-item-action">Historial (Gral)</a>
+            <a href="/SigApp/listado_historialEst/" class="list-group-item list-group-item-action">Historial (Estad)</a>
+          </div>
+                
+        </div>
+        <div class="col-8 bg-light mt-3" style="margin-left: 8%;">
+          <table class="table table-striped table-bordered table-hover" style="text-align: left;">
+            <tbody>
+              <tr>
+                <th style="width:30%">Institución</th>
+                <td colspan="3">{{ escuela.NombreEscuela }}</td>
+              </tr>
+              <tr>
+                <th>Carrera:</th>
+                <td colspan="4">{{ mod.NombreCarrera_new}}</td>
+                
+              </tr>
+              <tr>
+                <th>RVOE:</th>
+                <td>{{mod.ClaveCarrera_new}}</td>
+                <th >Clave Institucion:</th>
+                <td>{{ mod.ClaveEscuela_new }}</td>
+              </tr>
+              <tr>
+                <th>Fecha:</th>
+                <td  colspan="4">{{ mod.fechamod|date:'DATE_FORMAT' }}</td>
+              </tr>
+              <tr>
+                <th>Relizada por:</th>
+                <td colspan="4">{{ mod.usuario_mod }}</td>
+              </tr>
+              <tr>
+                <th>Aceptada por:</th>
+                <td colspan="4"> {{ mod.usuario_dep }}</td>
+              </tr>      
+            <tbody>
+          </table><hr>
+          <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%;">
+              <label style="font-size:20px; margin-left: -15%; text-align:center; margin-bottom: 5%; margin-top: 5%; ">
+                  Información Modificada (Estadistica)<br> 
+              </label>
+          </div>
+
+
+          <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table table-bordered table-hover" style="centro">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Total 1er</th>
+                  <th scope="col">Total 2do</th>
+                  <th scope="col">Total 3ro</th>
+                  <th scope="col">Total 4to</th>
+                  <th scope="col">Total 5to</th>
+                  <th scope="col">Total 6to</th>
+                  <th scope="col">Hombres</th>
+                  <th scope="col">Mujeres</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Modalidad</th>
+                  <th scope="col">Periodos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Est. Actual</th>
+                  <td>{{ mod.TotalPrimero_prev }}</td>
+                  <td>{{ mod.TotalSegundo_prev }}</td>
+                  <td>{{ mod.TotalTercero_prev }}</td>
+                  <td>{{ mod.TotalCuarto_prev }}</td>
+                  <td>{{ mod.TotalQuinto_prev }}</td>
+                  <td>{{ mod.TotalSexto_prev }}</td>
+                  <td>{{ mod.TotalHombres_prev }}</td>
+                  <td>{{ mod.TotalMujeres_prev }}</td>
+                  <td>{{ mod.Tipo_prev }}</td>
+                  <td>{{ mod.Modalidad_prev }}</td>
+                  <td>{{ mod.Periodos_prev }}</td>
+
+                </tr>
+                <tr>
+                  <th>Est. Modificada</th>
+                  <td>{{ mod.TotalPrimero_new }}</td>
+                  <td>{{ mod.TotalSegundo_new }}</td>
+                  <td>{{ mod.TotalTercero_new }}</td>
+                  <td>{{ mod.TotalCuarto_new }}</td>
+                  <td>{{ mod.TotalQuinto_new }}</td>
+                  <td>{{ mod.TotalSexto_new }}</td>
+                  <td>{{ mod.TotalHombres_new }}</td>
+                  <td>{{ mod.TotalMujeres_new }}</td>
+                  <td>{{ mod.Tipo_new }}</td>
+                  <td>{{ mod.Modalidad_new }}</td>
+                  <td>{{ mod.Periodos_new }}</td>
+                </tr>
+                <tr>
+                    <th>Comentarios</th>
+                    <td colspan="11">{{ mod.comentario }}</td>
+                    
+                  </tr>
+              </tbody>
+            </table>
+          </div>           
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+</body>
+
+</html>

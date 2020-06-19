@@ -1,0 +1,73 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+    .texto{
+        font-family: "Montserrat", sans-serif;
+    }       
+    .centro{
+        text-align: center;
+    }       
+    .centroItem{
+        align-items: center;
+    }
+    a{
+        color: black;
+    }
+    a:hover{
+        color:grey;
+    }
+    .dm-uploader {
+	    border: 0.25rem dashed grey;
+	    text-align: center;
+    }
+    .dm-uploader.active {
+	    border-color: grey;
+	     border-style: solid;
+    }
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;   
+        cursor: inherit;
+        display: block;
+    }
+    </style>
+
+    
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 85vh;">
+                <div class="row mt-4 ml-1" align="center">  
+                    <p>Lista de Centros de Trabajo<p>
+                    <ul>    
+                        {% for inst in clavect %}
+                        <li>    
+                            <a href="/SigApp/miInstitucion/{{ inst.cct }}/{{id_dep}}/">{{ inst.name }}</a><hr>
+                        </li>
+                        {% endfor %}  
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+</html>
