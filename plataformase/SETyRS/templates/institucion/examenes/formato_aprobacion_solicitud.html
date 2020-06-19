@@ -10,9 +10,9 @@
             size: letter portrait;
             margin-left: 2cm;
             margin-right: 2cm;
-            margin-top: 4cm;
+            margin-top: 3cm;
             margin-bottom: 5cm;
-            background-image:url('../SETyRS/static/img/Fondo.png');
+            background-image: url("../static/img/fondo_2020_bueno.jpg");
         }
         
         .table {
@@ -65,23 +65,26 @@
 
 
         <div class="card">
-            <h1 align="right">OFICIO:{{ solicitud.id }}<br>Tepic,Nayarit, a {{ solicitud.fecha }}<br> Asunto: Autorización de Examen</h1>
+            <h1 align="left">OFICIO Electrónico SETyRS_{{solicitud.id}}</h1>
+            <h1 align="right">Tepic,Nayarit, a {{ solicitud.fecha }}<br> Asunto: Autorización de Examen</h1>
 
             <h1 align="left">{{escuela.nombredirector}}<br>DIRECTOR(a) DE {{request.user.first_name}}<br>CCT {{escuela.cct}}<br>P R E S E N T E.
             </h1>
-            <p>Con el propósito de dar continuidad a la gestión realizada a Usted a través de oficio <b>{{ solicitud.oficio }}</b> y conforme a lo dispuesto por el Artículo 32 fracción III del Reglamento Interior
-                de la Secretaría de Educación y una vez revisando la documentación anexa a la solicitud y el recibo de pago de derechos <b>No. 6312848</b> de la Secretaría de Administración y Finanzas con fecha 27 de Septiembre del presente esta Dirección
-                tiene a bien autorizar que el día <b>27 DE JUNIO DE 2019</b> obtengan su <b>TÍTULO POR {{solicitud.categoria}}</b>, los alumnos que a continuación se detallan:
+            <p>Con el propósito de dar continuidad a la gestión realizada a Usted a través plataforma SETyRS <b>{{ solicitud.oficio }}</b> y conforme a lo dispuesto por el Artículo 32 fracción III del Reglamento Interior
+                de la Secretaría de Educación y una vez revisando la documentación anexa a la solicitud y el recibo de pago de derechos <b>No. 6312848</b> de la Secretaría de Administración y Finanzas se 
+                tiene a bien autorizar que el día <b>{{solicitud.fecha_exa}}</b> obtengan su <b>TÍTULO POR {{solicitud.categoria}}</b> en lugar <b>{{solicitud.lugar_exa}}</b>, los alumnos que a continuación se detallan:
             </p>
 
-            <b>COMPLEMENTARIO DE LA LICENCIATURA EN ENFERMERÍA</b>
+            <!-- <b>COMPLEMENTARIO DE LA LICENCIATURA EN ENFERMERÍA</b><b>Alumnos:</b>-->
             <table class="table" width="100%" border="1" cellspacing="0" cellpadding="0">
                 <thead>
                     <tr>
                         <td>No.</td>
                         <td>Número de certificado</td>
-                        <td>Nombre del alumno</td>
+                        <td>Nombre</td>
                         <td>CURP</td>
+                        <td>Carrera</td>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -91,6 +94,7 @@
                         <td>{{a.no_certificado}}</td>
                         <td>{{a.nombre_alumno}}</td>
                         <td>{{a.CURP}}</td>
+                        <td>{{a.carrera}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -122,5 +126,11 @@
         {% endif %}
 
     </div>
+    <footer>
+        <p align="center"> <font size=2><b>Direccion de Educacion Media Superior y Superior</b><br>SSEMSSICyT<br>Av. del Valle esq. Calle Florencia 85, Fracc. Ciudad del Valle<br>
+            Tepic, Nayarit. México C.P. 63157</font>
+        </p>
+
+    </footer>
 </body>
 </html>

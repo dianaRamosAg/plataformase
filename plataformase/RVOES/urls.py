@@ -15,6 +15,7 @@ urlpatterns = [
     path('solicitud/enviada', views.finSolicitud, name='finSolicitud'),
     path('acuerdos', views.acuerdos, name='acuerdos'),
 
+    path('estadoSolicitud/informacionPago/<id>', views.informacionPago, name='informacionPago'),
     path('estadoSolicitud/<usuario>/<solicitud>', views.estatus, name='estado'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/', views.historial, name='historial'),
     path('estadoSolicitud/<usuario>/H/<solicitud>/archivos', views.verArchivos,name='verArchivos'),
@@ -43,4 +44,6 @@ urlpatterns = [
     path('admin/finProceso/<solicitud>/', views.finProceso, name='finProceso'),
     #path('admin/verpdf/', views.verpdf, name='verpdf'),
     path('generate/pdf/<id>', views.Pdf.as_view(), name='generate_pdf'),
+
+    path('datosSolicitud/<id>', views.datosSolicitud, name='datosSolicitud'),
 ]

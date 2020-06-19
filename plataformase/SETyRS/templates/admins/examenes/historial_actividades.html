@@ -33,6 +33,7 @@
                 <th scope="col">Solicitud</th>
                 <th scope="col">Institucion</th>
                 <th scope="col">Estatus</th>
+                <th scope="col">Nivel Educativo</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Usuario</th>
 
@@ -41,10 +42,24 @@
         <tbody>
             {% if historial %}
             {% for h in historial %}
-            <tr>
-                <td>{{h.solicitud_id}}</a></td>
+            <tr id="propopo">
+                <td><a href="{% url 'SETyRS_revisar_solicitud_examen' h.solicitud_id %}">{{h.solicitud_id}}</a></td>
                 <td>{{h.solicitud.user.first_name}}</td>
                 <td>{{h.estatus}}</td>
+                <td id="nivel_e">{{h.nivel_educativo}}</td>
+                <!--
+                    <script>
+                    tr = table.getElementsById("propopo");
+                    for(i=0;i<tr.length;i++) {
+                    if(document.getElementById("nivel_e").value==2){
+                        document.getElementById("nivel_e").innerHTML = "Superior";
+                    }else{
+                        document.getElementById("nivel_e").innerHTML = "Media";
+                    }
+                }
+                </script>       
+
+                -->
                 <td>{{h.fecha}}</td>
                 <td>{{h.user.username}} - {{h.user.departamento_id}}</td>
             </tr>

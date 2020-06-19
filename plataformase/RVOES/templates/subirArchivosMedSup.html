@@ -34,16 +34,17 @@
                             <h4 class="">Solo son validos los archivos PDF</h4>
                         </div>
 
-                        {% if "1_1" in comentarios %}
+                        {% for element in coment %}
+                        {% if "1_1" in comentarios and element.archivo == "1_1" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" >Formato de solicitud</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_1" %}
+                                        {% if element.archivo == "1_1" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -51,12 +52,288 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card m-3 mt-5">
+                            <div class="card-body">
+                                <div class="col-md-12 text-left">
+                                    <h4 class="text-center">Información General</h4>
+                                    <p>Recuerde que si la información no modificable que se muestra no coincide con la real actualice su perfil.</p>
+                                    <!--Personas Físicas-->
+                                    <br>
+                                    {% if user.tipo_persona == '1' %}
+                                    <label class="" for="id_first_name" id="lblnombres">Nombre:</label>
+                                    <input readonly class="form-control col-12 ml-1" type="text" name="first_name" required id="id_first_name" value="{{user.first_name}}" onfocus="funcion()">
+
+                                    <label class="" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                                    <input readonly class="form-control col-12 ml-1" type="text" name="last_name" required id="id_last_name" value="{{user.last_name}}">
+                                    <br>
+                                    <div class=" row col-md-12">
+                                        <label class="ml-3" for="id_folio_identificacion" id="folio">Identificación:</label>
+
+                                        <input readonly class="form-control ml-2 col-3" name="identificacion" id="id_identificacion" value="{{user.identificacion}}">
+
+                                        <label class="ml-3" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
+                                        <input readonly class="form-control ml-2 col-3" type="text" name="folio_id" required id="id_folio_identificacion" value="{{user.folio_id}}">
+                                    </div>
+                                    {% endif %}
+
+                                    <!--Personas Morales-->
+                                    {% if user.tipo_persona == '2' %}
+                                    <label class="" for="id_razonSocial" id="lbl_razonSocial">Denominación o razón social:</label>
+                                    <input readonly class="form-control col-12 ml-1" type="text" name="razonSocial" id="id_razonSocial" value="{{user.first_name}} {{user.last_name}}" onfocus="funcion()">
+                                    <br>
+                                    <h6 class="pull-center"> Datos de Acta Constitutiva</h6>
+                                    <div class=" row col-md-12">
+                                        <label class="col-6" for="id_noInstrumentoNotarial" id="inst_notarial">Número de instrumento notarial:</label>
+                                        <input class="form-control col-5" type="number" name="inst_notarial" required id="id_noInstrumentoNotarial" value="{{solicitud.noInstrumentoNotarial}}">
+                                    </div>
+                                    <div class=" row col-md-12">
+                                        <label class="col-6" for="id_libro_inscripcion" id="lbl_libro_inscripcion">Número de Libro de inscripción:</label>
+                                        <input  class="form-control col-5 mt-2" type="text" name="libro_inscripcion" required id="id_libro_inscripcion" value="{{solicitud.libro_inscripcion}}">
+                                    </div>
+                                    <label class="col-4" for="id_nombreNotario">Nombre de notario: </label>
+                                    <input class="form-control mt-2 d-inline col-7" type="text" required name="nombreNotario" id="id_nombreNotario" value="{{solicitud.nombreNotario}}">
+
+                                    <label class="col-4" for="id_noNotario">Número de notario: </label>
+                                    <input class="form-control mt-2 d-inline col-7" type="number" required name="noNotario" id="id_noNotario" value="{{solicitud.noNotario}}">
+
+                                    <label class="mt-2">Fecha y lugar de expedición:</label>
+                                    <div class=" row col-md-12">
+                                        <input class="form-control  col-4" type="date" id="id_fecha" name="fecha" required value="{{solicitud.fecha}}" max="{{ fecha }}">
+                                        <input  class="form-control  col-7 ml-2"  type="text" name="lugar" required id="id_lugar" placeholder="p. ej. Tepic, Nayarit" value="{{solicitud.lugar}}">
+                                    </div>
+                                    <label class="mt-2" for="id_objeto_social" id="id_obj_so">Duración y objeto social:</label>
+                                    <textarea rows="2" class="form-control col-12" name="objeto_social" required id="id_objeto_social">{{solicitud.objeto_social}}</textarea>
+
+                                    <label class="mt-2" for="id_estatutosVigentes">Datos de Estatutos Vigentes</label>
+                                    <input type="text" class="form-control" name="estatutosVigentes" id="id_estatutosVigentes" value="{{solicitud.estatutosVigentes}}">
+                                    <!--label class="" for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de su acta constitutiva y estatutos vigentes? :</label>
+                                    <select required class="custom-select mr-sm-2 col-5" name="org_cop_acta" id="id_org_cop_acta" >
+                                        <option selected disabled>Seleccione</option>
+                                        <option value="Sí">Sí</option>
+                                        <option value="No">No</option>
+                                    </select><br-->
+                                    <label class="mt-2" for="id_nombreRepresentante">Nombre del representante legal:</label>
+                                    <input readonly class="form-control col-12" type="text" name="nombreRepresentante" id="id_nombreRepresentante" value="{{user.nombre_representante}}">
+
+                                    <label class="mt-2" for="id_poderNotarial">Datos del Poder Notarial del Representante Legal:</label>
+                                    <textarea class="form-control" name="poderNotarial" id="id_poderNotarial" rows="2" required>{{solicitud.poderNotarial}}</textarea>
+                                    <br>
+                                    <div class="row col-md-12 mt-2">
+                                        <label class="ml-1" for="id_folio_identificacion" id="folio">Identificación:</label>
+                                        <input class="form-control ml-2 col-4" readonly name="identificacion" id="id_identificacion" value="{{user.identificacion}}">
+
+                                        <label class="ml-1" for="id_folio_identificacion" id="folio">Núm. de folio:</label>
+                                        <input class="form-control ml-2 col-3" type="text" name="folio_id" readonly id="id_folio_identificacion" value="{{user.folio_id}}">
+                                    </div>
+                                    {% endif %}
+                                    <!--Datos fisico y Moral-->
+                                    <!--label class="" required for="id_folio" id="folio">¿Presenta original (para cotejo) y copia simple de identificación oficial? :</label>
+                                    <select required class="custom-select mr-sm-2 col-5" name="org_cop_identificacion" id="id_org_cop_identificacion" >
+                                        <option selected disabled>Seleccione</option>
+                                        <option value="Sí">Sí</option>
+                                        <option value="No">No</option>
+                                    </select-->
+                                    <br>
+                                    <label class="mt-2" for="id_dom_particular" id="particular">Domicilio legal del particular:</label>
+                                    {% if user.tipo_persona == '2' %}
+                                    <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="{{user.dom_legal_part}}">
+                                    {% endif %}
+                                    {% if user.tipo_persona == '1' %}
+                                    <input readonly class="form-control col-12" type="text" name="dom_particular" id="id_dom_particular" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, {{user.municipio}}, Nayarit. ">
+                                    {% endif %}
+                                    <label class="mt-2" for="id_celular">Teléfono/Celular:</label>
+                                    <input readonly  class="form-control col-3 mt-2 d-inline"  type="text" name="celular" id="id_celular" value="{{user.celular}}">
+                                    <br>
+                                    <label class="mt-2" for="id_rfc" id="lblcurp">Registro Federal de Contribuyentes:</label>
+                                    <input readonly class="form-control col-4 d-inline" type="text" name="rfc" id="id_rfc" value="{{user.curp_rfc}}">
+                                    <label >Correo electrónico para recibir notificaciones:</label>
+                                    <input readonly class="form-control col-6 d-inline" type="text" name="email" id="id_email" value="{{user.email}}">
+                                    <hr>
+                                    <h6>Personas autorizadas por el particular</h6>
+                                    <p class="text-justify">En este acto, en términos de los artículos 15 y 19 de la Ley Federal
+                                        de Procedimiento Administrativo autorizo a las personas que se indican en el presente
+                                        para oír y recibir notificaciones, realizar trámites, gestiones y comparecencias que
+                                        fueran necesarios para la tramitación de los procedimientos.</p>
+                                    <table class="table table-borderless">
+                                        <tbody>
+                                        <tr class="text-center">
+                                            <td ><input class="form-control" type="text" name="nomPerAut1" id="id_perAut1" value="{{solicitud.nomPerAut1}}">Nombre(s)</td>
+                                            <td ><input class="form-control" type="text" name="apMatPerAut1" id="id_apMatPerAut1" value="{{solicitud.apMatPerAut1}}">Primer Apellido</td>
+                                            <td ><input class="form-control" type="text" name="apPatPerAut1" id="id_apPatPerAut1" value="{{solicitud.apPatPerAut1}}">Segundo Apellido</td>
+                                        </tr>
+                                        <tr class="">
+                                            <td class="text-right">Correo electrónico:</td>
+                                            <td><input class="form-control" type="email" name="emailPerAut1" id="id_emailPerAut1" value="{{solicitud.emailPerAut1}}"></td>
+                                            <td class="justify-content-center">
+                                                <input class="form-control" type="text" name="telPerAut1" id="id_telPerAut1" placeholder="Teléfono de contacto" value="{{solicitud.telPerAut1}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><hr></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td ><input class="form-control" type="text" name="nomPerAut2" id="id_perAut2" value="{{solicitud.nomPerAut2}}">Nombre(s)</td>
+                                            <td ><input class="form-control" type="text" name="apMatPerAut2" id="id_apMatPerAut2" value="{{solicitud.apMatPerAut2}}">Primer Apellido</td>
+                                            <td ><input class="form-control" type="text" name="apPatPerAut2" id="id_apPatPerAut2" value="{{solicitud.apPatPerAut2}}">Segundo Apellido</td>
+                                        </tr>
+                                        <tr class="">
+                                            <td class="text-right">Correo electrónico:</td>
+                                            <td><input class="form-control" type="email" name="emailPerAut2" id="id_emailPerAut2" value="{{solicitud.emailPerAut2}}"></td>
+                                            <td class="justify-content-center">
+                                                <input class="form-control" type="text" name="telPerAut2" id="id_telPerAut2" placeholder="Teléfono de contacto" value="{{solicitud.telPerAut2}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><hr></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td ><input class="form-control" type="text" name="nomPerAut3" id="id_perAut3" value="{{solicitud.nomPerAut3}}">Nombre(s)</td>
+                                            <td ><input class="form-control" type="text" name="apMatPerAut3" id="id_apMatPerAut3" value="{{solicitud.apMatPerAut3}}">Primer Apellido</td>
+                                            <td ><input class="form-control" type="text" name="apPatPerAut3" id="id_apPatPerAut3" value="{{solicitud.apPatPerAut3}}">Segundo Apellido</td>
+                                        </tr>
+                                        <tr class="">
+                                            <td class="text-right">Correo electrónico:</td>
+                                            <td><input class="form-control" type="email" name="emailPerAut3" id="id_emailPerAut3" value="{{solicitud.emailPerAut3}}"></td>
+                                            <td class="justify-content-center">
+                                                <input class="form-control" type="text" name="telPerAut3" id="id_telPerAut3" placeholder="Teléfono de contacto" value="{{solicitud.telPerAut3}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><hr></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td ><input class="form-control" type="text" name="nomPerAut4" id="id_perAut4" value="{{solicitud.nomPerAut4}}">Nombre(s)</td>
+                                            <td ><input class="form-control" type="text" name="apMatPerAut4" id="id_apMatPerAut4" value="{{solicitud.apMatPerAut4}}">Primer Apellido</td>
+                                            <td ><input class="form-control" type="text" name="apPatPerAut4" id="id_apPatPerAut4" value="{{solicitud.apPatPerAut4}}">Segundo Apellido</td>
+                                        </tr>
+                                        <tr class="">
+                                            <td class="text-right">Correo electrónico:</td>
+                                            <td><input class="form-control" type="email" name="emailPerAut4" id="id_emailPerAut4" value="{{solicitud.emailPerAut4}}"></td>
+                                            <td class="justify-content-center">
+                                                <input class="form-control" type="text" name="telPerAut4" id="id_telPerAut4" placeholder="Teléfono de contacto" value="{{solicitud.telPerAut4}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><hr></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td ><input class="form-control" type="text" name="nomPerAut5" id="id_perAut5" value="{{solicitud.nomPerAut5}}">Nombre(s)</td>
+                                            <td ><input class="form-control" type="text" name="apMatPerAut5" id="id_apMatPerAut5" value="{{solicitud.apMatPerAut5}}">Primer Apellido</td>
+                                            <td ><input class="form-control" type="text" name="apPatPerAut5" id="id_apPatPerAut5" value="{{solicitud.apPatPerAut5}}">Segundo Apellido</td>
+                                        </tr>
+                                        <tr class="">
+                                            <td class="text-right">Correo electrónico:</td>
+                                            <td><input class="form-control" type="email" name="emailPerAut5" id="id_emailPerAut5" value="{{solicitud.emailPerAut5}}"></td>
+                                            <td class="justify-content-center">
+                                                <input class="form-control" type="text" name="telPerAut5" id="id_telPerAut5" placeholder="Teléfono de contacto" value="{{solicitud.telPerAut5}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3"><hr></td>
+                                        </tr>
+                                        <tr class="text-center">
+                                            <td ><input class="form-control" type="text" name="nomPerAut6" id="id_perAut6" value="{{solicitud.nomPerAut6}}">Nombre(s)</td>
+                                            <td ><input class="form-control" type="text" name="apMatPerAut6" id="id_apMatPerAut6" value="{{solicitud.apMatPerAut6}}">Primer Apellido</td>
+                                            <td ><input class="form-control" type="text" name="apPatPerAut6" id="id_apPatPerAut6" value="{{solicitud.apPatPerAut6}}">Segundo Apellido</td>
+                                        </tr>
+                                        <tr >
+                                            <td class="text-right">Correo electrónico:</td>
+                                            <td><input class="form-control" type="email" name="emailPerAut6" id="id_emailPerAut6" value="{{solicitud.emailPerAut6}}"></td>
+                                            <td class="justify-content-center">
+                                                <input class="form-control" type="text" name="telPerAut6" id="id_telPerAut6" placeholder="Teléfono de contacto" value="{{solicitud.telPerAut6}}">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <h6>Apoderados legales</h6>
+                                    <div class="custom-control custom-switch">
+                                    <input type="checkbox" checked class="custom-control-input" id="customSwitch1" onclick="if (document.getElementById('customSwitch1').checked == false)
+                                    {document.getElementById('apoderados_leg').style.display = 'inline';} else { document.getElementById('apoderados_leg').style.display = 'none';}">
+
+                                        <label class="custom-control-label" for="customSwitch1">¿Firma el representante legal?</label>
+                                    </div>
+
+                                    <div id="apoderados_leg" style="display: none;">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr class="text-center">
+                                                <td ><input class="form-control" type="text" name="nomApLegal1" id="id_nomApLegal1" value="{{solicitud.nomApLegal1}}">Nombre(s)</td>
+                                                <td ><input class="form-control" type="text" name="apMatApLegal1" id="id_apMatApLegal1" value="{{solicitud.apMatApLegal1}}">Primer Apellido</td>
+                                                <td ><input class="form-control" type="text" name="apPatApLegal1" id="id_apPatApLegal1" value="{{solicitud.apPatApLegal1}}">Segundo Apellido</td>
+                                            </tr>
+                                            <tr class="">
+                                                <td class="text-right">Correo electrónico:</td>
+                                                <td><input class="form-control" type="email" name="emailApLegal1" id="id_emailApLegal1" value="{{solicitud.emailApLegal1}}"></td>
+                                                <td class="justify-content-center">
+                                                    <input class="form-control" type="text" name="telApLegal1" id="id_telApLegal1" placeholder="Teléfono de contacto" value="{{solicitud.telApLegal1}}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Datos del poder notarial:</td>
+                                                <td colspan="2"><input type="text" class="form-control" name="poderNotApLegal1" id="id_poderNotApLegal1" value="{{solicitud.poderNotApLegal1}}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"><hr></td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td ><input class="form-control" type="text" name="nomApLegal2" id="id_nomApLegal2" value="{{solicitud.nomApLegal2}}">Nombre(s)</td>
+                                                <td ><input class="form-control" type="text" name="apMatApLegal2" id="id_apMatApLegal2" value="{{solicitud.apMatApLegal2}}">Primer Apellido</td>
+                                                <td ><input class="form-control" type="text" name="apPatApLegal2" id="id_apPatApLegal2" value="{{solicitud.apPatApLegal2}}">Segundo Apellido</td>
+                                            </tr>
+                                            <tr class="">
+                                                <td class="text-right">Correo electrónico:</td>
+                                                <td><input class="form-control" type="email" name="emailApLegal2" id="id_emailApLegal2" value="{{solicitud.emailApLegal2}}"></td>
+                                                <td class="text-right">
+                                                    <input class="form-control" type="text" name="telApLegal2" id="id_telApLegal2" placeholder="Teléfono de contacto" value="{{solicitud.telApLegal2}}">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-right">Datos del poder notarial:</td>
+                                                <td colspan="2"><input type="text" class="form-control" name="poderNotApLegal2" id="id_poderNotApLegal2" value="{{solicitud.poderNotApLegal2}}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <hr>
+                                    <h6>Pertenencia al programa de mejora institucional:</h6>
+                                    <select required class="custom-select col-8" name="perPrograma" id="id_perPrograma">
+                                        <option value="0" {% if solicitud.perPrograma == '0' %}selected{% endif %}>No pertenece a ningún grupo</option>
+                                        <option value="1" {% if solicitud.perPrograma == '1' %}selected{% endif %}>Grupo 1. Instituciones en proceso de acreditación</option>
+                                        <option value="2" {% if solicitud.perPrograma == '2' %}selected{% endif %}>Grupo 2. Instituciones Acreditadas</option>
+                                        <option value="3" {% if solicitud.perPrograma == '3' %}selected{% endif %}>Grupo 3. Instituciones Acreditadas Consolidadas</option>
+                                    </select>
+                                    <hr>
+
+                                    <!-- comparar el modelo desde aquí -->
+                                    <h6>Datos del plan y programas de estudios objeto de la solicitud</h6>
+                                    <label class="" for="id_nombreSolicitud">Nombre completo del plan y programas de estudio:</label>
+                                    <input class="form-control" type="text" required name="nombreSolicitud" id="id_nombreSolicitud" value="{{solicitud.nombreSolicitud}}">
+                                    <label class="mt-2" for="id_domcilio">Domicilio de impartición:</label>
+                                    <input class="form-control" type="text" readonly name="domcilio" id="id_domcilio" value="Colonia {{user.colonia}}, Calle {{user.calle}}, #{{user.noexterior}}, {{user.municipio}}, Nayarit.">
+                                    {%if request.user.tipo_usuario == '5' %}
+                                    <label class="mt-2">Denominación de la institución y del Plantel en que se impartirá:</label>
+                                    <small>Asentar propuestas de denominaciones en orden de preferencia.</small>
+                                    <input type="text" class="form-control" name="opcion1" id="id_opcion1" placeholder="Opcion 1" value="{{solicitud.opcion1}}">
+                                    <input type="text" class="form-control" name="opcion2" id="id_opcion2" placeholder="Opcion 2" value="{{solicitud.opcion2}}">
+                                    <input type="text" class="form-control" name="opcion3" id="id_opcion3" placeholder="Opcion 3" value="{{solicitud.opcion3}}">
+                                    {% endif %}
+                                    <label class="mt-2" for="id_nombreComercial">Nombre comercial o marca de la institución educativa:</label>
+                                    <input class="form-control" type="text" readonly name="nombreComercial" id="id_nombreComercial" value="{{user.marca_educativa}}">
+                                    <label class="mt-2" for="id_horarioDias">Horiario y días en que lo impartirá:</label>
+                                    <input class="form-control" type="text" name="horarioDias" id="id_horarioDias" value="{{solicitud.horarioDias}}">
+                                    <label class="mt-2" for="id_areaFormacion">Área o campo de formación:</label>
+                                    <input class="form-control text-center" type="text" name="areaFormacion" id="id_areaFormacion" value="{{solicitud.areaFormacion}}">
+                                </div>
+                            </div>
+                        </div>
                         {% endif %}
 
-                        {% if "1_2" in comentarios %}
+                        {% if "1_2" in comentarios and element.archivo == "1_2" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" >Recibo de pago</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
                             <div class="row">
                                 <label class="font-weight-normal m-2 pl-4" for="id_folio_pago">
                                     Folio de pago:
@@ -83,7 +360,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_2" %}
+                                        {% if element.archivo == "1_2" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -93,16 +370,16 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_3" in comentarios %}
+                        {% if "1_3" in comentarios and element.archivo == "1_3" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_3">
                             <label class="font-weight-bold" >Identificación oficial con fotografía</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="identificacion" id="id_identificacion">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_3" %}
+                                        {% if element.archivo == "1_3" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -112,16 +389,16 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_4" in comentarios %}
+                        {% if "1_4" in comentarios and element.archivo == "1_4" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="id_4">
                             <label class="font-weight-bold" >Manifiesto de compromiso  de incorporar al personal docente</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="perDocente" id="id_perDocente">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="perDocente" id="id_perDocente">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_4" %}
+                                        {% if element.archivo == "1_4" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -131,10 +408,10 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_5" in comentarios %}
+                        {% if "1_5" in comentarios and element.archivo == "1_5" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_5">
                             <label class="font-weight-bold" >Instalaciones</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="instalaciones" id="id_instalaciones">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="instalaciones" id="id_instalaciones">
                             <div class="row">
                                 <label class="font-weight-normal m-2 pl-4" for="id_dictamen_suelo">
                                     Dictamen constancia de uso de suelo:
@@ -249,7 +526,7 @@
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_5" %}
+                                        {% if element.archivo == "1_5" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -259,16 +536,16 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_6" in comentarios %}
+                        {% if "1_6" in comentarios and element.archivo == "1_6" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_6">
                             <label class="card-text" >Tecnología y equipamiento para la opción educativa virtual</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="equipamiento" id="id_equipamiento">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="equipamiento" id="id_equipamiento">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_6" %}
+                                        {% if element.archivo == "1_6" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -278,16 +555,16 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_7" in comentarios %}
+                        {% if "1_7" in comentarios and element.archivo == "1_7" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="1_7">
                             <label class="font-weight-bold"  >Planes y Programas de Estudio<br></label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="progEstuio" id="id_progEstuio">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="progEstuio" id="id_progEstuio">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_7" %}
+                                        {% if element.archivo == "1_7" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -297,16 +574,16 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_8" in comentarios %}
+                        {% if "1_8" in comentarios and element.archivo == "1_8" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="id_8">
                             <label class="font-weight-bold" >Opinión favorable de CIFRHS</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_8" %}
+                                        {% if element.archivo == "1_8" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -316,16 +593,16 @@
                         </div>
                         {% endif %}
 
-                        {% if "1_9" in comentarios %}
+                        {% if "1_9" in comentarios and element.archivo == "1_9" and element.atendida == False %}
                         <div class="form-group custom-file p-3 mt-2" id="id_9">
                             <label class="font-weight-bold" >Carta de intención</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="carta" id="id_carta">
                             <div class="col-md-12 mt-2">
                                 <div class="alert alert-warning w-50 w-50">
                                     <label>Los comentarios de este documeto son:</label>
                                     <ul class="list-group">
                                     {% for element in coment %}
-                                        {% if element.archivo == "1_9" %}
+                                        {% if element.archivo == "1_9" and element.atendida == False %}
                                             <li class="list-group-item">{{ element.descripcion }}</li>
                                         {% endif %}
                                     {% endfor %}
@@ -334,7 +611,7 @@
                             </div>
                         </div>
                         {% endif %}
-
+                        {% endfor %}
                         <div class="form-group custom-file p-3 m-3 text-center">
                             <button class="btn btn-secondary">Actualizar archivos</button>
                         </div>
@@ -344,6 +621,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock %}

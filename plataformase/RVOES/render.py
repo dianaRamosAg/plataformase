@@ -51,7 +51,7 @@ def render_pdf_planes_prog_estud(request, id):
     #Obtenemos el nombre del departamento
     departamento = Departamento.objects.filter(id=solicitud.estatus.id)
     #Obtiene la fecha de cuando la solicitud salió de dirección
-    fecha = obtenerFecha(id)[0]
+    fecha = obtenerFecha(id)
     #Si la solicitud es de media superior
     if solicitud.nivel == '1':
         nivel = "Media Superior"
@@ -131,12 +131,13 @@ def render_pdf_planes_prog_estud(request, id):
 
 #Obtener fecha de cuando la solicitud salio de dirección
 def obtenerFecha(id_solicitud):
-    nivel = Solicitud.objects.values_list('nivel').filter(id=id_solicitud)[0]
-    id_jefe = CustomUser.objects.values_list('id').filter(jefe='1', departamento=2)[0]
-    record = Notificacion.objects.values_list('fechaNotificacion').filter(solicitud_id=id_solicitud,
-                                                                        descripcion = "Una solicitud pasó a ser revisada por tú área",
-                                                                        usuario_id = id_jefe)[0]
-    return record
+    #nivel = Solicitud.objects.values_list('nivel').filter(id=id_solicitud)[0]
+    id_jefe = CustomUser.objects.get(jefe='1', departamento=2)
+    record = Notificacion.objects.get(solicitud_id=id_solicitud,
+                                      descripcion = "Esta solicitud esta pendiente de visita de revisión",
+                                      usuario_id = id_jefe)
+    print("record ->",record.fechaNotificacion)
+    return record.fechaNotificacion
     # import psycopg2
     # try:
     #     connection = psycopg2.connect(user="postgres", password=pass_db, host="localhost", port="5432",

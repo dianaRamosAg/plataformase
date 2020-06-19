@@ -11,7 +11,7 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email', 'curp_rfc', 'calle', 'noexterior',
                   'nointerior', 'codigopostal', 'municipio', 'colonia',
                   'celular', 'tipo_usuario', 'tipo_persona', 'first_name',
-                  'last_name', 'departamento','firma_digital')
+                  'last_name','firma_digital')
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -20,7 +20,7 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('username', 'email', 'curp_rfc', 'calle', 'noexterior',
                   'nointerior', 'codigopostal', 'municipio', 'colonia',
                   'celular', 'tipo_usuario', 'tipo_persona', 'first_name',
-                  'last_name', 'departamento')
+                  'last_name')
 
 class AcuerdosForms(forms.ModelForm):
     class Meta:

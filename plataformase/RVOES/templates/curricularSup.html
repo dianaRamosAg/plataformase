@@ -24,7 +24,7 @@
                         {% csrf_token %}
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_estudio">Estudio de factibilidad</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="estudio" id="id_estudio">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="estudio" id="id_estudio">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -42,7 +42,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_plan">Plan de estudios</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="plan" id="id_plan">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="plan" id="id_plan">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -60,7 +60,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" >
                             <label class="font-weight-bold" for="id_mapa">Mapa curricular</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="mapa" id="id_mapa">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="mapa" id="id_mapa">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -78,7 +78,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_programa">Programas de estudios</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="programa" id="id_programa">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="programa" id="id_programa">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -96,7 +96,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" id="div_metodologia">
                             <label class="font-weight-bold" for="id_metodologia">Metodología de modalidad</label>
-                            <input type="file" class="form-control-file w-50 p-3" name="metodologia" id="id_metodologia">
+                            <input type="file" accept="application/pdf" class="form-control-file w-50 p-3" name="metodologia" id="id_metodologia">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -114,7 +114,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" id="div_salud">
                             <label class="font-weight-bold" for="id_cifrhs">Opinión favorable de CIFRHS</label>
-                            <input type="file" class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
+                            <input type="file" accept="application/pdf" class="form-control-file w-50 p-3" name="cifrhs" id="id_cifrhs">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -132,7 +132,7 @@
 
                         <div class="form-group custom-file p-3 mt-2" id="div_salud2">
                             <label class="font-weight-bold" for="id_carta">Carta de intención</label>
-                            <input type="file" class="form-control-file w-50 p-3" name="carta" id="id_carta">
+                            <input type="file" accept="application/pdf" class="form-control-file w-50 p-3" name="carta" id="id_carta">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}

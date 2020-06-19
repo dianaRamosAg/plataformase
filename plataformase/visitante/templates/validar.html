@@ -1,207 +1,134 @@
+{% extends 'base5.html' %}
 {% load static %}
-<!DOCTYPE >
-<html>
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{% static '/css/h.css' %}" type='text/css' media='all' >
-    <script src="{% static '/js/jquery/jquery.min.css' %}""></script>
-    <!---- jquery link local dont forget to place this in first than other script or link or may not work ---->
-    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
-    <!---- boostrap.min link local ----->
-    <link rel="stylesheet" href="{% static '/css/style.css' %}">
-    <!---- boostrap.min link local ----->
-    <!-- <script src="{% static '/js/bootstrap.min.js' %}"></script> -->
-    <!---- Boostrap js link local ----->
-    <link rel="icon" href="images/icon.png" type="image/x-icon" />
-    <!---- Icon link local ----->
-    <title>{% block title %}Validar cuenta{% endblock %}</title>
-</head>
-<body>
-<header>
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #6092D9">
-        <div class="container" >
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a target="_blank" href="#" class="navbar-brand"><img src="{% static 'img/se.png' %}" width="120" height="40" style="margin-top: -5px;"/></a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="{% url 'menuadmin' %}" target="_blank">Menú</a></li>
-                    <li><a href="{% url 'usuarios' %}">Ver Usuarios</a></li>
-                    <li><a href="{% url 'docAnexos' %}">Doc Anexos</a></li>
-                    <li><a href="{% url 'signup' %}">Registrar Usuarios</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-user"></span>
-                            <strong>{{user.first_name}}</strong>
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <div class="navbar-login">
-                                    <div class="row">
-                                        <div class="col-lg-4">
-                                            <p class="text-center">
-                                                <span class="glyphicon glyphicon-user icon-size"></span>
-                                            </p>
-                                        </div>
-                                        <div class="col-lg-8">
-                                            <p class="text-left"><strong>{{user.first_name}} {{user.last_name}}</strong></p>
-                                            <p class="text-left small">{{user.username}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <div class="navbar-login navbar-login-session">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <p>
-                                                <a href="{% url 'logout' %}" class="btn btn-danger btn-block">Cerrar Sesion</a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</header>
+{% block title %}Solicitudes de cuentas{% endblock %}
+{% block content %}
+{% if not user.is_authenticated %}
+   <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
+{% else %}
 <div class="container-fluid">
+    <br>
     <div class="container">
         <h3 class="text-center" >Información del solicitante '{{VisitanteSC.first_name}} {{VisitanteSC.last_name}}'</h3>
         <p class="text-center">
             <small id="passwordHelpInline" class="text-muted">Valide la siguiente información</small>
         </p>
         <hr>
-        <div class="row">
-            <div class="col-md-12">
+        
                 <form action="../../../signuprv/{{VisitanteSC.email}}" enctype="multipart/form-data" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
                     {% csrf_token %}
-                    <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-6">
                         <fieldset>
-                            <p class="text-uppercase pull-center">Información de usuario</p>
+                            <p class="text-uppercase">Información de usuario</p>
                             <div class="form-group">
-                                <label class="ml-2" for="tipo_persona" style="float: left;">Tipo de persona:</label>
+                                <label class="ml-2" for="tipo_persona" style="float: left;">Tipo de persona :</label>
                                 {% if VisitanteSC.tipo_persona == '1' %}
-                                    <input  class="form-control col-2" style="width: 35%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Física">
+                                    <input  class="form-control ml-2 col-4" style="width: 35%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Física">
                                 {% endif %}
                                 {% if VisitanteSC.tipo_persona == '2' %}
-                                    <input  class="form-control col-2" style="width: 35%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Moral">
+                                    <input  class="form-control ml-2 col-4" style="width: 35%;" type="text"  id="tipo_persona"  readonly name="tipo_persona" value="Moral">
                                 {% endif %}
                                 <br>
-                                <label class="ml-2" for="id_tipo_usuario" style="float: left;">Tipo de usuario:</label>
+                                <label class="ml-2" for="id_tipo_usuario" style="float: left;">Tipo de usuario :</label>
                                 {% if VisitanteSC.tipo_usuario == '1' %}
-                                    <input  class="form-control col-4" style="width: 35%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Institución">
+                                    <input  class="form-control ml-2 col-4" style="width: 35%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Institución">
                                 {% endif %}
                                 {% if VisitanteSC.tipo_usuario == '5' %}
-                                    <input  class="form-control col-4" style="width: 35%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Particular">
+                                    <input  class="form-control ml-2 col-4" style="width: 35%;" type="text"  id="id_tipo_usuario"  readonly name="tipo_persona" value="Particular">
                                 {% endif %}
-                                <br>
+                            
                             </div>
                             <div class="form-group" style="text-align: left;">
-                                <label class="ml-2 col-1" for="id_first_name" id="lblnombres">Nombre(s):</label>
-                                <input readonly class="form-control ml-1 col-2" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}" onfocus="funcion()">
+                                <label class="" for="id_first_name" id="lblnombres">Nombre(s):</label>
+                                <input readonly class="form-control  col-10" type="text" name="first_name" required id="id_first_name" value="{{VisitanteSC.first_name}}" onfocus="funcion()">
                                 {% if VisitanteSC.tipo_persona == '1' %}
-                                    <label class="ml-1 col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
-                                    <input  readonly class="form-control ml-1 col-2" type="text" name="last_name" required id="id_last_name" value="{{VisitanteSC.last_name}}">
+                                    <label class=" col-1" for="id_last_name" id="lblapellidos">Apellidos:</label>
+                                    <input  readonly class="form-control col-10" type="text" name="last_name" required id="id_last_name" value="{{VisitanteSC.last_name}}">
                                 {% endif %}
-                                <label class="ml-2 mr-2" for="id_celular">Celular:</label>
-                                <input readonly  class="form-control col-2" required type="text" name="celular" id="id_celular" value="{{VisitanteSC.celular}}">
-                                <label class="ml-1 col-1" for="id_curp_rfc" id="lblcurp">{% if VisitanteSC.tipo_persona == '1' %}CURP:{% else %}RFC:{% endif %}</label>
-                                <input readonly  class="form-control ml-1 col-3" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{VisitanteSC.curp_rfc}}">
+                                <label class="" for="id_celular">Celular:</label>
+                                <input readonly  class="form-control col-10" required type="text" name="celular" id="id_celular" value="{{VisitanteSC.celular}}">
+                                <label class="" for="id_curp_rfc" id="lblcurp">{% if VisitanteSC.tipo_persona == '1' %}CURP:{% else %}RFC:{% endif %}</label>
+                                <input readonly  class="form-control col-10" type="text" name="curp_rfc" required id="id_curp_rfc" value="{{VisitanteSC.curp_rfc}}">
                                 <br>
+                            
                                 {% if VisitanteSC.tipo_usuario == '1' %}
                                     <div class="form-group" style="text-align:left;" id="datos_inst"  >
-                                        <p>Datos de institución</p>
-                                        <label class="ml-2 col-1" for="cct" style="text-align: left;">Clave del cenro de trabajo (CCT) :</label>
-                                        <input type="text" name="cct"  id="cct" class="form-control col-2" readonly value="{{VisitanteSC.inst_cct}}" >
-                                        <label class="ml-2 col-1" for="nombre_director" style="text-align: left;">Nombre de director:</label>
-                                        <input type="text" readonly name="nombre_director" id="nombre_director" class="form-control col-2" value="{{VisitanteSC.inst_nombredirector}}" >
-                                        <label class="ml-2 col-1" for="sector" style="text-align: left;">Sector:</label>
-                                        <input type="text" readonly name="sector" id="sector" class="form-control col-2" value="{{VisitanteSC.sector}}" >
-                                        <label class="ml-2 col-1" for="nivel_educativo" style="text-align: left;">Nivel educativo:</label>
+                                        <p>Datos de institución</p><hr>
+                                        <label class=" " for="cct" >Clave del centro de trabajo (CCT) :</label>
+                                        <input type="text" name="cct"  id="cct" class="form-control col-10" readonly value="{{VisitanteSC.inst_cct}}" >
+                                        <label class="" for="nombre_director" style="text-align: left;">Nombre de director:</label>
+                                        <input type="text" readonly name="nombre_director" id="nombre_director" class="form-control col-10" value="{{VisitanteSC.inst_nombredirector}}" >
+                                        <label class="" for="sector" style="text-align: left;">Sector:</label>
+                                        <input type="text" readonly name="sector" id="sector" class="form-control col-8" value="{{VisitanteSC.sector}}" >
+                                        <label class="" for="nivel_educativo" style="text-align: left;">Nivel educativo:</label>
                                         {% if VisitanteSC.nivel_educativo == '1' %}
-                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-2" value="Media Superior" >
+                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-8" value="Media Superior" >
                                         {% endif %}
                                         {% if VisitanteSC.nivel_educativo == '2' %}
-                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-2" value="Superior" >
+                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-8" value="Superior" >
                                         {% endif %}
                                         {% if VisitanteSC.nivel_educativo == '3' %}
-                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-2" value="Ambos (Media Superior/Superior)" >
+                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-8" value="Ambos (Media Superior/Superior)" >
                                         {% endif %}
-                                        <label class="ml-2 col-1" for="id_modalidad" style="text-align: left;">Modalidad:</label>
+                                        <br>
+                                        <label class="" for="id_modalidad" style="text-align: left;">Modalidad:</label>
                                         {% if VisitanteSC.modalidad == '1' %}
-                                        <input type="text" readonly name="modalidad" id="modalidad" class="form-control col-2" value="Telebachillerato" >
+                                        <input type="text" readonly name="modalidad" id="modalidad" class="form-control col-4" value="Telebachillerato" >
                                     {% endif %}
                                     {% if VisitanteSC.modalidad == '0' %}
-                                        <input type="text" readonly name="modalidad" id="modalidad" class="form-control col-2" value="No aplica" >
+                                        <input type="text" readonly name="modalidad" id="modalidad" class="form-control col-4" value="No aplica" >
                                     {% endif %}
                                     </div><br>
                                 {% endif %}
-                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4">
+                                <p>Dirección</p> <hr>
+                                <div class="row form-group" style="float: left;">
+                                    
                                     <label class="ml-2" for="id_calle">Calle:</label>
-                                    <input readonly class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle" placeholder="Calle" value="{{VisitanteSC.calle}}"><br>
+                                    <input readonly class="form-control ml-2 mr-2 col-3" required type="text" name="calle" id="id_calle" placeholder="Calle" value="{{VisitanteSC.calle}}">
 
                                     <label class="ml-2" for="id_codigopostal">Código postal:</label>
-                                    <input readonly class="form-control ml-2 col-1" required type="number" name="codigopostal" value="63000" id="id_codigopostal"value="{{VisitanteSC.codigopostal}}"><br>
-                                </div>
-                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="margin-left: 25px;" >
+                                    <input readonly class="form-control ml-2 col-2" required type="number" name="codigopostal" value="63000" id="id_codigopostal"value="{{VisitanteSC.codigopostal}}">
+                 </div>
+                                <div class="row" style="float: left;" style="margin-left: 25px;" ><br><br>
                                     <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                                    <input readonly class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" value="{{VisitanteSC.noexterior}}"><br>
+                                    <input readonly class="form-control col-2 ml-1" required type="number" name="noexterior" id="id_noexterior" value="{{VisitanteSC.noexterior}}"><br>
 
                                     <label class="ml-2 " for="id_municipio">Municipio:</label>
-                                    <input readonly class="form-control ml-2 col-1" required type="text" name="municipio" id="id_municipio" value="{{VisitanteSC.municipio}}"><br>
+                                    <input readonly class="form-control ml-2 col-4" required type="text" name="municipio" id="id_municipio" value="{{VisitanteSC.municipio}}"><br>
                                 </div>
 
-                                <div class="row justify-content-center align-items-center col-12 m-3 col-xs-4" style="float: right;" >
+                                <div class="row" style="float: left;" style="float: right;" ><br><br>
                                     <label class="ml-2" for="id_nointerior">No. Interior:</label>
-                                    <input readonly class="form-control ml-4 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" value="{{VisitanteSC.nointerior}}"><br>
+                                    <input readonly class="form-control  col-2 ml-1" required type="number" name="nointerior" id="id_nointerior" value="{{VisitanteSC.nointerior}}"><br>
 
                                     <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
-                                    <input  readonly class="form-control col-2" required type="text" name="colonia" id="id_colonia" value="{{VisitanteSC.colonia}}"><br>
+                                    <input  readonly class="form-control ml-3 col-4" required type="text" name="colonia" id="id_colonia" value="{{VisitanteSC.colonia}}"><br>
                                 </div>
                             </div>
                         </fieldset>
                 </div>
-                <div class="col-md-2">
-                <!-------null------>
-                </div>
-                <div class="col-md-5" style="float: right;">
+                
+                <div class="col-6" style="float: right;">
                     <fieldset>
                         <p class="text-uppercase"> Información de inicio de sesión </p>
                         <div class="form-group" style="text-align: left;">
                             <div class="container-fluid form-group row " style="width: 100%; float:right;">
                                 <br>
-                                <label style="text-align: left;">Correo electronico:</label>
-                                <input  readonly class="form-control col"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
+                                <label style="text-align: left;">Correo electrónico:</label>
+                                <input  readonly class="form-control col-6 ml-2"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
                                 <br><br>
-                                <div class="text-center">
-                                    <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-2 mx-auto">Regresar</a>
-                                    <button class="btn btn-primary col-2 mx-auto" type="submit">Registrar usuario</button>
-                                    <br><br>
-                                    <a class="btn btn-danger col-2 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a>
+                                <div class="text-center col-md-12"><br>
+                                    <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-5 ">Regresar</a>
+                                    <button class="btn btn-primary col-5 ml-2"  style="float: right;"type="submit">Registrar</button>
+                                   <br>
+                                   <br> <a class="btn btn-danger col-10 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a>
                                 </div>
                             </div>
                         </div>
                     </fieldset>
                 </div>
                 </form>
-            </div>
-        </div>
+           
     </div>
 </div>
 
@@ -250,7 +177,7 @@
     </div>
   </div>
 
-
+  {% endif %}
 <script type="text/javascript">
 
 function funcion(){
@@ -355,5 +282,5 @@ function femail(){
     // }
 
 </script>
-</body>
-</html>
+{% endblock %}
+

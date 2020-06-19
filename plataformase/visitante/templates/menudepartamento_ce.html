@@ -3,6 +3,8 @@
 <html lang="es-MX">
 	<head>
 		<meta charset="UTF-8">
+		
+	<meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
 			<title>Control escolar</title>
 			<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 			<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
@@ -32,7 +34,7 @@
 						 <nav>
 							<ul class="nav">
 						
-								<li><a href="#" style="pointer-events: none;">Bienvenido,Control escolar! {{ user.first_name }} {{ user.last_name }} </a>
+								<li><a href="#" style="pointer-events: none;">Bienvenido(a) : Control escolar, {{ user.first_name }} {{ user.last_name }} </a>
 									<li class="nav-item dropdown ml-auto">
 										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/us2.png' %}"/></a>
 										<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">

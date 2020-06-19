@@ -77,8 +77,29 @@ def regUser(request):
                 inst_nombredirector = request.POST["nombre_director"]
                 sector = request.POST["sector"]
                 nivel_educativo = request.POST["nivel_educativo"]
-                modalidad = request.POST["modalidad"]
+                if nivel_educativo=='1':
+                    modalidad = request.POST["modalidad"]
+                else:modalidad = "0"
+
             departamento = int(request.POST["departamento"])
+            if tipo_usuario=='1' or tipo_usuario=='5': #Institución o Particular
+                identificacion = request.POST["identificacion"]
+                folio_id = request.POST["folio_id"]
+                marca_educativa = request.POST["marca_educativa"]
+
+                if tipo_persona == '2': # Tipo moral en Institución o Particular
+                    nombre_representante = request.POST["nombre_representante"]
+                    dom_legal_part = request.POST["dom_legal_part"]
+                else:
+                    nombre_representante = None
+                    dom_legal_part = None
+            else:
+                identificacion = None
+                folio_id = None
+                marca_educativa = None
+                nombre_representante = None
+                dom_legal_part = None
+                
 
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
             if tipo_usuario == '2':
@@ -98,16 +119,20 @@ def regUser(request):
             #Obtenemos el ID del usuario que registro a al nuevo usuario
             registro = (request.user.id)
             #Si existe un usuario que sea jefe de ese departamento
-            if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists():
+            if tipo_usuario == '2':
+                if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists():
                 #Se le hace usuario normal
-                CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
+                    CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0')
             #Registramos el usuario en la base de datos
             usr = CustomUser(username=username,email=username, password=password, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular, tipo_usuario=tipo_usuario,
                             tipo_persona=tipo_persona, first_name=first_name, last_name=last_name,
                             departamento_id=departamento, jefe=jefe, registro_id=registro,
-                            date_joined=datetime.datetime.now(), firma_digital=firma_digital)
+                            date_joined=datetime.datetime.now(), firma_digital=firma_digital, 
+                            identificacion=identificacion,dom_legal_part=dom_legal_part,
+                            folio_id=folio_id,nombre_representante=nombre_representante,
+                            marca_educativa=marca_educativa)
             usr.save()
             if tipo_usuario == '1':
                 usrInst = UsuarioInstitucion(id_usuariobase=usr, cct = inst_cct,
@@ -272,20 +297,41 @@ def actualizarusr(request):
             email = request.POST["email"]
             tipo_usuario = request.POST["tipo_usuario"]
             departamento = int(request.POST["departamento"])
+            user = CustomUser.objects.get(email=email)
             if tipo_usuario=='3':
                  CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento)
                  return redirect('usuarios')
             if tipo_usuario=='2':
-                firma = request.POST["firma_digital"]
-                CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1,firma_digital='firmas_digitales/'+firma)
-                return redirect('usuarios')
+                if CustomUser.objects.filter(jefe='1', departamento_id=departamento).exists() :
+                    #Se le hace usuario normal
+                    CustomUser.objects.filter(jefe='1', departamento_id=departamento).update(jefe='0', tipo_usuario='3')
+                    CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
 
+                else:
+                    CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=departamento,jefe=1)
+                if request.FILES:
+                    if 'firma_digital' in request.FILES:
+                        user.firma_digital.delete()
+                        user.firma_digital = request.FILES['firma_digital']
+                        user.tipo_usuario= tipo_usuario
+                        user.departamento_id=departamento
+                        user.jefe = 1
+                user.save()
+                return redirect('usuarios')
             if tipo_usuario=='4':
                 CustomUser.objects.filter(email=email).update(tipo_usuario=tipo_usuario,departamento_id=None,jefe='0')
                 return redirect('usuarios')
 
         else:
                 return redirect('menuadmin')
+
+
+
+
+
+
+
+
 
 
 def ActUsr(request,email):

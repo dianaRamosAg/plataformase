@@ -3,7 +3,7 @@
 <html lang="es-MX">
 <head>
 	<meta charset="utf-8" />
-	
+	<meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
 	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/us1.png'%}">
 
 	<title>Información de usuario</title>
@@ -122,77 +122,32 @@
 			                                        </div>
 												</div>
 											</div>
-											<!-- <div class="col-sm-12">
-		                                        <h4 class="info-text"> Datos de institución</h4>
-		                                    </div>
-											{% for element in usrinst %}
-											<div class="col-sm-5 col-sm-offset-1">
-												<div class="input-group">
-												<span class="input-group-addon">
-													<i class="material-icons">record_voice_over</i>
-												</span>
-												<div class="form-group label-floating">
-												  <label class="control-label">Clave del centro de trabajo (CCT)</label>
-												  <input name="cct" type="text" class="form-control" value="{{ element.cct}}">
+											<div class="col-sm-3 col-sm-offset-1 ml-2">
+		                                        <div class="form-group label-floating">
+		                                            <label class="control-label">Tipo de identificación</label>
+	                                            	<select  class="form-control" name="identificacion">
+														<option value="{{user.identificacion}}">{{user.identificacion}}</option>
+														<option value="Credencial para Votar">Credencial para Votar</option>
+														<option value="Pasaporte">Pasaporte</option>
+														<option value="Cartilla Militar">Cartilla Militar</option>
+														<option value="Cédula Profesional">Cédula Profesional</option>
+														<option value="Documento que credite la legal estancia en el país">Documento que credite la legal estancia en el país</option>
+													</select>
 												</div>
-											</div></div>
-											<div class="col-sm-5 ">
-												<div class="input-group">
-												<span class="input-group-addon">
-													<i class="material-icons">record_voice_over</i>
-												</span>
-												<div class="form-group label-floating">
-												  <label class="control-label">Nombre director </label>
-												  <input name="nombre_director" type="text" class="form-control" value="{{ element.nombredirector }}">
-												</div>
-											</div></div>
-								<div class="col-sm-5 col-sm-offset-1">
-									<div class="input-group">
-										<span class="input-group-addon">
-														<i class="material-icons">email</i>
-										</span>
-									<div class="form-group label-floating">
-									<label class="control-label" for="id_sector" style="text-align: left;">Sector:</label>
-                                <select  class="form-control ml-2 col-1" name="sector" id="id_sector" required>
-                                    <option value="{{element.sector}}" selected>{{element.sector}}</option>
-                                    <option value="Publico"> Público </option>
-                                    <option value="Privado"> Privado </option>
-								</select>
+												</div>	
+												<div class="col-sm-3">
+													<div class="form-group label-floating">
+														<label class="control-label">Folio</label>
+														<input type="number"  name="folio_id" class="form-control" value="{{ user.folio_id }}">
 													</div>
-													</div></div>
-												
-								<div class="col-sm-5 ">
-									<div class="input-group">
-										<span class="input-group-addon">
-																<i class="material-icons">email</i>
-										</span>
-								<div class="form-group label-floating">
-                                <label class="control-label" for="id_nivel_educativo" style="text-align: left;">Nivel Educativo:</label>
-                                <select  class="form-control ml-2 col-1" name="nivel_educativo" id="id_nivel_educativo" required>
-									{% if element.nivel_educativo == '1' %}
-                                    <option value="1" selected> Media superior </option>
-                                    <option value="2"> Superior </option>
-									<option value="3"> Ambos </option>
-									{%endif%}
-									{% if element.nivel_educativo == '2' %}
-                                    <option value="1" > Media superior </option>
-                                    <option value="2" selected> Superior </option>
-									<option value="3"> Ambos </option>
-									{%endif%}
-									{% if element.nivel_educativo == '3' %}
-                                    <option value="1" > Media superior </option>
-                                    <option value="2" > Superior </option>
-									<option value="3" selected> Ambos </option>
-									{%endif%}
-									
-								</select>
-								</div>
-								</div>
-								</div>{% endfor%}
-                            
-		                                	
-		                            	</div>
-		                            </div> -->
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group label-floating">
+														<label class="control-label">Marca de la institución</label>
+														<input type="text"  name="marca" class="form-control" value="{{ user.marca_educativa }}">
+													</div>
+												</div>
+
 		                            
 		                            <div class="tab-pane" id="address">
 		                                <div class="row">

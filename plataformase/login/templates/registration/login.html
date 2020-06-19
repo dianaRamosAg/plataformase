@@ -1,117 +1,589 @@
-{% extends 'base3.html' %}
-{% block content %}
+<!DOCTYPE html>
+{% load static %}
 {% if user.is_authenticated %}
 <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'perfil' %}">
 {% else %}
-<div class="pace-overlay"></div>
-<header id="header" class="header-front-page" style="background-image: url(http://localhost/plataforma2/wp-content/uploads/2020/02/photo-of-woman-using-her-laptop-935756-scaled.jpg);background-attachment: fixed;">
-	<div class="top-header">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-4 col-xs-8">
-					<a href="#"> <img src="../static/img/se.png" width="200" height="90"/></a>
-				</div><!--/.col-sm-2-->
-				<div class="col-sm-8 col-xs-4">
-<!------------------------------------------NAVEGADOR PRINCIPAL----------------------------------->
-<nav class="header-navigation" style="float: right;">
-	<ul id="menu-menu-principal" class="clearfix"><li id="menu-item-55" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-55"><a href="{% url 'login' %}" aria-current="page">Inicio</a></li>
-		<li id="menu-item-56" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-56">
-			<a href="#team">Acerca</a></li>
-		<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58">
-			<a href="#projects">Servicios</a></li>
-		<li id="menu-item-57" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-57">
-			<a href="#contact-us">Contacto</a></li>
-		<li id="menu-item-139" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59">
-			<a href="{% url 'login'%}" >Iniciar sesión</a></li>
-	</ul>
-</nav>
-</div>
-</div>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
 
-<div col-sm-12 >
-<div class=" col-sm-5  " style="float:left;margin-right:100px; margin-top: 60px; background-color:  rgba(255, 255, 255, 0.8) ;  border-radius: 3px" id="principal">
-	<h3 align="center" style="color: rgb(70, 87, 180);">SSEMSSICYT</h3>
-	<div class="section-description" ><span style="color: #000000" >
-		<p align="center">Plataforma de unificación de sistemas digitales, <br>Localización de instituciones,generación de turnos de RVOE, autorización de exámenes a título y sinodales.</p></span>
-				</div>
-</div>
+        <title>Plataforma SSEMSSICyT</title>
+        <link rel="icon" type="image/x-icon" href="{% static '/img/se.png' %}" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
 
- <div class="container2 col-sm-7 " style="float:right;margin-bottom: 42px;">
-	 <div class="d-flex justify-content-center h-100">
-		 <div class="card">
-			 <div class="card-header">
-				 <h4>Inicia sesión</h4>
-			 </div>
-			 <div class="card-body">
-				 <form method="post">
-					 {% csrf_token %}
-					 <div class="input-group form-group">
-						 <div class="input-group-prepend">
-							 <span style="color:white">Correo electrónico</span>
-						 </div>
-						 <input type="text" class="form-control" name="username" id="id_username" required class="input" value="" size="5" autocapitalize="off" >
-					 </div>
-					 <div class="input-group form-group">
-						 <div class="input-group-prepend">
-							 <span style="color:white">Contraseña</span>
-						 </div>
-							 <span class="input-group-text">
-								 <input type="password"  name="password" id="id_password" class="form-control  input" required>
-								 <button type="button" class="button button-secondary wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="Mostrar contraseña" id="pass" onclick="mostrarContrasena()">
-								 <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
-								 </button>
-							 </span>
-						 </div>
+        <link href="../../static/login/css/style.css" rel="stylesheet" type="text/css" />
 
-					 <div class="form-group">
-						 <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info btn-lg btn-block" value="Acceder">Acceder </button>
-						 </div>
+        <link rel='stylesheet'   href="{% static '/css/logincss.css' %}" type='text/css' media='all' />
 
-					 {% if form.errors %}
-					 {% for field in form %}
-						 {% for error in field.errors %}
-						 <p>{{error}}</p>
-							 <div class="alert alert-danger">
-								 <label>Por favor ingrese un nombre de usuario y contraseña correctos.</label>
-								 <!--p>Considere que ambos campos son sensibles al uso de mayúsculas.</p-->
-							 </div>
-						 {% endfor %}
-					 {% endfor %}
-					 {% for error in form.non_field_errors %}
-					 <p>{{error}}</p>
-						 <div class="alert alert-danger">
-							 <label>Por favor ingrese un nombre de usuario y contraseña correctos.</label>
-							 <!--p>Considere que ambos campos son sensibles al uso de mayúsculas.</p-->
-						 </div>
-					 {% endfor %}
-					 {% endif %}
-				 </form>
-			 </div>
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static '/img/se.png' %}"style="width:20%;height:20%;" /></a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav text-uppercase ml-auto">
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">SSEMSSICyT</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Servicios</a></li>
 
-			 <div class="card-footer">
-				 <div class="d-flex justify-content-center links">
-					 <a href="{% url 'menuvisitante'%}" class="visit" style="color: white;">Ingresar como visitante</a>
-				 </div>
-				 <div class="d-flex justify-content-center">
-					 <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
-				 </div>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contacto</a></li>
+                       </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead">
 
-			 </div>
-			</div>
+            <div class="container">
+                <div class="masthead-subheading">SSEMSSICyT</div>
+                <h5 class="my-3">Plataforma de servicios digitales.</h5>
+                <br><br>
+                <div class="container2 col-sm-7 " style="float:right;margin-top: -270px;margin-right: -100px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                ">
+                    <div class="d-flex justify-content-center h-100">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Inicia sesión</h4>
+                            </div>
+                            <div class="card-body">
+                                <form method="post">
+                                    {% csrf_token %}
 
-			</div><!--/.col-sm-10-->
-		</div><!--/.row-->
-	</div><!--/.container-->
-			</div>
-		</div>
-	</div>
-	</div><!--/.top-header-->
-	<br><br>
-</header><!--/#header-->
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Correo electrónico</label>
+                                        <input type="text" style="background-color: white;" class="form-control " name="username" id="id_username" required   autocapitalize="off" >
+                                         </div>
+                                    <div class="form-group">
+                                     <label for="exampleInputEmail1">Contraseña</label>
+                                     <input type="password"  name="password" id="id_password" class="form-control  " required>
+                                     </div>
+                                     <div class="input-group form-group">
+                                        <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info btn-lg btn-block" value="Acceder">Acceder </button>
+						             </div>
+
+                                    {% if form.errors %}
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+
+                                            <div class="alert alert-danger">
+                                                <label>{{error}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    {% for error in form.non_field_errors %}
+
+                                        <div class="alert alert-danger">
+                                            <label>{{error}}</label>
+                                        </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                </form>
+                            </div>
+                            <br><br><br>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-center links">
+                                    <a href="{% url 'menuvisitante'%}" class="visit" style="color: white;">Ingresar como visitante</a>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
+                                </div>
+
+                            </div>
+                           </div>
+                           <br> <br>
+            </div>
+           </div> </div>
+        </header>
+        <!-- Services-->
+        <section class="page-section" id="services">
+            <div class="container">
+                <div class="text-center">
+                    <a class="portfolio-link" data-toggle="modal" href="#sub" style="color: black;"> 
+                   
+                    <h2 class="section-heading text-uppercase">SSEMSSICyT
+                        
+                    </h2></a>
+                    <h3 class="section-subheading text-muted">Subsecretaría de Educación Media Superior, Superior e Investigación Científica y Tecnológica de Nayarit.</h3>
+                    <small>Es la dependencia competente para establecer la normativa,
+                        requisitos, trámites y procedimientos administrativos a los que deberá sujetarse el otorgamiento, revocación, suspensión o retiro de la autorización o del reconocimiento de validez oficial de estudios a los planes y programas de estudio a los particulares que participen en el proceso educativo
+                        estatal de educación medio superior y superior, de conformidad a lo establecido a la legislación en la materia.</small>
+                </div>
+                <div class="row text-center">
+                    <div class="col-md-12 portafolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#direccion" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-chalkboard-teacher fa-stack-1x fa-inverse"></i></span>
+                        </a>
+                            <h5 class="my-2">Dirección de Educación Media Superior y Superior</h5>
+
+                         </div>
+                   <br>
+                </div>
+
+                <div class="row text-center"><br>
+                    <div class="col-md-4 portafolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#media" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-school fa-stack-1x fa-inverse"></i></span>
+                        </a>
+                            <h5 class="my-2">Departamento de Educación Media Superior</h5>
+
+                         </div>
+                    <div class="col-md-4 portafolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#cyt" style="color: black;">  <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-laptop fa-stack-1x fa-inverse"></i></span>
+                       </a>
+                            <h5 class="my-2">Departamento de Investigación Científica y Tecnológica</h5>
+                          </div>
+                    <div class="col-md-4 portafolio-item">
+                        <a class="portfolio-link" data-toggle="modal" href="#superior" style="color: black;"> 
+                        <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-university fa-stack-1x fa-inverse"></i></span>
+                        </a>
+                        <h5 class="my-2">Departamento de Educación Superior</h5>
+                          </div>
+                </div>
+            </div>
+        </section>
+        <!-- Portfolio Grid-->
+        <section class="page-section bg-light" id="portfolio">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Sistemas</h2>
+                    <h3 class="section-subheading text-muted">Actualmente SEMSSICyT se encuentra desarrollando sistemas digitales para la optimización de tiempo en respuesta a ciertos servicios proveídos por esta institución
+                        .</h3>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="#"
+                                ><div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static '/img/rvoe.jpeg'%}" alt=""
+                            /></a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">RVOES</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de generación de turnos de Reconocimiento de Validez Oficial de Estudios.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="#"
+                                ><div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static '/img/exam.jpg'%}" alt=""
+                            /></a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">SETyRS</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de asignación de Exámenes a Título y Registro de Sinodales.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="#"
+                                ><div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static '/img/tb.jpg'%}"  alt=""
+                            /></a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">TBC</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de Telebachillerato Comunitario.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-lg-0">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="#"
+                                ><div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static '/img/sig.jpg'%}" alt=""
+                            /></a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">SIG</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de Información Geográfica.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4 mb-sm-0">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="#"
+                                ><div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static '/img/app.jpg'%}" alt=""
+                            /></a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">SIG App</div>
+                                <div class="portfolio-caption-subheading text-muted">Complemento móvil de Sistema de Información Geográfica.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" data-toggle="modal" href="#"
+                                ><div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
+                                </div>
+                                <img class="img-fluid" src="{% static '/img/block.jpg'%}" alt=""
+                            /></a>
+                            <div class="portfolio-caption">
+                                <div class="portfolio-caption-heading">Blockchain</div>
+                                <div class="portfolio-caption-subheading text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Contact-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">Contacto</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="team-member">
+                            <img class="mx-auto rounded-circle" src="{% static '/img/mapas-y-ubicacion.png'%}" alt="" style="width: 20%; height: 20%;" />
+                            <h4>Domicilio</h4>
+                            <p class="text-muted"> Avenida del Valle #85 Esq. Calle Florencia, Fraccionamiento Ciudad del Valle</span>
+                            </p>
+                            </div>
+                    </div>
+
+                        <div class="col-lg-4">
+                            <div class="team-member">
+                                <img class="mx-auto rounded-circle" src="{% static '/img/comentario.png'%}" alt="" style="width: 20%; height: 20%;" />
+                                <h4>Atención</h4>
+                                <p class="text-muted"> Teléfono : +52 (311)-139-2820, Horario : 9:00 am a 3:00 pm</span>
+                                </p>
+                                </div>
+                        </div>
+
+                            <div class="col-lg-4">
+                                <div class="team-member">
+                                    <img class="mx-auto rounded-circle" src="{% static '/img/facebook.png'%}" alt="" style="width: 20%; height: 20%;" />
+                                    <h4>Atención</h4>
+                                    <p class="text-muted">Fb SSEMSSICyT</span>
+                                    </p>
+                                    </div>
+                            </div>
+                            </div>
+                             <!--ROW-->
+            </div>
+
+        </section>
+        <!-- Footer-->
+        <footer class="footer py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 text-lg-left">Copyright © SSEMSSICyT 2020</div>
+                    <div class="col-lg-4 my-3 my-lg-0">
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-laptop"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-circle"></i></a>
+                    </div>
+                    <div class="col-lg-4 text-lg-right"><a href="#!">Manuales de uso</a></div>
+                </div>
+            </div>
+        </footer>
+
+    <!--MODALES DEPARTAMENTOS-->
+    <div class="modal" tabindex="-1" role="dialog" id="sub">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center">Subsecretaría de Educación Media Superior, Superior e Investigación Científica y Tecnológica de Nayarit</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="row text-center" style="margin-left: 170px;">
+            <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-user-alt  fa-stack-1x fa-inverse"></i></span>
+            </div>
+            <div class="modal-body">
+              <p>Subsecretario Mtro. Martín Isaac Pérez</p>
+              <p>Correo electrónico : subsecretariaEMSYS@nayarit.gob.mx</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="modal" tabindex="-1" role="dialog" id="direccion">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center">Dirección de Educación Media Superior y Superior</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="row text-center" style="margin-left: 170px;">
+            <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-user-alt  fa-stack-1x fa-inverse"></i></span>
+            </div>
+            <div class="modal-body">
+              <p>Jefe de departamento Lic. Víctor Manuel Alvarado Jiménez</p>
+              <p>Correo electrónico : demsys@nayarit.gob.mx</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal" tabindex="-1" role="dialog" id="media">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center">Departamento de Educación Media Superior</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="row text-center" style="margin-left: 170px;">
+            <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-user-alt  fa-stack-1x fa-inverse"></i></span>
+            </div>
+            <div class="modal-body">
+              <p>Jefe de departamento Mtro. Juan Humberto Pintado</p>
+              <p>Correo electrónico : mediasupSE@nayarit.gob.mx</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal" tabindex="-1" role="dialog" id="superior">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center">Departamento de Educación Superior</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="row text-center" style="margin-left: 170px;">
+            <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-user-alt  fa-stack-1x fa-inverse"></i></span>
+            </div>
+            <div class="modal-body">
+              <p>Jefe de departamento Mtro. William Javier Lozano Mora</p>
+              <p>Correo electrónico : superiorSE@nayarit.gob.mx</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal" tabindex="-1" role="dialog" id="cyt">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-center">Departamento de Investigación Científica y Tecnológica</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="row text-center" style="margin-left: 170px;">
+            <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-user-alt  fa-stack-1x fa-inverse"></i></span>
+            </div>
+            <div class="modal-body">
+              <p>Jefe de departamento Ing. Christopher Alan Estrada González</p>
+              <p>Correo electrónico : inv_cytSE@nayarit.gob.mx</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+    <!----------------------------------------------->
+        <!-- Portfolio Modals--><!-- Modal 1-->
+        <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="assets/img/close-icon.svg" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h2 class="text-uppercase">Project Name</h2>
+                                    <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/01-full.jpg" alt="" />
+                                    <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                                    <ul class="list-inline">
+                                        <li>Date: January 2020</li>
+                                        <li>Client: Threads</li>
+                                        <li>Category: Illustration</li>
+                                    </ul>
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times mr-1"></i>Close Project</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal 2-->
+        <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="assets/img/close-icon.svg" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h2 class="text-uppercase">Project Name</h2>
+                                    <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/02-full.jpg" alt="" />
+                                    <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                                    <ul class="list-inline">
+                                        <li>Date: January 2020</li>
+                                        <li>Client: Explore</li>
+                                        <li>Category: Graphic Design</li>
+                                    </ul>
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times mr-1"></i>Close Project</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal 3-->
+        <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="assets/img/close-icon.svg" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h2 class="text-uppercase">Project Name</h2>
+                                    <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/03-full.jpg" alt="" />
+                                    <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                                    <ul class="list-inline">
+                                        <li>Date: January 2020</li>
+                                        <li>Client: Finish</li>
+                                        <li>Category: Identity</li>
+                                    </ul>
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times mr-1"></i>Close Project</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal 4-->
+        <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="assets/img/close-icon.svg" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h2 class="text-uppercase">Project Name</h2>
+                                    <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/04-full.jpg" alt="" />
+                                    <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                                    <ul class="list-inline">
+                                        <li>Date: January 2020</li>
+                                        <li>Client: Lines</li>
+                                        <li>Category: Branding</li>
+                                    </ul>
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times mr-1"></i>Close Project</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal 5-->
+        <div class="portfolio-modal modal fade" id="portfolioModal5" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="assets/img/close-icon.svg" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h2 class="text-uppercase">Project Name</h2>
+                                    <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/05-full.jpg" alt="" />
+                                    <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                                    <ul class="list-inline">
+                                        <li>Date: January 2020</li>
+                                        <li>Client: Southwest</li>
+                                        <li>Category: Website Design</li>
+                                    </ul>
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times mr-1"></i>Close Project</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal 6-->
+        <div class="portfolio-modal modal fade" id="portfolioModal6" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="close-modal" data-dismiss="modal"><img src="assets/img/close-icon.svg" /></div>
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="modal-body">
+                                    <!-- Project Details Go Here-->
+                                    <h2 class="text-uppercase">Project Name</h2>
+                                    <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <img class="img-fluid d-block mx-auto" src="assets/img/portfolio/06-full.jpg" alt="" />
+                                    <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae, nostrum, reiciendis facere nemo!</p>
+                                    <ul class="list-inline">
+                                        <li>Date: January 2020</li>
+                                        <li>Client: Window</li>
+                                        <li>Category: Photography</li>
+                                    </ul>
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times mr-1"></i>Close Project</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 {% endif %}
-{% endblock %}
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 
-
-</body>
+        <script src="{% static '/js/scripts.js' %}"></script>
+    </body>
 </html>

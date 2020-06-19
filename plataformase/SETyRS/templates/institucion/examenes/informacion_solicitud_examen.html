@@ -9,7 +9,7 @@
     {% endif %}
 
     {% if solicitud.estatus == 'Aprobada' %}
-        <p><strong>¡Felicidades!</strong></p>
+        <p><strong>¡Exito!</strong></p>
         <p>Puedes descargar el informe de aprobación de solicitud a continuación</p>
         <a href="{% url 'SETyRS_generar_pdf' solicitud.id %}">
             <span class="material-icons" style="font-size:55px;"> picture_as_pdf </span>
@@ -56,6 +56,22 @@
     </div>
 </div>
 <br>
+
+<div class="container">
+    <h5>Lugar y fecha</h5>
+    <br>
+    <div class="form-group">
+        <label for="presidente">Lugar</label>
+        <input type="text" id="presidente" class="form-control" value="{{solicitud.lugar_exa}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="secretario">Fecha</label>
+        <input type="text" id="secretario" class="form-control" value="{{solicitud.fecha_exa}}" readonly>
+    </div>
+</div>
+<br>
+
+
 <div class="container">
     <h5>Alumnos</h5>
     <br>
@@ -67,6 +83,8 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">No. Certificado</th>
                     <th scope="col">CURP</th>
+                    <th scope="col">Carrera</th>
+                    <th scope="col">Folio de pago</th>
                     <th scope="col">Certificado de Egreso</th>
                     <th scope="col">Servicio Social</th>
                     <th scope="col">Inscripción Control Escolar</th>
@@ -80,6 +98,8 @@
                     <td>{{a.nombre_alumno}}</td>
                     <td>{{a.no_certificado}}</td>
                     <td>{{a.CURP}}</td>
+                    <td>{{a.carrera}}</td>
+                    <td>{{a.folio_pago}}</td>
                     {% doc archivos a.id as f %}
                     <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{f.certi}}')"><u>Ver archivo</u></a></td>
                     <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{f.cotejo}}')"><u>Ver archivo</u></a></td>

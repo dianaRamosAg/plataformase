@@ -10,6 +10,9 @@
                 <a class="nav-link ml-4" href="{% url 'notificacionAdmin' %}">Notificaciones {{total}}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'admin' %}">Regresar</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
             </li>
         </ul>
@@ -56,7 +59,9 @@
                     {% else %}
                     <p class="card-text" >Relación de recursos bibliográficos</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="rec_bibliograficos" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.rec_bibliograficos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -75,7 +80,9 @@
                     {% else %}
                     <p class="card-text" >Relación de recursos didácticos</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="rec_didacticos" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.rec_didacticos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -94,7 +101,9 @@
                     {% else %}
                     <p class="card-text" >Talleres</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="talleres" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.talleres }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -113,7 +122,9 @@
                     {% else %}
                     <p class="card-text" >Infraestructura de apoyo informático</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="apoyo_informatico" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.apoyo_informatico }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -132,7 +143,9 @@
                     {% else %}
                     <p class="card-text" >Apoyo de comunicaciones</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="apoyo_comunicaciones" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.apoyo_comunicaciones }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -151,7 +164,9 @@
                     {% else %}
                     <p class="card-text" >Personal</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="personal" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.personal }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -162,59 +177,102 @@
         {% endfor %}
     </div>
 
-    <form method="post" action="../../../finProceso/{{ solicitud.id }}/">
-      {% csrf_token %}
-      {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
+    <embed class="mt-4" src="" type="application/pdf" id="pdf" width="100%" height="600px" />
 
-      <div class="col-5 mt-2 mx-auto">
-          <div class="card-body border border-dark text-center">
-                    <p class="card-text" >Observaciones de la visita a la institución<br></p>
-                    <textarea placeholder="No hay observaciones" id="id_observacionesVisita" name="observacionesVisita" onKeyUp='cambiarBoton();'></textarea>
-          </div>
-      </div>
-      <div class="col mt-3 mb-3 text-center">
-          <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
-              {% if solicitud.estatus_id == 3 %}
-                  <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
-                  <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
-              {% endif %}
-            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
-      </div>
 
-      {% else %}
+    <div class="m-3">
+    {% if solicitud.estatus_id == 1 and solicitud.completado == 10 %}
+        {% if solicitud.customuser.tipo_persona == '1' %}
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
+                <label class="custom-control-label" for="id_org_cop_identificacion">¿Presenta original y copia simple de identificación oficial?</label>
+            </div>
+        {% endif %}
+        {% if solicitud.customuser.tipo_persona == '2' %}
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="org_cop_acta" id="id_org_cop_acta">
+                <label class="custom-control-label" for="id_org_cop_acta">¿Presenta original y copia simple de su acta constitutiva y estatutos vigentes?</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="org_cop_identificacion" id="id_org_cop_identificacion">
+                <label class="custom-control-label" for="id_org_cop_identificacion">¿Presenta original y copia simple del poder notarial vigente e identificación oficial de su representante legal?</label>
+        </div>
+        {% endif %}
+    {% endif %}
+    </div>
 
-      <div class="col mt-3 mb-3 text-center">
-          <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
-          {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
-              {% if comentarios == "" %}
-                  <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-              {% else %}
-                  {% if comentarioMostrado %}
-                      {% if comentarioNoMostrado %}
-                          <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                      {% else %}
-                          <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                      {% endif %}
-                  {% else %}
-                      <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                  {% endif %}
-              {% endif %}
-          {% endif %}
 
-          <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
-
-          <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
-          {% if solicitud.completado == 10 %}
-            {% if solicitud.estatus.id == 1 %}
-                <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
+    {% if solicitud.estatus_id == 3 and solicitud.completado == 10 %}
+    <form method="post" enctype="multipart/form-data" action="../../../finProceso/{{ solicitud.id }}/">
+        {% csrf_token %}
+        <div class="col-5 mt-2 mx-auto">
+            <div class="card-body border border-dark text-center">
+                <p class="card-text" >Archivo de validación de turno<br></p>
+                <input class="form-control-file m-2" type="file" required name="archivoNivel" id="id_archivoNivel" accept="application/pdf">
+            </div>
+        </div>
+        <div class="col mt-3 mb-3 text-center">
+            <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+            {% if solicitud.estatus_id == 3 %}
+            <button class="btn btn-primary" id="finProceso">Se realizó revisión</button>
+            <button class="btn btn-danger" id="finProceso2">Rechazar solicitud</button>
             {% endif %}
-          {% endif %}
-          <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
-      </div>
-
-      {% endif %}
-
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+        </div>
     </form>
+    {% else %}
+
+        <div class="col mt-3 mb-3 text-center">
+            <a class="btn btn-info" href="../comentarios/mostrar/academica">Ver Comentarios</a>
+            {% if solicitud.completado != 12 %}
+            {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
+                {% if comentarios == "" %}
+                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                {% else %}
+                    {% if comentarioMostrado %}
+                        {% if comentarioNoMostrado %}
+                        <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                        {% else %}
+                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                        {% endif %}
+                    {% else %}
+                    <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            {% endif %}
+            <a class="btn btn-secondary" href="../curricular">Anterior Carpeta</a>
+
+            {% if solicitud.completado == 10 %}
+                {% if solicitud.estatus.id == 1 %}
+                    <form class="d-inline" method="post" id="id_form2" action="../entregoDocumentos">
+                    {% csrf_token %}
+                        <input type="text" hidden name="hayComentariosNoAtendidos" id="id_hayComentariosNoAtendidos" value="{{hayComentariosNoAtendidos}}">
+                        {% if solicitud.customuser.tipo_persona == '1' %}
+                            {% if hayComentariosNoAtendidos == False %}
+                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false ){
+                                event.preventDefault();
+                                alert('¡ATENCIÓN!, la casilla de original y copia de Identificación no esta marcada, en caso de no haberlas entregado no puede continuar.\nSi fueron entregadas, favor de marcar la casilla.');
+                                }" > Entregó documentos</button>
+                            {% endif %}
+                            {%if hayComentariosNoAtendidos == True %}
+                                <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
+                            {% endif %}
+                        {% endif %}
+                        {% if solicitud.customuser.tipo_persona == '2' %}
+                            {% if hayComentariosNoAtendidos == False %}
+                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');}" >Entregó documentos</button>
+                            {% endif %}
+                            {%if hayComentariosNoAtendidos == True %}
+                                <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
+                            {% endif %}
+                        {% endif %}
+                    </form>
+                {% endif %}
+            {% endif %}
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Inicio</a>
+        </div>
+    {% endif %}
 
 </div>
 
@@ -231,10 +289,22 @@
       document.getElementById('finProceso2').style.display='inline';
     }
   }
+
+//---------------------------
+function org(evt) {
+    identif = document.getElementById('id_org_cop_identificacion');
+    if(identif.checked == true){
+        console.log("checked")
+        evt.preventDefault();
+    }
+
+}
+
 </script>
 {% endif %}
 
 <script>
+    window.history.forward();
     function terminar(estado){
         var btnTerminar = document.getElementById("TRevision")
         switch(estado){

@@ -9,13 +9,13 @@
         <div class="container mb-3">
             <div class="container col-md-5 text-center">
                 <label for="select_nivel_educativo">Nivel Educativo</label>
-                {% if nivel == 3 %}
+                {% if nivel == '3' %}
                 <select class="form-control" name="nivel" id="select_nivel_educativo" required>
                     <option selected disabled hidden>Seleccione el nivel educativo de su solicitud</option>
                     <option value=1>Media Superior</option>
                     <option value=2>Superior</option>
                 </select>
-                {% elif nivel == 1 %}
+                {% elif nivel == '1' %}
                 <select class="form-control" name="nivel" id="select_nivel_educativo" required>
                     <option selected value=1>Media Superior</option>
                 </select>
@@ -83,7 +83,7 @@
                 <label>VOCAL</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="vocal" id="selectVocal" required>
+                <select class="form-control" name="vocal" id="selectVocal" reqired>
                     <option  selected hidden>Seleccionar</option>
                     {% if sinodales %}
                         {% for s in sinodales %}
@@ -94,6 +94,25 @@
                     {% endif %}
               </select>
             </div>
+        
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <label class="form-check-label col-2" for="date">Fecha de Examen</label>
+               
+            </div>
+            <div class="col-md-4">
+                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" value="" required>
+            </div>
+            
+            <div class="col-md-2">
+                <label>Lugar de Examen</label>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="Lugar_exa" required>
+            </div>
+
+
         </div>
         <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
         <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>

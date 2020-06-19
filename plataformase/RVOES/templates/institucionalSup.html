@@ -22,74 +22,41 @@
                     <h4 class="">Solo son validos los archivos PDF</h4>
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="form-group custom-file p-3 mt-2" >
-                            <label class="font-weight-bold" for="id_solicitud">Solicitud de RVOE</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
-                            ¿No tiene el formato? descarguelo <a href="https://dipes.sep.gob.mx/work/models/DIPES/Resource/17/1/images/Formato%201_%20Solicitud%20de%20RVOE.pdf">aqui</a>
-                        </div>
+
                         {% if form.errors %}
                             {% for field in form %}
                                 {% for error in field.errors %}
-                                    {% if field.name == 'solicitud' %}
-                                        <div class="col-md-12 mt-2">
-                                            <div class="alert alert-danger w-25">
-                                                <label>{{ error }}</label>
-                                            </div>
+                                    <div class="col-md-12 mt-2">
+                                        <div class="alert alert-danger w-25">
+                                            <label>{{ error }} - {{ field }}</label>
                                         </div>
-                                    {% endif %}
+                                    </div>
                                 {% endfor %}
                             {% endfor %}
                         {% endif %}
 
-                        <div class="form-group custom-file p-3 mt-2">
-                            <label class="font-weight-bold" for="id_pago">Comprobante de pago</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
-                            <div class="row">
-                                <label class="font-weight-normal m-2 pl-4" for="id_folio_pago">
-                                    Folio de pago:
-                                </label>
-                                <input type="text" class="form-control form-control-sm w-25 p-2" required
-                                       name="folio_pago" id="id_folio_pago">
-                            </div>
-                            <div class="row">
-                                <label class="font-weight-normal m-2 pl-4" for="id_monto_pago">
-                                    Monto de pago:
-                                </label>
-                                <input type="text" class="form-control form-control-sm w-25 p-2" required
-                                       name="monto_pago" id="id_monto_pago">
-                            </div>
-                            <div class="row">
-                                <label class="font-weight-normal m-2 pl-4" for="id_fecha_pago">
-                                    Fecha en que se realizó el pago:
-                                </label>
-                                <input type="date" class="form-control col-2" id="id_fecha_pago" required name="fecha_pago"
-                                       value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
-                            </div>
+                        <div class="form-group custom-file p-3 mt-2" >
+                            <label class="font-weight-bold" for="id_solicitud" id="lblsolicitud">Solicitud de Reconocimiento de Validez Oficial de Estudios del Tipo Superior</label>
+                            <br><small>Recuerde que en este archivo debe incluir la misma información que introdujo anteriormente.</small>
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="solicitud" id="id_solicitud">
                         </div>
                         {% if form.errors %}
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    {% if field.name == 'pago' %}
-                                        <div class="col-md-12 mt-2">
-                                            <div class="alert alert-danger w-25">
-                                                <label>{{ error }}</label>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        {% if field.name == 'solicitud' %}
+                                            <div class="col-md-12 mt-2">
+                                                <div class="alert alertt-danger w-25">
+                                                    <label>{{ error }}</label>
+                                                </div>
                                             </div>
-                                        </div>
-                                    {% endif %}
-                                    {% if field.name == 'folio_pago' %}
-                                        <div class="col-md-12 mt-2">
-                                            <div class="alert alert-danger w-25">
-                                                <label>Este folio ya se encuentra registrado junto con una solicitud.</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                        {% endif %}
                                 {% endfor %}
                             {% endfor %}
                         {% endif %}
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_acredita_personalidad">Documento que acredita la personalidad juridica</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="acredita_personalidad" id="id_acredita_personalidad">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="acredita_personalidad" id="id_acredita_personalidad">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -107,7 +74,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold"  for="id_acredita_inmueble">Documento que acredita la ocupacion legal del inmueble</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="acredita_inmueble" id="id_acredita_inmueble">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="acredita_inmueble" id="id_acredita_inmueble">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -125,7 +92,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_licencia_suelo">Licencia de uso de suelo</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="licencia_suelo" id="id_licencia_suelo">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="licencia_suelo" id="id_licencia_suelo">
                             <div class="row">
                                 <label class="font-weight-normal m-2 pl-4" for="id_dictamen_suelo">
                                     Dictamen constancia de uso de suelo:
@@ -171,7 +138,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_constancia_estructural">Constancia de seguridad estructural</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="constancia_estructural" id="id_constancia_estructural">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="constancia_estructural" id="id_constancia_estructural">
                             <div class="row">
                                 <label class="font-weight-normal m-2 pl-4" for="id_dictamen_estructural">
                                     Nombre de constancia:
@@ -224,7 +191,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_constancia_proteccion">Constancia de protección civil</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="constancia_proteccion" id="id_constancia_proteccion">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="constancia_proteccion" id="id_constancia_proteccion">
                             <div class="row">
                                 <label class="font-weight-normal m-2 pl-4" for="id_dictamen_proteccion">
                                     Folio de dictamen:
@@ -264,7 +231,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_inife">INIFE</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="inife" id="id_inife">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="inife" id="id_inife">
                             <div class="row">
                                 <label class="font-weight-normal m-2 pl-4" for="id_folio_inife">
                                     Folio dictamen de INIFE:
@@ -303,7 +270,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_des_instalacion">Descripcion de las instalaciones</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="des_instalacion" id="id_des_instalacion">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="des_instalacion" id="id_des_instalacion">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -321,7 +288,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_planos">Planos estructurales y arquitectonicos</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="planos" id="id_planos">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="planos" id="id_planos">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}
@@ -339,7 +306,7 @@
 
                         <div class="form-group custom-file p-3 mt-2">
                             <label class="font-weight-bold" for="id_biblio">Biblioteca</label>
-                            <input type="file" required class="form-control-file w-50 p-3" name="biblio" id="id_biblio">
+                            <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="biblio" id="id_biblio">
                         </div>
                         {% if form.errors %}
                             {% for field in form %}

@@ -20,11 +20,20 @@ class ArchivosMedSupForm(forms.ModelForm):
         model = CMedSuperior
         fields = '__all__'
 
+class ActPagoMedSupForm(forms.ModelForm):
+    class Meta:
+        model = CMedSuperior
+        fields = ('pago', 'fecha_pago', 'monto_pago', 'folio_pago')
+
 class ArchivosInstForm(forms.ModelForm):
     class Meta:
         model = CInstitucional
         fields = '__all__'
 
+class ActPagoSupForm(forms.ModelForm):
+    class Meta:
+        model = CInstitucional
+        fields = ('pago', 'fecha_pago', 'monto_pago', 'folio_pago')
 
 class ArchivosCCurrForm(forms.ModelForm):
     class Meta:

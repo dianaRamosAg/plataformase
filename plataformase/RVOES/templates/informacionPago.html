@@ -1,0 +1,91 @@
+{% extends 'baseUser.html' %}
+
+{% block title %}Actualización de archivos{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-12 text-center mt-2 mb-1">
+                    <h3>Folio: {{solicitud.id}} -  Institución: {{solicitud.customuser.first_name}}
+                        {{solicitud.customuser.last_name}}</h3>
+                    <h3> {{ solicitud.nombreSolicitud }}</h3>
+                </div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col-12 text-center mb-3">
+                    <h3>
+                        Modalidad:
+                        {% if solicitud.modalidad == '2' %}
+                            Escolarizada
+                        {% endif %}
+                        {% if solicitud.modalidad == '1' %}
+                            Mixta
+                        {% endif %}
+                        {% if solicitud.modalidad == '3' %}
+                            No escolarizada
+                        {% endif %}
+                        -
+                        {% if solicitud.nivel == '1' %}
+                            Nivel: Media Superior
+                        {% else %}
+                            Nivel: Superior
+                        {% endif %}
+                    </h3>
+                    <br>
+                    <h2>Favor de subir la siguiente información sobre el pago:</h2>
+                    <h4 class="">Solo son validos los archivos PDF</h4>
+                </div>
+            </div>
+
+
+            <div class="form-group custom-file p-3 mt-2 ml-5">
+                <label class="font-weight-bold" >Recibo de pago</label>
+                <input type="file" accept="application/pdf" required class="form-control-file w-50 p-3" name="pago" id="id_pago">
+                <div class="row">
+                    <label class="font-weight-normal m-2 pl-4" for="id_folio_pago">
+                        Folio de pago:
+                    </label>
+                    <input type="text" class="form-control form-control-sm w-25 p-2" required
+                           name="folio_pago" id="id_folio_pago">
+                </div>
+                <div class="row">
+                    <label class="font-weight-normal m-2 pl-4" for="id_monto_pago">
+                        Monto de pago:
+                    </label>
+                    <input type="text" class="form-control form-control-sm w-25 p-2" required
+                           name="monto_pago" id="id_monto_pago">
+                </div>
+                <div class="row">
+                    <label class="font-weight-normal m-2 pl-4" for="id_fecha_pago">
+                        Fecha en que se realizó el pago:
+                    </label>
+                    <input type="date" class="form-control col-2" id="id_fecha_pago" required name="fecha_pago"
+                           value="{{ fecha }}" min="2020-01-01" max="{{ fecha }}">
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="row col-5 mt-4 ml-5">
+                    <div class=" alert alert-danger">
+                        <label>El folio de pago ingresado ya se encuentra registrado.<br>
+                            <strong>El folio de pago debe ser único por solicitud.</strong>
+                        </label>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="form-group custom-file p-3 m-3 text-center">
+                <button class="btn btn-secondary">Registrar información de pago</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script>
+    window.history.forward();
+</script>
+
+{% endblock %}

@@ -34,6 +34,7 @@
                 <th scope="col">Folio</th>
                 <th scope="col">Institución</th>
                 <th scope="col">Estatus</th>
+                <th scope="col">Nivel Educativo</th>
                 <th scope="col">Fecha</th>
             </tr>
         </thead>
@@ -44,6 +45,7 @@
                 <td><a href="{% url 'SETyRS_revisar_solicitud_examen' s.id %}">{{s.id}}</a></td>
                 <td>{{s.user.first_name}}</td>
                 <td>{{s.estatus}}</td>
+                <td>{{s.nivel_educativo}}</td>
                 <td>{{s.fecha}}</td>
             </tr>
             {% endfor %}

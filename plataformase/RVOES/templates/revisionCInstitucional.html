@@ -11,6 +11,9 @@
                 <a class="nav-link ml-4" href="{% url 'notificacionAdmin' %}">Notificaciones {{total}}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link ml-2" href="{% url 'admin' %}">Regresar</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link ml-2" href="{% url 'logout' %}">Cerrar sesión</a>
             </li>
         </ul>
@@ -44,6 +47,12 @@
         <div class="col-12 text-center mb-1">
             <h3>Carpeta Institucional</h3>
         </div>
+        {% if solicitud.completado == 12 %}
+        <div class="col-12 text-center mb-1">
+            Dirección {%if solicitud.aceptArchivoNivel%}Aceptó{%else%}Rechazó{%endif%} el archivo subido por el nivel.
+            <button onclick="mostrarPDF('{{ solicitud.archivoNivel }}')" type="button" class="btn btn-secondary m-2">Ver archivo subido por el nivel</button>
+        </div>
+        {%endif%}
 
         {% for archivo in archivos %}
 
@@ -57,7 +66,9 @@
                     {% else %}
                     <p class="card-text">Solicitud de RVOE</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="solicitud" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.solicitud }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -66,24 +77,28 @@
             </div>
         </div>
 
+        {% if solicitud.completado > 9 %}
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
                 <form method="post" id="2_2" action="../comentarios/2_2/institucional">
                     {% csrf_token %}
-                    {% if "2_2" in comentarios and solicitud.completado != 10 %}
+                    {% if "2_2" in comentarios %}
                     <p class="card-text text-danger">Comprobante de pago<br>
                         <small>*Este archivo tiene observaciones</small></p>
                     {% else %}
                     <p class="card-text">Comprobante de pago</p>
                     {% endif %}
+                    {% if solicitud.completado == 10 and solicitud.estatus.id == 1 %}
                     <textarea placeholder="Comentario..." id="pago" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.pago }}')" type="button" class="btn btn-secondary">Ver</button>
-                    {% if solicitud.completado != 10 %}
+                    {% if solicitud.completado == 10 and solicitud.estatus.id == 1 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
                     {% endif %}
                 </form>
             </div>
         </div>
+        {% endif %}
 
         <div class="col-3 mt-1">
             <div class="card-body border border-dark text-center">
@@ -95,7 +110,9 @@
                     {% else %}
                     <p class="card-text">Documento que acredita la personalidad juridica</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="acredita_personalidad" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.acredita_personalidad }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -114,7 +131,9 @@
                     {% else %}
                     <p class="card-text">Documento que acredita la ocupacion legal del inmueble</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="acredita_inmueble" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.acredita_inmueble }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -133,8 +152,10 @@
                     {% else %}
                     <p class="card-text">Licencia de uso de suelo</p>
                     {% endif %}
-                    <p class="card-text">Licencia: {{ archivo.dictamen_suelo }}</p>
+                    <!--p class="card-text">Licencia: {{ archivo.dictamen_suelo }}</p-->
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="licencia_suelo" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.licencia_suelo }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -153,8 +174,10 @@
                     {% else %}
                     <p class="card-text">Constancia de seguridad estructural</p>
                     {% endif %}
-                    <p class="card-text">Licencia: {{ archivo.dictamen_estructural }}</p>
+                    <!--p class="card-text">Licencia: {{ archivo.dictamen_estructural }}</p-->
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="constancia_estructural" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.constancia_estructural }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -173,8 +196,10 @@
                     {% else %}
                     <p class="card-text">Constancia de proteccion civil</p>
                     {% endif %}
-                    <p class="card-text">Licencia: {{ archivo.dictamen_proteccion }}</p>
+                    <!--p class="card-text">Licencia: {{ archivo.dictamen_proteccion }}</p-->
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="constancia_proteccion" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.constancia_proteccion }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -193,8 +218,10 @@
                     {% else %}
                     <p class="card-text">INIFE</p>
                     {% endif %}
-                    <p class="card-text">Licencia: {{ archivo.inife }}</p>
+                    <!--p class="card-text">Licencia: {{ archivo.folio_inife }}</p-->
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="inife" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.inife }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -213,7 +240,9 @@
                     {% else %}
                     <p class="card-text">Descripcion de las instalaciones</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="des_instalacion" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.des_instalacion }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -232,7 +261,9 @@
                     {% else %}
                     <p class="card-text">Planos estructurales y arquitectonicos</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="planos" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.planos }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -251,7 +282,9 @@
                     {% else %}
                     <p class="card-text">Biblioteca</p>
                     {% endif %}
+                    {% if solicitud.completado < 9 %}
                     <textarea placeholder="Comentario..." id="biblio" name="descripcion"></textarea>
+                    {% endif %}
                     <button onclick="mostrarPDF('{{ archivo.biblio }}')" type="button" class="btn btn-secondary">Ver</button>
                     {% if solicitud.completado != 10 %}
                         <button type="submit" class="btn btn-danger mt-1" type="button" name="button">Poner Comentarios</button>
@@ -266,7 +299,8 @@
                 <th>DICTAMEN PROTECCIÓN CIVIL</th>
                 <th>CONSTANCIA DE USO DE SUELO</th>
                 <th>DICTAMEN INIFE</th>
-                <th>FECHA DE PAGO DE DERECHOS</th>
+                {% if solicitud.completado > 9 %}
+                <th>FECHA DE PAGO DE DERECHOS</th>{% endif %}
             </tr>
             <tr class="text-center">
                 <td>{{ archivo.dictamen_estructural }} {{ archivo.fecha_estructural }}
@@ -279,7 +313,9 @@
                     {{ archivo.fecha_suelo }} Firmado por: {{ archivo.firma_suelo }}</td>
                 <td>{{ archivo.folio_inife }} {{ archivo.fecha_inife }} Firmado por:
                     {{ archivo.firma_inife }}</td>
-                <td>Recibo oficial: {{ archivo.folio_pago }} {{ archivo.fecha_pago }} ${{ archivo.monto_pago }}</td>
+                {% if solicitud.completado > 9 %}
+                <td>Recibo oficial: {{ archivo.folio_pago }}<br>{{ archivo.fecha_pago }}<br>${{ archivo.monto_pago }}</td>
+                {% endif %}
             </tr>
         </table>
 
@@ -287,40 +323,124 @@
 
         <embed src="" type="application/pdf" id="pdf" width="100%" height="600px" />
 
+        <embed class="mt-4" src="{% url 'datosSolicitud' solicitud.id %}" type="" id="datosSolicitud" width="100%" height="600px" />
+
+    </div>
     </div>
 
     <div class="col mt-3 mb-3 text-center">
-        <a class="btn btn-info" href="../comentarios/mostrar/institucional">Ver Comentarios</a>
-        {% if NombreDepartamento == "Control Escolar" %}
-            <a class="btn btn-secondary" href="../curricular">Siguiente Carpeta</a>
+    {% if solicitud.estatus_id == 2 and solicitud.completado == 11 %}
+        <form method="post" class="m-3" action="#" id="id_form_archivoNivel">
+            {% csrf_token %}
+            <div class="col-4 mt-1 mx-auto">
+                <div class="card-body border border-dark text-center">
+                    <input type="text" hidden name="archivoNivel" id="id_valor" value="True">
+                    <button onclick="mostrarPDF('{{ solicitud.archivoNivel }}')" type="button" class="btn btn-secondary m-2">Ver archivo subido por el nivel</button>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="id_validar" checked onclick="aceptReject()">
+                        <label class="custom-control-label" for="id_validar" id="lbl_validar">Aceptar solicitud</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col mt-3 mb-3 text-center">
+                <a class="btn btn-info" href="../comentarios/mostrar/medSuperior">Ver Comentarios</a>
+                <button class="btn btn-primary" id="finProcesoValidar" onclick="asegurar()">Finalizar revisión</button>
+                <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+            </div>
+        </form>
         {% else %}
-            {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
-                {% if comentarios == "" %}
-                    <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                {% else %}
-                    {% if comentarioMostrado %}
-                        {% if comentarioNoMostrado %}
-                            <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                        {% else %}
-                            <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
-                        {% endif %}
+        <form method="post" id="id_form" action="">
+            {% csrf_token %}
+            {% if solicitud.completado == 10 and solicitud.estatus.id == 2 %}
+            <div class="m">
+                <input type="text" hidden name="hayComentariosNoAtendidos" id="id_hayComentariosNoAtendidos" value="{{hayComentariosNoAtendidos}}">
+                <label>Número de oficio de admisión de trámite:</label>
+                <input class="form-control d-inline col-2" required type="text" name="noOficioAdmision" id="id_noOficioAdmision">
+            </div>
+            <br>
+            {% endif %}
+            <a class="btn btn-info" href="../comentarios/mostrar/institucional">Ver Comentarios</a>
+            {% if NombreDepartamento == "Control Escolar" %}
+                <a class="btn btn-secondary" href="../curricular">Siguiente Carpeta</a>
+            {% else %}
+                {% if solicitud.completado != 10 and estadoComentario == '0' or estadoComentario == '2' %}
+                    {% if comentarios == "" %}
+                        <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
                     {% else %}
-                        <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                        {% if comentarioMostrado %}
+                            {% if comentarioNoMostrado %}
+                                <a onclick="terminar(2)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                            {% else %}
+                                <a onclick="terminar(0)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                            {% endif %}
+                        {% else %}
+                            <a onclick="terminar(1)" id="TRevision" class="btn btn-secondary" href="" >Terminar revisión</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}
-        {% endif %}
-        {% if solicitud.completado == 10 %}
-          {% if solicitud.estatus.id == 2 %}
-              <a class="btn btn-secondary" href="../entregoDocumentos">Entregó documentos</a>
-          {% endif %}
-        {% endif %}
-        <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+            {% if solicitud.completado == 10 %}
+              {% if solicitud.estatus.id == 2 %}
+                  <button type="submit" onclick="entregoDocumentos()" class="btn btn-secondary" id="id_entregoDocumentos">Entregó documentos</button>
+              {% endif %}
+            {% endif %}
+            <a class="btn btn-secondary" href="{% url 'admin' %}">Regresar</a>
+        </form>
     </div>
+    {% endif %}
 
 </div>
 
+{% if solicitud.estatus_id == 2 and solicitud.completado == 11 %}
+<script type="text/javascript">
+    var btnAceptReject = document.getElementById("id_valor");
+    var btnFinProcesoValidar = document.getElementById("finProcesoValidar");
+    var lbl_validar = document.getElementById("lbl_validar");
+
+    function aceptReject(){
+        if (btnAceptReject.value=="True"){
+            btnAceptReject.value = "False";
+            lbl_validar.innerHTML = "Rechazar solicitud";
+            btnFinProcesoValidar.removeAttribute("class");
+            btnFinProcesoValidar.setAttribute("class", "btn btn-danger");
+        }else{
+            btnAceptReject.value = "True";
+            lbl_validar.innerHTML = "Aceptar solicitud";
+            btnFinProcesoValidar.setAttribute("class", "btn btn-primary");
+        }
+    }
+
+    function asegurar(){
+        if (btnAceptReject.value=="True"){
+            var opcion = confirm("Indicará a ventanilla única que la solicitud fue aceptada ¿Desea continuar?");
+            if (opcion == true) {
+                document.getElementById("id_form_archivoNivel").action = "../../../finProceso/{{ solicitud.id }}/";
+            }else{
+                document.getElementById("id_form_archivoNivel").action = "#lbl_validar";
+            }
+        }else{
+            var opcion = confirm("Indicará a ventanilla única que la solicitud fue rechazada ¿Desea continuar?");
+            if (opcion == true) {
+                document.getElementById("id_form_archivoNivel").action = "../../../finProceso/{{ solicitud.id }}/";
+            }else{
+                document.getElementById("id_form_archivoNivel").action = "#lbl_validar";
+            }
+        }
+    }
+</script>
+{% endif %}
+
 <script>
+    window.history.forward();
+    function entregoDocumentos(){
+        if(document.getElementById("id_noOficioAdmision").value == ''){
+            alert('Coloque un número de oficio de admisión de trámite');
+            document.getElementById("id_entregoDocumentos").href = "#id_noOficioAdmision";
+        }else{
+            document.getElementById("id_form").action = "../entregoDocumentos";
+        }
+    }
+
     function terminar(estado){
         var btnTerminar = document.getElementById("TRevision")
         switch(estado){
@@ -331,7 +451,8 @@
                 var opcion = confirm("Se le notificarán los comentarios introducidos al usuario de la institución correspondiente y estos ya no podrán modificarse o eliminarse ¿Desea terminar la revisión?")
                 break
             case 2:
-                var opcion = confirm("Se le introdujeron nuevos comentarios a esta solicitud, la misma será cancelada ¿Desea terminar la revisión?")
+                var opcion = confirm("Se le notificarán los comentarios introducidos al usuario de la institución correspondiente y estos ya no podrán modificarse o eliminarse ¿Desea terminar la revisión?")
+                //var opcion = confirm("Se le introdujeron nuevos comentarios a esta solicitud, la misma será cancelada ¿Desea terminar la revisión?")
                 break
         }
 
