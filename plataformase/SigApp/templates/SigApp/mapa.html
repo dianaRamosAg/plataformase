@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+
+  
+  <select class="col-12 mb-2" id="latitud" style="font-size: 18px;" hidden>
+    <option value="21.233">21.233</option>
+  </select>
+  <select class="col-12 mb-2" id="longitud" style="font-size: 18px;"  hidden>
+    <option value="35.135">sasa</option>
+           </select>         
+
+    <h3>My Google Maps Demo</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+<script>
+  var la = parseFloat(document.getElementById("latitud").value);
+  var ln = parseFloat(document.getElementById("longitud").value);
+  document.write(la);
+  document.write(ln);
+  console.log(ln, la);
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  var uluru = {
+      lat: la, lng: ln}; //AQUI REEMPLAZARIA CON LAS VARIABLES
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 4, center: uluru});
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({
+      position: uluru, 
+      map: map
+      });
+}
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4&callback=initMap">
+    </script>
+  </body>
+</html>

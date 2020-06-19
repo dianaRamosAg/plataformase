@@ -1,0 +1,124 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+    .texto{
+        font-family: "Montserrat", sans-serif;
+    }       
+    .centro{
+        text-align: center;
+    }       
+    .centroItem{
+        align-items: center;
+    }
+    a{
+        color: black;
+    }
+    a:hover{
+        color:grey;
+    }
+    .dm-uploader {
+	    border: 0.25rem dashed grey;
+	    text-align: center;
+    }
+    .dm-uploader.active {
+	    border-color: grey;
+	     border-style: solid;
+    }
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;   
+        cursor: inherit;
+        display: block;
+    }
+    </style>
+
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
+                
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                        Menú
+                    </a>
+                    <a href="/SigApp/selectInstitucion2/{{ user.id }}/" class="list-group-item list-group-item-action " tabindex="-1" aria-disabled="true">Mis Instituciones</a>
+                </div>
+                
+            </div>
+            {% if not clavect %}
+                <div class="col-9 col-sm-5 col-md-7 col-lg-7 col-xl-9" style="height: 40x;">
+                    <p style="font-size:20px; margin-bottom: 50px; margin-left: 35%; margin-top: 30%;">Aun no cuentas con Centros de Trabajos</p>
+                <div>   
+            {% else %}
+                <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
+                    <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;"><b>Listado de Centros de Trabajo</b></p>
+                    
+                    <div class="input-group left col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Buscar</span>
+                        </div>
+                        <input class="form-control" id="myInput" type="text" placeholder="...">
+                    </div>
+
+                    <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 1%;">
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th style="width: 1%" scope="col">Clave</th>
+                                    <th style="width: 35%" scope="col">Institución</th>
+                                    <th style="width: 25%" scope="col">Nombre del Director</th>
+                                    <th style="width: 2%" colspan="2">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTable">
+                                {% for inst in clavect %}
+                                    <tr> 
+                                        <td scope="row">{{ inst.cct }}</td>
+                                        <td scope="row">{{ inst.name }}</td>
+                                        <td scope="row"> {{ inst.director }}</td>
+                                        <td><a href="/SigApp/miInstitucion/{{ inst.cct }}/{{id_dep}}/" style="color:dodgerblue">Visualizar</a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+</body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+        });
+    </script>
+
+{% endblock %}
+</html>

@@ -3,7 +3,9 @@
 <!DOCTYPE html>
 <html>
 <body>
-    {% block content %}
+  {% block content %}
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
     <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
                 .texto{
@@ -29,21 +31,22 @@
         <div class="row bg-light m-2">
             <!--Nav bar izquierdo-->
             <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
-                <div class="row mt-4 ml-1">       
-                    <a href="/SigApp/perfilAdmin">Mi perfil </a>     	
+
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                        Menú
+                    </a>
+                    <a href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/" class="list-group-item list-group-item-action">Solicitudes de Modificación</a>
+                    <a href="/SigApp/listado_historial/" class="list-group-item list-group-item-action">Historial (Gral)</a>
+                    <a href="/SigApp/listado_historialEst/" class="list-group-item list-group-item-action">Historial (Estad)</a>
                 </div>
-                <div class="row mt-4 ml-1">
-                    <a href="/SigApp/modificacionesAdmin">Modificaciones</a> 
-                </div>
-                <div class="row mt-4 ml-1">
-                  <a href="/SigApp/registrosAdmin">Registros</a>
-                </div>
+
             </div>
             <div class="col-9 bg-light ml-1 mt-5" style="height: 40px;">
-                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Datos a modificar de la institución {{ nombreI }}</p>
+                <p style="font-size:20px; margin-bottom: 50px; margin-left: 150px;">Datos a modificar de la institución: <b>{{ nombreI }}</b></p>
                 
             <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%;">
-              <table class="table">
+              <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col"></th>
@@ -89,23 +92,88 @@
                   </tr>
                 </tbody>
               </table>
-              <form method="post">
-              <div style="text-align: right;">
+
+              <form method="post" id="form" name="form">
                 {% csrf_token %}
-                <input onclick="notificaAlta()" type="submit" class="btn btn-primary" value= "Aceptar">
-                <button class="btn btn-danger">Cancelar</button>
-                <!-- <button class="btn btn-info" onclick="window.history.go(-1);">Regresar</button> -->
-              </div>
-              </form>
+                <div style="text-align: left; padding: 2px; margin-bottom: 10%;">
+                  <div class="form-check" style="margin-top: 3%; margin-bottom: 2px;">
+                    <input onchange="showContent()" class="form-check-input" type="checkbox" name="defaultCheck1" id="defaultCheck1" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    <label class="form-check-label" for="defaultCheck1" style="font: italic;" >
+                      Quiero rechazar está información
+                    </label>
+                    <hr>
+                  </div> 
+                  <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                      <p class="" style="text-align: left; font-size: 15px; font-weight: bold;">Indique la razón para no modificar la información:</p>
+                      <textarea required minlength="5" type="text" id="razon" name="razon" rows="5" class="col-12 mb-4"  style="text-align: left; font-size: 15px; padding: 1%;" placeholder="Describa el motivo para rechazar esta modificación" ></textarea>
+                      <input onclick="a()" type="button" class="btn btn-secondary btn-lg btn-block" value="Rechazar"></input>
+                    </div>
+                  </div>
+                  {% comment %} por favor la longitud de este texto debe ser minimo 25 caracteres {% endcomment %}
+                
+                  <input onclick="a()" id="aceptar" type="button" class="btn btn-success btn-lg btn-block" value="Aceptar"></input>
+                  
+                </div>
+              </form>            
             </div>
             </div>
         </div>
     </div>
 </body>
 <script>
-   function notificaAlta(){
-     alert("¡La información se ha actualizado correctamente!");
-   }
+  
+  function a()
+  {
+    var a = document.forms["form"]["razon"].value;
+    check = document.getElementById("defaultCheck1");
+    if (check.checked){
+      if (a != "" ) {
+        if (confirm('¿Estas seguro de RECHAZAR este modificación?')){ 
+          alert("La información ha sido rechazada, se le notificara a la institución");
+          document.form.submit()
+        }
+      }else{
+        alert("Completa los campos!");
+      }
+              
+    }else{
+      if (confirm('¿Estas seguro de ACEPTAR este modificación?')){ 
+      alert("¡La información se ha actualizado correctamente!");
+      document.form.submit()
+      }
+    }
+  
+  }
+
+  function showContent() {
+    element = document.getElementById("aceptar");
+    check = document.getElementById("defaultCheck1");
+    if (check.checked) {
+        element.style.visibility = "hidden"
+      }else {
+        element.style.visibility = "visible"
+      }
+  }
+
+  
+
 </script>
 {% endblock %}
 </html>
+
+{% comment %} 
+  function confirmacion2(){
+    check = document.getElementById("defaultCheck1");
+    if (check.checked) {
+      if (confirm('¿Estas seguro de RECHAZAR este modificación?')){ 
+        document.form.submit()
+        alert("La información ha sido rechazada, se le notificara a la institución");
+      }
+    }else{
+      if (confirm('¿Estas seguro de ACEPTAR este modificación?')){ 
+        document.form.submit()
+        alert("¡La información se ha actualizado correctamente!");
+      }
+    }
+  }  {% endcomment %}

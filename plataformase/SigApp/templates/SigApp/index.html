@@ -21,6 +21,21 @@
 
 	<script type="text/javascript">
 
+		function infoInstitucion2(aInstitucion2){
+			var aInst = document.getElementById(aInstitucion2);
+			//var sInstitucion = document.getElementById('selectInstitucion');
+			var CCT = document.getElementById('inputCCT'); 
+			//var valueInstitucion = sInstitucion.value;
+			console.log(CCT);
+			if( CCT.value != ''){
+				console.log("/SigApp/localizarInst/"+CCT.value);
+				aInst.href = "/SigApp/localizarInst/"+CCT.value;
+				//aInst.href = "/SigApp/localizarInst/"+CCT.value+"/";	
+			}else{
+				alert("Introduce una Clave");	
+			}												 
+		};
+
 		function infoInstitucion(aInstitucion){
 			var aInst = document.getElementById(aInstitucion);
 			var sInstitucion = document.getElementById('selectInstitucion');
@@ -199,12 +214,11 @@ function updInstituciones(selectOrigen){
 
 	
 
-    <div class="container-fluid col-12 "  style="padding-top: 3%; background-image: url({% static 'SigApp/backgroundBlur.png' %})"; padding-top: 5%; padding-bottom: 5%">
+    <div class="container-fluid col-12 "  style="padding-top: 3%; background-image: url({% static 'SigApp/backgroundBlur.png' %}); padding-top: 5%; padding-bottom: 5%">
 		
 		<div class="container-fluid col-xl-7 col-lg-9 col-md-9 col-sm-10 col-xs-10" style="background-color: #FFFFFF;  border: solid 2px #000000; padding-bottom: 2%;">
-			
-					
-
+		
+		
 			<div class="row mt-3">				
 				<div class="centro texto col-12" style=" color: #707070; font-size: 158%;">
 					<p>INVESTIGA TU INSTITUCIÓN</p>
@@ -219,6 +233,19 @@ function updInstituciones(selectOrigen){
 				<div class="centro col-12">
 					<INPUT class="texto"  TYPE=text id="inputCCT" name="ClaveCentroTrabajo" value="" size="17" style="font-weight: bold; text-align: center;"/>	 					 
 				</div>
+
+				<div class="centro col-12">
+					{% for message in messages %}
+					<span class="badge badge-danger" style="margin-top: 20px; text-align: center;">{{ message }}</span> <br>
+					{% endfor  %}
+				</div>
+				<!-- {% if messages %}
+    				<ul class="messages">
+        				{% for message in messages %}
+        					<li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        				{% endfor %}
+    				</ul>    
+				{% endif %} -->
 
 			</div>
 
@@ -334,18 +361,16 @@ function updInstituciones(selectOrigen){
 			<!--*FIN COMBO ETIQUETA NOMBRE INSTITUCIÓN-->
 			<br>
 			<!--* ROW BOTONES*-->
+			
 			<div class="row">
 				<div class="centro col-6">
-					<button class="btn btn-secondary w-75" form="ConsultaInstitucion" value="Submit">Ubicar</button>
+					<a style="color: white;" class="btn btn-secondary w-75 " id="buscarInstitucion2" onclick="infoInstitucion2(this.id)" >Ubicar</a>
 				</div>
-
 				<div class="centro col-6">		
-					
-						<a style="color: white;" class="btn btn-secondary w-75 " id="buscarInstitucion" onclick="infoInstitucion(this.id)" >Buscar</a>
-					</button>
+					<a style="color: white;" class="btn btn-secondary w-75 " id="buscarInstitucion" onclick="infoInstitucion(this.id)" >Buscar</a>
 				</div>
 			</div>
-			<!--*FIN DEL ROW DE BOTONES UBICAR E INFORMACIÓN*-->
+				<!--*FIN DEL ROW DE BOTONES UBICAR E INFORMACIÓN*-->
       	</div>
 		<!--*FIN DEL CONTAINER PARA EL FORMULARIO *-->
 		  
