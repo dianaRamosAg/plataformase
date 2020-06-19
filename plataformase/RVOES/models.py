@@ -29,7 +29,6 @@ class Solicitud(models.Model):
     otro = models.TextField(blank=True, null=True)
     duracion = models.FloatField(blank=True, null=True)
     
-  #  etapa= models.IntegerField(blank=True, null=True, default=0)
     #Ambos tipos de persona
     identificacion = models.TextField(blank=True, null=True)#Tipo de identificación oficial (Ambos)
     folio_id = models.TextField(null=True, blank=True)#Número de folio de identificación oficial (Ambos)
