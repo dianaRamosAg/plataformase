@@ -135,7 +135,7 @@ class CMedSuperior(models.Model):
     id_solicitud = models.ForeignKey('Solicitud',
                                     on_delete=models.CASCADE,)
     pago = models.FileField(upload_to='Archivos/MedSuperior', blank=True, null=True, validators=[valid_extension])#Ubicación de archivo de pago
-    folio_pago = models.TextField(unique=True, default='0', blank=True, null=True)#Folio de pago no se puede repetir (incluido con los de superior)
+    folio_pago = models.TextField(default='0', blank=True, null=True)#Folio de pago no se puede repetir (incluido con los de superior)
     monto_pago = models.TextField(blank=True, null=True)#Monto de pago
     fecha_pago = models.DateField(blank=True, null=True, auto_now_add=False,)#Fecha en que se realizó el pagó
     solicitud = models.FileField(upload_to='Archivos/MedSuperior', validators=[valid_extension], default="")#Ubicación de archivo de solicitud
@@ -176,7 +176,7 @@ class CInstitucional(models.Model):
     id_solicitud = models.ForeignKey('Solicitud',
                                     on_delete=models.CASCADE,)
     solicitud = models.FileField(upload_to='Archivos/Institucional', validators=[valid_extension], blank=True, null=True, default="")#Ubicación de archivo de solicitud
-    folio_pago = models.TextField(unique=True, default='0', blank=True, null=True)#Folio de pago no se puede repetir (incluido con los de superior)
+    folio_pago = models.TextField(default='0', blank=True, null=True)#Folio de pago no se puede repetir (incluido con los de superior)
     monto_pago = models.TextField(blank=True, null=True)#Monto de pago
     fecha_pago = models.DateField(blank=True, null=True, auto_now_add=False,)#Fecha en que se realizó el pagó
     pago = models.FileField(upload_to='Archivos/Institucional', blank=True, null=True, validators=[valid_extension],)#Ubicación de archivo de pago

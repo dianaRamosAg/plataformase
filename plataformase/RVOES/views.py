@@ -657,6 +657,22 @@ def terminarSubArchivos(request, usuario, solicitud):
         if request.method == 'POST':#Si la solicitud es con el método POST
             request.POST._mutable = True#Permitimos la edición de lo que se recibe por el método POST
             IsLoSolicitud = Solicitud.objects.get(id=solicitud)#Solicitud que recibirá la actualización de documentos.
+            if IsLoSolicitud.completado > 9:
+                existPagoMed = CMedSuperior.objects.filter(folio_pago=request.POST["folio_pago"]).exists()#Retorna un valor booleando de si existe el valor de folio registrado en una solicitud de Media Superior
+                existPagoSup = CInstitucional.objects.filter(folio_pago=request.POST["folio_pago"]).exists()#Retorna un valor booleando de si existe el valor de folio registrado en una solicitud de Superior
+                if existPagoMed == True or existPagoSup == True:#Si ya se te tiene registrado el valor del folio volver a pedir los datos.
+                    if IsLoSolicitud.nivel == '1':#Si la solicitud es de nivel media superior
+                        return render(request, 'subirArchivosMedSup.html',
+                                    {'solicitud': sol,
+                                    'comentarios': comentario,
+                                    'coment': Coment,
+                                    'existPagoMed': existPagoMed})#Muestra la plantilla "subirArchivosMedSup.html", para que la instución actualice los archivos necesarios de la carpeta Media Superior.
+                    else:#Si la solicitud es de nivel superior
+                        return render(request, 'subirArchivosSup.html',
+                                    {'solicitud': sol,
+                                    'comentarios': comentario,
+                                    'coment': Coment,
+                                    'existPagoSup': existPagoSup})#Muestra la plantilla "subirArchivosSup.html", para que la instución actualice los archivos necesarios de las carpetas de Superior.
             Comenta = Comentarios.objects.filter(solicitud_id=solicitud, departamento=IsLoSolicitud.estatus)#Obtenemos los comentarios correspondientes a la solicitud y dadas por su departamento actual.
             comentario = ""#Inicializa variable "comentario" en vacío.
             for element in Comenta:#Ciclo que recorre todos los registros que se tienen en la variable "Coment"
@@ -1216,66 +1232,78 @@ def informacionPago(request, id):
         fecha = datetime.today().strftime('%Y-%m-%d')
         error = False
         if request.method == 'POST':
-            if solicitud.nivel == '1':
-                form = ActPagoMedSupForm(request.POST, request.FILES)
-                if form.is_valid():
-                    med = CMedSuperior.objects.get(id_solicitud=id)
-                    newMed = CMedSuperior(pago=request.FILES["pago"], solicitud=med.solicitud,
-                                          folio_pago=request.POST["folio_pago"], monto_pago=request.POST["monto_pago"],
-                                          fecha_pago=request.POST["fecha_pago"], id_solicitud=solicitud,
-                                          identificacion=med.identificacion,
-                                          perDocente=med.perDocente, instalaciones=med.instalaciones,
-                                          dictamen_suelo=med.dictamen_suelo, expediente_suelo=med.expediente_suelo,
-                                          fecha_suelo=med.fecha_suelo, firma_suelo=med.firma_suelo,
-                                          dictamen_estructural=med.dictamen_estructural,
-                                          fecha_estructural=med.fecha_estructural,
-                                          arqui_dictamen_estructural=med.arqui_dictamen_estructural,
-                                          noCedula_dictamen_estructural=med.noCedula_dictamen_estructural,
-                                          DRO_dictamen_estructural=med.DRO_dictamen_estructural,
-                                          dictamen_proteccion=med.dictamen_proteccion,
-                                          fecha_dictamen_proteccion=med.fecha_dictamen_proteccion,
-                                          firma_dictamen_proteccion=med.firma_dictamen_proteccion,
-                                          folio_inife=med.folio_inife, fecha_inife=med.fecha_inife,
-                                          firma_inife=med.firma_inife, equipamiento=med.equipamiento,
-                                          progEstuio=med.progEstuio, cifrhs=med.cifrhs, carta=med.carta)
-                    med.delete()
-                    newMed.save()
-                    actualizar2Fase(solicitud.id, request.user.id)
-                else:
-                    error = True
-                    return render(request, 'informacionPago.html', {'solicitud': solicitud,
-                                                                    'fecha': fecha, 'error': error})
-            if solicitud.nivel == '2':
-                form = ActPagoSupForm(request.POST, request.FILES)
-                if form.is_valid():
-                    inst = CInstitucional.objects.get(id_solicitud=id)
-                    newInst = CInstitucional(id_solicitud=solicitud, pago=request.FILES["pago"], solicitud=inst.solicitud,
-                                             folio_pago=request.POST["folio_pago"], monto_pago=request.POST["monto_pago"],
-                                             fecha_pago=request.POST["fecha_pago"],
-                                             acredita_personalidad=inst.acredita_personalidad,
-                                             acredita_inmueble=inst.acredita_inmueble, licencia_suelo=inst.licencia_suelo,
-                                             dictamen_suelo=inst.dictamen_suelo, expediente_suelo=inst.expediente_suelo,
-                                             fecha_suelo=inst.fecha_suelo, firma_suelo=inst.firma_suelo,
-                                             constancia_estructural=inst.constancia_estructural,
-                                             dictamen_estructural=inst.dictamen_estructural,
-                                             fecha_estructural=inst.fecha_estructural,
-                                             arqui_dictamen_estructural=inst.arqui_dictamen_estructural,
-                                             noCedula_dictamen_estructural=inst.noCedula_dictamen_estructural,
-                                             DRO_dictamen_estructural=inst.DRO_dictamen_estructural,
-                                             constancia_proteccion=inst.constancia_proteccion,
-                                             dictamen_proteccion=inst.dictamen_proteccion,
-                                             fecha_dictamen_proteccion=inst.fecha_dictamen_proteccion,
-                                             firma_dictamen_proteccion=inst.firma_dictamen_proteccion,
-                                             inife=inst.inife, folio_inife=inst.folio_inife, fecha_inife=inst.fecha_inife,
-                                             firma_inife=inst.firma_inife, des_instalacion=inst.des_instalacion,
-                                             planos=inst.planos, biblio=inst.biblio)
-                    inst.delete()
-                    newInst.save()
-                    actualizar2Fase(solicitud.id, request.user.id)
-                else:
-                    error = True
-                    return render(request, 'informacionPago.html', {'solicitud': solicitud,
-                                                                    'fecha': fecha, 'error': error})
+            existPagoMed = CMedSuperior.objects.filter(folio_pago=request.POST["folio_pago"]).exists()#Retorna un valor booleando de si existe el valor de folio registrado en una solicitud de Media Superior
+            existPagoSup = CInstitucional.objects.filter(folio_pago=request.POST["folio_pago"]).exists()#Retorna un valor booleando de si existe el valor de folio registrado en una solicitud de Superior
+            if existPagoMed == False and existPagoSup == False:#Si no se tiene  registrado el valor del folio en alguna solicitud...
+                if solicitud.nivel == '1':#Si la solicitud es de nivel Media Superior
+                    form = ActPagoMedSupForm(request.POST, request.FILES)#Creamos un formulario para validar
+                    if form.is_valid():#Si los datos del formulario son validos...
+                        med = CMedSuperior.objects.get(id_solicitud=id)#Obtenemos los datos de la solicitud
+                        #Generamos una nueva solicitud para actualizar los datos con los documentos
+                        newMed = CMedSuperior(pago=request.FILES["pago"], solicitud=med.solicitud,
+                                            folio_pago=request.POST["folio_pago"], monto_pago=request.POST["monto_pago"],
+                                            fecha_pago=request.POST["fecha_pago"], id_solicitud=solicitud,
+                                            identificacion=med.identificacion,
+                                            perDocente=med.perDocente, instalaciones=med.instalaciones,
+                                            dictamen_suelo=med.dictamen_suelo, expediente_suelo=med.expediente_suelo,
+                                            fecha_suelo=med.fecha_suelo, firma_suelo=med.firma_suelo,
+                                            dictamen_estructural=med.dictamen_estructural,
+                                            fecha_estructural=med.fecha_estructural,
+                                            arqui_dictamen_estructural=med.arqui_dictamen_estructural,
+                                            noCedula_dictamen_estructural=med.noCedula_dictamen_estructural,
+                                            DRO_dictamen_estructural=med.DRO_dictamen_estructural,
+                                            dictamen_proteccion=med.dictamen_proteccion,
+                                            fecha_dictamen_proteccion=med.fecha_dictamen_proteccion,
+                                            firma_dictamen_proteccion=med.firma_dictamen_proteccion,
+                                            folio_inife=med.folio_inife, fecha_inife=med.fecha_inife,
+                                            firma_inife=med.firma_inife, equipamiento=med.equipamiento,
+                                            progEstuio=med.progEstuio, cifrhs=med.cifrhs, carta=med.carta)
+                        med.delete()#Borramos la solicitud sin los datos de pago
+                        newMed.save()#Guardamos la solicitud con los datos anteriores y los nuevos datos de pago
+                        actualizar2Fase(solicitud.id, request.user.id)#Se actualiza la solicitud para que pase a la segunda etapa de revisión (en físico).-
+                    else:
+                        #Si el formulario no es valido, vuelve a pedir los datos de pago
+                        error = True
+                        return render(request, 'informacionPago.html', {'solicitud': solicitud,
+                                                                        'fecha': fecha, 'error': error})
+                if solicitud.nivel == '2':#Si la solicitud es de nivel superior
+                    form = ActPagoSupForm(request.POST, request.FILES)#Creamos el formulario para validar
+                    if form.is_valid():#Si los datos del formulario son validos.
+                        inst = CInstitucional.objects.get(id_solicitud=id)#Obtenemos los datos de la solicitud anterior
+                        #Generamos la nueva solicitud
+                        newInst = CInstitucional(id_solicitud=solicitud, pago=request.FILES["pago"], solicitud=inst.solicitud,
+                                                folio_pago=request.POST["folio_pago"], monto_pago=request.POST["monto_pago"],
+                                                fecha_pago=request.POST["fecha_pago"],
+                                                acredita_personalidad=inst.acredita_personalidad,
+                                                acredita_inmueble=inst.acredita_inmueble, licencia_suelo=inst.licencia_suelo,
+                                                dictamen_suelo=inst.dictamen_suelo, expediente_suelo=inst.expediente_suelo,
+                                                fecha_suelo=inst.fecha_suelo, firma_suelo=inst.firma_suelo,
+                                                constancia_estructural=inst.constancia_estructural,
+                                                dictamen_estructural=inst.dictamen_estructural,
+                                                fecha_estructural=inst.fecha_estructural,
+                                                arqui_dictamen_estructural=inst.arqui_dictamen_estructural,
+                                                noCedula_dictamen_estructural=inst.noCedula_dictamen_estructural,
+                                                DRO_dictamen_estructural=inst.DRO_dictamen_estructural,
+                                                constancia_proteccion=inst.constancia_proteccion,
+                                                dictamen_proteccion=inst.dictamen_proteccion,
+                                                fecha_dictamen_proteccion=inst.fecha_dictamen_proteccion,
+                                                firma_dictamen_proteccion=inst.firma_dictamen_proteccion,
+                                                inife=inst.inife, folio_inife=inst.folio_inife, fecha_inife=inst.fecha_inife,
+                                                firma_inife=inst.firma_inife, des_instalacion=inst.des_instalacion,
+                                                planos=inst.planos, biblio=inst.biblio)
+                        inst.delete()#Borramos la solicitud sin los datos de pago
+                        newInst.save()#Guardamos la solicitud con los datos anteriores y los nuevos datos de pago
+                        actualizar2Fase(solicitud.id, request.user.id)#Se actualiza la solicitud para que pase a la segunda etapa de revisión (en físico).
+                    else:
+                        #Si el formulario no es valido, vuelve a pedir los datos de pago
+                        error = True
+                        return render(request, 'informacionPago.html', {'solicitud': solicitud,
+                                                                        'fecha': fecha, 'error': error})
+            else:
+                #Si ya se tiene registrado el folio de pago, vuelve a pedir los datos de pago
+                error = True
+                return render(request, 'informacionPago.html', {'solicitud': solicitud,
+                                                                'fecha': fecha, 'error': error})
             return redirect('estado',request.user.id,'G')
         return render(request, 'informacionPago.html', {'solicitud': solicitud,
                                                         'fecha': fecha, 'error': error })
@@ -1498,6 +1526,13 @@ def revisionCInstitucional(request, solicitud):
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+        #Si existe algun comentario sin atender de la solicitud evita que esta sea revisada.
+        if Comentarios.objects.filter(solicitud=solicitud, atendida=False, mostrado='1').exists():
+            error = "Esta solicitud tiene comentarios por atender, favor de esperar a que sean resueltos."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
+        if Solicitud.objects.filter(id=solicitud, completado=9).exists():
+            error = "Esta solicitud está en proceso de realizar el pago, favor de esperar a que la información del pago sea añadida a la solicitud."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
         #Cuenta las notificaciones no leídas pertenecientes al usuario que hizo la solicitud.
         totalnotificaciones = Notificacion.objects.filter(leida='0',
                                                           tipo_notificacion='P',
@@ -1560,6 +1595,13 @@ def revisionCCurricular(request, solicitud):
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+        #Si existe algun comentario sin atender de la solicitud evita que esta sea revisada.
+        if Comentarios.objects.filter(solicitud=solicitud, atendida=False, mostrado='1').exists():
+            error = "Esta solicitud tiene comentarios por atender, favor de esperar a que sean resueltos."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
+        if Solicitud.objects.filter(id=solicitud, completado=9).exists():
+            error = "Esta solicitud está en proceso de realizar el pago, favor de esperar a que la información del pago sea añadida a la solicitud."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
         #Cuenta las notificaciones no leídas pertenecientes al usuario que hizo la solicitud.
         totalnotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='P',
                                                         usuario_id=request.user.id).count()
@@ -1607,6 +1649,13 @@ def revisionCAcademica(request, solicitud):
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+        #Si existe algun comentario sin atender de la solicitud evita que esta sea revisada.
+        if Comentarios.objects.filter(solicitud=solicitud, atendida=False, mostrado='1').exists():
+            error = "Esta solicitud tiene comentarios por atender, favor de esperar a que sean resueltos."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
+        if Solicitud.objects.filter(id=solicitud, completado=9).exists():
+            error = "Esta solicitud está en proceso de realizar el pago, favor de esperar a que la información del pago sea añadida a la solicitud."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
         #Cuenta las notificaciones no leídas pertenecientes al usuario que hizo la solicitud.
         totalnotificaciones = Notificacion.objects.filter(leida='0', tipo_notificacion='P',
                                                         usuario_id=request.user.id).count()
@@ -1667,6 +1716,13 @@ def revisionCMedSuperior(request, solicitud):
     -:return render 'errorRevision.html': Muestra a usuario el mensaje de error de que no puede revisar esa solicitud.
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+        #Si existe algun comentario sin atender de la solicitud evita que esta sea revisada.
+        if Comentarios.objects.filter(solicitud=solicitud, atendida=False, mostrado='1').exists():
+            error = "Esta solicitud tiene comentarios por atender, favor de esperar a que sean resueltos."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
+        if Solicitud.objects.filter(id=solicitud, completado=9).exists():
+            error = "Esta solicitud está en proceso de realizar el pago, favor de esperar a que la información del pago sea añadida a la solicitud."
+            return render(request, 'errorRevision.html', {"folio": solicitud, 'error':error})
         #Cuenta las notificaciones no leídas pertenecientes al usuario que hizo la solicitud.
         totalnotificaciones = Notificacion.objects.filter(leida='0',
                                                           tipo_notificacion='P',
@@ -1791,7 +1847,6 @@ def comentariosTerminado(request, solicitud):
 
         #   2. De tener comentarios le muestra los comentarios a la institución.
         if tieneComentariosPorMostrar:
-            print("Entró -> 2")
             #Obtenemos si la solicitud tiene comentarios (comentario=0: no tiene comentarios, comentario=1: tiene comentarios)
             solicitudes = Solicitud.objects.values_list('comentario').get(id=solicitud)[0]
             #Si la solicitud no tiene comentarios.

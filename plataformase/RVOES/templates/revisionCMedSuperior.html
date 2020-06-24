@@ -83,7 +83,7 @@
             <div class="card-body border border-dark text-center">
                 <form method="post" id="1_2" action="../comentarios/1_2/medSuperior">
                     {% csrf_token %}
-                    {% if "1_2" in comentarios %}
+                    {% if "1_2" in comentarios and completado == 10 and solicitud.estatus.id == 1 %}
                         <p class="card-text text-danger" >Recibo de pago<br>
                                 <small>*Este archivo tiene observaciones</small>
                         </p>
@@ -430,7 +430,7 @@
                                 <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false ){
                                 event.preventDefault();
                                 alert('¡ATENCIÓN!, la casilla de original y copia de Identificación no esta marcada, en caso de no haberlas entregado no puede continuar.\nSi fueron entregadas, favor de marcar la casilla.');
-                                }" > Entregó documentos</button>
+                                }"> Entregó documentos</button>
                             {% endif %}
                             {%if hayComentariosNoAtendidos == True %}
                                 <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
@@ -438,7 +438,10 @@
                         {% endif %}
                         {% if solicitud.customuser.tipo_persona == '2' %}
                             {% if hayComentariosNoAtendidos == False %}
-                                <button type="submit" class="btn btn-secondary" onclick =" if ( document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){ event.preventDefault(); alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');}" >Entregó documentos {% else %}</button>
+                                <button type="submit" class="btn btn-secondary" onclick =" if (document.getElementById('id_org_cop_identificacion').checked == false || document.getElementById('id_org_cop_acta').checked == false ){
+                                    event.preventDefault(); 
+                                    alert('¡ATENCIÓN!, Se debe presentar acta constitutiva, estatutos vigentes e identificación en original y copia, de lo contrario no puede continuar.\nSi fueron entregadas, favor de marcar las casillas correspondientes.');
+                                    }" >Entregó documentos</button>
                             {% endif %}
                             {%if hayComentariosNoAtendidos == True %}
                                 <button type="submit" class="btn btn-secondary" onclick ="" >Enviar comentarios</button>
@@ -490,10 +493,13 @@
     function aceptReject(){
         if (btnAceptReject.value=="True"){
             btnAceptReject.value = "False";
-            lbl_validar.innerHTML = "Rechazar solicitud"
+            lbl_validar.innerHTML = "Rechazar solicitud";
+            btnFinProcesoValidar.removeAttribute("class");
+            btnFinProcesoValidar.setAttribute("class", "btn btn-danger");
         }else{
             btnAceptReject.value = "True";
-            lbl_validar.innerHTML = "Aceptar solicitud"
+            lbl_validar.innerHTML = "Aceptar solicitud";
+            btnFinProcesoValidar.setAttribute("class", "btn btn-primary");
         }
     }
 
