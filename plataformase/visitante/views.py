@@ -18,11 +18,14 @@ def menuparticular(request):
     return render(request,'menuparticular.html')
 
 def menuadmin(request):
-    NumSolicitudes = VisitanteSC.objects.filter(leida='0').count()
-    if NumSolicitudes>0:
-       return render(request, 'menuadmin.html', {"numSol": NumSolicitudes})
+    if request.user.tipo_usuario == '4':
+        NumSolicitudes = VisitanteSC.objects.filter(leida='0').count()
+        if NumSolicitudes>0:
+            return render(request, 'menuadmin.html', {"numSol": NumSolicitudes})
+        else:
+             return render(request,'menuadmin.html')
     else:
-        return render(request,'menuadmin.html')
+        return redirect('perfil')
 
 def menudepartamento(request):
     if request.user.departamento_id == '1':

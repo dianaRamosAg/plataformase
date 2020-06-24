@@ -100,6 +100,7 @@ else:
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
             'PASSWORD' : 'diana',
+            #'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
             'PORT'    : '5432',
             #'PORT'     : '3306',
