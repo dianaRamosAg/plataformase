@@ -11,9 +11,11 @@
             <p class="card-text">
                 La solicitud {{ folio }} no puede ser revisada por su departamento.
             </p>
-            <p>
-                Es probable que aún no le toque revisarla o que ya la haya revisado antes.
-            </p>
+            <p>{% if not error %}
+                Es probable que aún no le toque revisarla o que ya la haya revisado antes.    
+            {% else %}
+                {{error}}
+            {% endif %}</p>
             <a href="{% url 'admin' %}" class="card-link">Regresar</a>
         </div>
     </div>

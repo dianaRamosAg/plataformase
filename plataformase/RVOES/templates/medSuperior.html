@@ -22,7 +22,18 @@
                     <h4 class="">Solo son validos los archivos PDF</h4>
                     <form method="post" enctype="multipart/form-data" id="formulario">
                         {% csrf_token %}
-
+                        
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="col-md-12 mt-2">
+                                <div class="alert alertt-danger w-25">
+                                    <label>{{ error }}</label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
                         <div class="form-group custom-file p-3 mt-2" >
                             <label class="font-weight-bold" for="id_solicitud" id="lblsolicitud">Solicitud de Reconocimiento de Validez Oficial de Estudios del Tipo Media Superior</label>
                             <br><small>Recuerde que en este archivo debe incluir la misma información que introdujo anteriormente.</small>
@@ -475,7 +486,7 @@
 
     function ocultarProgEstudio(){
         document.getElementById('id_progEstuio').style.display = 'none';
-        document.getElementById("id_progEstuio").setAttribute("required", "false");
+        document.getElementById("id_progEstuio").removeAttribute("required");
     }
 
 </script>

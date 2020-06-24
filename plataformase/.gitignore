@@ -1,2 +1,6 @@
 /media/
 *.pyc
+
+*/migrations/
+*/__pycache__/
+/env/
