@@ -328,14 +328,11 @@ def SInstitucional(request):
             folioPago = CMedSuperior.objects.filter(folio_pago=request.POST["folio_pago"]).exists()
             if folioPago:#Si existe, se borra para marcar que el folio es inválido, ya que este no se puede repetir.
                 request.POST["folio_pago"] = None
-                print("pago existe")
             '''
             form = ArchivosInstForm(request.POST, request.FILES)#Se añaden los archivos y los campos de texto ingresados al sistema
             if form.is_valid():#Si el formulario es válido, lo guarda en la base de datos y redirige a la siguiente vista para que guarde los archivos de la siguente carpeta
-                print("formulario valido")
                 form.save()
                 return redirect('curricularSup')#Redirige a la URL con nombre "curricularSup"
-            print("formulario no valido")
         else:#Si el request no fue realizado con el método POST
             form = ArchivosInstForm()#Se crea el formulario de la información requerida según el modelo "CInstitucional"
             id_solicitud = Solicitud.objects.values_list('id').order_by('id').last()[0]#Se obtiene el ID de la ultima solicitud ingresada.
@@ -1223,6 +1220,13 @@ def terminarSubArchivos(request, usuario, solicitud):
         return redirect('perfil')
 
 def informacionPago(request, id):
+    """Actualiza la información sobre el pago correspondiente a la solicitud.
+    Parámetros
+    -:param request: Contiene información del navegador del usuario esta realizando la petición.
+    -:param id: Contiene el ID de la solicitud de la que se va a actualizar la información de pago.
+    Retorna
+    -:return: regresa la vista para que la institución pueda hacer el añadido de la información y cuando se carga se redirige a la vista de historial de solicitud.
+    """
     if request.user.tipo_usuario == '1' or request.user.tipo_usuario == '5':
         # Activando esta opción podremos editar los datos que vienen del método POST
         #request.POST._mutable = True
@@ -1310,6 +1314,11 @@ def informacionPago(request, id):
     return redirect('perfil')
 
 def actualizar2Fase(solicitud, user):
+    """Actualiza es estado de la solicitud para que pase al proceso de revisión en físico
+    Parámetros
+    -:param request: Contiene información del navegador del usuario esta realizando la petición.
+    -:param user: Contiene el ID del usuario del jefe del departamento
+    """
     import datetime
     # Si ya se registro el pago, pasa a la revisión de la segunda fase
     # Si anteriomente fue revisado por el ultimo departamento, le toca a control escolar recibir documentos
@@ -2050,7 +2059,6 @@ def entregoDocumentosFisicos(request, solicitud):
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
         if request.POST["hayComentariosNoAtendidos"] == 'True':
-            print("Entró")
             return comentariosTerminado(request, solicitud)
         else:
             import datetime
@@ -2115,7 +2123,7 @@ def entregoDocumentosFisicos(request, solicitud):
         return redirect('perfil')
 
 def finProceso(request, solicitud):
-    """Define que el proceso digital a terminado.
+    """Se utiliza para encaminar el fin del proceso en la plataforma.
     Parámetros
     -:param request: Contiene información del navegador del usuario que está realizando la petición.
     -:param solicitud: Contiene el ID de la solicitud la cual se quiere revisar.
@@ -2124,109 +2132,55 @@ def finProceso(request, solicitud):
     """
     if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
         import datetime
+        #Obtenemos información de la solicitud
         sol = Solicitud.objects.get(id=solicitud)
+        #Si la solicitud esta en el nivel
         if sol.estatus.id == 4 or sol.estatus.id == 3:
+            #Si en el request hay archivos
             if request.FILES:
+                #Actualizamos el archivo subido del nivel
                 archivoNivel = request.FILES["archivoNivel"]
                 sol = Solicitud.objects.get(id=solicitud)
                 sol.archivoNivel.delete()
                 sol.archivoNivel = archivoNivel
                 sol.save()
+            #Si el nivel es Media Superior asignamos la variable
             if sol.nivel == '1':
                 nivel = "Media Superior"
+            #Si el nivel es Superior asignamos la variable
             else:
                 nivel = "Superior"
+            #Actualiza el estatus de la solicitud al departamento de dirección y se establece completado 11
             Solicitud.objects.filter(id=solicitud).update(completado=11, estatus=2)
+            #Se crea la notificación a la institución de que la solicitud esta en proceso de validación
             notif = Notificacion(solicitud=sol, leida=0, fechaNotificacion=datetime.datetime.now(),
                          descripcion="Su solicitud esta en proceso de validación de turno.",
                          tipo_notificacion='H', usuario=sol.customuser)
             notif.save()
+            #Se registra la actividad de que el nivel que ya ha subido el archivo de validación
             act = Actividades(usuario=request.user, fecha=datetime.datetime.now(), solicitud=sol,
                         descripcion="El nivel "+nivel+" ha subido el archivo validando el turno")
             act.save()
+        #Si la solicitud se encuentra en el departamento de dirección
         if sol.estatus.id == 2:
-            print(request.POST["archivoNivel"])
+            #Obtenemos si el valor de aceptado.
             valor = request.POST["archivoNivel"]
+            #Si es True se establece la variable como True
             if valor == "True":
                 aceptArchivoNivel = True
             else:
                 aceptArchivoNivel = False
+            #Actualiza la solicitud a fin de proceso en el sistema y se envia el estatus a ventanilla única
             Solicitud.objects.filter(id=solicitud).update(completado=12, estatus=1, aceptArchivoNivel=aceptArchivoNivel)
+            #Se le notifica a la institución que se diriga a ventanilla única por el resultado
             notif = Notificacion(solicitud=sol, leida=0, fechaNotificacion=datetime.datetime.now(),
                          descripcion="Su solicitud ya fue procesada por los departamentos, favor de dirigirse a Ventanilla única para saber la conclusión de su solicitud",
                          tipo_notificacion='H', usuario=sol.customuser)
             notif.save()
+            #Se le registra la actividad de que dirección que ya ha validado el turno.
             act = Actividades(usuario=request.user, fecha=datetime.datetime.now(), solicitud=sol,
                         descripcion="Dirección a ratificado el turno.")
             act.save()
         return redirect('admin')
-        '''
-        #Obtenemos la observación realizada por la visita
-        observacion = request.POST["observacionesVisita"]
-        if observacion == "":
-            #Actualiza el estado de la solicitud para decir que ya ha terminado el proceso digital (completado:11)
-            Solicitud.objects.filter(id=solicitud).update(completado=11)
-            #Registra la actividad de que el proceso digital de la solicitud ya ha terminado.
-            actividad = Actividades(usuario_id=request.user.id,
-                                    descripcion='La solicitud ' + solicitud + 'ha completado el proceso digital',
-                                    fecha=datetime.datetime.now(),
-                                    solicitud_id=solicitud)
-            actividad.save()
-            #Obtiene el usuario de institución correspondiente a la solicitud.
-            usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]
-            #Registra la notificación para la institución, de que que su solicitud ha terminado el proceso digital.
-            notificacionA = Notificacion(solicitud_id=solicitud,
-                                        descripcion="La solicitud " + solicitud + " ha completado su proceso de revisión digital. "
-                                                                                "Ahora comience el proceso en físico",
-                                        leida='0',
-                                        fechaNotificacion=datetime.datetime.now(),
-                                        tipo_notificacion='H',
-                                        usuario_id=usuario)
-            notificacionA.save()
-            #Se obtienen los usuarios de todo el personal de todos los departamentos.
-            usuariosDep = CustomUser.objects.exclude(departamento_id=None)
-            #Registra la notificación de que la solicitud ha completado el proceso digital.
-            for element in usuariosDep:
-                notificacionB = Notificacion(solicitud_id=solicitud,
-                                            descripcion="La solicitud " + solicitud + " ha completado su proceso de revisión digital",
-                                            leida='0',
-                                            fechaNotificacion=datetime.datetime.now(),
-                                            tipo_notificacion='P',
-                                            usuario_id=element.id)
-                notificacionB.save()
-            return redirect('admin')
-        else:
-            #Actualiza el estado de la solicitud para decir que fue cancelada por incumplimiento de la solicitud
-            Solicitud.objects.filter(id=solicitud).update(completado=-1)
-            #Registra la actividad de que el proceso digital de la solicitud ya ha terminado.
-            actividad = Actividades(usuario_id=request.user.id,
-                                    descripcion='La solicitud ' + solicitud + ' ha sido rechazada por incumplimiento en la visita de la institución',
-                                    fecha=datetime.datetime.now(),
-                                    solicitud_id=solicitud)
-            actividad.save()
-            #Obtiene el usuario de institución correspondiente a la solicitud.
-            usuario = Solicitud.objects.values_list('customuser_id').get(id=solicitud)[0]
-            #Registra la notificación para la institución, de que que su solicitud ha terminado el proceso digital.
-            notificacionA = Notificacion(solicitud_id=solicitud,
-                                        descripcion="La solicitud " + solicitud + " ha sido rechazada por incumplimiento en la visita de la institución. "
-                                                                                "("+observacion+")",
-                                        leida='0',
-                                        fechaNotificacion=datetime.datetime.now(),
-                                        tipo_notificacion='H',
-                                        usuario_id=usuario)
-            notificacionA.save()
-            #Se obtienen los usuarios de todo el personal de todos los departamentos.
-            usuariosDep = CustomUser.objects.exclude(departamento_id=None)
-            #Registra la notificación de que la solicitud ha completado el proceso digital.
-            for element in usuariosDep:
-                notificacionB = Notificacion(solicitud_id=solicitud,
-                                            descripcion="La solicitud " + solicitud + " ha sido rechazada por incumplimiento en la visita de la institución",
-                                            leida='0',
-                                            fechaNotificacion=datetime.datetime.now(),
-                                            tipo_notificacion='P',
-                                            usuario_id=element.id)
-                notificacionB.save()
-            return redirect('admin')
-        '''
     else:
         return redirect('perfil')
