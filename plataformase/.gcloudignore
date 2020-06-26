@@ -17,5 +17,5 @@
 __pycache__/
 # Ignored by the build system
 /setup.cfg
-/plataformase/env/
-/plataformase/TBC/
+/env/
+/TBC/
