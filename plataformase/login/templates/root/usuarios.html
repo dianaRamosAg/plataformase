@@ -88,10 +88,16 @@
                             <label>Particular</label>
                         {% endif %}
                     </td>
+                    {% if element.tipo_usuario != '1' and element.tipo_usuario != '5'  %}
                     <td>
-                        <button type="button" data-toggle="modal" href="">Editar</button>
-                           
-                        </td>
+                        <button type="button" data-toggle="modal" href="">Permisos</button>   
+                    </td>
+                    {% endif %}
+                    {% if element.tipo_usuario == '1' or element.tipo_usuario == '5'  %}
+                    <td>
+                        <button type="button" data-toggle="modal" href="">No aplica</button>   
+                    </td>
+                    {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>

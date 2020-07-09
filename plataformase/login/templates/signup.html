@@ -295,14 +295,18 @@
         function pmoral(){
             var per = document.getElementById('id_tipo_persona');
             var usr = document.getElementById('id_tipo_usuario');
-            if(usr.value == '1' || per.value == '5')
+            if(usr.value == '1' || usr.value == '5')
             {
                 document.getElementById('ip').style.display = 'inline';
 
                 if (per.value == '1'){
                 document.getElementById('moral').style.display = 'none';
                 document.getElementById('id_dom_legal_part').removeAttribute("required");
+            
                 document.getElementById('id_nombre_representante').removeAttribute("required");
+
+                }
+                if (per.value == '5'){
 
                 }
             }

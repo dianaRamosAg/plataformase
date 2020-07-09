@@ -196,9 +196,7 @@ def regUser(request, email):
                          municipio=usrV.municipio, colonia=usrV.colonia, celular=usrV.celular,
                          tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona)
         usr.save()
-        email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
-        email.send()
-        
+
         #send_mail('Subject here', 'Here is the message.', 'sigssemssicyt@gmail.com', ['dianalaura.lee@gmail.com'], fail_silently=False)
         if usrV.tipo_usuario == '1':
             customUsr = CustomUser.objects.get(id=usr.id)
@@ -206,6 +204,8 @@ def regUser(request, email):
                                          sector=usrV.sector, nivel_educativo=usrV.nivel_educativo,modalidad=usrV.modalidad)
             usrInst.save()
     VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
+    email.send()
     return redirect('usuarios')
 
 
@@ -214,9 +214,9 @@ def regUser(request, email):
 def cancelarsolicitud(request,email2,email):
     # vs=VisitanteSC.objects.get(email = email2)
     usrV = VisitanteSC.objects.get(email=email)
-    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta NO ha sido aceptada, Usuario: '+usrV.email+". Ante cuanlquier duda, comuniquese  a  SSEMSSYCyT", to=[usrV.email])
+    VisitanteSC.objects.filter(email=email2).delete()
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta NO ha sido aceptada, Usuario: '+usrV.email+". Ante cualquier duda, comuniquese  a  SSEMSSYCyT", to=[usrV.email])
     email.send()
-    VisitanteSC.objects.filter(email=email2,leida='0').update(leida='1')
     return redirect('notificacionsc')
 
 #Actualizar datos de los usuarios
@@ -251,7 +251,7 @@ def actualizarperfilusr(request):
             nombre_representante = None
             dom_legal_part = None
 
-
+        
         email = request.POST["email"]
         curp_rfc = request.POST["curp_rfc"]
         calle = request.POST["calle"]
