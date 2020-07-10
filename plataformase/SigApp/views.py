@@ -697,7 +697,7 @@ def selectInstitucion(request,id):
 
         except EscuelaC.DoesNotExist:
 
-            clavect.append({'cct': c.cct,'name': "Aviso! Este centro de trabajo no esta disponible para modificar su información", 'director': "Favor de consultar al administrador"})
+            clavect.append({'cct': c.cct,'name': "Aviso! Este centro de trabajo no se encuentra registrado y no esta disponible para modificar su información", 'director': "Favor de consultar al administrador"})
 
     print(clavect)
 
@@ -814,7 +814,7 @@ def miInstitucion(request, id, id_dep):
                 clavect.append({'cct': c.cct,'name': Escuela.NombreEscuela, 'director': Escuela.nombreDirector})
             
             except EscuelaC.DoesNotExist:
-                clavect.append({'cct': c.cct,'name': "Aviso! Este centro de trabajo no esta disponible para modificar su información", 'director': "Favor de consultar al administrador"})
+                clavect.append({'cct': c.cct,'name': "Aviso! Este centro de trabajo no se encuentra registrado y no esta disponible para modificar su información", 'director': "Favor de consultar al administrador"})
             
         print(clavect)
 
