@@ -20,7 +20,7 @@
                     <th class="" scope="col">Jefe</th>
                     <th class="" scope="col">Activo</th>
                     <th class="" scope="col">Tipo de usuario</th>
-                    <th class="" scope="col">Acciones</th>
+                    <th class="" scope="col">Permisos</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,12 +90,12 @@
                     </td>
                     {% if element.tipo_usuario != '1' and element.tipo_usuario != '5'  %}
                     <td>
-                        <button type="button" data-toggle="modal" href="">Permisos</button>   
+                        <button type="button" style="border-style: solid; border-color: lightgray;"  href="">Cambiar</button>   
                     </td>
                     {% endif %}
                     {% if element.tipo_usuario == '1' or element.tipo_usuario == '5'  %}
                     <td>
-                        <button type="button" data-toggle="modal" href="">No aplica</button>   
+                        <button type="button" style="border-style: none;" href=""></button>   
                     </td>
                     {% endif %}
                     </tr>
