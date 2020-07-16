@@ -129,7 +129,7 @@
       <!---->
       <!--Opción del Departamento-->
       <ul class="texto nav navbar-nav navbar-right">
-        {% if user.tipo_usuario == "3"%}
+        {% if user.tipo_usuario == "3" or user.tipo_usuario == "2"%}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
               Hola, Departamento {{ user.first_name }} {{ user.last_name }}

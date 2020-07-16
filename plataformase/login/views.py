@@ -245,7 +245,7 @@ def usuarios(request):
     Retorna
     -:return render: Regresa la vista en la cual el usuario podrá actualizar el estatus de los usuarios.
     """
-    usuarios = CustomUser.objects.all()
+    usuarios = CustomUser.objects.filter(is_active=True)
     return render(request, 'root/usuarios.html', {'usuarios': usuarios })
 
 

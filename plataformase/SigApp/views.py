@@ -689,14 +689,17 @@ def detalle(request,idr,inst):
 def selectInstitucion(request,id):
 
     queryset = UsuarioInstitucion.objects.filter(id_usuariobase_id=id) #1
-    
     clavect = []
     for c in queryset:
-        Escuela = EscuelaC.objects.get(ClaveEscuela=c.cct)
-        clavect.append({'cct': c.cct,'name': Escuela.NombreEscuela, 'director': Escuela.nombreDirector})
+        try:
+            Escuela = EscuelaC.objects.get(ClaveEscuela=c.cct)
+            clavect.append({'cct': c.cct,'name': Escuela.NombreEscuela, 'director': Escuela.nombreDirector})
+
+        except EscuelaC.DoesNotExist:
+
+            clavect.append({'cct': c.cct,'name': "Aviso! Este centro de trabajo no se encuentra registrado y no esta disponible para modificar su información", 'director': "Favor de consultar al administrador"})
 
     print(clavect)
-
 
     return render(request,'SigApp/selectInstitucion2.html',{
         "clavect":clavect,
@@ -806,8 +809,13 @@ def miInstitucion(request, id, id_dep):
         
         clavect = []
         for c in queryset:
-            Escuela = EscuelaC.objects.get(ClaveEscuela=c.cct)
-            clavect.append({'cct': c.cct,'name': Escuela.NombreEscuela, 'director': Escuela.nombreDirector})
+            try:
+                Escuela = EscuelaC.objects.get(ClaveEscuela=c.cct)
+                clavect.append({'cct': c.cct,'name': Escuela.NombreEscuela, 'director': Escuela.nombreDirector})
+            
+            except EscuelaC.DoesNotExist:
+                clavect.append({'cct': c.cct,'name': "Aviso! Este centro de trabajo no se encuentra registrado y no esta disponible para modificar su información", 'director': "Favor de consultar al administrador"})
+            
         print(clavect)
 
         return render(request,'SigApp/selectInstitucion2.html',{

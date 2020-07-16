@@ -30,7 +30,7 @@
     <link href="{% static '/css/demo.css' %}" rel="stylesheet" />
 </head>
 
-<body>
+<body onload="jefes()">
 	<div class="image-container set-full-height" style="background-image: url({% static '/img/tres.jpg'%})">
     
         <nav>
@@ -48,7 +48,7 @@
 		            <!--      Wizard container        -->
 		            <div class="wizard-container">
 		                <div class="card wizard-card" data-color="green" id="wizardProfile">
-							<form action="../actualizarperfilusr/" method="POST">
+							<form action="../actualizarperfilusr/" method="POST" enctype="multipart/form-data" >
 								{% csrf_token %}
 		                <!--        You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue"       -->
 
@@ -125,7 +125,14 @@
 		                                	</div>
 		                            	</div>
 		                            </div>
-		                            
+									<!---------------FIRMA DIGITAL PARA JEFES---------------------->
+									<div class="col-sm-10 col-sm-offset-1" style="text-align:left; display: none;" id="firma"  >
+										<br>
+										<label class="" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital :</label>
+										   <input id="id_firma" type="file"  name="firma_digital" style=" float:left; margin-left: 40px;"><br>
+									<br><br>
+								  </div>
+									<!-------------------------------------------------------------------------------->
 		                            <div class="tab-pane" id="address">
 		                                <div class="row">
 		                                    <div class="col-sm-12">
@@ -208,6 +215,18 @@
 	    </div> <!--  big container -->
 
 	 
+<script type="text/javascript">
+function jefes (){
+	tipoUsr = "{{request.user.tipo_usuario}}";
+	if(tipoUsr=='2'){
+		document.getElementById("firma").style.display = 'inline';
+	}
+	else{
+		document.getElementById("firma").style.display = 'none';
+	}
+
+}
+</script>
 
 </body>
 	<!--   Core JS Files   -->

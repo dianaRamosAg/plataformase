@@ -10,6 +10,11 @@
     <br><br><br><br>
     <h2>Estatus de usuarios</h2>
     <br>
+    
+    <button class="btn btn-secondary" onclick="verTodos();">Todos</button>
+    <button class="btn btn-secondary" onclick="verDepto();">Departamentos</button>
+    <button class="btn btn-secondary" onclick="verInstituciones();">Instituciones</button>
+
     <div class="m-5 col-10 mx-auto responsive">
         <table class="table table-hover table-striped" style="width: 90%; text-align:center; margin: 0 auto;">
             <thead class="thead-dark">
@@ -23,10 +28,10 @@
                     <th class="" scope="col">Permisos</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="todos" style="display: none;">
                 {% for element in usuarios %}
                 <!-- {{ forloop.counter }} -->
-                    <tr onclick="editarUsuario(this.id)" id="row{{forloop.counter}}">
+                    <tr  id="row{{forloop.counter}}">
                         <td class="" id="{{ element.username }}">{{ element.username }}</td>
                         <td class="">
                             {{ element.first_name }}
@@ -49,10 +54,10 @@
                                 No aplica
                             {% endif %}
                         </td>
-                        <td class="">
-                            <div class="custom-control custom-switch">
+                        <td class="" aria-disabled="true">
+                            <div class="custom-control custom-switch" >
                                 {% if element.jefe == '1' %}
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"checked>
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"checked disabled>
                                     <label class="custom-control-label" for="customSwitch1">Sí</label>
                                 {% else %}
                                     <input type="checkbox" class="custom-control-input" id="customSwitch1" >
@@ -90,7 +95,7 @@
                     </td>
                     {% if element.tipo_usuario != '1' and element.tipo_usuario != '5'  %}
                     <td>
-                        <button type="button" style="border-style: solid; border-color: lightgray;"  href="">Cambiar</button>   
+                        <button type="button" style="border-style: solid; border-color: lightgray;"  onclick="editarUsuario(this.id)" id="row{{forloop.counter}}">Cambiar</button>   
                     </td>
                     {% endif %}
                     {% if element.tipo_usuario == '1' or element.tipo_usuario == '5'  %}
@@ -101,6 +106,173 @@
                     </tr>
                 {% endfor %}
             </tbody>
+    <!--------------------------------------------------------------------------------->
+
+            <tbody id="instituciones" style="display:none;">
+                {% for element in usuarios %}
+                {% if element.tipo_usuario == '1' %}
+                <!-- {{ forloop.counter }} -->
+                    <tr  id="row{{forloop.counter}}">
+                        <td class="" id="{{ element.username }}">{{ element.username }}</td>
+                        <td class="">
+                            {{ element.first_name }}
+                            {{ element.last_name }}
+                        </td>
+                        <td class="">
+                            {% if element.departamento_id == 1 %}
+                                Control Escolar
+                            {% endif %}
+                            {% if element.departamento_id == 2 %}
+                                Dirección
+                            {% endif %}
+                            {% if element.departamento_id == 3 %}
+                                Superior
+                            {% endif %}
+                            {% if element.departamento_id == 4 %}
+                                Media Superior
+                            {% endif %}
+                            {% if element.departamento_id == None %}
+                                No aplica
+                            {% endif %}
+                        </td>
+                        <td class="" aria-disabled="true">
+                            <div class="custom-control custom-switch" >
+                                {% if element.jefe == '1' %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"checked disabled>
+                                    <label class="custom-control-label" for="customSwitch1">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" >
+                                    <label class="custom-control-label" for="customSwitch1">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="">
+                            <div class="custom-control custom-switch">
+                                {% if element.is_active %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2"checked>
+                                    <label class="custom-control-label" for="customSwitch2">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2" >
+                                    <label class="custom-control-label" for="customSwitch2">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                    <td>
+                        {% if element.tipo_usuario == '1' %}
+                            <label>Institución</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '2' %}
+                            <label>Jefe de departamento</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '3' %}
+                            <label>Subordinado de departamento</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '4' %}
+                            <label>Administrador de sitio</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '5' %}
+                            <label>Particular</label>
+                        {% endif %}
+                    </td>
+                    {% if element.tipo_usuario != '1' and element.tipo_usuario != '5'  %}
+                    <td>
+                        <button type="button" style="border-style: solid; border-color: lightgray;"  onclick="editarUsuario(this.id)" id="row{{forloop.counter}}">Cambiar</button>   
+                    </td>
+                    {% endif %}
+                    {% if element.tipo_usuario == '1' or element.tipo_usuario == '5'  %}
+                    <td>
+                        <button type="button" style="border-style: none;" href=""></button>   
+                    </td>
+                    {% endif %}
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+            <!------------------------------------------------------------------------------->
+   <tbody id="departamentos">
+                {% for element in usuarios %}
+                {% if element.tipo_usuario == '2' or element.tipo_usuario == '3'  %}
+                <!-- {{ forloop.counter }} -->
+                    <tr  id="row{{forloop.counter}}">
+                        <td class="" id="{{ element.username }}">{{ element.username }}</td>
+                        <td class="">
+                            {{ element.first_name }}
+                            {{ element.last_name }}
+                        </td>
+                        <td class="">
+                            {% if element.departamento_id == 1 %}
+                                Control Escolar
+                            {% endif %}
+                            {% if element.departamento_id == 2 %}
+                                Dirección
+                            {% endif %}
+                            {% if element.departamento_id == 3 %}
+                                Superior
+                            {% endif %}
+                            {% if element.departamento_id == 4 %}
+                                Media Superior
+                            {% endif %}
+                            {% if element.departamento_id == None %}
+                                No aplica
+                            {% endif %}
+                        </td>
+                        <td class="" aria-disabled="true">
+                            <div class="custom-control custom-switch" >
+                                {% if element.jefe == '1' %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1"checked disabled>
+                                    <label class="custom-control-label" for="customSwitch1">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1" >
+                                    <label class="custom-control-label" for="customSwitch1">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="">
+                            <div class="custom-control custom-switch">
+                                {% if element.is_active %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2"checked>
+                                    <label class="custom-control-label" for="customSwitch2">Sí</label>
+                                {% else %}
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2" >
+                                    <label class="custom-control-label" for="customSwitch2">No</label>
+                                {% endif %}
+                            </div>
+                        </td>
+                    <td>
+                        {% if element.tipo_usuario == '1' %}
+                            <label>Institución</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '2' %}
+                            <label>Jefe de departamento</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '3' %}
+                            <label>Subordinado de departamento</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '4' %}
+                            <label>Administrador de sitio</label>
+                        {% endif %}
+                        {% if element.tipo_usuario == '5' %}
+                            <label>Particular</label>
+                        {% endif %}
+                    </td>
+                    {% if element.tipo_usuario != '1' and element.tipo_usuario != '5'  %}
+                    <td>
+                        <button type="button" style="border-style: solid; border-color: lightgray;"  onclick="editarUsuario(this.id)" id="row{{forloop.counter}}">Cambiar</button>   
+                    </td>
+                    {% endif %}
+                    {% if element.tipo_usuario == '1' or element.tipo_usuario == '5'  %}
+                    <td>
+                        <button type="button" style="border-style: none;" href=""></button>   
+                    </td>
+                    {% endif %}
+                    </tr>
+                    
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+  
+
+
         </table>
     </div>
     <a class="btn btn-primary" href="{% url 'menuadmin' %}">Regresar</a>
@@ -115,6 +287,22 @@
         // console.log("correo : "+usr);
         window.location="editar/"+usr;
     };
+
+    function verInstituciones(){
+        document.getElementById('instituciones').style.display = '';
+        document.getElementById('departamentos').style.display = 'none';
+        document.getElementById('todos').style.display = 'none';
+    }
+    function verTodos(){
+        document.getElementById('todos').style.display = '';
+        document.getElementById('departamentos').style.display = 'none';
+        document.getElementById('instituciones').style.display = 'none';
+    }
+    function verDepto(){
+        document.getElementById('departamentos').style.display = '';
+        document.getElementById('todos').style.display = 'none';
+        document.getElementById('instituciones').style.display = 'none';
+    }
   </script>
 
 {% endblock %}

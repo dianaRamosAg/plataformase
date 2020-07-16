@@ -106,7 +106,8 @@ else:
         }
     }
 
-    
+#Conexión con   Proxy para cloud
+#cloud_sql_proxy.exe -instances="plataformase:us-west2:plataforma"=tcp:3306
 
 
 # Password validation
@@ -160,6 +161,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'SETyRS/static'),
 ]
 
+# Bucket de google cloud plattform 
+ 
 if os.getenv('GAE_APPLICATION', None):
     DEFAULT_FILE_STORAGE = 'django_gcloud_storage.DjangoGCloudStorage'
     GCS_PROJECT = "plataformase"
@@ -170,7 +173,7 @@ else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
+# Configuración para uso de correo 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'sigssemssicyt@gmail.com'
@@ -178,13 +181,3 @@ EMAIL_HOST_PASSWORD = 'sigapp2019'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-# SENDGRID_API_KEY = os.getenv('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')
-
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "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")
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "dianalaura.lee@gmail.com") # this is the sendgrid email

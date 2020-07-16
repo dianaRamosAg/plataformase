@@ -230,6 +230,18 @@ def actualizarperfilusr(request):
         else:
             last_name=""
 
+        if request.user.tipo_usuario=='2':
+            email = request.POST["email"]
+            user = CustomUser.objects.get(email=email)
+            if request.FILES:
+                if 'firma_digital' in request.FILES:
+                    user.firma_digital.delete()
+                    user.firma_digital = request.FILES['firma_digital']
+                     
+            user.save()
+        else:
+            firma_digital= None
+
         if request.user.tipo_usuario =='1' or request.user.tipo_usuario =='5':
             identificacion = request.POST["identificacion"]
             folio_id = request.POST["folio_id"]
