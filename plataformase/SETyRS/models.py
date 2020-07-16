@@ -29,7 +29,7 @@ class SolicitudExamen(models.Model):
 # Tabla de alumnos candidatos a graduarse registrados en las solicitudes de las instituciones
 class Alumnos(models.Model):
     no_certificado = models.CharField(max_length=20)
-    nombre_alumno = models.CharField(max_length=50)
+    nombre_alumno = models.CharField(max_length=100)
     CURP = models.CharField(max_length=50)
     id_solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
     folio_pago = models.CharField(max_length=50,default='1234', blank=True)
@@ -45,7 +45,7 @@ class Alumnos(models.Model):
 # Tabla de las solicitudes de sinodales
 class SolicitudSinodal(models.Model):
     estatus = models.IntegerField(default=1)
-    institucion = models.CharField(max_length=50)
+    institucion = models.CharField(max_length=100)
     fase = models.IntegerField(default=1)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     fecha = models.DateField('fecha de publicacion')
@@ -63,7 +63,7 @@ class Sinodales(models.Model):
     estatus = models.IntegerField(default=1)
     id_solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE)
     nivel_educativo = models.IntegerField(default=1)
-    institucion = models.CharField(max_length = 50, default='Instituto Tecnologico de Tepic')
+    institucion = models.CharField(max_length = 100, default='Instituto Tecnologico de Tepic')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -84,7 +84,7 @@ class ArchivosSinodales(models.Model):
 
 # Tabla de notificaciones de las instituciones       
 class Notificaciones(models.Model):
-    descripcion = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=150)
     visto = models.BooleanField(default=False)
     fecha = models.DateTimeField('fecha de publicacion')
     solicitud_id = models.IntegerField()
