@@ -220,7 +220,7 @@ def perfil(request):
     if request.user.is_authenticated:
         #Si el tipo de usuario es institución (1)
         if request.user.tipo_usuario == '1':
-            return redirect('menuinstitucion')
+            return redirect('menuinstitucion', request.user.id)
         #Si el tipo de usuario es jefe de departamento(2)   //rvoe  y examenes
         if request.user.departamento_id == 1:
             return redirect('control')

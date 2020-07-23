@@ -119,9 +119,9 @@
                                 <br><br>
                                 <div class="text-center col-md-12"><br>
                                     <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-5 ">Regresar</a>
-                                    <button class="btn btn-primary col-5 ml-2"  style="float: right;"type="submit">Registrar</button>
+                                    <button class="btn btn-primary col-5 ml-2"  style="float: right;"type="submit" onclick="alert('¡ATENCIÓN!, El usuario será registrado');">Registrar</button>
                                    <br>
-                                   <br> <a class="btn btn-danger col-10 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a>
+                                   <br> <a class="btn btn-danger col-10 mx-auto" data-target="#myModal3" data-toggle="modal" onclick="alert('¡ATENCIÓN!, La solicitud será cancelada');">Cancelar solicitud</a>
                                 </div>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
           <h4 class="modal-title">Cancelar solicitud</h4>
         </div>
         <div class="modal-body">
-          <p>¡Cuidado!,Si cancela ya no aparecera en la lista de solicitudes</p>
+          <p>¡Cuidado!, Si cancela ya no aparecera en la lista de solicitudes</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger"  onclick="femail()"  data-dismiss="modal">Cancelar</button>

@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('no_certificado', models.CharField(max_length=20)),
-                ('nombre_alumno', models.CharField(max_length=50)),
+                ('nombre_alumno', models.CharField(max_length=100)),
                 ('CURP', models.CharField(max_length=50)),
                 ('folio_pago', models.CharField(blank=True, default='1234', max_length=50)),
                 ('carrera', models.CharField(blank=True, default='Carrera', max_length=100)),
@@ -96,7 +96,7 @@ class Migration(migrations.Migration):
             name='Notificaciones',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('descripcion', models.CharField(max_length=100)),
+                ('descripcion', models.CharField(max_length=150)),
                 ('visto', models.BooleanField(default=False)),
                 ('fecha', models.DateTimeField(verbose_name='fecha de publicacion')),
                 ('solicitud_id', models.IntegerField()),
@@ -116,7 +116,7 @@ class Migration(migrations.Migration):
                 ('grado_academico', models.CharField(max_length=100)),
                 ('estatus', models.IntegerField(default=1)),
                 ('nivel_educativo', models.IntegerField(default=1)),
-                ('institucion', models.CharField(default='Instituto Tecnologico de Tepic', max_length=50)),
+                ('institucion', models.CharField(default='Instituto Tecnologico de Tepic', max_length=150)),
             ],
             options={
                 'db_table': 'SETyRS_sinodales',
@@ -148,7 +148,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('estatus', models.IntegerField(default=1)),
-                ('institucion', models.CharField(max_length=50)),
+                ('institucion', models.CharField(max_length=150)),
                 ('fase', models.IntegerField(default=1)),
                 ('fecha', models.DateField(verbose_name='fecha de publicacion')),
                 ('nivel_educativo', models.IntegerField(default=1)),

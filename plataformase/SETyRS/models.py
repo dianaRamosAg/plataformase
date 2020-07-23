@@ -45,7 +45,7 @@ class Alumnos(models.Model):
 # Tabla de las solicitudes de sinodales
 class SolicitudSinodal(models.Model):
     estatus = models.IntegerField(default=1)
-    institucion = models.CharField(max_length=100)
+    institucion = models.CharField(max_length=150)
     fase = models.IntegerField(default=1)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     fecha = models.DateField('fecha de publicacion')
@@ -63,7 +63,7 @@ class Sinodales(models.Model):
     estatus = models.IntegerField(default=1)
     id_solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE)
     nivel_educativo = models.IntegerField(default=1)
-    institucion = models.CharField(max_length = 100, default='Instituto Tecnologico de Tepic')
+    institucion = models.CharField(max_length = 150, default='Instituto Tecnologico de Tepic')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -77,7 +77,7 @@ class ArchivosSinodales(models.Model):
     sinodal = models.ForeignKey(Sinodales, on_delete=models.CASCADE)
     curriculum = models.FileField(upload_to='SETyRS/archivos/sinodales',validators=[validate_file_extension], blank=True, null=True)
     cedula = models.FileField(upload_to='SETyRS/archivos/sinodales',validators=[validate_file_extension], blank=True, null=True)
-    solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE)
+    solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE,default=1)
 
     class Meta:
         db_table = 'SETyRS_documentos_sinodales'

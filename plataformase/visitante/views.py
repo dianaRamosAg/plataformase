@@ -6,13 +6,45 @@ from RVOES.models import NotificacionRegistro
 from .models import VisitanteSC,ConfiguracionPDF
 from django.contrib.auth.hashers import make_password
 from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
+
+#Cambiar contraseña de usuario
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, '¡ Su contraseña ha sido actualizada !')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Por favor, corrigir el error')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })
+
+
 
 ''' Vistas que redireccionan respecto a permisos de usuario'''
 def index(request):
     return redirect('login')
 
-def menuinstitucion(request):
-    return render(request,'menuinstitucion.html')
+''' Menu de instituciones'''
+def menuinstitucion(request,id):
+    inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
+    if inst.modalidad == '1':
+        # En caso de ser modalidad Telebachillerato
+        return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
+    else: 
+        return render(request,'menuinstitucion.html')
+
+
 
 def menuparticular(request):
     return render(request,'menuparticular.html')
@@ -224,6 +256,7 @@ def actualizarperfilusr(request):
 
     if request.method == 'POST':
         first_name = request.POST["first_name"]
+        email = request.POST["email"]
 
         if request.user.tipo_persona=='1':
             last_name = request.POST["last_name"]
@@ -254,8 +287,7 @@ def actualizarperfilusr(request):
                 identificacion = request.POST["identificacion"]
                 folio_id = request.POST["folio_id"]
                 marca_educativa = request.POST["marca"] 
-               
-
+      
         if request.user.tipo_usuario !='1' and request.user.tipo_usuario !='5':
             identificacion = None
             folio_id = None
@@ -264,7 +296,7 @@ def actualizarperfilusr(request):
             dom_legal_part = None
 
         
-        email = request.POST["email"]
+
         curp_rfc = request.POST["curp_rfc"]
         calle = request.POST["calle"]
         noexterior = request.POST["noexterior"]
@@ -273,11 +305,19 @@ def actualizarperfilusr(request):
         municipio = request.POST["municipio"]
         colonia = request.POST["colonia"]
         celular = request.POST["celular"]
-        
-        CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
+        idup = request.user.id
+        print("contraseña")
+
+        print(request.user.password)
+        if(request.user.password=='sistemas1'):
+            print("si")
+        else:
+            print("no")
+
+        CustomUser.objects.filter(id=idup).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
         codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name,
         identificacion=identificacion,folio_id=folio_id,marca_educativa=marca_educativa,nombre_representante=nombre_representante,
-        dom_legal_part=dom_legal_part)
+        dom_legal_part=dom_legal_part, username=email,email=email)
    
   
     return redirect('perfiluser') 

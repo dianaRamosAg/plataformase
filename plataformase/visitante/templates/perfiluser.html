@@ -4,9 +4,11 @@
 <html lang="es-MX">
 <head>
 	<meta charset="utf-8" />
-	
-	<meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 	<link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/us1.png'%}">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 	<title>Información de usuario</title>
 
@@ -30,15 +32,14 @@
     <link href="{% static '/css/demo.css' %}" rel="stylesheet" />
 </head>
 
-<body onload="jefes()">
+<body onload="jefes()" class="responsive">
 	<div class="image-container set-full-height" style="background-image: url({% static '/img/tres.jpg'%})">
     
         <nav>
             <ul class="nav" >
         
                 <li><a href="{% url 'perfil'%}" style="color: white;" >Regresar</a>
-                  
-                    
+                           
             </ul>
         </nav><!-- / nav -->
 	    <!--   Big container   -->
@@ -119,7 +120,7 @@
 													</span>
 													<div class="form-group label-floating">
 			                                            <label class="control-label">Email</label>
-			                                            <input name="email" type="email"  readonly class="form-control" value="{{ user.username }}">
+			                                            <input name="email" type="email" required  class="form-control" value="{{ user.username }}">
 			                                        </div>
 												</div>
 		                                	</div>
@@ -201,8 +202,10 @@
 		                        </div>
 		                        <div class="wizard-footer">
 		                            <div class="pull-right">
-		                                <input type='submit' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Guardar' />
-		                                 </div>
+										<input type='submit' onclick="alert('¡ATENCIÓN!, Sus datos seran actualizados');"
+									class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Guardar' />
+		                                
+									</div>
 
 		                            
 		                            <div class="clearfix"></div>
@@ -214,7 +217,7 @@
 	        </div><!-- end row -->
 	    </div> <!--  big container -->
 
-	 
+
 <script type="text/javascript">
 function jefes (){
 	tipoUsr = "{{request.user.tipo_usuario}}";
@@ -230,14 +233,6 @@ function jefes (){
 
 </body>
 	<!--   Core JS Files   -->
-    <script src="{% static '/js/jquery-2.2.4.min.js' %}" type="text/javascript"></script>
-	<script src="{% static '/js/bootstrap.min.js' %}" type="text/javascript"></script>
-	<script src="{% static '/js/bootstrap.js' %}" type="text/javascript"></script>
-
-	<!--  Plugin for the Wizard -->
-	<script src="{% static '/js/material-bootstrap-wizard.js' %}"></script>
-
-    <!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
-	<script src="{% static '/js/jquery.validate.min.js' %}"></script>
+   
 
 </html>
