@@ -22,6 +22,7 @@ class SolicitudExamen(models.Model):
     nivel_educativo = models.IntegerField(default=1)
     fecha_exa = models.DateField(default='2020-06-06')
     lugar_exa = models.CharField(max_length=50,default='Algun lugar')
+    hora_exa = models.CharField(max_length=10,default='12:00')
 
     class Meta:
         db_table = 'SETyRS_solicitud_examen'

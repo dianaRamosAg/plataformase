@@ -97,12 +97,13 @@
         
         </div>
         <div class="row mb-4">
+
             <div class="col-md-2">
                 <label class="form-check-label col-2" for="date">Fecha de Examen</label>
                
             </div>
             <div class="col-md-4">
-                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" min="2020-07-20" value="" required>
+                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" min="2020-08-03" value="" required>
             </div>
             
             <div class="col-md-2">
@@ -114,6 +115,24 @@
 
 
         </div>
+
+        <div class="row mb-4">
+            
+            <div class="col-md-2">
+                <label class="form-check-label col-2" for="date">Hora</label>
+               
+            </div>
+            <div class="col-md-4">
+                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="" required>
+            </div>
+
+
+        </div>
+
+
+
+
+
         <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
         <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>
     </form>
