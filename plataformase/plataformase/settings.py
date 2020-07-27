@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'TBC',
+    'TBC',
     'SETyRS',
     'SigApp',
+    'sweetify'
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
@@ -96,10 +97,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-            'NAME'     : 'plataforma',
+            'NAME'     : 'plataformaP',
             'USER'     : 'postgres',
-            'PASSWORD' : 'diana',
-            #'PASSWORD' : 'admin',
+            #'PASSWORD' : 'diana',
+            'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
             'PORT'    : '5432',
             #'PORT'     : '3306',
