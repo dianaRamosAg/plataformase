@@ -701,7 +701,7 @@ def crear_solicitud_examen(request):
             vocal = request.POST["vocal"]
             escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
             #if escuela.nivel_educativo == 3:
-            nivel_educativo = request.POST['nivel']
+            nivel_educativo = request.POST['nivel_edu']
             fecha_e = request.POST["fecha_exa"]
             lugar_e = request.POST["Lugar_exa"]
             hora_e = request.POST["hora_exa"]

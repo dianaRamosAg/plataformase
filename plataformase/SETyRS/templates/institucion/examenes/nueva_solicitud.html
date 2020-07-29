@@ -10,10 +10,10 @@
             <div class="container col-md-5 text-center">
                 <label for="select_nivel_educativo">Nivel Educativo</label>
                 {% if nivel == '3' %}
-                <select class="form-control" name="nivel" id="select_nivel_educativo" required>
-                    <option selected disabled hidden>Seleccione el nivel educativo de su solicitud</option>
-                    <option value=1>Media Superior</option>
-                    <option value=2>Superior</option>
+                <select class="form-control" name="nivel_edu" id="select_nivel_educativo" required>
+                    <option selected hidden>Seleccione el nivel educativo de su solicitud</option>
+                    <option value="1">Media Superior</option>
+                    <option value="2">Superior</option>
                 </select>
                 {% elif nivel == '1' %}
                 <select class="form-control" name="nivel" id="select_nivel_educativo" required>
@@ -45,6 +45,7 @@
                     <option value="6">EXAMEN CENEVAL</option>
                     <option value="7">ALTO RENDIMIENTO DE LICENCIATURA</option>
                     <option value="8">EXPERIENCIA PROFESIONAL</option>
+                    <option value="8">EXCELENCIA ACADEMICA</option>
                 </select>
             </div>
             <div class="col-md-2">
@@ -123,7 +124,7 @@
                
             </div>
             <div class="col-md-4">
-                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="" required>
+                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="12:00" required>
             </div>
 
 
