@@ -57,8 +57,25 @@
                     </div>
                     <div class="collapse show" id="docentes">
                         <div class="card-text p-3">
-                            <!--Lista que mostrará el resumen estadistico de cada docente-->
-                            
+                            <table class="table table-borderless table-hover" id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
+                                <thead>
+                                    <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">
+                                    <th>#</th>
+                                    <th style="width: 65%;">Nombre</th>
+                                    <th>Clave</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="overflow-y: scroll; height: 200px; width: 95%; position: absolute;">
+                                        {% for doc in docente %}
+                                        {% csrf_token %}
+                                            <tr>
+                                                <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                <td style="width: 73.5%;">{{ doc.nombres_docente }} {{ doc.apellidos_docente }}</td>
+                                                <td>{{ doc.clave_docente }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     </div>
@@ -74,7 +91,7 @@
                         </div>
                         <div class="collapse show" id="alumnos">
                             <div class="card-text p-3">
-                                <!--Lista que mostrará el resumen estadistico de cada docente-->
+                            <!--Lista que mostrará el resumen estadistico de cada docente-->
                             <table class="table table-borderless table-hover" id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
                                 <thead>
                                     <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">

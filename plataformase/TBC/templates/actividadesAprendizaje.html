@@ -139,7 +139,7 @@
                                                     <td style="padding-left: 5%; width: 70%;"> {{ cu.nombre_modulo }}</td> 
                                                     {% endif %}
                                                 {% endfor %}
-                                                <td ><a href={% url 'actividadD' id=act.id_actividad %} class="btn btn-outline-info btn-sm" type="submit" ><i class="far fa-eye"></i></a></td>
+                                                <td ><a href={% url 'TBC:actividadD' id=act.id_actividad %} class="btn btn-outline-info btn-sm" type="submit" ><i class="far fa-eye"></i></a></td>
                                                 <td><button class="btn btn-outline-danger btn-sm" onclick="confirmDialogDelete('{{ act.id_actividad }}')" style="cursor: pointer;"> <i class="far fa-trash-alt"></i> </button></td>
                                                 
                                                 {% for entrega in entregas%}

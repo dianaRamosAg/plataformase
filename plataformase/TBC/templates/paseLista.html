@@ -97,11 +97,11 @@
                                                 {% for alSM in alumnoSelM %}
                                                     {% if alS.id_alumno == alSM.id_alumno %}
                                                     <tr>
-                                                        <td style="width: 62.5%;">{{ alS.nombre_alumno }} <input type="text" value="{{ alS.nombre_alumno }}" hidden name="nombreAlumnoTabla"></td> <!--Nombre-->
-                                                        <td style="width: 15%;">{{ alS.num_matricula }} <input type="text" value="{{ alS.num_matricula }}" hidden name="matriculaAlumnoTabla"></td> <!--Matrícula-->
-                                                        <td > &nbsp;&nbsp;&nbsp;<input type="checkbox" name="Asistencia{{forloop.counter0}}" id="asistencia"></td>
-                                                        <td class="text-center"> &nbsp;&nbsp;&nbsp;<input type="checkbox" name="Retardo{{forloop.counter0}}" id="retardo"></td>
-                                                        <td class="text-center"> &nbsp;&nbsp;<input type="checkbox" name="Justificacion{{forloop.counter0}}" id="justificacion"></td>
+                                                        <td style="width: 64.5%;">{{ alS.nombre_alumno }} <input type="text" value="{{ alS.nombre_alumno }}" hidden name="nombreAlumnoTabla"></td> <!--Nombre-->
+                                                        <td style="width: 20%;">{{ alS.num_matricula }} <input type="text" value="{{ alS.num_matricula }}" hidden name="matriculaAlumnoTabla"></td> <!--Matrícula-->
+                                                        <td style="padding-top: 0;" > &nbsp;&nbsp;&nbsp;<input type="checkbox" name="Asistencia{{forloop.counter0}}" id="asistencia"></td>
+                                                        <td  style="padding-top: 0;"  class="text-center"> &nbsp;&nbsp;&nbsp;<input type="checkbox" name="Retardo{{forloop.counter0}}" id="retardo"></td>
+                                                        <td style="padding-top: 0;"  class="text-center"> &nbsp;&nbsp;<input type="checkbox" name="Justificacion{{forloop.counter0}}" id="justificacion"></td>
                                                         <td hidden><input type="text" name="cctL" value="{{ alS.cct }}"></td>
                                                         <td hidden> <input type="text" name="fechaL" value=" {% now "SHORT_DATE_FORMAT" %} "> </td>
                                                         <td hidden><input type="text" name="semestreL" value="{{ alS.semestre }}"></td>
@@ -269,7 +269,7 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                                <button class="btn btn-outline-success btn-block" type="submit" >Guardar</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -306,19 +306,17 @@
                                         </div>
                                         <div class="col-md-3">
                                             <select class="selectpicker" data-live-search="true" data-width="100%" data-size="4" title="Materia"  id="selectMateriaH" onchange="seleccionMateriaH();" required>
-                                                {% for dc in docenteCurso %}
+                                               
                                                         {% for cu in modulo %}
-                                                            {% if dc.id_curso == cu.id_modulo %}
-                                                                <option value="{{ dc.id_dc }}">{{ cu.nombre_modulo }}</option>
-                                                            {% endif %}
+                                                            <option value="{{ cu.id_modulo }}">{{ cu.nombre_modulo }}</option>
                                                         {% endfor %}
-                                                    {% endfor %}
+                                                    
                                             </select>
                                         </div>
                                         <div class="col-md-3">
                                             <select class="selectpicker" data-live-search="true" data-width="100%" data-size="4" title="Grupo"  id="selectGrupoH" onchange="seleccionGrupoH();" required>
                                                 {% for al in alumno %}
-                                                <option value="{{ al.cct }}">{{ al.cct }}</option>
+                                                    <option value="{{ al.cct }}">{{ al.cct }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

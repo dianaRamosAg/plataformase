@@ -22,7 +22,8 @@ from login.models import CustomUser
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-idDocente = 1
+global idDocente
+global idAlumnoI
 #idAlumnoI = 3409
 
 
@@ -36,28 +37,45 @@ def resultadosTBC(request):
 Función para devolver la homePage
 '''
 def homePage(request):
-	try:
-		#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
-		field_name = 'id_alumno'
-		obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado mas espacio
-		field_value = getattr(obj, field_name)
-		idAlumnoI = field_value
-	except:
-		print('')
-
-	NotificacionesDocente = Notificacion_mod.objects.all()
-	NotificacionesDocenteModulo = Notificacion_mod_docente.objects.filter(id_docente = idDocente)
-	try:
-		Docentes = Docente.objects.get(id_docente = idDocente)
-	except:
-		Docentes = None
-	Cursos = Curso.objects.all()
-	Alumnos = Alumno.objects.all()
-	AlumnosI = Alumno.objects.filter(nombre_escuela = request.user.municipio)
 	if not request.user.is_authenticated:
             #return render(request,'../../login/templates/registration/login.html')
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+	try:
+		#Docentes = Docente.objects.get(id_docente = idDocente)
+		Docentes = Docente.objects.filter(nombre_escuela = usuarioLogueado.municipio)
+		NotificacionesDocente = Notificacion_mod.objects.all()
+		NotificacionesDocenteModulo = Notificacion_mod_docente.objects.filter(id_docente = idDocente)
+	except:
+		#Docentes = None
+		NotificacionesDocente = None
+		NotificacionesDocenteModulo = None
+	Cursos = Curso.objects.all()
+	Alumnos = Alumno.objects.all()
+	AlumnosI = Alumno.objects.filter(nombre_escuela = request.user.municipio)
+	
 
 	if request.user.tipo_usuario == "7":
 		return redirect('/TBC/actividad-alumno/'+str(idAlumnoI))
@@ -73,6 +91,29 @@ def consultaAlumnos(request):
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+
 	if request.method == 'POST':
 		idAlumno = request.POST['idAlumno']
 		nombreAlumno = request.POST['nombreAlumno']
@@ -112,7 +153,7 @@ def consultaAlumnos(request):
 			#Se pretende actualizar un registro existente
 			Alumno.objects.filter(id_alumno = idAlumno).update(nombre_alumno = nombreAlumno, email = email, tel_fijo = telFijo, tel_celular = telCelular, curp_alumno = curp, calle = calle, colonia = colonia, num_int = numInt, num_ext = numExt,
 				num_matricula = numMatricula, nombre_escuela = nombreEscuela, cct = cct, semestre = semestre)
-			CustomUser.objects.filter(email = email).update(password = contrasena)
+			#CustomUser.objects.filter(email = email).update(password = contrasena)
 			sweetify.success(request, 'Se actualizó', text='El alumno fue actualizado exitosamente', persistent='Ok', icon="success")
 	return render(request, 'consultaAlumnos.html', {'usuario':usuarioLogueado, "alumno":Alumnos, })
 
@@ -130,7 +171,7 @@ def delete_alumno(request, id):
 		sweetify.success(request, 'Se eliminó', text='El alumno fue eliminado exitosamente', persistent='Ok', icon="success")
 	except:
 		sweetify.error(request, 'No se eliminó', text='Ocurrió un error', persistent='Ok', icon="error")
-	return redirect('consultaAlumnos')
+	return redirect('TBC:consultaAlumnos')
 
 '''
 Función para consultar el historial académico de un alumno o de un grupo
@@ -142,6 +183,28 @@ def historialAcademico(request):
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
 
 	if request.method == 'POST':
 		nombreAlumno = request.POST['nombreAlumno']
@@ -156,19 +219,46 @@ def historialAcademico(request):
 Función para realizar el pase de lista
 '''
 def paseLista(request):
+	if not request.user.is_authenticated:
+			return HttpResponseRedirect(reverse('login'))
+	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+
 	Alumnos = Alumno.objects.all()
 	AlumnoSel = None
-	Docentes = Docente.objects.filter(id_docente = idDocente)
-	DocenteCursos = Docente_curso.objects.filter(id_docente = idDocente)
 	alumnoCurso = Alumno_curso.objects.all()
 	Cursos = Curso.objects.all()
 	Modulos = Modulo.objects.all()
 	AsistenciasG = None
 	materia = None
 	AlumnoSelM = None
-	if not request.user.is_authenticated:
-			return HttpResponseRedirect(reverse('login'))
-	usuarioLogueado = request.user
+	try:
+		Docentes = Docente.objects.filter(id_docente = idDocente)
+		DocenteCursos = Docente_curso.objects.filter(id_docente = idDocente)
+	except:
+		Docentes = None
+		DocenteCursos = None
 
 	if request.method == 'POST':
 		bandera = request.POST['bandera']
@@ -238,7 +328,7 @@ def paseLista(request):
 					idx += 1
 					sweetify.success(request, 'Pase de lista exitoso', text='¡El pase de lista se guardó correctamente', persistent='Ok', icon="success")
 
-	return render(request, 'paseLista.html', {'usuario':usuarioLogueado, "alumno":Alumnos, "alumnoSel":AlumnoSel, 'docente':Docentes, 'docenteCurso':DocenteCursos, 'modulo':Modulos,'curso':Cursos, 'asistencia':AsistenciasG, 'alumnoSelM':AlumnoSelM, 'alumnoCurso':alumnoCurso}) #, "prueba":list_of_hashes})
+	return render(request, 'paseLista.html', {'usuario':usuarioLogueado, "alumno":Alumnos, "alumnoSel":AlumnoSel, 'docente':Docentes, 'docenteCurso':DocenteCursos, 'modulo':Modulos, 'asistencia':AsistenciasG, 'alumnoSelM':AlumnoSelM, 'alumnoCurso':alumnoCurso}) #, "prueba":list_of_hashes})
 
 
 '''
@@ -249,6 +339,29 @@ def consultaDocentes(request):
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+
 	if request.method == 'POST':
 		idDocente = request.POST['idDocente']
 		nombresDocente = request.POST['nombresDocente']
@@ -305,7 +418,7 @@ def delete_docente(request, id):
 		sweetify.success(request, 'Se eliminó', text='El docente fue eliminado exitosamente', persistent='Ok', icon="success")
 	except:
 		sweetify.error(request, 'No se eliminó', text='El docente aun tiene cursos relacionados', persistent='Ok', icon="error")
-	return redirect('consultaDocentes')
+	return redirect('TBC:consultaDocentes')
 
 '''
 Función para mostrar las actividades relacionadas al docente logeado
@@ -314,6 +427,29 @@ def actividadesAprendizaje(request):
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+
 	Docentes = Docente.objects.filter(id_docente = idDocente)
 	DocenteCursos = Docente_curso.objects.filter(id_docente = idDocente)
 	Cursos = Modulo.objects.all()
@@ -331,14 +467,38 @@ def actividadesAprendizaje(request):
 Función para insertar una actividad, datos y archivos
 '''
 def nuevaActividad(request):
+	if not request.user.is_authenticated:
+			return HttpResponseRedirect(reverse('login'))
+	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
 	c = 0
 	cRub = 0
 	DocenteCursos = Docente_curso.objects.filter(id_docente = idDocente)
 	Cursos = Curso.objects.all()
 	Modulos = Modulo.objects.all()
-	if not request.user.is_authenticated:
-			return HttpResponseRedirect(reverse('login'))
-	usuarioLogueado = request.user
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+
 	Docentes = Docente.objects.filter(id_docente = idDocente)
 	ActividadDocente = Actividad_docente.objects.filter(id_docente = idDocente)
 	if request.method == 'POST':
@@ -434,7 +594,7 @@ def nuevaActividad(request):
 		sweetify.success(request, 'Se insertó', text='La actividad fue registrado exitosamente', persistent='Ok', icon="success")
 		#except:
 		#	sweetify.error(request, 'No se insertó', text='Ocurrió un error', persistent='Ok', icon="error")
-		return redirect('actividadesAprendizaje')
+		return redirect('TBC:actividadesAprendizaje')
 
 	return render(request, 'nuevaActividad.html', {'usuario':usuarioLogueado, 'docente':Docentes, 'docenteCurso':DocenteCursos, 'curso':Cursos, 'modulo':Modulos }) 
 
@@ -443,6 +603,31 @@ Función para mostrar lo relacionado a la actividad seleccionada por su id
 (id como parámetro) y para actualizar los datos de la actividad
 '''
 def actividadD(request, id):
+	if not request.user.is_authenticated:
+			return HttpResponseRedirect(reverse('login'))
+	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
 	c = 0
 	cRub = 0
 	Alumnos = Alumno.objects.all()
@@ -450,10 +635,7 @@ def actividadD(request, id):
 	Docentes = Docente.objects.filter(id_docente = idDocente)
 	Entregas = Entrega_actividad.objects.filter(id_actividad = id)
 	Archivos = Archivo.objects.filter(id_actividad = id)
-	if not request.user.is_authenticated:
-			return HttpResponseRedirect(reverse('login'))
-	usuarioLogueado = request.user
-	#--
+
 	if request.method == 'POST':
 		nombreArchivos = ''
 		nombreRubrica = ''
@@ -510,7 +692,7 @@ def actividadD(request, id):
 			sweetify.success(request, 'Se actualizó', text='La actividad fue actualizada exitosamente', persistent='Ok', icon="success")
 		except:
 			sweetify.error(request, 'No se actualizó', text='Ocurrió un error', persistent='Ok', icon="error")
-		return redirect('actividadesAprendizaje')
+		return redirect('TBC:actividadesAprendizaje')
 
 	return render(request, 'actividadDocente.html', {'usuario':usuarioLogueado, 'actividad':ActividadDocente, 'docente':Docentes, 'alumno':Alumnos, 'entrega':Entregas , 'archivo':Archivos,}) 
 
@@ -559,7 +741,7 @@ def delete_actividad(request, id):
 		sweetify.error(request, 'No se eliminó', text='Ocurrió un error', persistent='Ok', icon="error")
 	ActividadDocentes = Actividad_docente.objects.all()
 
-	return redirect('actividadesAprendizaje')
+	return redirect('TBC:actividadesAprendizaje')
 
 
 '''
@@ -573,6 +755,28 @@ def revisarActividad(request, id, idAlumno):
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
 
 	if request.method == 'POST':
 		try:
@@ -608,16 +812,39 @@ def actividadAlumno (request, id):
 	ActividadAlumno = Actividad_docente.objects.all()
 	NotificacionAct = Notificacion_act.objects.all()
 	NotificacionActAalumno = Notificacion_act_alumno.objects.filter(id_alumno = id)
+	DocenteCurso = Docente_curso.objects.all()
 	#ActividadAlumno = Actividad_docente.objects.filter(id_curso = idDocente)
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
 	try:
 		Entregas = Entrega_actividad.objects.filter(id_alumno = id)
-		return render(request, 'actividadAlumno.html', {'usuario':usuarioLogueado, 'alumno':AlumnoI, 'alumnoCurso':AlumnoCursos, 'curso':Cursos, 'modulo':Modulos ,'actividad_docente': ActividadAlumno, 'entrega': Entregas, 'notificaciones':NotificacionAct, 'notificacion':NotificacionActAalumno, })
+		return render(request, 'actividadAlumno.html', {'docenteCurso':DocenteCurso, 'usuario':usuarioLogueado, 'alumno':AlumnoI, 'alumnoCurso':AlumnoCursos, 'curso':Cursos, 'modulo':Modulos ,'actividad_docente': ActividadAlumno, 'entrega': Entregas, 'notificaciones':NotificacionAct, 'notificacion':NotificacionActAalumno, })
 	except:
 		print('kaka')
-	return render(request, 'actividadAlumno.html', {'usuario':usuarioLogueado, 'alumno':AlumnoI, 'alumnoCurso':AlumnoCursos, 'curso':Cursos,'modulo':Modulos ,'actividad_docente': ActividadAlumno, 'notificaciones':NotificacionAct, 'notificacion':NotificacionActAalumno,})
+	return render(request, 'actividadAlumno.html', {'docenteCurso':DocenteCurso,'usuario':usuarioLogueado, 'alumno':AlumnoI, 'alumnoCurso':AlumnoCursos, 'curso':Cursos,'modulo':Modulos ,'actividad_docente': ActividadAlumno, 'notificaciones':NotificacionAct, 'notificacion':NotificacionActAalumno,})
 
 '''
 Función para la funcionalidad de toma de lista
@@ -754,17 +981,50 @@ def updateAPES(request):
 
 #Función para realizar la entrega por parte del alumno
 def entregaAlumno(request, id, idAlumno):
+	if not request.user.is_authenticated:
+			return HttpResponseRedirect(reverse('login'))
+	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+
 	c = 0
 	Alumnos = Alumno.objects.all()
 	ActividadDocente = Actividad_docente.objects.get(id_actividad = id)
-	Docentes = Docente.objects.filter(id_docente = idDocente)
 	Entregas = Entrega_actividad.objects.filter(id_actividad = id)
 	Archivos = Archivo.objects.filter(id_actividad = id)
 	Cursos = Curso.objects.all()
 	Modulos = Modulo.objects.all()
-	if not request.user.is_authenticated:
-			return HttpResponseRedirect(reverse('login'))
-	usuarioLogueado = request.user
+	try:
+		Docentes = Docente.objects.filter(id_docente = idDocente)
+	except:
+		#Se debe de sacar el id_docente para hacer las inserciones
+		#Se quiere obtener el id_docente haciendo la relacion con la actividad
+		field_name = 'id_docente'
+		obj = Actividad_docente.objects.get(id_actividad = id)
+		field_value = getattr(obj, field_name)
+		idDocente = field_value
+		Docentes = Docente.objects.filter(id_docente = idDocente)
+	
 	try:
 		Entrega = Entrega_actividad.objects.get(id_actividad = id, id_alumno = idAlumno)
 		return render(request, 'entregaAlumno.html', {'usuario':usuarioLogueado, 'actividad':ActividadDocente, 'docente':Docentes, 'alumno':Alumnos, 'entrega':Entregas , 'archivo':Archivos, 'curso':Cursos, 'entregaA': Entrega })
@@ -846,7 +1106,8 @@ def entregaAlumno(request, id, idAlumno):
 			EntregaNueva.save()
 			nuevaNotifD.save()
 			sweetify.success(request, 'Se entregó', text='La actividad fue entregada exitosamente', persistent='Ok', icon="success")
-		except:
+		except Exception as e:
+			print(e)
 			sweetify.error(request, 'No se entregó', text='Ocurrió un error', persistent='Ok', icon="error")
 		return redirect('/TBC/actividad-alumno/'+str(idAlumno))
 

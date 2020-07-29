@@ -267,8 +267,8 @@ class Actividad_docente(models.Model):
 class Entrega_actividad(models.Model):
     id_entrega = models.AutoField(primary_key= True)
     nombre_actividad = models.CharField(max_length=400)
-    calificacion = models.DecimalField(max_digits= 8,decimal_places=2)
-    retroalimentacion = models.CharField(max_length=500)
+    calificacion = models.DecimalField(max_digits= 8,decimal_places=2, null=True)
+    retroalimentacion = models.CharField(max_length=500, null=True)
     archivo =  models.CharField(max_length=500) #models.FileField(upload_to='Archivos/TBC')
     fecha_hora_subida = models.CharField(max_length=50)
     id_alumno = models.IntegerField()
@@ -326,12 +326,12 @@ class Archivo(models.Model):
     id_archivo = models.IntegerField(primary_key= True)
     nombre_archivo = models.CharField(max_length=500)
     archivo = models.CharField(max_length=500)
-    descripcion = models.CharField(max_length=500)
+    descripcion = models.CharField(max_length=500, null=True)
     tipo_archivo = models.CharField(max_length=100)
     id_actividad = models.IntegerField()
     url = models.CharField(max_length=500)
-    id_alumno = models.IntegerField()
-    id_docente = models.IntegerField()
+    id_alumno = models.IntegerField(null=True)
+    id_docente = models.IntegerField(null=True)
 
 class Notificacion_act(models.Model):
     id_notificacion = models.AutoField(primary_key= True)

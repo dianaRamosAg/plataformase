@@ -83,13 +83,13 @@
                                         <tbody style="overflow-y: scroll; height: 120px; width: 95%; position: absolute;">
                                             {% for ar in archivo %}
                                             {% csrf_token %}
-                                            {% if ar.tipo_archivo == 'Recurso' %}
-                                                <tr>
-                                                    <th scope="row">{{ forloop.counter }}</th>
-                                                    <td style="width: 60%;">{{ ar.nombre_archivo }}</td>
-                                                    <td style="width: 40%;">{{ ar.descripcion }}</td>
-                                                    <td><a class="btn btn-outline-primary btn-sm" href="{{ ar.url }}" target="_blank"><i class="far fa-eye"></i></a></td>
-                                                </tr>
+                                                {% if ar.tipo_archivo == 'Recurso' %}
+                                                    <tr>
+                                                        <th scope="row">{{ forloop.counter }}</th>
+                                                        <td style="width: 60%;">{{ ar.nombre_archivo }}</td>
+                                                        <td style="width: 40%;">{{ ar.descripcion }}</td>
+                                                        <td><a class="btn btn-outline-primary btn-sm" href="{{ ar.url }}" target="_blank"><i class="far fa-eye"></i></a></td>
+                                                    </tr>
                                                 {% endif %}
                                             {% endfor %}
                                         </tbody>

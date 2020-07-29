@@ -26,20 +26,24 @@
                                         <tbody class="" style="overflow-y: scroll; height: 208px; width: 97%; position: absolute;">
                                             {% for ac in alumnoCurso %}
                                             <tr onclick="seleccionCurso('{{ ac.id_dc }}');" style="width: 100%; display: inline-table; height:40px; table-layout: fixed;">
-                                                {% for cu in modulo %}
-                                                    {% if ac.id_dc == cu.id_modulo %}
-                                                        <td style="width: 82.5%;">{{ cu.nombre_modulo }}</td>
-                                                        {% for notif in notificaciones %}
-                                                            {% for notificacion in notificacion %}
-                                                                {% if notificacion.id_notificacion == notif.id_notificacion  %}
-                                                                    {% if notif.id_dc == cu.id_modulo %}
-                                                                        {% if notificacion.status == 0 and notif.tipo == 1 %}
-                                                                            <td style="display: none;"><input type="text" id="input" class="inputNA" hidden></td>
-                                                                            <td style="display: inline;"><span hidden class="badge badge-pill badge-danger" style="margin-top: 12.5%; margin-left: 2%; font-size: 90%; padding-top: 3%;" id="spanNA"></span></td>
+                                                {% for dc in docenteCurso %}
+                                                    {% if dc.id_dc == ac.id_dc %}
+                                                        {% for cu in modulo %}
+                                                            {% if cu.id_modulo == dc.id_curso %}
+                                                                <td style="width: 82.5%;">{{ cu.nombre_modulo }}</td>
+                                                                {% for notif in notificaciones %}
+                                                                    {% for notificacion in notificacion %}
+                                                                        {% if notificacion.id_notificacion == notif.id_notificacion  %}
+                                                                            {% if notif.id_dc == cu.id_modulo %}
+                                                                                {% if notificacion.status == 0 and notif.tipo == 1 %}
+                                                                                    <td style="display: none;"><input type="text" id="input" class="inputNA" hidden></td>
+                                                                                    <td style="display: inline;"><span hidden class="badge badge-pill badge-danger" style="margin-top: 12.5%; margin-left: 2%; font-size: 90%; padding-top: 3%;" id="spanNA"></span></td>
+                                                                                {% endif %}
+                                                                            {% endif %}
                                                                         {% endif %}
-                                                                    {% endif %}
-                                                                {% endif %}
-                                                            {% endfor %}
+                                                                    {% endfor %}
+                                                                {% endfor %}
+                                                            {% endif %}
                                                         {% endfor %}
                                                     {% endif %}
                                                 {% endfor %}
@@ -95,29 +99,31 @@
                                     </thead>
                                     <tbody style="overflow-y: scroll; height: 237px; width: 97%; position: absolute;">
                                         {% for ac in alumnoCurso %}
-                                            {% for act in actividad_docente %}
-                                                {% if ac.id_dc == act.id_curso %}
-                                                    <tr>
-                                                        <th style="width: 5%;" scope="row">{{ forloop.counter }}</th>
-                                                        <td style="padding-left: 88px; width: 45%;">{{ act.nombre_actividad }} </td>
-                                                        {% for cu in modulo %}
-                                                            {% if  act.id_curso == cu.id_modulo %}
-                                                                <td style="padding-left: 88px; width: 55%;"> {{ cu.nombre_modulo }}</td> 
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                        <td style="padding-left: 88px;"><a href={% url 'entregaAlumno' id=act.id_actividad idAlumno=alumno.id_alumno  %} class="btn btn-outline-info btn-sm" type="submit" data-toggle="tooltip" data-placement="right" title="Entregar"><i class="fas fa-file-import"></i></a></td>
-                                                        {% for en in entrega %}
-                                                            {% if act.id_actividad == en.id_actividad %}
-                                                                {% if en.entregada is True and en.calificada is not True%}
-                                                                    <td class="text-center" style="padding-left: 88px; width: 45%;"> <span class="badge badge-pill badge-success" style="margin-left: 2%; font-size: 85%; padding-top: 10%;">&nbsp;</h5></span></td>
+                                            {% for dc in docenteCurso %}
+                                                {% for act in actividad_docente %}
+                                                    {% if dc.id_docente == act.id_docente and ac.id_dc == dc.id_dc %}
+                                                        <tr>
+                                                            <th style="width: 5%;" scope="row">{{ forloop.counter }}</th>
+                                                            <td style="padding-left: 88px; width: 45%;">{{ act.nombre_actividad }} </td>
+                                                            {% for cu in modulo %}
+                                                                {% if  act.id_curso == cu.id_modulo %}
+                                                                    <td style="padding-left: 88px; width: 55%;"> {{ cu.nombre_modulo }}</td> 
                                                                 {% endif %}
-                                                                {% if en.entregada is True and en.calificada is True %}
-                                                                    <td style="padding-left: 88px; width: 45%;"> <span class="badge badge-pill badge-success" style="margin-left: 2%; font-size: 85%; padding-top: 25%;">R</h5></span></td>
+                                                            {% endfor %}
+                                                            <td style="padding-left: 88px;"><a href={% url 'TBC:entregaAlumno' id=act.id_actividad idAlumno=alumno.id_alumno  %} class="btn btn-outline-info btn-sm" type="submit" data-toggle="tooltip" data-placement="right" title="Entregar"><i class="fas fa-file-import"></i></a></td>
+                                                            {% for en in entrega %}
+                                                                {% if act.id_actividad == en.id_actividad %}
+                                                                    {% if en.entregada is True and en.calificada is not True%}
+                                                                        <td class="text-center" style="padding-left: 88px; width: 45%;"> <span class="badge badge-pill badge-success" style="margin-left: 2%; font-size: 85%; padding-top: 10%;">&nbsp;</h5></span></td>
+                                                                    {% endif %}
+                                                                    {% if en.entregada is True and en.calificada is True %}
+                                                                        <td style="padding-left: 88px; width: 45%;"> <span class="badge badge-pill badge-success" style="margin-left: 2%; font-size: 85%; padding-top: 25%;">R</h5></span></td>
+                                                                    {% endif %}
                                                                 {% endif %}
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </tr>
-                                                {% endif %}
+                                                            {% endfor %}
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endfor %}
                                         {% endfor %}
                                     </tbody>
