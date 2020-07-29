@@ -13,6 +13,8 @@ from datetime import datetime
 from django.utils import formats
 from django.core import serializers
 from django.http import JsonResponse
+from django.db.models import Q
+from django.utils import six 
 from django.contrib.auth.hashers import make_password
 
 # from django.apps import apps
@@ -923,7 +925,10 @@ def nuevoModulo(request):
 	semestres = Semestre.objects.all()
 	areas_disc = Area_disciplinar.objects.all()
 	Modulos = Modulo.objects.all()
-	return render(request, 'nuevoModulo.html',{'semestres': semestres,'areas_disc':areas_disc,'modulos':Modulos})
+	if not request.user.is_authenticated:
+			return HttpResponseRedirect(reverse('login'))
+	usuarioLogueado = request.user
+	return render(request, 'nuevoModulo.html',{'semestres': semestres,'areas_disc':areas_disc,'modulos':Modulos,'usuario':usuarioLogueado})
 
 def nuevoModuloInsertar(request):
 	if request.is_ajax:
@@ -934,6 +939,7 @@ def nuevoModuloInsertar(request):
 
 def nuevaUnidad(request):
 	if request.is_ajax:
+		print('============='+request.GET.get('moduloDeLaUnidad')+'    lol=========')
 		unidadNueva = Unidad_modulo(nombre_unidad = request.GET.get('nombreUnidad'), id_modulo_unidad = Modulo.objects.get(id_modulo=request.GET.get('moduloDeLaUnidad')), proposito_unidad = "")
 		unidadNueva.save()
 		data = serializers.serialize("json",Unidad_modulo.objects.filter(nombre_unidad=request.GET.get('nombreUnidad')))
@@ -969,13 +975,31 @@ def updateUnidad(request):
 
 def deleteAPES(request):
 	if request.is_ajax:
-		deleteAPES = Aprendizaje_esperado_modulo.objects.filter(id = request.GET.get('aprendizajeEsperado')).delete()
+		print(request.GET.get('aprendizajeActual'))
+		deleteAPES = Aprendizaje_esperado_modulo.objects.filter(id = request.GET.get('aprendizajeEsperado').split('-')[1]).delete()
 		return JsonResponse("deleted",safe=False)
 
 def updateAPES(request):
 	if request.is_ajax:
-		updatedUnidad = Aprendizaje_esperado_modulo.objects.filter(id = request.GET.get('aprendizajeActual')).update(aprendizaje_esperado = request.GET.get('aprendizajeNuevo'))
+		updatedUnidad = Aprendizaje_esperado_modulo.objects.filter(id = request.GET.get('aprendizajeActual').split('-')[1]).update(aprendizaje_esperado = request.GET.get('aprendizajeNuevo'))
 		return JsonResponse("Updated",safe=False)
+
+def updPropUnidad(request):
+	if request.is_ajax:
+		updatedUnidad = Unidad_modulo.objects.filter(Q(id_unidad = request.GET.get('unidad')) & Q(id_modulo_unidad=request.GET.get('modulo'))).update(proposito_unidad = request.GET.get('proposito'))
+		return JsonResponse("Updated proposito de la unidad",safe=False)
+
+def updArchivo(request):
+	if request.is_ajax:
+		if request.method == 'POST':
+			doc = request.FILES 
+			updatedModulo = Modulo.objects.filter(id_modulo=request.POST.get('modulo')).update(pdf_modulo = request.FILES['archivo'])
+			return JsonResponse("Updated pdf de la unidad",safe=False)
+
+def getPropUnidad(request):
+	if request.is_ajax:
+		propUnidad = serializers.serialize("json",Unidad_modulo.objects.filter(Q(id_unidad = request.GET.get('unidad')) & Q(id_modulo_unidad=request.GET.get('modulo'))))
+		return JsonResponse(propUnidad,safe=False)
 		
 ''' ================= FINAL DE LA SECCION DE LAS VIEWS PARA EL MANEJO DE MODULOS EN TBC =========================''' 
 

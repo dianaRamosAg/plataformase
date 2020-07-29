@@ -30,5 +30,8 @@ urlpatterns = [
    path('Modulos/update/unidad',updateUnidad,name='updateUnidad'),
    path('Modulos/delete/APES',deleteAPES,name='deleteAPES'),
    path('Modulos/update/APES',updateAPES,name='updateAPES'),
+   path('Modulos/update/propositoUnidad',updPropUnidad,name='updPropUnidad'),
+   path('Modulos/update/archivo',updArchivo,name='updArchivo'),
+   path('Modulos/update/getpropositoUnidad',getPropUnidad,name='getPropUnidad'),
 
 ]

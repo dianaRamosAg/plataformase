@@ -286,8 +286,27 @@ function crearUnidad(){
         selectedUnidad=idNombre;
         var tituloAPES =  document.getElementById("tituloAPES");
         var tituloPropUnidad = document.getElementById("tituloPropUnidad");
+        var btnNAE =  document.getElementById("btnNAE");
+        btnNAE.className="col-lg-6 btn btn-block btn-outline-success";
         var unidad = document.getElementById(idNombre);
         document.getElementById("divApEsperados").innerHTML="";
+        var prop = document.getElementById("propositoUnidad");
+
+        $.ajax({
+            url: '/TBC/Modulos/update/getpropositoUnidad',
+            data:
+            {
+                'modulo':moduloPK,
+                'unidad':selectedUnidad,
+            },
+            dataType: "json",
+            success:function(response){
+                $.each(JSON.parse(response),function(i,item){
+                    prop.value = item["fields"]["proposito_unidad"]
+                })
+            }
+        })
+
         $.ajax({
             url: '/TBC/Modulos/get/APES/'+idNombre,
             dataType: "json",
@@ -302,11 +321,11 @@ function crearUnidad(){
                              //Agregar listener a los botones
                              elemento2.setAttribute('onclick','deleteAPES(this.id)')
                              elemento3.setAttribute('onclick','updateAPES(this.id)');
-         
+                             //Si hay un proposito de la unidad, que lo muestre
                              //Agregamos el id de la unidad como id de los botones
-                             elemento.setAttribute("id", ''+item["pk"]);
-                             elemento2.setAttribute("id",''+item["pk"]);
-                             elemento3.setAttribute("id",''+item["pk"]);
+                             elemento.setAttribute("id", 'apes-'+item["pk"]);
+                             elemento2.setAttribute("id",'apes-'+item["pk"]);
+                             elemento3.setAttribute("id",'apes-'+item["pk"]);
          
                              //Agregamos el texto a los botones
                              elemento.innerHTML=item["fields"]["aprendizaje_esperado"];
@@ -329,7 +348,7 @@ function crearUnidad(){
                              
                              // Creamos un div row para agregar los botones previos, tambien definimos sus caracteristicas
                              var divRow = document.createElement("div");
-                             divRow.setAttribute("id","divRow"+item["pk"]);
+                             divRow.setAttribute("id","divRowApes"+item["pk"]);
                              divRow.className="row col-lg-10";      
          
                              //Agregamos el boton de unidad al div principal
@@ -339,13 +358,13 @@ function crearUnidad(){
                              document.getElementById("divApEsperados").appendChild(divRow);
          
                              //Agregamos nuestros botones al div row
-                             document.getElementById("divRow"+item["pk"]).appendChild(elemento3);
-                             document.getElementById("divRow"+item["pk"]).appendChild(elemento2);
+                             document.getElementById("divRowApes"+item["pk"]).appendChild(elemento3);
+                             document.getElementById("divRowApes"+item["pk"]).appendChild(elemento2);
          
                              $("#"+item["pk"]).hide().fadeIn('slow');
                 });   
                 tituloAPES.innerHTML= "Aprendizajes esperados de la unidad: "+ unidad.innerHTML; 
-                tituloPropUnidad.innerHTML =   "Próposito de la unidad: "+ unidad.innerHTML;
+                tituloPropUnidad.innerHTML =   "Próposito de la unidad:\n"+ unidad.innerHTML;
             }
         })
     };
@@ -386,10 +405,10 @@ function crearUnidad(){
                     elemento2.setAttribute('onclick','deleteAPES(this.id)')
                     elemento3.setAttribute('onclick','updateAPES(this.id)');
 
-                    //Agregamos el id de la unidad como id de los botones
-                    elemento.setAttribute("id", ''+item["pk"]);
-                    elemento2.setAttribute("id",''+item["pk"]);
-                    elemento3.setAttribute("id",''+item["pk"]);
+                    //Agregamos el id del apes como id de los botones
+                    elemento.setAttribute("id", 'apes-'+item["pk"]);
+                    elemento2.setAttribute("id",'apes-'+item["pk"]);
+                    elemento3.setAttribute("id",'apes-'+item["pk"]);
 
                     //Agregamos el texto a los botones
                     elemento.innerHTML=nombreAPES;
@@ -412,7 +431,7 @@ function crearUnidad(){
                     
                     // Creamos un div row para agregar los botones previos, tambien definimos sus caracteristicas
                     var divRow = document.createElement("div");
-                    divRow.setAttribute("id","divRow"+item["pk"]);
+                    divRow.setAttribute("id","divRowApes"+item["pk"]);
                     divRow.className="row col-lg-10";      
 
                     //Agregamos el boton de unidad al div principal
@@ -422,8 +441,8 @@ function crearUnidad(){
                     document.getElementById("divApEsperados").appendChild(divRow);
 
                     //Agregamos nuestros botones al div row
-                    document.getElementById("divRow"+item["pk"]).appendChild(elemento3);
-                    document.getElementById("divRow"+item["pk"]).appendChild(elemento2);
+                    document.getElementById("divRowApes"+item["pk"]).appendChild(elemento3);
+                    document.getElementById("divRowApes"+item["pk"]).appendChild(elemento2);
 
                     $("#"+item["pk"]).hide().fadeIn('slow');
                             
@@ -450,7 +469,7 @@ function crearUnidad(){
         };
 
         function desactivarBtnGuardar(){
-            var btnGuardar =  document.getElementById("btnGuardarModulo");
+            var tblModulos = document.getElementById("tableModulos");
             var selectSemestre = document.getElementById("selectSemestre");
             var selectAD = document.getElementById("selectAD");
             var inputCreditos = document.getElementById("inputCreditos");
@@ -525,11 +544,20 @@ function crearUnidad(){
                                     console.log(response);  
                                     $.each(JSON.parse(response),function(i,item){
                                         moduloPK = item["pk"]
+                                        var newRow = tblModulos.insertRow(1);
+                                        newRow.setAttribute('onclick','setModulo(this.id)');
+                                        newRow.id="tableRow"+moduloPK;
+                                        var cell1 = newRow.insertCell(0);
+                                        var cell2 = newRow.insertCell(1);
+                                        cell1.id="tableMod-"+moduloPK;
+                                        cell2.id="tableAD-{{mod.areadisciplinar_modulo.id_areadisciplinar}}-{{mod.semestre_modulo.id_semestre}}"
+                                        cell1.innerHTML=item["fields"]["nombre_modulo"];
+                                        cell2.id="tableAD-"+item["fields"]["areadisciplinar_modulo"]+"-"+item["fields"]["semestre_modulo"];
+                                        cell2.innerHTML=selectAD.options[selectAD.selectedIndex].text;
                                     });
                                      
                                 }
                             })
-                       
                         tituloUnidades.innerHTML="Unidades del módulo: "+nombreModulo;
                         //inputNombre.readOnly= true;
                         btnNU.className="col-lg-6 btn btn-block btn-outline-success";   
@@ -543,38 +571,97 @@ function crearUnidad(){
         function setModulo(idRow){
             var tblRow = document.getElementById(idRow);
             var divUnidades = document.getElementById("divUnidades");
+            var tituloModulo = document.getElementById("tituloModulo");
             var selectSemestre = document.getElementById("selectSemestre");
             var selectAD = document.getElementById("selectAD");
             var Cells = tblRow.getElementsByTagName("td");
             var btnNU =  document.getElementById("btnNU");
             nombreModulo = Cells[0].innerText;
+            moduloPK = Cells[0].id.split("-")[1];
             var idAD = Cells[1].id.split("-")[1];
             var idSemestre = Cells[1].id.split("-")[2];
             
             var nombreModinput = document.getElementById("inputNombre");
             nombreModinput.value = ""+Cells[0].innerText;
+            tituloModulo.innerHTML = ""+Cells[0].innerText;
+            nombreModulo = Cells[0].innerText;
+
+            var  tituloUnidades =document.getElementById("tituloUnidades");
+            tituloUnidades.innerHTML="Unidades del módulo: "+nombreModulo;
 
             btnNU.className="col-lg-6 btn btn-block btn-outline-success";
             divUnidades.innerHTML="";
             selectSemestre.selectedIndex=idSemestre;
             selectAD.selectedIndex=idAD;
-
-
             getUnidades();
             
         };
+
+        function updProposito(){
+
+            var prop = document.getElementById("propositoUnidad");
+            $.ajax({
+                url: '/TBC/Modulos/update/propositoUnidad',
+                data:
+                {
+                    'modulo':moduloPK,
+                    'unidad':selectedUnidad,
+                    'proposito': prop.value,
+                },
+                dataType: "json",
+                success:function(response){
+                    console.log(moduloPK);  
+                    console.log(selectedUnidad); 
+                    console.log(prop.value); 
+                }
+            })
+        };
+
+        function updArchivo(){
+            
+
+            var pdfModulo = $('#pdfInput').get(0).files[0];
+
+            var formData = new FormData();
+            formData.append("archivo", pdfModulo);
+            formData.append("modulo", moduloPK);
+            $.ajax({
+                url: '/TBC/Modulos/update/archivo',
+                headers:{ "X-CSRFToken": $('meta[name="_token"]').attr('content') },
+                data: formData,
+                type: 'POST',
+                async: true,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                enctype: 'multipart/form-data',
+                success:function(response){
+                    console.log(response);  
+                }
+            })
+        };
+
 
         function cargarListeners() { 
             var inputNombre = document.getElementById("inputNombre"); 
             var btnGuardar = document.getElementById("btnGuardarModulo");
             var btnNU =  document.getElementById("btnNU");
             var btnNAE =  document.getElementById("btnNAE");
+            var btnGuardarProposito = document.getElementById("btnGuardarProposito");
+            var btnGuardarArchivo = document.getElementById("btnGuardarArchivo");
 
             inputNombre.addEventListener("keyup", textEnteredModulo, false); 
             btnGuardar.addEventListener("click",desactivarBtnGuardar,false);
             btnNU.addEventListener("click", crearUnidad,false);
             btnNAE.addEventListener("click",crearApes,false);       
+            btnGuardarProposito.addEventListener("click",updProposito,false);
+            btnGuardarArchivo.addEventListener("click",updArchivo,false);
 
+            $.ajaxSetup({
+                headers: {
+                  'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+                }
+            });
           }
 
  

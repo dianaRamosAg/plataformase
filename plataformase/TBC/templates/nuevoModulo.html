@@ -1,17 +1,11 @@
-    {% extends 'baseTBC.html' %}
-    {% load static %}
-    {% block content%}
-    
-    <script type="text/javascript"> 
-        const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-    </script>
+{% extends 'baseTBC.html'%}
+{% load static %}
+{% block content%}
+
     <script src="{% static 'JS/nuevoModJs.js' %}" defer></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <div class="row">
-    <div class="col-md-6 col-lg-6 mt-3">
-            <h4>Programas de la institución</h4>
+    <h4>Programas de la institución</h4>
             <div class="scrollable" style="height: 400px; overflow: scroll;">
-            <table class="table-wrapper-scroll-y table table-striped table-bordered table-hover">
+            <table id="tableModulos" class="table-wrapper-scroll-y table table-striped table-bordered table-hover">
                 <tr style=" background-color: #BDBDBD"><td colspan="4"><h4>Modulos</h4></td></tr>
                     {% for mod in modulos %}
                         <tr id="tableRow{{mod.id_modulo}}" onclick="setModulo(this.id)">
@@ -21,10 +15,10 @@
                     {% endfor %}
             </table>
             </div>
+    <div class="row">
+    <div class="col-md-6 col-lg-6 mt-3">
             <br>
             <h4 id="tituloModulo">Módulo</h5>
-            <form class="needs-validation" method="post">
-                {% csrf_token %}
                 <label for="nombreAlumno">Nombre</label>
                 <div class="row">
                     <input type="text" id="inputNombre" class="form-control border border-ligth col-lg-8" id="nombreAlumno" name="nombreAlumno" placeholder="Nombre" required value="{{ alumnoSel.nombre_alumno | default_if_none:'' }}">
@@ -54,7 +48,10 @@
        <h4>Instituto Telebachiller #3</h4>
        <br>
        <h5>Programa del módulo</h5>
-       <input id="input-b1" name="input-b1" type="file" class="file" data-browse-on-zone-click="true">
+       <div class="row">
+       <input id="pdfInput" name="input-b1" type="file" class="file" data-browse-on-zone-click="true">
+       <button id="btnGuardarArchivo" class="col-lg-2 btn btn-block btn-info disabled"><i class="fas fa-save"></i> Guardar</button>
+        </div>
        <br>
        <br>
         <label style="font-size: 20px;">Semestre *</label>
@@ -79,13 +76,11 @@
         <label style="font-size: 20px;">Créditos *</label>
         <input style="text-align: center;" type="text" class="form-control border border-ligth col-lg-4" id="inputCreditos" name="creditosModulo">
         <br>
-        <label id="tituloPropUnidad" style="font-size: 20px;">Próposito de la unidad</label>
-        <div class="row">
-            <textarea readonly style="height: 250px;"  class="form-control rounded-0 col-lg-7" id="propositoUnidad" rows="3"></textarea>
-            <a id="btnGuardarProposito" class="col-lg-2 btn btn-block btn-info disabled"><i class="fas fa-save"></i> Guardar</a>
-        </div>
-
-    </form>
+            <label id="tituloPropUnidad" style="font-size: 20px;">Próposito de la unidad</label>
+                <div class="row">
+                    <textarea style="height: 250px;"  class="form-control rounded-0 col-lg-7" id="propositoUnidad" rows="3"></textarea>
+                    <button id="btnGuardarProposito" class="col-lg-2 btn btn-block btn-info disabled"><i class="fas fa-save"></i> Guardar</button>
+                </div>
     </div>
 
 
