@@ -1,6 +1,6 @@
 /media/
 *.pyc
 
-/migrations/
+*migrations/*
 /__pycache__/
 /env/
