@@ -22,30 +22,6 @@
     }
     </style>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-    function populate(){
-        $('#selectMunicipio').change(function(){
-		    var municipio = $('#selectMunicipio').find(":selected").val();
-			$.ajax({
-			    url:"/SigApp/updl/"+municipio,
-				method: 'GET',
-				dataType: "json",
-				success:function(jsonData){
-				var optionsLocalidades="";		
-				    $('#selectLocalidad').empty();
-					$('#selectLocalidad').append('<option value="00"> Seleccione Localidad </option>');
-					$.each(JSON.parse(jsonData),function(i,item){
-					optionsLocalidades+='<option value="'+item["fields"]["Clave_Municipio"]+'">'+item["fields"]["Nombre"]+'</option>';
-					item["fields"]["Nombre"]
-                    });
-					$('#selectLocalidad').append(optionsLocalidades);
-					console.log(jsonData);
-					}
-			})		
-		});							
-	}		
-</script>
-
 
     <div class="container-fluid">
         <div class="row">
@@ -115,12 +91,10 @@
             var map = new google.maps.Map(
                 document.getElementById('map'), {zoom: 13, center: options});
             var infowindow = new google.maps.InfoWindow;
-            //Arreglo de marcadores
-            //for (i = 0; i < coordenadas.length; i++) {  
+             
             var marker = new google.maps.Marker({
                 position: options,
                 map: map,
-                label: '!'
             });
 
             map.addListener('center_changed', function() {
@@ -144,7 +118,6 @@
                 infowindow.open(map, marker);
                 }
             })(marker, options));
-            //Verificando si existe contenido
         }
  
         function redirecciona(){
