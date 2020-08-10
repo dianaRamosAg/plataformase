@@ -2,7 +2,7 @@
 *.pyc
 *.idea
 
-*migrations/*
+*/migrations/*
 *__pycache__/*
 env/
 accounts/
