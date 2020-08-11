@@ -704,8 +704,9 @@ def crear_solicitud_examen(request):
             nivel_educativo = request.POST['nivel']
             fecha_e = request.POST["fecha_exa"]
             lugar_e = request.POST["Lugar_exa"]
+            hora_e = request.POST["hora_exa"]
             solicitud = SolicitudExamen(categoria=categoria, id_presidente=presidente, id_secretario=secretario, id_vocal=vocal, 
-                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e)
+                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e)
             solicitud.save()
             msg = 'Nueva solicitud de exámenes a titulo. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=1, user_id=request.user.id)

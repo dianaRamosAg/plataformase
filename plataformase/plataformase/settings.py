@@ -163,13 +163,14 @@ STATICFILES_DIRS = [
 ]
 
 # Bucket de google cloud plattform 
- 
+ #https://storage.googleapis.com/plataformase.appspot.com/Archivos/MedSuperior/RVOE.pdf
 if os.getenv('GAE_APPLICATION', None):
     DEFAULT_FILE_STORAGE = 'django_gcloud_storage.DjangoGCloudStorage'
     GCS_PROJECT = "plataformase"
     GCS_BUCKET = "plataformase.appspot.com"
     GCS_CREDENTIALS_FILE_PATH = "key.json"
-    MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
+    MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GCS_BUCKET)
+    #MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

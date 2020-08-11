@@ -308,11 +308,7 @@ def actualizarperfilusr(request):
         idup = request.user.id
         print("contraseña")
 
-        print(request.user.password)
-        if(request.user.password=='sistemas1'):
-            print("si")
-        else:
-            print("no")
+        
 
         CustomUser.objects.filter(id=idup).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
         codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name,
