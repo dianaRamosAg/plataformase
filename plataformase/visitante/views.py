@@ -154,6 +154,10 @@ def regVisit(request):
         first_name = request.POST["first_name"]
         last_name = request.POST["last_name"]
         email = request.POST["email"]
+        #En caso de ya tener una solicitud del mismo correo
+        if VisitanteSC.objects.filter(email=email).exists():
+            return render(request,'solExistente.html')
+
         curp_rfc = request.POST["curp_rfc"]
         calle = request.POST["calle"]
         password = make_password(request.POST["password"])
