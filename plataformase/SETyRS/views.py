@@ -3,7 +3,7 @@ from django.http import Http404
 from django.utils import timezone
 from datetime import date
 from django.contrib import messages
-
+from django.http import JsonResponse
 from .models import *
 from .forms import *
 from RVOES.models import Departamento
@@ -425,6 +425,11 @@ def detalle_solicitud_sinodal(request, id):
     else:
         raise Http404('El usuario no tiene permiso de ver esta pagina')
 
+def upd_solicitud_sinodal(request):
+    if request.method == 'POST':
+        SolicitudSinodal.objects.filter(id=request.POST.get('idSoliSinod')).update(nivel_educativo=request.POST.get("nuevoNivel"))
+        return JsonResponse("Updated",safe=False)
+
 # funcion que retorna la plantilla donde se muestran todas las solicitudes de sinodales que han sido iniciadas o finalizadas
 def lista_solicitudes_sinodales(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -462,8 +467,14 @@ def crear_solicitud_sinodal(request):
             user_id = request.user.id
             datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
             nivel = datos_escuela.nivel_educativo
-            solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
-            solicitud.save()
+            if nivel == "3":
+                print(request.POST.get("nivel"))
+                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
+                solicitud.save()
+            else:
+                print('NO ES MIXTA')
+                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
+                solicitud.save()
             msg = 'Nueva solicitud de sinodales. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2, user_id=user_id)
             notificacion.save()

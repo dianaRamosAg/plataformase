@@ -25,7 +25,13 @@
                 <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.curriculum}}')"><u>Ver archivo</u></a></td>
                 <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{s.cedula}}')"><u>Ver archivo</u></a></td>
                 <td>{{s.sinodal.estatus}}</td>
-                <td>{{s.sinodal.nivel_educativo}}</td>
+                {% if solicitud.nivel_educativo == 1 %}
+                        <td>Media Superior</td>
+                        {% elif solicitud.nivel_educativo == 2 %}
+                        <td>Superior</td>
+                        {% elif solicitud.nivel_educativo == 3 %}
+                        <td>Aquí está el detalle</td>
+                    {% endif %}
                 <td>
                     {% if s.sinodal.estatus == 'Aceptado' or s.sinodal.estatus == 'Rechazado' %}
                     <input type="button" class="btn btn-primary" value="Aceptar" disabled>

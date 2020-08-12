@@ -26,6 +26,7 @@ urlpatterns = [
     path('institucion/', login_required(views.index_institucion), name='SETyRS_institucion_index'), #INDEX de la institucion
     path('institucion/nueva_solicitud_sinodal/', login_required(views.nueva_solicitud_sinodal), name='SETyRS_nueva_solicitud_sinodal'), #Vista para crear una nueva solicitud de sinodal
     path('institucion/nueva_solicitud_sinodal/crear/', login_required(views.crear_solicitud_sinodal), name='SETyRS_crear_solicitud_sinodal'), #Metodo de creacion de una nueva solicitud de sinodal en la BD
+    path('institucion/Updsolicitud/sinodal/26/',login_required(views.upd_solicitud_sinodal), name="SETyRS_upd_solicitud_sinodal"),# URL que hace uso de la view updSolicitudSinodal
     path('institucion/solicitud/sinodal/<int:id>/', login_required(views.detalle_solicitud_sinodal), name='SETyRS_detalle_solicitud_sinodal'), #Vista de detalle solicitud que redirige a una pagina deacuerdo al estado o fase de la solicitud
     path('institucion/solicitud/sinodal/<int:id>/agregar_sinodal/', login_required(views.agregar_sinodal), name='SETyRS_agregar_sinodal'), #Metodo para agregar un sinodal a la solicitud
     path('institucion/solicitud/sinodal/eliminar_sinodal/', login_required(views.eliminar_sinodal), name='SETyRS_eliminar_sinodal'), #Metodo para eliminar un sinodal de la solicitud
