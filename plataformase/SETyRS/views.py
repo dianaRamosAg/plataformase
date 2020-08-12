@@ -5,6 +5,7 @@ from datetime import date
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import *
+from login.models import CustomUser
 from .forms import *
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
@@ -275,7 +276,8 @@ def revisar_solicitud_examen(request, id):
             presidente = ArchivosSinodales.objects.select_related('sinodal').get(sinodal_id = solicitud.id_presidente)
             secretario = ArchivosSinodales.objects.select_related('sinodal').get(sinodal_id = solicitud.id_secretario)
             vocal =  ArchivosSinodales.objects.select_related('sinodal').get(sinodal_id = solicitud.id_vocal)
-            context = {'departamento':dep,'lista_alumnos': alumnos, 'solicitud':solicitud,'p':presidente,'s':secretario,'v':vocal,'notificaciones':num_notifi}
+            user = request.user
+            context = {'departamento':dep,'lista_alumnos': alumnos, 'solicitud':solicitud,'p':presidente,'s':secretario,'v':vocal,'notificaciones':num_notifi, 'usuario': user}
 
             if request.user.departamento_id == 2:
                 notificacion = NotificacionAdmin.objects.filter().order_by('-fecha')
