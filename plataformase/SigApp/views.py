@@ -326,7 +326,7 @@ def localizador(request):
 
     
     
-    return render(request,'SigApp/mapa_institucionesORIGINAL.html',{
+    return render(request,'SigApp/mapa_instituciones3.html',{
         "opcionesgrados": GradosAcademicos,
         "areaseducacion":AreasIntereses,
         "opcionesmunicipios": Municipios,
