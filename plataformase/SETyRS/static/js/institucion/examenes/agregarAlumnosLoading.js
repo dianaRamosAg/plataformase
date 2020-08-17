@@ -1,4 +1,3 @@
-
 function cargarListeners() { 
     var btnC = document.getElementById("btnContinuar");
     btnC.addEventListener("click",continuarSoli,false);
@@ -12,7 +11,7 @@ function continuarSoli(){
     //creamos el boton de cargando...
     var creandoBoton = document.createElement("button");
     creandoBoton.className="btn btn-primary mt-3";
-    creandoBoton.innerHTML="Agregando sinodales..."
+    creandoBoton.innerHTML="Agregando alumnos..."
     creandoBoton.disabled=true;
     //creamos el span para que gire
     var spanBoton = document.createElement("span");

@@ -626,7 +626,7 @@ def nueva_solicitud_examen(request):
         num_notifi = contarNotificaciones(request.user.id)
         sinodales = Sinodales.objects.filter(user_id=request.user.id, estatus=2).order_by('nombre_sinodal')
         context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel}
-        return render(request, 'institucion/examenes/nueva_solicitud.html', context)
+        return render(request, 'institucion/sinodales/examenes/nueva_solicitud.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
 
@@ -640,11 +640,11 @@ def detalle_solicitud_examen(request, id):
             context = {'lista_alumnos': lista_alumnos, 'solicitud':solicitud,
                        'notificacion':notificacion,'notificaciones':num_notifi}
             if solicitud.fase == 1:
-                return render(request, 'institucion/examenes/agregar_alumnos.html', context)
+                return render(request, 'institucion/sinodales/examenes/agregar_alumnos.html', context)
             elif solicitud.fase == 2:
                 archivos = ArchivosAlumnos.objects.filter(solicitud_id=id).order_by('id')
                 context.update({'archivos':archivos})
-                return render(request, 'institucion/examenes/agregar_documentos_alumnos.html', context)
+                return render(request, 'institucion/sinodales/examenes/agregar_documentos_alumnos.html', context)
             else:
                 if solicitud.estatus == 2:
                     solicitud.estatus = 'Pendiente'
@@ -659,7 +659,7 @@ def detalle_solicitud_examen(request, id):
                 secretario = get_object_or_404(Sinodales, pk=solicitud.id_secretario)
                 vocal =  get_object_or_404(Sinodales, pk=solicitud.id_vocal)
                 context.update({'p':presidente, 's':secretario, 'v':vocal, 'archivos':archivos})
-                return render(request, 'institucion/examenes/informacion_solicitud_examen.html', context)
+                return render(request, 'institucion/sinodales/examenes/informacion_solicitud_examen.html', context)
         else:
             raise Http404("El usuario no tiene permiso de ver esta página")
     else:
@@ -698,7 +698,7 @@ def lista_solicitudes_examenes(request):
                 s.estatus = 'Aprobada'
             elif e==4:
                 s.estatus = 'Rechazada'     
-        return render(request, 'institucion/examenes/lista_solicitudes_examenes.html', context)
+        return render(request, 'institucion/sinodales/examenes/lista_solicitudes_examenes.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
 

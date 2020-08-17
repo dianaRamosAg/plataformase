@@ -12,7 +12,7 @@ function continuarSoli(){
     //creamos el boton de cargando...
     var creandoBoton = document.createElement("button");
     creandoBoton.className="btn btn-primary mt-3";
-    creandoBoton.innerHTML="Agregando sinodales..."
+    creandoBoton.innerHTML="Guardando archivos..."
     creandoBoton.disabled=true;
     //creamos el span para que gire
     var spanBoton = document.createElement("span");
