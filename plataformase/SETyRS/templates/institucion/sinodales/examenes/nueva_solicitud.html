@@ -47,24 +47,27 @@
                     <option value="7">ALTO RENDIMIENTO DE LICENCIATURA</option>
                     <option value="8">EXPERIENCIA PROFESIONAL</option>
                 </select>
+                
+                
+
             </div>
             <div class="col-md-2">
-                <label>SECRETARIO</label>
+                <label>otra(Ingresar opcion de titulacion valida para la secretaria):</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="secretario" id="selectSecretario">
-                    <option  selected hidden>Seleccionar</option>
-                    {% if sinodales %}
-                        {% for s in sinodales %}
-                            <option value="{{s.id}}">{{s.nombre_sinodal}}  {{s.rfc}}</option>
-                        {% endfor %}
-                    {% else %}
-                        <option>No tiene sinodales registrados</option>
-                    {% endif %}
-                  </select>
+                <input type="text" class="form-control" size="100" name="otro_exa" required>
             </div>
+
+
+            
         </div>
         <div class="row mb-4">
+
+            
+
+
+
+
             <div class="col-md-2">
                 <label>PRESIDENTE</label>
             </div>
@@ -80,6 +83,27 @@
                     {% endif %}
               </select>
             </div>
+
+            <div class="col-md-2">
+                <label>SECRETARIO</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" name="secretario" id="selectSecretario">
+                    <option  selected hidden>Seleccionar</option>
+                    {% if sinodales %}
+                        {% for s in sinodales %}
+                            <option value="{{s.id}}">{{s.nombre_sinodal}}  {{s.rfc}}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option>No tiene sinodales registrados</option>
+                    {% endif %}
+                  </select>
+            </div>
+
+            
+        
+        </div>
+        <div class="row mb-4">
             <div class="col-md-2">
                 <label>VOCAL</label>
             </div>
@@ -95,7 +119,8 @@
                     {% endif %}
               </select>
             </div>
-        
+
+
         </div>
         <div class="row mb-4">
 
@@ -124,7 +149,7 @@
                
             </div>
             <div class="col-md-4">
-                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="" required>
+                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="12:00" required>
             </div>
 
 
