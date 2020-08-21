@@ -159,6 +159,9 @@ def regVisit(request):
             return render(request,'solExistente.html')
 
         curp_rfc = request.POST["curp_rfc"]
+        #Si la CURP/RFC ya se encuentra registrado
+        if VisitanteSC.objects.filter(curp_rfc=curp_rfc).exists():
+            return render(request,'datosExistentes.html')
         calle = request.POST["calle"]
         password = make_password(request.POST["password"])
         noexterior = request.POST["noexterior"]
@@ -173,6 +176,9 @@ def regVisit(request):
         if tipo_usuario == '1':
             # Guardamos los datos de un centro de trabajo vinculado con la institución
             inst_cct = request.POST["cct"]
+            if VisitanteSC.objects.filter(cct=inst_cct).exists():
+                return render(request,'cctExistentes.html')
+            
             inst_nombredirector = request.POST["nombre_director"]
             sector = request.POST["sector"]
             nivel_educativo = request.POST["nivel_educativo"]
@@ -261,6 +267,8 @@ def actualizarperfilusr(request):
     if request.method == 'POST':
         first_name = request.POST["first_name"]
         email = request.POST["email"]
+        if CustomUser.objects.filter(email=email).exists():
+            return render(request,'datosExistentes.html')
 
         if request.user.tipo_persona=='1':
             last_name = request.POST["last_name"]
