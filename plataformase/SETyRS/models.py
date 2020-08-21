@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from login.models import CustomUser, UsuarioInstitucion
-from django.utils import timezone
 from .validators import validate_file_extension
 
 # Create your models here.
