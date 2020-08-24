@@ -322,11 +322,11 @@ def localizador(request):
     Localidades = Localidad.objects.all()
     AreasIntereses = AreaInteres.objects.all()
     Municipios = Municipio.objects.all()
-    Escuelas = EscuelaC.objects.all().order_by('-Latitud') #decendente
+    Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
 
     
     
-    return render(request,'SigApp/mapa_institucionesORIGINAL.html',{
+    return render(request,'SigApp/mapa_instituciones3.html',{
         "opcionesgrados": GradosAcademicos,
         "areaseducacion":AreasIntereses,
         "opcionesmunicipios": Municipios,
@@ -358,6 +358,16 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
             municipio='BAHÍA DE BANDERAS'
         municipio=municipio.replace("-"," ")
     if localidad != 'empty':
+        if("1" in localidad):
+            localidad = localidad.replace('1','Á')
+        if("2" in localidad):
+            localidad = localidad.replace('2','É')
+        if("3" in localidad):
+            localidad = localidad.replace('3', 'Í')
+        if("4" in localidad):
+            localidad = localidad.replace('4', 'Ó')
+        if("5" in localidad):
+            localidad = localidad.replace('5', 'Ú')
         localidad=localidad.replace("-"," ") 
     if nivelacademico != 'empty':
         nivelacademico=nivelacademico.replace("-"," ")  
@@ -370,11 +380,12 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     if localidad != 'empty':
                         #Si hay una localidad seleccionada se filtará por localidad,Sector,Area de Interes y Nivel Academico
                         # Reemplazar filtro InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in=Subquery(DetalleCarrera.objects.filter(Clave_Carrera__areaInteres__Clave_Area=areainteres).values('Clave_Institucion'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Dominio=dominio).filter(Nivel=nivelacademico))                    
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Localidad=localidad).filter(Dominio=dominio).filter(Nivel=nivelacademico).filter(TipoServicio = areainteres))     
+                        #print('keeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')             
                     else:
                         #Si no se seleccionó una localidad se filtará por municipio,Sector,Area de Interes y Nivel Academico
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in=Subquery(DetalleCarrera.objects.filter(Clave_Carrera__areaInteres__Clave_Area=areainteres).values('Clave_Institucion'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Nivel=nivelacademico).filter(Dominio=dominio))                    
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Nivel=nivelacademico).filter(Dominio=dominio))                   
 
                 else:
                     #Si no hay municipio seleccionado, verificamos si hay una localidad seleccionada
@@ -415,11 +426,13 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     if localidad != 'empty':
                         #Si hay una localidad seleccionada se filtará por localidad,Sector y Nivel Academico (SIN AREA DE INTERES)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Dominio=dominio))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio = municipio).filter(Localidad=localidad).filter(Dominio = dominio).filter(Nivel=nivelacademico))
+                        #print('pero ke a pasaooooooooooooooooooooooooooooooooooooooooo')
                     else:
                         #Si no se seleccionó una localidad se filtará por municipio,Sector y Nivel Academico (SIN AREA DE INTERES)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Dominio=dominio).filter(Nivel=nivelacademico))
+                        #InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Dominio=dominio).filter(Nivel=nivelacademico))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio = municipio).filter(Dominio = dominio).filter(Nivel=nivelacademico))
                 else:
                     #Si no hay municipio seleccionado, verificamos si hay una localidad seleccionada
                     if localidad != 'empty':
@@ -508,13 +521,14 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     else:
                         #Si no se seleccionó una localidad se filtará por municipio,Sector y Nivel Academico (SIN AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Dominio=dominio).filter(Nivel=nivelacademico))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Nivel=nivelacademico))
+                        #print('terremoto pa tu colaaaaaaaaaaaaaaaaaaaa')
                 else:
                     #Si no hay municipio seleccionado, verificamos si hay una localidad seleccionada
                     if localidad != 'empty':
                         #Si no se seleccionó municipio pero una localidad fue seleccionada de manera directa, se filtrará por la localidad seleccionada y Nivel Academico (SIN AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Nivel=nivelacademico))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Nivel=nivelacademico))   
                     else:
                         #Si no se seleccionó Municipio y tampoco una localidad, se filtrarán las instituciones y Nivel Academico ( SIN MUNICIPIO O LOCALIDAD NI AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))))
@@ -525,7 +539,7 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     if localidad != 'empty':
                         #Si no hay un area de interes seleccionada y hay una localidad seleccionada se filtará por localidad y Sector(SIN NIVEL ACADEMICO , AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Dominio=dominio))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Localidad = localidad))
                     else:
                         #Si no se seleccionó una localidad ni un area de interes pero si un municipio, se filtará por municipio y Sector (SIN NIVEL ACADEMICO, AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))))

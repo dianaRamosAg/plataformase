@@ -37,17 +37,22 @@ def index(request):
 
 ''' Menu de instituciones'''
 def menuinstitucion(request,id):
-    inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
-    if inst.modalidad == '1':
-        # En caso de ser modalidad Telebachillerato
-        return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
-    else: 
-        return render(request,'menuinstitucion.html')
+    if request.user.tipo_usuario == '1':
+        inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
+        if inst.modalidad == '1': #En caso de ser TBC
+            return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
+        else:
+            return render(request,'menuinstitucion.html')
+    else:
+        return redirect('logout')
 
 
 
 def menuparticular(request):
-    return render(request,'menuparticular.html')
+    if request.user.tipo_usuario == '5':
+        return render(request,'menuparticular.html')
+    else:
+        return redirect('logout')
 
 def menuadmin(request):
     if request.user.tipo_usuario == '4':
@@ -57,13 +62,16 @@ def menuadmin(request):
         else:
              return render(request,'menuadmin.html')
     else:
-        return redirect('perfil')
+        return redirect('logout')
 
 def menudepartamento(request):
-    if request.user.departamento_id == '1':
-        return render(request,'menudepartamento_ce.html')
+    if request.user.tipo_usuario == '3':
+        if request.user.departamento_id == '1':
+            return render(request,'menudepartamento_ce.html')
+        else:
+            return render(request,'menudepartamento.html')
     else:
-        return render(request,'menudepartamento.html')
+        return redirect('logout')
 
 def control(request):
     return render(request,'menudepartamento_ce.html')
@@ -216,8 +224,9 @@ def notificacionsc(request):
 
 #Funcion que manda los datos del visitante que pidió cuenta, se valida y puede aceptarse o no.
 def validar(request,email):
-    vs=VisitanteSC.objects.get(email = email)
-    return render(request,'validar.html',{'VisitanteSC':vs})
+    if request.user.tipo_usuario == '4':
+        vs=VisitanteSC.objects.get(email = email)
+        return render(request,'validar.html',{'VisitanteSC':vs})
 
 
 def regUser(request, email):
