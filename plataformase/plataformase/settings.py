@@ -99,10 +99,10 @@ else:
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
             #'PASSWORD' : 'diana',
-            'PASSWORD' : 'admin',
+            'PASSWORD' : 'ricor',
             'HOST'     : 'localhost',
-            #'PORT'    : '5432',
-            'PORT'     : '3306',
+            'PORT'    : '5432',
+            #'PORT'     : '3306',
         }
     }
 
@@ -172,8 +172,8 @@ else:
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dianalaura.lee@gmail.com'
-EMAIL_HOST_PASSWORD = 's1st3m4s1'
+EMAIL_HOST_USER = 'sigssemssicyt@gmail.com'
+EMAIL_HOST_PASSWORD = 'sigapp2019'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
