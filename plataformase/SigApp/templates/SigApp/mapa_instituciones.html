@@ -11,6 +11,9 @@
         }    
     .centro{
         text-align: center;
+        }
+    .left{
+        text-align: left;
         }    
     .centroItem{
         align-items: center;
@@ -41,7 +44,8 @@
 				success:function(jsonData){
 				var optionsLocalidades="";		
 				    $('#selectLocalidad').empty();
-					$('#selectLocalidad').append('<option value="00"> Seleccione Localidad </option>');
+                    $('#selectLocalidad').append('<option value="00"> Seleccionar... </option>');
+					$('#selectLocalidad').append('<option value="00"> TODAS </option>');
 					$.each(JSON.parse(jsonData),function(i,item){
 					optionsLocalidades+='<option value="'+item["fields"]["Clave_Municipio"]+'">'+item["fields"]["Nombre"]+'</option>';
 					item["fields"]["Nombre"]
@@ -62,7 +66,8 @@
                 <div class="row mt-3">            
                     <p class="col-12 mb-2" style="font-size: 18px;">Municipio</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="localidad('selectMunicipio')" TYPE=text id="selectMunicipio" name="selectMunicipio" onclick="populate();" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                        <select class="form-control form-control-sm" onchange="filtroD('selectMunicipio')" TYPE=text id="selectMunicipio" name="selectMunicipio" onclick="populate();" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                            <option class="opt" value="seleccionar">Selecionar...</option>
                             <option class="opt" value="seleccioneI">TODOS</option>
                             {% for element in opcionesmunicipios %}
                             <option id="idmuni" value="{{element.Clave_Municipio}}">{{element.Nombre}}</option>
@@ -74,7 +79,8 @@
                 <div class="row mt-5">
                     <p class="col-12 mb-2" style="font-size: 18px;">Localidad</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="localidad('selectLocalidad')" TYPE=text id="selectLocalidad" name="selectLocalidad" value="" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;" >
+                        <select class="form-control form-control-sm" onchange="filtroD('selectLocalidad')" TYPE=text id="selectLocalidad" name="selectLocalidad" value="" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;" >
+                            <option class="opt" value="seleccionar" selected="selected">Selecionar...</option>
                             <option class="opt" value="seleccioneI">TODAS</option>
                             {% for element in localidades %}
                                 <option name="localidades" value="{{element.Clave_Localidad}}">{{element.Nombre}}</option>
@@ -88,6 +94,7 @@
                     <p class="col-12 mb-2" style="font-size: 18px;">Nivel Educativo</p>
                     <div class="centro col-12">
                         <select class="form-control form-control-sm" onchange="filtroD('selectNivel')" class="dropDown" TYPE=text id="selectNivel" name="selectNivel" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                            <option class="opt" value="seleccionar">Selecionar...</option>
                             <option value="Todas" name="nivel">TODOS</option>
                             <option value="Media" name="nivel">MEDIA SUPERIOR</option>
                             <option value="Superior" name="nivel">SUPERIOR</option> 
@@ -99,18 +106,19 @@
                     <p class="col-12 mb-2" style="font-size: 18px;">Dominio</p>
                     <div class="centro col-12">
                         <select class="form-control form-control-sm" onchange="filtroD('selectDominio')" class="dropDown" TYPE=text id="selectDominio" name="selectDominio" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
-                            <option value="Todas" name="dominios">TODAS</option>
+                            <option class="opt" value="seleccionar">Selecionar...</option>
+                            <option value="Todas" name="dominios">TODOS</option>
                             <option value="Pública" name="dominios">PÚBLICO</option>
                             <option value="Privada" name="dominios">PRIVADO</option> 
                         </select> 
                     </div>
                 </div>
-               
-                               
-                <div class="row mt-5 mb-3">    
+                        
+                <div class="row mt-5">    
                     <p class="col-12 mb-2" style="font-size: 18px;">Tipo servicio</p>
                     <div class="centro col-12">
                         <select class="form-control form-control-sm" onchange="filtroD('selectTipoS')" class="dropDown" TYPE=text id="selectTipoS" name="selectTipoS" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                            <option class="opt" value="seleccionar">Selecionar...</option>
                             <option value="Todas" name="dominios">TODOS</option>
                             <option value="Pública" name="dominios">BACHILLERATO GENERAL</option>
                             <option value="Privada" name="dominios">PROFESIONAL TÉCNICO</option> 
@@ -119,6 +127,11 @@
                         </select> 
                     </div>
                 </div>
+                
+                <div class="row mt-5 mb-3 p-4">
+                    <button class="btn btn-block btn-info" onclick="restableceFiltros()">Restablecer</button>
+                </div> 
+
                 <!--Para obtener datos de las instituciones y guardarlas en vectores-->
                 <div class="row mt-3">            
                     <div class="centro col-12">
@@ -224,20 +237,20 @@
     
     <script>
         var coordenadas = new Array();
+        var backupC = new Array();
         var repetidos = new Array();
+        var temporal = new Array();
         var flag;
         
-
         var lat = 21.5039;
         var lng = -104.895;
 
         var x = document.getElementById("NombreC");
         var y = x.getElementsByTagName("*");
-        
 
         var m = document.getElementById("LatitudC");
         var n = m.getElementsByTagName("*");
-        console.log(n);
+        //console.log(n);
         var a = document.getElementById("LongitudC");
         var b = a.getElementsByTagName("*");
 
@@ -260,10 +273,11 @@
         var p = o.getElementsByTagName("*");
 
         for(var i = 0; i<y.length; i++){
+            //coordenadas[i] contiene todas las instituciones
             coordenadas[i] = new Array();
             coordenadas[i][0] = y[i].innerHTML;
-            coordenadas[i][1] = n[i].innerHTML; //Latitud
-            coordenadas[i][2] = b[i].innerHTML; //Longitud
+            coordenadas[i][1] = parseFloat(n[i].innerHTML); //Latitud
+            coordenadas[i][2] = parseFloat(b[i].innerHTML); //Longitud
             coordenadas[i][3] = d[i].innerHTML; //Dominio (Pública - Privada)
             coordenadas[i][4] = f[i].innerHTML; //Localidad
             coordenadas[i][5] = h[i].innerHTML; //Nivel (Media superior - Superior)
@@ -271,77 +285,135 @@
             coordenadas[i][7] = l[i].innerHTML; //Municipio
             coordenadas[i][8] = p[i].innerHTML; //Clave
         }
+        backupC = coordenadas;
+
+        /*
+        A partir de aquí empiezan los métodos nuevos
+        */
 
         function filtroD(parametro){
             var parametroF = document.getElementById(parametro).options[document.getElementById(parametro).selectedIndex].text;
             parametroF = parametroF.toUpperCase();
-            //Comienza filtro para dominio **Falta añadir en if el filtro de nivel**
-                for(var i = 0; i< y.length; i++){
-                    if(d[i].innerHTML  == " "+parametroF+" " || f[i].innerHTML  == " "+parametroF+" " || h[i].innerHTML  == " "+parametroF+" " || j[i].innerHTML  == " "+parametroF+" " || l[i].innerHTML  == " "+parametroF+" "){
-                        coordenadas[i] = new Array();
-                        coordenadas[i][0] = y[i].innerHTML;
-                        coordenadas[i][1] = n[i].innerHTML; //Latitud
-                        coordenadas[i][2] = b[i].innerHTML; //Longitud
-                        coordenadas[i][3] = d[i].innerHTML; //Dominio (Pública - Privada)
-                        coordenadas[i][4] = f[i].innerHTML; //Localidad
-                        coordenadas[i][5] = h[i].innerHTML; //Nivel
-                        coordenadas[i][6] = j[i].innerHTML; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
-                        coordenadas[i][7] = l[i].innerHTML; //Municipio
-                        coordenadas[i][8] = p[i].innerHTML; //Clave
-                    }else{
-                        if(parametroF  == "TODAS" || parametroF  == "TODOS" || parametroF == "Seleccione Localidad"){
-                            coordenadas[i] = new Array();
-                            coordenadas[i][0] = y[i].innerHTML;
-                            coordenadas[i][1] = n[i].innerHTML; //Latitud
-                            coordenadas[i][2] = b[i].innerHTML; //Longitud
-                            coordenadas[i][3] = d[i].innerHTML; //Dominio (Pública - Privada)
-                            coordenadas[i][4] = f[i].innerHTML; //Localidad
-                            coordenadas[i][5] = h[i].innerHTML; //Nivel
-                            coordenadas[i][6] = j[i].innerHTML; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
-                            coordenadas[i][7] = l[i].innerHTML; //Municipio
-                            coordenadas[i][8] = p[i].innerHTML; //Clave
-                            
-                        }else{
-                            coordenadas[i] = new Array();
-                            coordenadas[i][0] = null;
-                            coordenadas[i][1] = null; //Latitud
-                            coordenadas[i][2] = null; //Longitud
-                            coordenadas[i][3] = null; //Dominio (Pública - Privada)
-                            coordenadas[i][4] = null; //Localidad
-                            coordenadas[i][5] = null; //Nivel
-                            coordenadas[i][6] = null; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
-                            coordenadas[i][7] = null; //Municipio
-                            coordenadas[i][8] = null; //Clave
-                        } 
-                    }
-                    
-                }
-                initMap();
+            var select = document.getElementById(parametro).disabled = true;
+            //parametro F contiene el texto del filtro seleccionado
+            //coordenadas es un arreglo con todas las instituciones
+            filtroArray(coordenadas, parametroF)
+            initMap();
         }
-        
-        function geocodeM(){
-            var x = document.getElementById("selectMunicipio").selectedIndex;
-            var municipiomap = document.getElementsByTagName("option")[x].text;
-            var location = municipiomap+', Nayarit';
-            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                params:{
-                    address: location,
-                    key: 'AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4'
+
+        function filtroArray(array, filtro){
+            //array.sort();
+            console.log('Filtro:' + filtro)
+            console.log('Arreglo:')
+            console.log(array)
+            //alert(filtro)
+            //Esta función es para hacer el filtrado del array con el filtro, generando otro arreglo y luego realizar coordenadas = nuevoArray
+            for(i = 0; i < Object.keys(array).length; i++){
+                //Si se selecciona todos/todas simplemente se llenan normal
+                if(filtro  == "TODOS"){
+                    //alert('entro a todas todos')
+                    temporal[i] = new Array();
+                    temporal[i][0] = array[i][0];
+                    temporal[i][1] = parseFloat(array[i][1]); //Latitud
+                    temporal[i][2] = parseFloat(array[i][2]); //Longitud
+                    temporal[i][3] = array[i][3]; //Dominio (Pública - Privada)
+                    temporal[i][4] = array[i][4]; //Localidad
+                    temporal[i][5] = array[i][5]; //Nivel
+                    temporal[i][6] = array[i][6]; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
+                    temporal[i][7] = array[i][7]; //Municipio
+                    temporal[i][8] = array[i][8]; //Clave
                 }
-            })
-            .then(function(response){  
-                console.log(response);
-                lat = response.data.results[0].geometry.location.lat;
-                lng = response.data.results[0].geometry.location.lng;
-                initMap();
+                //Ya se compara el filtro con el array, no con lo arrojado en los selects
+                if(array[i][3]  == " "+filtro+" " || array[i][5]  == " "+filtro+" " || array[i][6]  == " "+filtro+" "){
+                    console.log(i)
+                    temporal[i] = new Array();
+                    temporal[i][0] = array[i][0];
+                    temporal[i][1] = parseFloat(array[i][1]); //Latitud
+                    temporal[i][2] = parseFloat(array[i][2]); //Longitud
+                    temporal[i][3] = array[i][3]; //Dominio (Pública - Privada)
+                    temporal[i][4] = array[i][4]; //Localidad
+                    temporal[i][5] = array[i][5]; //Nivel
+                    temporal[i][6] = array[i][6]; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
+                    temporal[i][7] = array[i][7]; //Municipio
+                    temporal[i][8] = array[i][8]; //Clave
+                }
+                if(array[i][7]  == " "+filtro+" "){
+                    temporal[i] = new Array();
+                    temporal[i][0] = array[i][0];
+                    temporal[i][1] = parseFloat(array[i][1]); //Latitud
+                    temporal[i][2] = parseFloat(array[i][2]); //Longitud
+                    temporal[i][3] = array[i][3]; //Dominio (Pública - Privada)
+                    temporal[i][4] = array[i][4]; //Localidad
+                    temporal[i][5] = array[i][5]; //Nivel
+                    temporal[i][6] = array[i][6]; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
+                    temporal[i][7] = array[i][7]; //Municipio
+                    temporal[i][8] = array[i][8]; //Clave
+                    geocodeM(filtro);
+                }else{
+                    if(array[i][4]  == " "+filtro+" " || filtro == "TODAS"){
+                    temporal[i] = new Array();
+                    temporal[i][0] = array[i][0];
+                    temporal[i][1] = parseFloat(array[i][1]); //Latitud
+                    temporal[i][2] = parseFloat(array[i][2]); //Longitud
+                    temporal[i][3] = array[i][3]; //Dominio (Pública - Privada)
+                    temporal[i][4] = array[i][4]; //Localidad
+                    temporal[i][5] = array[i][5]; //Nivel
+                    temporal[i][6] = array[i][6]; //Tipo servicio (Bachillerato, Tecnológico, Licenciatura y posgrado)
+                    temporal[i][7] = array[i][7]; //Municipio
+                    temporal[i][8] = array[i][8]; //Clave
+                    //alert('Entrando a ')
+                    geocodeL(filtro);
+                }
+                }
                 
-            })
-            .catch(function(error){
-                console.log(error);
-            });
+            }
+            
+            coordenadas = temporal;
+            temporal = new Array();
+            coordenadas = coordenadas.sort();
+            console.log('Arreglo finalizado:')
+            console.log(coordenadas)
         }
-        
-        function initMap(){ 
+
+        function restableceFiltros(){
+            var municipios = document.querySelectorAll('#selectMunicipio option');
+            var municipio = document.getElementById('selectMunicipio').disabled = false;
+            for (var i = 0, l = municipios.length; i < l; i++) {
+                municipios[i].selected = municipios[i].defaultSelected;
+            }
+
+            var localidades = document.querySelectorAll('#selectLocalidad option');
+            var localidad = document.getElementById('selectLocalidad').disabled = false;
+            for (var i = 0, l = localidades.length; i < l; i++) {
+                localidades[i].selected = localidades[i].defaultSelected;
+            }
+
+            var niveles = document.querySelectorAll('#selectNivel option');
+            var nivel = document.getElementById('selectNivel').disabled = false;
+            for (var i = 0, l = niveles.length; i < l; i++) {
+                niveles[i].selected = niveles[i].defaultSelected;
+            }
+
+            var dominios = document.querySelectorAll('#selectDominio option');
+            var dominio = document.getElementById('selectDominio').disabled = false;
+            for (var i = 0, l = dominios.length; i < l; i++) {
+                dominios[i].selected = dominios[i].defaultSelected;
+            }
+
+            var tipos = document.querySelectorAll('#selectTipoS option');
+            var tipo = document.getElementById('selectTipoS').disabled = false;
+            for (var i = 0, l = tipos.length; i < l; i++) {
+                tipos[i].selected = tipos[i].defaultSelected;
+            }
+            //Para restablecer el array de coordenadas e inicie como nuevo
+            coordenadas = backupC;
+            lat = 21.5039;
+            lng = -104.895;
+            initMap();
+
+        }
+
+        function initMapX(){ 
             //Opciones del mapa
             var options = {
                 zoom: 14,
@@ -395,21 +467,16 @@
                             c++;
                             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                                 return function() {
-                                infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><p>Esta ubicación contiene mas de una institución, da click en listar para visualizar<br></p><br><button onclick='listar(repetidos)'>Listar</button></div>");
+                                //listar(repetidos);
+                                infowindow.setContent("<div onmouseenter='listar(repetidos)' class='centro' id='divInfo' style='vertical-align:middle; text-align:center'><p >Oops! Esta ubicación contiene mas de una institución, consulta la lista<br></p><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'><br><table id='tablaInfo'></table></div>");
                                 infowindow.open(map, marker); 
                                 }
                             })(marker, i));    
-                        }//
-                        
-
+                        }
                         console.log("No esta repetido, continua",i);
                         console.log(repetidos); //
                         repetidos.splice(0,flag);
                         flag=0;
-                        
-                        //rep[i] = new Array();
-                        //rep[i][0] = coor[i][0];
-                        //rep[i][1] = coor[i][1];
                     }  
                 }
                 
@@ -426,18 +493,210 @@
                     });
                 }
             }
+        
+        var coordenadasLatLon = new Array();
+        var repetidos2 = new Array();
+        function find_keys_of_dupl(a){
+            var k = [];
+            for(var i in a){
+                for(var j in a){
+                    if(i!=j && JSON.stringify(a[i]) == JSON.stringify(a[j])){
+                        if(k.indexOf(i) < 0){
+                            k.push(i);
+                        }
+                    }   
+                }
+            }
+            return k;
+        }
+        
+        function initMap(){
+            //Opciones del mapa
+            var options = {
+                zoom: 14,
+                center: { lat, lng }
+            }
+            //Mapa nuevo
+            var map = new google.maps.Map(document.getElementById('map'), options);
+            var marker, i;
+            var infowindow = new google.maps.InfoWindow;
+            /*
+            A partir de aquí comienza el código 
+            */
+
+            /*
+            Para buscar los que tienen latitud y longitud repeteidos, para encapsularlos en un solo array
+            coordenadas[i][1] -> latitud
+            coordenadas[i][2] -> longitud
+            Encontrar los repetidos, meterlos a otro array coordenadasRep, y sacarlos de coordenadas[]
+            */
+            
+            for(i = 0; i < Object.keys(coordenadas).length/2; i++){
+                //coordenadasLatLon es un array con solo latitudes y longitudes para comprobar cuales estan repetidos
+                coordenadasLatLon[i] = new Array();
+                coordenadasLatLon[i][1] = parseFloat(coordenadas[i][1]);
+                coordenadasLatLon[i][2] = parseFloat(coordenadas[i][2]);
+            }
+            
+            //Se procede a verificar cuales son repetidos para sacar el índice y meterlo a un arreglo para proceder a comparar cuando se pongan los marcadores
+            //Con el uso del método find_keys_of_dupl
+            //indicesRepetidos contiene los indices en los cuales existen latitudes y longitudes repetidas
+            indicesRepetidos = find_keys_of_dupl(coordenadasLatLon);
+            //Ciclo para recorrer todas las instituciones sin latitudes y longitudes repetidas (coordenadas.length)
+            for (i = 0; i < Object.keys(coordenadas).length; i++){
+                repetidos[i] = new Array();
+                repetidos[i][0] = parseFloat(coordenadas[i][1]);
+                repetidos[i][1] = parseFloat(coordenadas[i][2]);
+                repetidos[i][2] = coordenadas[i][8];
+                repetidos[i][3] = coordenadas[i][0];
+                
+                repetidos[i][4] = coordenadas[i][3];
+                repetidos[i][5] = coordenadas[i][5];
+                //Los dos siguientes bloques de código son para las instituciones que NO tienen la latitud y longitud repetidas
+                //Esta parte pone sólo los marcadores de todas las instituciones
+                marker = new google.maps.Marker({
+                position: new google.maps.LatLng(coordenadas[i][1], coordenadas[i][2]),
+                map: map
+                });
+                //Esta parte crea el infoWindow y lo pone su respectivo marcador
+                //Se compara si el índice que se está comparando está dentro de los repetidos, si está colocar su infoWindow, si no colocar el normal
+                if(indicesRepetidos.includes(String(i))){
+                    
+                    if(coordenadas[i][1] === repetidos[i][0] && coordenadas[i][2] === repetidos[i][1]){
+                        repetidos2[i] = new Array();
+                        repetidos2[i][0] = parseFloat(repetidos[i][0]);
+                        repetidos2[i][1] = parseFloat(repetidos[i][1]);
+                        repetidos2[i][2] = repetidos[i][2];
+                        repetidos2[i][3] = repetidos[i][3];
+
+                        repetidos2[i][4] = repetidos[i][4];
+                        repetidos2[i][5] = repetidos[i][5];
+                        
+                        //console.log(repetidos2[i])
+                        //repe = repetidos2[i]
+                        lat = parseFloat(coordenadas[i][1])
+                        lon = parseFloat(coordenadas[i][2])
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) { 
+                            return function() {
+                            infowindow.setContent("<div class='centro' id='divInfo' style='vertical-align:middle; text-align:center'><p >Oops! Esta ubicación contiene mas de una institución, consulta la lista <hr> <button class='centro btn btn-success' id='btnListar' onclick='listar(repetidos2)'> Listar Instituciones</button> </p> <p hidden id='coordenadas'>"+marker.getPosition()+"</p> <img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'><br><table id='tablaInfo'></table></div>");
+                            infowindow.open(map, marker); 
+                            }
+                        })(marker, i)); 
+                    }
+                }else{
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                        infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'></div><div class='centro' style='vertical-align:middle; text-align:center'><a href=# onclick='redirecciona()' style='margin:20px'>"+coordenadas[i][0]+"<br><a id='claveMapa'>"+coordenadas[i][8]+"</a>")+"</a></div>";
+                        infowindow.open(map, marker); 
+                        }
+                    })(marker, i));
+                }
+            }
+            /*
+            Fin del código
+            */
+            //Verificando si existe contenido
+            // if(props.content){
+            //     var infoVentana = new google.maps.InfoWindow({
+            //     content: props.content
+            //     });
+
+            //     marker.addListener('click', function(){
+            //     infoVentana.open(map, marker);
+            //     });
+            // }
+            
+        }
+        function listar(ar){
+            //Se obtienen las coordenadas del infoWindow
+
+             document.getElementById("btnListar").style.visibility = "hidden";
+            var coordenadas = document.getElementById('coordenadas').textContent;
+            var coordenadas = coordenadas.replace("(", "")
+            var coordenadas = coordenadas.replace(")", "")
+            var coordenadas = coordenadas.replace(" ", "")
+            var coord = coordenadas.split(",")
+            var lat = coord[0]+ ' '
+            var lon = coord[1] +' '
+            ar.sort();
+            //console.log('entrando')
+            console.log(ar)
+            //console.log(Object.keys(ar).length)
+            
+        
+            var divInfo = document.getElementById('divInfo');
+            var tablaInfo = document.createElement('table');
+            for(i = 0; i < Object.keys(ar).length; i++){ //Object.keys(ar).length -> 324
+                latitud = ar[i][0]//.replace(" ", "")
+                longitud = ar[i][1]//.replace(" ", "")
+                //latitud.trim();
+                //alert(latitud+','+longitud+'.'+'\n'+lat+','+lon+'.')
+                //var l1 = latitud.localeCompare(lat)
+                //var l2 = longitud.localeCompare(lon)
+                
+                if( latitud == lat && longitud == lon){
+                    //console.log(ar[i])
+                    // if (hasDuplicates(ar[i])) {
+                    //     alert("Duplicate elements found.");
+                    // }
+                    // else {
+                    //     alert("No Duplicates found.");
+                    // }
+                    
+                    tablaInfo.id = 'tablaInfo';
+                    var tr = document.createElement('tr');
+                    var td1 = document.createElement('td');
+                    var td2 = document.createElement('td');
+
+                    var td3 = document.createElement('td'); //
+                    var td4 = document.createElement('td'); //
+
+                    var a = document.createElement('a');
+                    var pLat = ar[i][2];
+                    a.href = "institucionesUbicacion/id/"+pLat.trimLeft();
+                
+
+                    a.textContent = ar[i][2];
+                    td1.appendChild(a);
+                    td2.textContent = ar[i][3];
+                    td3.textContent = ar[i][4];
+                    td4.textContent = ar[i][5];
+
+                    tr.appendChild(td1);
+                    tr.appendChild(td2);
+
+                    tr.appendChild(td3); //
+                    tr.appendChild(td4); //
+
+                    tablaInfo.appendChild(tr);
+
+                    tablaInfo.setAttribute("class", "left table table-bordered ");
+                } 
+                
+            }
+            divInfo.appendChild(tablaInfo);
+        }
+
+        function hasDuplicates(arr)
+        {
+            return new Set(arr).size !== arr.length; 
+        }
+
+        /*
+        Fin de los códigos nuevos
+        */
  
         function redirecciona(){
             var claveC = document.getElementById('claveMapa').innerHTML;
-            
             location.replace("institucionesUbicacion/id/"+claveC.trimLeft())
         }
-        function geoCodeL(){
-            var localidadmap = document.getElementById("selectLocalidad").options[document.getElementById("selectLocalidad").selectedIndex].text;
-            var z = document.getElementById("selectMunicipio").selectedIndex;
-            var municipio = document.getElementsByTagName("option")[z].text;
 
-            var location = localidadmap+",'"+municipio+"'"+",Nayarit";
+        function geocodeM(municipio){
+            //var x = document.getElementById("selectMunicipio").selectedIndex;
+            //var municipiomap = document.getElementsByTagName("option")[x].text;
+            //alert(municipio)
+            municipiomap = municipio//al municipio que sea seleccionado
+            var location = municipiomap+', Nayarit';
             axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                 params:{
                     address: location,
@@ -446,8 +705,8 @@
             })
             .then(function(response){  
                 console.log(response);
-                lat = response.data.results[0].geometry.location.lat;
-                lng = response.data.results[0].geometry.location.lng;
+                lat = parseFloat(response.data.results[0].geometry.location.lat);
+                lng = parseFloat(response.data.results[0].geometry.location.lng);
                 initMap();
                 
             })
@@ -456,41 +715,35 @@
             });
         }
 
-        function localidad(parametro){
-            geoCodeL();
-            filtroD(parametro);
-
-        }
-        var stop = 0;
-        function listar(ar){
-            document.getElementById("app").style.visibility = "visible";
-            
-            if(stop>0){  
-            }else{
-                for(i = 0; i < ar.length; i++){
-                    var tr = document.createElement('tr');
-                    var td1 = document.createElement('td');
-                    var td2 = document.createElement('td');
-
-                    var a = document.createElement('a');
-                    var pLat = ar[i][2];
-                    a.href = "institucionesUbicacion/id/"+pLat.trimLeft();
-                    
-
-                    a.textContent = ar[i][2];
-                    td1.appendChild(a);
-                    td2.textContent = ar[i][3];
-                    tr.appendChild(a);
-                    tr.appendChild(td2);
-                    var app = document.querySelector('#mytable');
-                    app.appendChild(tr);  
-                    stop++;
-                }
+        function geocodeL(localidad){
+            //var localidadmap = document.getElementById("selectLocalidad").options[document.getElementById("selectLocalidad").selectedIndex].text;
+            if(localidad == 'TODAS'){
+                console.log('k')
             }
-            
-            
-            
+            else{
+                localidadmap = localidad;
+                var z = document.getElementById("selectMunicipio").selectedIndex;
+                var municipio = document.getElementsByTagName("option")[z].text;
+                var location = localidadmap+",'"+municipio+"'"+",Nayarit";
+                axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                    params:{
+                        address: location,
+                        key: 'AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4'
+                    }
+                })
+                .then(function(response){  
+                    console.log(response);
+                    lat = parseFloat(response.data.results[0].geometry.location.lat);
+                    lng = parseFloat(response.data.results[0].geometry.location.lng);
+                    initMap();
+                    
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+            }
         }
+
         
         
     </script>
@@ -499,4 +752,13 @@
     
 </body>
 {% endblock %}
-</html>
+</html><html><head><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"><meta name="Robots" content="NOINDEX " /></head><body></body>
+                <script type="text/javascript">
+                 var gearPage = document.getElementById('GearPage');
+                 if(null != gearPage)
+                 {
+                     gearPage.parentNode.removeChild(gearPage);
+                     document.title = "Error";
+                 }
+                 </script>
+                 </html>
