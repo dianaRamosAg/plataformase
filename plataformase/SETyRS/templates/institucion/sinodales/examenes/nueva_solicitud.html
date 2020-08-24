@@ -2,9 +2,10 @@
 <div class="container col-md-10 text-center">
     <h2 class="mt-3">Nueva Solicitud de Exámen a Título</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    <script src="{% static 'js/admins/examenes/nuevaSoli.js' %}" defer></script>
     <p>*Recuerda que para poder realizar una solicitud tienes que tener al menos 3 sinodales registrados.
          Si aún no los tienes registralos <a href="{% url 'SETyRS_nueva_solicitud_sinodal' %}"><strong><u>aquí</u></strong></a></p>
-    <form action="{% url 'SETyRS_crear_solicitud_examen' %}" method="POST">
+    <form id="enviarSolicitud" action="{% url 'SETyRS_crear_solicitud_examen' %}" method="POST">
         {% csrf_token %}
         <div class="container mb-3">
             <div class="container col-md-5 text-center">
@@ -46,24 +47,27 @@
                     <option value="7">ALTO RENDIMIENTO DE LICENCIATURA</option>
                     <option value="8">EXPERIENCIA PROFESIONAL</option>
                 </select>
+                
+                
+
             </div>
             <div class="col-md-2">
-                <label>SECRETARIO</label>
+                <label>otra(Ingresar opcion de titulacion valida para la secretaria):</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="secretario" id="selectSecretario">
-                    <option  selected hidden>Seleccionar</option>
-                    {% if sinodales %}
-                        {% for s in sinodales %}
-                            <option value="{{s.id}}">{{s.nombre_sinodal}}  {{s.rfc}}</option>
-                        {% endfor %}
-                    {% else %}
-                        <option>No tiene sinodales registrados</option>
-                    {% endif %}
-                  </select>
+                <input type="text" class="form-control" size="100" name="otro_exa" required>
             </div>
+
+
+            
         </div>
         <div class="row mb-4">
+
+            
+
+
+
+
             <div class="col-md-2">
                 <label>PRESIDENTE</label>
             </div>
@@ -79,6 +83,27 @@
                     {% endif %}
               </select>
             </div>
+
+            <div class="col-md-2">
+                <label>SECRETARIO</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" name="secretario" id="selectSecretario">
+                    <option  selected hidden>Seleccionar</option>
+                    {% if sinodales %}
+                        {% for s in sinodales %}
+                            <option value="{{s.id}}">{{s.nombre_sinodal}}  {{s.rfc}}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option>No tiene sinodales registrados</option>
+                    {% endif %}
+                  </select>
+            </div>
+
+            
+        
+        </div>
+        <div class="row mb-4">
             <div class="col-md-2">
                 <label>VOCAL</label>
             </div>
@@ -94,7 +119,8 @@
                     {% endif %}
               </select>
             </div>
-        
+
+
         </div>
         <div class="row mb-4">
 
@@ -123,7 +149,7 @@
                
             </div>
             <div class="col-md-4">
-                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="" required>
+                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="12:00" required>
             </div>
 
 
@@ -132,9 +158,10 @@
 
 
 
-
-        <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
-        <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>
+        <div id="buttonContainer" >
+            <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
+            <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>
+        </div>
     </form>
 </div>
 <br>

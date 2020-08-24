@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'TBC',
+    'TBC',
     'SETyRS',
     'SigApp',
+    'sweetify'
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
