@@ -33,30 +33,44 @@
                 <p>*Los sinodales deben ser 3 personas distintas</p>
             </div>
             <div class="col-md-2">
-                <label for="selectCategoria">OPCIÓN DE TITULACIÓN</label>
+                <label for="sel">OPCIÓN DE TITULACIÓN</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="categoria" id="selectCategoria">
+                <select class="form-control" name="categoria" id="sel">
                     <option  selected hidden>Seleccionar</option>
-                    <option value="1">SEMINARIO DE TITULACION</option>
-                    <option value="2">TESIS EXTERNA</option>
-                    <option value="3">INFORME SOBRE SERVICIO SOCIAL</option>
-                    <option value="4">ESTUDIOS DE POSGRADO</option>
-                    <option value="5">EXAMEN GENERAL DE CONOCIMIENTOS</option>
-                    <option value="6">EXAMEN CENEVAL</option>
-                    <option value="7">ALTO RENDIMIENTO DE LICENCIATURA</option>
-                    <option value="8">EXPERIENCIA PROFESIONAL</option>
-                </select>
+                    <option value="SEMINARIO DE TITULACION">SEMINARIO DE TITULACION</option>
+                    <option value="TESIS EXTERNA">TESIS EXTERNA</option>
+                    <option value="INFORME SOBRE SERVICIO SOCIAL">INFORME SOBRE SERVICIO SOCIAL</option>
+                    <option value="ESTUDIOS DE POSGRADO">ESTUDIOS DE POSGRADO</option>
+                    <option value="EXAMEN GENERAL DE CONOCIMIENTOS">EXAMEN GENERAL DE CONOCIMIENTOS</option>
+                    <option value="EXAMEN CENEVAL">EXAMEN CENEVAL</option>
+                    <option value="ALTO RENDIMIENTO DE LICENCIATURA">ALTO RENDIMIENTO DE LICENCIATURA</option>
+                    <option value="EXPERIENCIA PROFESIONAL">EXPERIENCIA PROFESIONAL</option>
+                </select> Valor seleccionado: <input type="button" onclick="see();" value="Ver" /><br/>
+                Agregar opción: <input type="text" id="text"><input type="button" onclick="add();" value="Agregar" onkeyup="javascript:this.value=this.value.toUpperCase();" /><br/>
+
+                <script type="text/javascript">
+                    function add(){
+                    var text = document.getElementById("text");
+                    var sel = document.getElementById("sel");
+                    
+                    var opt = document.createElement("option");
+                    
+                    opt.appendChild(document.createTextNode(text.value));
+                    opt.setAttribute("value", text.value);
+                    
+                    sel.appendChild(opt);
+                    }
+                    
+                    function see(){
+                    alert(document.getElementById("sel").value);
+                    }
+                    </script>
                 
                 
 
             </div>
-            <div class="col-md-2">
-                <label>otra(Ingresar opcion de titulacion valida para la secretaria):</label>
-            </div>
-            <div class="col-md-4">
-                <input type="text" class="form-control" size="100" name="otro_exa" required>
-            </div>
+            
 
 
             

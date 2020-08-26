@@ -9,7 +9,7 @@ $(function () {
   });
 
 function validar() {
-    var categoria = document.getElementById("selectCategoria").value;
+    var categoria = document.getElementById("sel").value;
     var secretario = document.getElementById("selectSecretario").value;
     var presidente = document.getElementById("selectPresidente").value;
     var vocal = document.getElementById("selectVocal").value;

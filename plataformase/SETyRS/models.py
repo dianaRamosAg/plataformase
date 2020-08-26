@@ -9,7 +9,7 @@ from .validators import validate_file_extension
 #--------------------------------------- Modelos de Institución ------------------------------------------------------------
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
-    categoria = models.IntegerField()
+    categoria = models.CharField(max_length=100,default='opcion vacia', blank=True)
     institucion = models.IntegerField(default=1)
     area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
