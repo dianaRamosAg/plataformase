@@ -36,7 +36,7 @@
                 <label for="sel">OPCIÓN DE TITULACIÓN</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="categoria" id="sel">
+                <select class="form-control" name="categoria" id="sel" onChange="otrosOnChange(this)">
                     <option  selected hidden>Seleccionar</option>
                     <option value="SEMINARIO DE TITULACION">SEMINARIO DE TITULACION</option>
                     <option value="TESIS EXTERNA">TESIS EXTERNA</option>
@@ -46,9 +46,12 @@
                     <option value="EXAMEN CENEVAL">EXAMEN CENEVAL</option>
                     <option value="ALTO RENDIMIENTO DE LICENCIATURA">ALTO RENDIMIENTO DE LICENCIATURA</option>
                     <option value="EXPERIENCIA PROFESIONAL">EXPERIENCIA PROFESIONAL</option>
-                </select> Valor seleccionado: <input type="button" onclick="see();" value="Ver" /><br/>
-                Agregar opción: <input type="text" id="text"><input type="button" onclick="add();" value="Agregar" onkeyup="javascript:this.value=this.value.toUpperCase();" /><br/>
-
+                    <option value="OTROS">OTROS</option>
+                </select> 
+                
+                <div id="nCuenta" style="display:none;">Valor seleccionado: <input type="button" onclick="see();" value="Ver" /><br/>
+                    Agregar opción: <input type="text" id="text"><input type="button" onclick="add();" value="Agregar" onkeyup="javascript:this.value=this.value.toUpperCase();" /><br/>
+    </div> 
                 <script type="text/javascript">
                     function add(){
                     var text = document.getElementById("text");
@@ -58,8 +61,10 @@
                     
                     opt.appendChild(document.createTextNode(text.value));
                     opt.setAttribute("value", text.value);
+                    opt.setAttribute("selected", true);
                     
                     sel.appendChild(opt);
+                    document.getElementById("text")="";
                     }
                     
                     function see(){
@@ -143,7 +148,7 @@
                
             </div>
             <div class="col-md-4">
-                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" min="2020-08-03" value="" required>
+                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" min="2020-08-31" value="" required>
             </div>
             
             <div class="col-md-2">
