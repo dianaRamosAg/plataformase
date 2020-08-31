@@ -49,7 +49,7 @@
                     <option value="OTROS">OTROS</option>
                 </select> 
                 
-                <div id="nCuenta" style="display:none;">Valor seleccionado: <input type="button" onclick="see();" value="Ver" /><br/>
+                <div id="nCuenta" style="display:none;">
                     Agregar opción: <input type="text" id="text"><input type="button" onclick="add();" value="Agregar" onkeyup="javascript:this.value=this.value.toUpperCase();" /><br/>
     </div> 
                 <script type="text/javascript">
@@ -64,7 +64,12 @@
                     opt.setAttribute("selected", true);
                     
                     sel.appendChild(opt);
-                    document.getElementById("text")="";
+                    divT = document.getElementById("text");
+                    divT.value="";
+                    divC = document.getElementById("nCuenta");
+                    divC.style.display="none";
+                    
+                    
                     }
                     
                     function see(){
