@@ -1,8 +1,10 @@
-
 function cargarListeners() { 
+    console.log("H");
     var btnNS = document.getElementById("avanzar");
     btnNS.addEventListener("click",creandoSoli,false);
+    btnGuardar.addEventListener("click",guardarDoc,false)
 };
+
 
 function creandoSoli(){
     var btnNS = document.getElementById("avanzar");
@@ -24,9 +26,6 @@ function creandoSoli(){
     divContainer.appendChild(creandoBoton);
 
     //Depués de haber agregado el botón, enviamos el form para crear la solicitud
-
-    setTimeout(function(){ document.getElementById("enviarSolicitud").submit(); }, 2000);
-    
 };
 
   document.addEventListener("DOMContentLoaded", cargarListeners, false);

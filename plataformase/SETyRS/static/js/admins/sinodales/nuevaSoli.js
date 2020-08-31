@@ -24,8 +24,6 @@ function creandoSoli(){
     divContainer.appendChild(creandoBoton);
 
     //Depués de haber agregado el botón, enviamos el form para crear la solicitud
-
-    setTimeout(function(){ document.getElementById("enviarSolicitud").submit(); }, 2000);
     
 };
 

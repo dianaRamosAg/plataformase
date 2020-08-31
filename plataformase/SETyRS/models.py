@@ -145,3 +145,10 @@ class NotificacionAdmin(models.Model):
     class Meta:
         db_table = 'SETyRS_notificaciones_admin'
 
+#Tabla relacional centros de trabajo y reglamento interio de titulación
+class reglamento_interior_titulacion(models.Model):
+    CCT = models.CharField(max_length=30)
+    RIT = models.FileField(upload_to='SETyRS/archivos/alumnos',validators=[validate_file_extension], blank=True, null=True)
+    
+    class Meta:
+        db_table = 'SETyRS_reglamento_interior_titulacion'

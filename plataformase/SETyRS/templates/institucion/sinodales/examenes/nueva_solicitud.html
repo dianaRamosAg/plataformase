@@ -1,4 +1,9 @@
 {% extends 'institucion/base.html' %} {% load static %} {% block content %}
+<script>
+    if(!"{{RIT}}"){
+
+    }
+</script>
 <div class="container col-md-10 text-center">
     <h2 class="mt-3">Nueva Solicitud de Exámen a Título</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -153,17 +158,44 @@
 
         </div>
 
-
-
-
-        <div id="buttonContainer" >
+        <div id="buttonContainer">
             <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
-            <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>
+            <a href="#agregarDocumentoModal" data-toggle="modal" class="btn btn-secondary mt-3">Cancelar</a>
+            <!--<a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>-->
         </div>
     </form>
 </div>
 <br>
 <br>
+
+<!-- Agregar Documento Modal-->
+<div id="agregarDocumentoModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formRIT" action="{% url 'SETyRS_guardar_Reglamento' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">						
+                    <h4 style="text-align: center;" class="modal-title">Su centro de trabajo tiene un documento pendiente por subir:<br> Reglamento interior de titulacion</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div style="text-align: center;" class="modal-body">
+                    <label>CENTRO DE TRABAJO</label><br>
+                    <input style="text-align: center;" type="text" class="form-control" data-editable="false" value="{{institucion.cct}}" name="centroTrabajo">
+                    <br><br>
+                    <label>REGLAMENTO</label>
+                    <br>
+                    <div style="text-align: left;">
+                        <input id="documentoPendiente" name="documentoPendiente" type="file" class="file" data-show-preview="true">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                    <input type="submit" id="btnGuardar" class="btn btn-success" value="Guardar">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="{% static 'js/institucion/examenes/nueva_solicitud_examenes.js' %}"></script>
 {% endblock %}

@@ -617,15 +617,23 @@ def leer_notificacion(request, id):
 
 #VISTAS DE LA INSTITUCION EXAMENES A TITULO ------------------------------------------------------------------------------------------------
 
+def guardar_Reglamento(request):
+    centro =request.POST.get("centroTrabajo")
+    reglamento = reglamento_interior_titulacion(CCT=centro, RIT=request.POST['documentoPendiente'])
+    reglamento.save()
+    return JsonResponse("Documento actualizado",safe=False)
 
 def nueva_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+        tieneReglamento = False
+        if reglamento_interior_titulacion.objects.filter(CCT=datos_escuela.cct):
+            tieneReglamento = True
         nivel = datos_escuela.nivel_educativo
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
         sinodales = Sinodales.objects.filter(user_id=request.user.id, estatus=2).order_by('nombre_sinodal')
-        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel}
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel,'institucion':datos_escuela,'RIT':tieneReglamento}
         return render(request, 'institucion/sinodales/examenes/nueva_solicitud.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
