@@ -1,9 +1,15 @@
+
+
 function cargarListeners() { 
-    console.log("H");
     var btnNS = document.getElementById("avanzar");
     btnNS.addEventListener("click",creandoSoli,false);
-    btnGuardar.addEventListener("click",guardarDoc,false)
+    if(RIT == "False"){
+        $(window).on('load',function(){
+            $('#agregarDocumentoModal').modal('show');
+        });
+    }
 };
+
 
 
 function creandoSoli(){
@@ -26,6 +32,7 @@ function creandoSoli(){
     divContainer.appendChild(creandoBoton);
 
     //Depués de haber agregado el botón, enviamos el form para crear la solicitud
+    document.getElementById("enviarSolicitud").submit();
 };
 
   document.addEventListener("DOMContentLoaded", cargarListeners, false);

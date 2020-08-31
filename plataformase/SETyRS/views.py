@@ -10,7 +10,7 @@ from .forms import *
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
 from .render import Render
-
+from django.core.files.storage import FileSystemStorage
 # VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
 
 # el departamento de dirección es el unico que puede ver e interactuar con las solicitudes de ambos niveles educativos (superior y media superior)
@@ -619,9 +619,19 @@ def leer_notificacion(request, id):
 
 def guardar_Reglamento(request):
     centro =request.POST.get("centroTrabajo")
-    reglamento = reglamento_interior_titulacion(CCT=centro, RIT=request.POST['documentoPendiente'])
+    #Obtenemos los files del POST
+    files = request.FILES
+    #Aislamos/separamos el archivo a guardar
+    myfile = files['documentoPendiente']
+    #Indicamos una ruta donde se almacenará el archivo
+    fs = FileSystemStorage("media/SETyRS/archivos/reglamentos")
+    #Hacemos el save del archivo indicando el nombre del archivo y el archivo como tal
+    filename = fs.save(myfile.name, myfile)
+
+    #Una vez guardamos el archivo en nuestro folder de media, guardamos la ruta del archivo en la bd
+    reglamento = reglamento_interior_titulacion(CCT=centro, RIT="media/SETyRS/archivos/reglamentos/"+myfile.name)
     reglamento.save()
-    return JsonResponse("Documento actualizado",safe=False)
+    return redirect('SETyRS_nueva_solicitud_examen')
 
 def nueva_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
