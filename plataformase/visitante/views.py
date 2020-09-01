@@ -65,7 +65,7 @@ def menuadmin(request):
         return redirect('logout')
 
 def menudepartamento(request):
-    if request.user.tipo_usuario == '3':
+    if request.user.tipo_usuario == '3' or request.user.tipo_usuario == '2':
         if request.user.departamento_id == '1':
             return render(request,'menudepartamento_ce.html')
         else:

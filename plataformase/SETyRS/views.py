@@ -10,7 +10,7 @@ from .forms import *
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
 from .render import Render
-
+from django.core.files.storage import FileSystemStorage
 # VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
 
 # el departamento de dirección es el unico que puede ver e interactuar con las solicitudes de ambos niveles educativos (superior y media superior)
@@ -617,15 +617,34 @@ def leer_notificacion(request, id):
 
 #VISTAS DE LA INSTITUCION EXAMENES A TITULO ------------------------------------------------------------------------------------------------
 
+def guardar_Reglamento(request):
+    centro =request.POST.get("centroTrabajo")
+    # #Obtenemos los files del POST
+    # files = request.FILES
+    # #Aislamos/separamos el archivo a guardar
+    # myfile = files['documentoPendiente']
+    # #Indicamos una ruta donde se almacenará el archivo
+    # fs = FileSystemStorage("media/SETyRS/archivos/reglamentos")
+    # #Hacemos el save del archivo indicando el nombre del archivo y el archivo como tal
+    # filename = fs.save(myfile.name, myfile)
+
+    #Una vez guardamos el archivo en nuestro folder de media, guardamos la ruta del archivo en la bd
+    reglamento = reglamento_interior_titulacion(CCT=centro)
+    reglamento.RIT = request.FILES['documentoPendiente']
+    reglamento.save()
+    return redirect('SETyRS_nueva_solicitud_examen')
 
 def nueva_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+        tieneReglamento = False
+        if reglamento_interior_titulacion.objects.filter(CCT=datos_escuela.cct):
+            tieneReglamento = True
         nivel = datos_escuela.nivel_educativo
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
         sinodales = Sinodales.objects.filter(user_id=request.user.id, estatus=2).order_by('nombre_sinodal')
-        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel}
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel,'institucion':datos_escuela,'RIT':tieneReglamento}
         return render(request, 'institucion/sinodales/examenes/nueva_solicitud.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')

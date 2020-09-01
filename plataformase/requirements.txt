@@ -55,3 +55,4 @@ whitenoise==4.1.4
 wrapt==1.11.1
 xhtml2pdf==0.2.4
 zipp==2.2.0
+sweetify==2.0.0
