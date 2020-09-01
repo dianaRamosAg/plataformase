@@ -2,11 +2,21 @@
 <html>
   <head>
     <style>
+      @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
        /* Set the size of the div element that contains the map */
       #map {
         height: 400px;  /* The height is 400 pixels */
         width: 100%;  /* The width is the width of the web page */
-       }
+      }
+      .my-custom-scrollbar {
+            position: relative;
+            height: 500px;
+            overflow: auto;
+            margin-bottom:2%;
+      }
+      .table-wrapper-scroll-y {
+            display: block;
+      }
     </style>
   </head>
   <body>
@@ -23,25 +33,47 @@
     <!--The div element for the map -->
     <div id="map"></div>
 <script>
-  var la = parseFloat(document.getElementById("latitud").value);
-  var ln = parseFloat(document.getElementById("longitud").value);
-  document.write(la);
-  document.write(ln);
-  console.log(ln, la);
-// Initialize and add the map
-function initMap() {
-  // The location of Uluru
-  var uluru = {
-      lat: la, lng: ln}; //AQUI REEMPLAZARIA CON LAS VARIABLES
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 4, center: uluru});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({
-      position: uluru, 
+
+    var lat = 21.5039;
+    var lng = -104.895; 
+    var arre = [[123,111],[123,456],[700,323]];
+    console.log(arre[0][1]);     
+
+    function initMap(){ 
+      //Opciones del mapa
+      var options = {
+          zoom: 14,
+          center: { lat, lng }
+      }
+      //Mapa nuevo
+      var map = new google.maps.Map(document.getElementById('map'), options);
+      var marker;
+      //var infowindow = new google.maps.InfoWindow;
+
+
+      marker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lng),
       map: map
       });
-}
+      
+      google.maps.event.addListener(marker, 'click', (function(marker, position) {
+          return function() {
+          infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'></div><div class='centro' style='vertical-align:middle; text-align:center'><div class='table-wrapper-scroll-y my-custom-scrollbar'><table><tbody>"{% for i in arre %}"<tr><td><a href=# onclick='redirecciona()' style='margin:20px'>"+arre[i][0]+"<br><a id='claveMapa'>"+arre[i][1]+"</a>")+"</a></td></tr>"{% endfor %}"</tbody></table></div></div>";
+          infowindow.open(map, marker); 
+          }
+      })(marker));
+      
+      //Verificando si existe contenido
+          if(props.content){
+              var infoVentana = new google.maps.InfoWindow({
+              content: props.content
+              });
+
+              marker.addListener('click', function(){
+              infoVentana.open(map, marker);
+              });
+          }
+      }
     </script>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -51,5 +83,45 @@ function initMap() {
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4&callback=initMap">
     </script>
+
+
+
+    
+    
+    <div class='centro' style='vertical-align:middle; text-align:center'>
+      <img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'>
+    </div>
+    <div class='centro' style='vertical-align:middle; text-align:center'>
+      <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table>
+          <tbody>
+            {% for i in arre %}
+              <tr>
+                <td><a href=# onclick='redirecciona()' style='margin:20px'>"+arre[i][0]+"<br><a id='claveMapa'>"+arre[i][1]+"</a>")+"</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>";
+
+    <div class='centro' style='vertical-align:middle; text-align:center'>
+      <img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'>
+    </div>
+    <div class='centro' style='vertical-align:middle; text-align:center'>
+      <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table>
+          <tbody>
+            {% for i in arre %}
+              <tr>
+                <td><a href=# onclick='redirecciona()' style='margin:20px'>"+arre[i][0]+"<br><a id='claveMapa'>"+arre[i][1]+"</a>")+"</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>";
+
+  
   </body>
 </html>

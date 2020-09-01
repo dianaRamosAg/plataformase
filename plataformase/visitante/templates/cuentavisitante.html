@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static '/css/formulario.css' %}" type='text/css' media='all' >
     
 </head>
-<body>
+<body class="responsive">
     <div class="head">
         <h3>Solicitud de cuenta - Registro</h3>
     </div>
@@ -122,7 +122,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="ml-1 col-1 "for="id_calle">Calle:</label>
-                                    <input class="form-control ml-1 col-2" required type="text" name="calle" id="id_calle" pattern="[a-zA-ZáéíóúÁÉÍÓÚñ\s]{1,40}">
+                                    <input class="form-control ml-1 col-2" required type="text" name="calle" id="id_calle">
                                 </div>
                                    
                                 <div class="form-group">
@@ -162,13 +162,13 @@
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_noexterior">No. Exterior:</label>
-                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="noexterior" id="id_noexterior" >
+                                       <input class="form-control ml-2 mr-2 col-1" value="0" required type="number" name="noexterior" id="id_noexterior" >
                                    </div>
                                </div>
                                 <div class="col-md-3">
                                    <div class="form-group">
                                        <label class="ml-2" for="id_nointerior">No. Interior:</label>
-                                       <input class="form-control ml-2 mr-2 col-1" required type="number" name="nointerior" id="id_nointerior" >
+                                       <input class="form-control ml-2 mr-2 col-1" value="0" required type="number" name="nointerior" id="id_nointerior" >
                                    </div>
                                </div>
                                 <div class="col-md-3">
@@ -183,7 +183,7 @@
                                         <h3>Datos de institución</h3>*
                                         <small>Estos datos son obligatorios</small><br>
                                         <label class="ml-2 col-1" for="id_cct" style="text-align: left;">Clave del centro de trabajo :</label>
-                                        <input type="text" name="cct"  id="id_cct" class="form-control col-2" required pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*"  >
+                                        <input type="text" name="cct"  id="id_cct" class="form-control col-2" required>
 
                                         <label class="ml-2 col-1" for="id_nombre_director" style="text-align: left;">Nombre de director:</label>
                                         <input type="text" name="nombre_director"  id="id_nombre_director" required pattern ="[a-zA-ZáéíóúÁÉÍÓÚñ\s]+([0-9])*" class="form-control ml-1 col-2"  >

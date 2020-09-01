@@ -26,6 +26,7 @@ urlpatterns = [
     path('institucion/', login_required(views.index_institucion), name='SETyRS_institucion_index'), #INDEX de la institucion
     path('institucion/nueva_solicitud_sinodal/', login_required(views.nueva_solicitud_sinodal), name='SETyRS_nueva_solicitud_sinodal'), #Vista para crear una nueva solicitud de sinodal
     path('institucion/nueva_solicitud_sinodal/crear/', login_required(views.crear_solicitud_sinodal), name='SETyRS_crear_solicitud_sinodal'), #Metodo de creacion de una nueva solicitud de sinodal en la BD
+    path('institucion/Updsolicitud/sinodal/26/',login_required(views.upd_solicitud_sinodal), name="SETyRS_upd_solicitud_sinodal"),# URL que hace uso de la view updSolicitudSinodal
     path('institucion/solicitud/sinodal/<int:id>/', login_required(views.detalle_solicitud_sinodal), name='SETyRS_detalle_solicitud_sinodal'), #Vista de detalle solicitud que redirige a una pagina deacuerdo al estado o fase de la solicitud
     path('institucion/solicitud/sinodal/<int:id>/agregar_sinodal/', login_required(views.agregar_sinodal), name='SETyRS_agregar_sinodal'), #Metodo para agregar un sinodal a la solicitud
     path('institucion/solicitud/sinodal/eliminar_sinodal/', login_required(views.eliminar_sinodal), name='SETyRS_eliminar_sinodal'), #Metodo para eliminar un sinodal de la solicitud
@@ -48,6 +49,7 @@ urlpatterns = [
     path('institucion/solicitud/examen_a_titulo/<int:id>/editar_documentos/', login_required(views.editar_documentos_alumno), name='SETyRS_editar_documentos_alumno'), #Metodo para editar los documentos de un sinodal
     path('institucion/solicitud/examen_a_titulo/<int:id>/enviar_solicitud', login_required(views.finalizar_solicitud_examen), name='SETyRS_finalizar_solicitud_examen'), #Metodo para finalizar la solicitud y "enviarla" al departamento correspondiente
     path('institucion/solicitudes/examenes_a_titulo', login_required(views.lista_solicitudes_examenes), name='SETyRS_solicitudes_examenes'), #Vista de solicitudes de sinodales realizadas
+    path('institucion/guardar_Reglamento/',login_required(views.guardar_Reglamento), name='SETyRS_guardar_Reglamento'), #Vista para actualizar el documento requerido para hacer solicitudes
      #urls de generacion del pdf
     path('institucion/solicitud/<int:id>/informe_aprobacion_solicitud',login_required(views.generar_pdf) ,name='SETyRS_generar_pdf'), # Metodo para generar el archivo pdf de la autorizacion de examenes a titulo
     

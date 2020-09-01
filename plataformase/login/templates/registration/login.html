@@ -24,7 +24,7 @@
         <link rel='stylesheet'   href="{% static '/css/logincss.css' %}" type='text/css' media='all' />
 
     </head>
-    <body id="page-top">
+    <body id="page-top" class="responsive">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
@@ -33,8 +33,8 @@
                     <ul class="navbar-nav text-uppercase ml-auto">
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">SSEMSSICyT</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Servicios</a></li>
-
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'menuvisitante'%}">Visitante</a></li>
                        </ul>
                 </div>
             </div>
@@ -165,8 +165,8 @@
                                 <img class="img-fluid" src="{% static '/img/rvoe.jpeg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading">RVOES</div>
-                                <div class="portfolio-caption-subheading text-muted">Sistema de generación de turnos de Reconocimiento de Validez Oficial de Estudios.</div>
+                                <div class="portfolio-caption-heading">SRVOE</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de generación de turnos de REVOE.</div>
                             </div>
                         </div>
                     </div>
@@ -193,8 +193,8 @@
                                 <img class="img-fluid" src="{% static '/img/tb.jpg'%}"  alt=""
                             /></a>
                             <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading">TBC</div>
-                                <div class="portfolio-caption-subheading text-muted">Sistema de Telebachillerato Comunitario.</div>
+                                <div class="portfolio-caption-heading">STBC</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de centros de telebachillerato comunitario.</div>
                             </div>
                         </div>
                     </div>
@@ -204,11 +204,10 @@
                                 ><div class="portfolio-hover">
                                     <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                                 </div>
-                                <img class="img-fluid" src="{% static '/img/sig.jpg'%}" alt=""
-                            /></a>
+                                <img class="img-fluid" src="{% static '/img/si.jpg'%}" alt="" /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">SIG</div>
-                                <div class="portfolio-caption-subheading text-muted">Sistema de Información Geográfica.</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de Información Geográfica, Media Superior y Superior.</div>
                             </div>
                         </div>
                     </div>
@@ -236,7 +235,7 @@
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">Blockchain</div>
-                                <div class="portfolio-caption-subheading text-muted"></div>
+                                <div class="portfolio-caption-subheading text-muted"><br><br></div>
                             </div>
                         </div>
                     </div>
@@ -249,12 +248,12 @@
         <section class="page-section" id="contact">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Contacto</h2>
+                    <h2 class="section-heading text-uppercase">Contacto</h2><br>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="{% static '/img/mapas-y-ubicacion.png'%}" alt="" style="width: 20%; height: 20%;" />
+                            <img class="mx-auto rounded-circle" src="{% static '/img/mapas-de-google.png'%}" alt="" style="width: 20%; height: 20%;" />
                             <h4>Domicilio</h4>
                             <p class="text-muted"> Avenida del Valle #85 Esq. Calle Florencia, Fraccionamiento Ciudad del Valle</span>
                             </p>
@@ -263,7 +262,7 @@
 
                         <div class="col-lg-4">
                             <div class="team-member">
-                                <img class="mx-auto rounded-circle" src="{% static '/img/comentario.png'%}" alt="" style="width: 20%; height: 20%;" />
+                                <img class="mx-auto" src="{% static '/img/telefono.png'%}" alt="" style="width: 20%; height: 20%;align-items: center; justify-content: center;" />
                                 <h4>Atención</h4>
                                 <p class="text-muted"> Teléfono : +52 (311)-139-2820, Horario : 9:00 am a 3:00 pm</span>
                                 </p>
@@ -314,8 +313,7 @@
               <p>Correo electrónico : subsecretariaEMSYS@nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            </div>
+                </div>
           </div>
         </div>
       </div>
@@ -336,8 +334,7 @@
               <p>Correo electrónico : demsys@nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            </div>
+              </div>
           </div>
         </div>
       </div>
@@ -358,8 +355,7 @@
               <p>Correo electrónico : mediasupSE@nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            </div>
+             </div>
           </div>
         </div>
       </div>
@@ -380,8 +376,7 @@
               <p>Correo electrónico : superiorSE@nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            </div>
+               </div>
           </div>
         </div>
       </div>
@@ -402,8 +397,7 @@
               <p>Correo electrónico : inv_cytSE@nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
-            </div>
+             </div>
           </div>
         </div>
       </div>

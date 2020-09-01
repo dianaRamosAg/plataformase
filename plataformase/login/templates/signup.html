@@ -4,18 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
-    
+    <title>Administrador</title>  
     <link rel='stylesheet'   href="{% static '/css/nav.css' %}" type='text/css' media='all' />
     <link href="{% static '/bootstrap.min.css' %}" rel="stylesheet" id="bootstrap-css">
-    
-	
 </head>
-<body>
+
+<body class="responsive">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
           <a target="_blank" href="#" class="navbar-brand"><img src="{% static 'img/se.png' %}" width="120" height="40" style="margin-top: -5px;"/></a>
-          
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -50,7 +47,7 @@
       <div class="container">
           <!-- Default form register -->
   
-<form class="text-center border border-light p-5" enctype="multipart/form-data" action="../signupr/" method="POST">
+<form class="text-center border border-light p-5 responsive" enctype="multipart/form-data" action="../signupr/" method="POST">
     {% csrf_token %}
     <p class="h4 mb-3">Registro de Usuario</p>
     <small id="passwordHelpInline" class="text-muted">Complete los siguientes campos para registrar a un usuario en especifico</small>
@@ -90,7 +87,7 @@
      
           <div class="col-12"  id="firma" style="float:left; display: none;" ><br>
           <label class="" for="id_firma" id="lbl_firma" style="text-align: left; float:left">Firma digital:</label>
-             <input id="id_firma" type="file" class="col-9" name="firma_digital"  accept="img/png, .jpg, .jpeg, .png">
+             <input id="id_firma"  required type="file" class="col-9" name="firma_digital"  accept="img/png, .jpg, .jpeg, .png">
       <br>
             </div>
     
@@ -148,7 +145,7 @@
 </div>
 
 
-      <div class="col-md-12" id="datos_inst" style="float: left;"><hr>
+      <div class="col-md-12 responsive" id="datos_inst" style="float: left;"><hr>
           <p class=" pull-center col-12">Datos de institución</p>
 
           <label class="" for="id_cct"  style="float: left;" style="text-align: left;" >Clave del centro de trabajo (CCT):</label>
@@ -157,15 +154,15 @@
           <label class="" style="float: left;" for="id_nombre_director" style="text-align: left;">Nombre del director :</label>
           <input type="text" name="nombre_director"  id="id_nombre_director" class="form-control col-8" placeholder="" >
           <br>
-          <div class="row col-md-12">
+          <div class="row col-md-12 responsive">
               <br>
-           <select  class="form-control col-5" name="sector" id="id_sector" required>
+           <select  class="form-control col-5 responsive" name="sector" id="id_sector" required>
               <option disabled="" selected="">Seleccione Sector</option>
               <option value="Publico"> Público </option>
               <option value="Privado"> Privado </option>
           </select>
           
-          <select  class="form-control col-6 ml-4" name="nivel_educativo" id="id_nivel_educativo" required onchange="fmod()">
+          <select  class="form-control col-6 ml-4 responsive" name="nivel_educativo" id="id_nivel_educativo" required onchange="fmod()">
               <option disabled="" selected="">Seleccione Nivel Educativo</option>
               <option value="1"> Media superior </option>
               <option value="2"> Superior </option>
@@ -173,7 +170,7 @@
           </select><br>
       </div>
 
-          <div id="modalidad" style="display: none;" >
+          <div id="modalidad" style="display: none;" class="responsive" >
           <label class="" for="id_modalidad" style="float: left; ">¿Es modalidad Telebachillerato? :</label>
                   <select  class="form-control " name="modalidad" id="id_modalidad" required>
                       <option disabled="" selected="" >Seleccione</option>
@@ -184,17 +181,17 @@
              
       </div>
 
-<div class="col-12">    
+<div class="col-12 responsive">    
     <hr>
 <p class="pull-center text-center">Dirección</p>
 </div>
 
-<div class="row col-md-12" style="float: left;">
+<div class="row col-md-12 responsive" style="float: left;">
     <label class="col-2" for="id_colonia" style="float: left;">Colonia:</label>
     <input class="form-control col-3" required type="text" name="colonia" id="id_colonia" ><br>
  
    
-    <select  class="form-control col-6 ml-2" name="municipio" id="id_municipio" required>
+    <select  class="form-control col-6 ml-2 responsive" name="municipio" id="id_municipio" required>
         <option disabled=""  value="" selected="">Seleccione Municipio</option>
         <option value="Acaponeta"> Acaponeta </option>
         <option value="Ahucatlán"> Ahucatlán </option>
@@ -221,7 +218,7 @@
 <br>
 
 <br>
-      <div class="row col-md-12  "style="float: left;">
+      <div class="row col-md-12 responsive  "style="float: left;">
         <br>
         <label class="col-2" for="id_calle" style="float: left;">Calle:</label>
         <input class="form-control col-3" required type="text" name="calle" id="id_calle"  >
@@ -241,10 +238,10 @@
            </div>
         </div>
   
-        <div class="col-6">
+        <div class="col-6 responsive">
          
             <p class=" pull-center">Información de inicio de sesión</p>
-            <div class="form-group" style="text-align: left;">
+            <div class="form-group responsive" style="text-align: left;">
                 <div class="container-fluid form-group row " style="width: 100%; float:right;">
                     <input type="text" name="username" required id="id_username" hidden>
                     <br>
@@ -267,9 +264,9 @@
                 </div>
             <br>
         </div>
-            <div class="text-center"><br>
-                <button class="btn btn-secondary col-3" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
-                <button class="btn btn-primary col-3 mx-auto" type="submit">Registrar</button>
+            <div class="text-center responsive"><br>
+                <button class="btn btn-secondary col-3 mx-auto responsive" onclick="location.href='{% url 'menuadmin' %}">Regresar</button>
+                <button class="btn btn-primary col-3 mx-auto responsive" type="submit">Registrar</button>
             </div>
             </div>
             
@@ -295,14 +292,18 @@
         function pmoral(){
             var per = document.getElementById('id_tipo_persona');
             var usr = document.getElementById('id_tipo_usuario');
-            if(usr.value == '1' || per.value == '5')
+            if(usr.value == '1' || usr.value == '5')
             {
                 document.getElementById('ip').style.display = 'inline';
 
                 if (per.value == '1'){
                 document.getElementById('moral').style.display = 'none';
                 document.getElementById('id_dom_legal_part').removeAttribute("required");
+            
                 document.getElementById('id_nombre_representante').removeAttribute("required");
+
+                }
+                if (per.value == '5'){
 
                 }
             }
@@ -383,6 +384,7 @@
             else{
                 
                 document.getElementById("firma").style.display = 'none';
+                document.getElementById("id_firma").removeAttribute("required");
                 document.getElementById("alertJefe").style.display = 'none';
                
             }

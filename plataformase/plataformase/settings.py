@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'TBC',
+    'TBC',
     'SETyRS',
     'SigApp',
+    'sweetify'
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
@@ -96,17 +97,19 @@ else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
+            #'NAME'     : 'plattform',
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
             #'PASSWORD' : 'diana',
             'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
-            #'PORT'    : '5432',
-            'PORT'     : '3306',
+            'PORT'    : '5432',
+            #'PORT'     : '3306',
         }
     }
 
-    
+#Conexión con   Proxy para cloud
+#cloud_sql_proxy.exe -instances="plataformase:us-west2:plataforma"=tcp:3306
 
 
 # Password validation
@@ -160,30 +163,24 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'SETyRS/static'),
 ]
 
+# Bucket de google cloud plattform 
+ #https://storage.googleapis.com/plataformase.appspot.com/Archivos/MedSuperior/RVOE.pdf
 if os.getenv('GAE_APPLICATION', None):
     DEFAULT_FILE_STORAGE = 'django_gcloud_storage.DjangoGCloudStorage'
     GCS_PROJECT = "plataformase"
     GCS_BUCKET = "plataformase.appspot.com"
     GCS_CREDENTIALS_FILE_PATH = "key.json"
-    MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
+    MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GCS_BUCKET)
+    #MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Configuración para uso de correo 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'dianalaura.lee@gmail.com'
-EMAIL_HOST_PASSWORD = 's1st3m4s1'
+EMAIL_HOST_USER = 'sigssemssicyt@gmail.com'
+EMAIL_HOST_PASSWORD = 'sigapp2019'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-# SENDGRID_API_KEY = os.getenv('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')
-
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "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")
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "dianalaura.lee@gmail.com") # this is the sendgrid email

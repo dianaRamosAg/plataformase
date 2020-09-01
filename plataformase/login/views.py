@@ -55,7 +55,11 @@ def regUser(request):
             import datetime
             #Generamos las variables con los datos recibidos del request.
             username = request.POST["email"]
+            if CustomUser.objects.filter(email=username).exists():
+                return render(request,'datosExistentes.html')
             curp_rfc = request.POST["curp_rfc"]
+            if CustomUser.objects.filter(curp_rfc=curp_rfc).exists():
+                return render(request,'datosExistentes.html')
             calle = request.POST["calle"]
             password = make_password(request.POST["password2"])
             noexterior = request.POST["noexterior"]
@@ -74,6 +78,8 @@ def regUser(request):
                 firma_digital = request.FILES["firma_digital"]
             if tipo_usuario=='1':
                 inst_cct = request.POST["cct"]
+                if UsuarioInstitucion.objects.filter(cct=inst_cct).exists():
+                    return render(request,'cctExistentes.html')
                 inst_nombredirector = request.POST["nombre_director"]
                 sector = request.POST["sector"]
                 nivel_educativo = request.POST["nivel_educativo"]
@@ -220,7 +226,7 @@ def perfil(request):
     if request.user.is_authenticated:
         #Si el tipo de usuario es institución (1)
         if request.user.tipo_usuario == '1':
-            return redirect('menuinstitucion')
+            return redirect('menuinstitucion', request.user.id)
         #Si el tipo de usuario es jefe de departamento(2)   //rvoe  y examenes
         if request.user.departamento_id == 1:
             return redirect('control')
@@ -235,6 +241,10 @@ def perfil(request):
         #Usuario institución particular
         if request.user.tipo_usuario == '5':
             return redirect('menuparticular')
+        if request.user.tipo_usuario == '6':
+            return redirect('TBC:homepageTBC')
+        if request.user.tipo_usuario == '7':
+            return redirect('TBC:homepageTBC')
     else:#Si no hay sesión iniciada, le redirige al login
         return redirect('login')
 
@@ -245,30 +255,15 @@ def usuarios(request):
     Retorna
     -:return render: Regresa la vista en la cual el usuario podrá actualizar el estatus de los usuarios.
     """
-    usuarios = CustomUser.objects.all()
+    usuarios = CustomUser.objects.filter(is_active=True)
     return render(request, 'root/usuarios.html', {'usuarios': usuarios })
-
-
-#----------------------------- VISITANTE ---------------------------------
-#-------------------------------------------------------------------------
-# '''Función que te redirige a la pantalla '''
-# def visitante(request):
-#     return render(request, 'signup_visitante.html')
-
-# def Regvisitante(request):
-#     if request.user.tipo_usuario == '4':
-#         if request.method == 'get':
-#             user = User.objects.get(username='uan@gmail.com')
-#             user.set_password('123')
-#             user.save()
-
-#     return redirect('usuarios')
 
 
 def editar(request,email):
     ''' Función editar, por medio del correo electronico se muestra 
     los permisos que pueden ser cambiados solo por el administrador.'''
     us = CustomUser.objects.get(username = email)
+                
     return render(request,'editarpermisos.html',{'CustomUser':us})
 
 def visit(request):
@@ -292,6 +287,7 @@ def visit(request):
 
 '''Función para actualizar los permisos de los usuarios,por parte del administrador'''
 def actualizarusr(request):
+
      if request.user.tipo_usuario == '4':
         if request.method == 'POST':
             email = request.POST["email"]
@@ -337,14 +333,19 @@ def actualizarusr(request):
 def ActUsr(request,email):
     """ Actualizar/quitar departameto en caso de que se cambie a administrador
     """
+    if CustomUser.objects.filter(email=email, tipo_usuario ='1').exists():
+        return redirect('usuarios')
+    if CustomUser.objects.filter(email=email, tipo_usuario ='5').exists():
+        return redirect('usuarios')
 
-    if request.user.tipo_usuario == '4':
-        us = CustomUser.objects.get(username = email)
-        #Obtiene todos los departamentos registrados
-        departamentos = Departamento.objects.all()
-        idJefesDepReg = CustomUser.objects.values_list('departamento_id', flat=True).filter(jefe='1')
-        return render(request, 'editarpermisos.html', {'departamentos': departamentos, 'jefes': list(idJefesDepReg),'CustomUser':us })
     else:
-        return redirect('perfil')
+        if request.user.tipo_usuario == '4':
+            us = CustomUser.objects.get(username = email)
+        #Obtiene todos los departamentos registrados
+            departamentos = Departamento.objects.all()  
+            idJefesDepReg = CustomUser.objects.values_list('departamento_id', flat=True).filter(jefe='1')
+            return render(request, 'editarpermisos.html', {'departamentos': departamentos, 'jefes': list(idJefesDepReg),'CustomUser':us })
+        else:
+            return redirect('perfil')
 
   

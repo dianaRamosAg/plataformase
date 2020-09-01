@@ -21,10 +21,10 @@
 	<link rel='stylesheet' id='elementor-post-148-css'  href="{% static '/css/post-148.css' %}" type='text/css' media='all' />
 
 </head>
-<body  class="page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
+<body  class="responsive page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
 <header id="main-header">
 	<a href="#" id="logo-header">
-		<div class="col-sm-2 col-xs-4 ">
+		<div class="col-sm-2 col-xs-3 ">
 			<a href="#"></a> <img src="{% static '/img/se.png'%}" width="230" height="80"/></a>
 		</div><!--/.col-sm-2-->
 	</a>
@@ -38,7 +38,7 @@
 					<a href="{% url 'notificacionsc'%}" class="dropdown-item">Solicitud de cuenta     <span class="badge pull-right">{{numSol}}</span></a>
 					<!-- <a href="{% url 'configuracionpdf'%}" class="dropdown-item">Configuración PDF</a> -->
 					<div class="dropdown-divider"></div>
-					<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
+					<a href="{% url 'perfiluser'%}" class="dropdown-item">Configuración de cuenta</a>
 					<a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
 				</div>
 			</li>
@@ -55,7 +55,7 @@
 <BR><br>
 
 <!------------------------------------------SISTEMAS------------------------------>
-<section class="pricingCardGrid">
+<section class="pricingCardGrid responsive">
 	<div class="pricingCardGrid__body row">
 		<div class="pricingCardGrid__pricingCard">
 			<a class="pricingCard" href="{% url 'signup' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">

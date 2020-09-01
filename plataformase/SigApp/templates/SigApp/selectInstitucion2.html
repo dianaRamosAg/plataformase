@@ -94,7 +94,11 @@
                                         <td scope="row">{{ inst.cct }}</td>
                                         <td scope="row">{{ inst.name }}</td>
                                         <td scope="row"> {{ inst.director }}</td>
-                                        <td><a href="/SigApp/miInstitucion/{{ inst.cct }}/{{id_dep}}/" style="color:dodgerblue">Visualizar</a></td>
+                                        {% if inst.director != "Favor de consultar al administrador"%}
+                                            <td><a href="/SigApp/miInstitucion/{{ inst.cct }}/{{id_dep}}/" style="color:dodgerblue">Visualizar</a></td>
+                                        {% else %}
+                                            <td><a style="color: red">No disponible</a></td>
+                                        {% endif %}
                                     </tr>
                                 {% endfor %}
                             </tbody>
