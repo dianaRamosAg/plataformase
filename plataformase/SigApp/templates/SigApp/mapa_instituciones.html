@@ -19,14 +19,6 @@
         margin-left: auto;
         margin-right: auto;
         display: block;
-    }.my-custom-scrollbar {
-        position: relative;
-        height: 200px;
-        overflow: auto;
-        margin-bottom:2%;
-    }
-    .table-wrapper-scroll-y {
-        display: block;
     }
     </style>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -208,36 +200,20 @@
             </div>
             <div id="map" class="col-8 col-sm-9 col-md-9 col-lg-10 col-xl-10"></div>
         </div>
-
-        <div id="app" style="visibility:hidden;" class="table-wrapper-scroll-y my-custom-scrollbar">
-            <table class="table table-bordered table-striped mb-0 ">
-                <thead>
-                    <tr>
-                        <th style="width:25%">Clave Institución</th>
-                        <th style="width:75%">Nombre Institución</th>
-                    </tr>
-                </thead>
-                <tbody id="mytable"></tbody>
-            </table>
-        </div>
     </div>
     
     <script>
         var coordenadas = new Array();
-        var repetidos = new Array();
-        var flag;
-        
 
         var lat = 21.5039;
         var lng = -104.895;
 
         var x = document.getElementById("NombreC");
         var y = x.getElementsByTagName("*");
-        
 
         var m = document.getElementById("LatitudC");
         var n = m.getElementsByTagName("*");
-        console.log(n);
+
         var a = document.getElementById("LongitudC");
         var b = a.getElementsByTagName("*");
 
@@ -352,69 +328,18 @@
             var marker, i;
             var infowindow = new google.maps.InfoWindow;
             //Arreglo de marcadores
-            var flag = 0;
-            var c = 0;
             for (i = 0; i < coordenadas.length; i++) {  
-                
                 marker = new google.maps.Marker({
                 position: new google.maps.LatLng(coordenadas[i][1], coordenadas[i][2]),
                 map: map
                 });
-                console.log("-----",flag,i);
-                if(flag == 0){
-                    console.log("Cuando es CERO",i);
-                    repetidos[flag] = new Array();
-                    repetidos[flag][0] = coordenadas[i][1];
-                    repetidos[flag][1] = coordenadas[i][2];
-                    repetidos[flag][2] = coordenadas[i][8];
-                    repetidos[flag][3] = coordenadas[i][0];
-                    flag++;
-                    console.log(coordenadas[i][1],i);
-                }else {
-                    var dato1 = repetidos[flag-1][0];
-                    var dato2 = coordenadas[i][1];
-                    if(Object.is(dato1, dato2)){
-                        console.log("ESTA REPETIDO-----------------",i);
-                        repetidos[flag] = new Array();
-                        repetidos[flag][0] = coordenadas[i][1];
-                        repetidos[flag][1] = coordenadas[i][2];
-                        repetidos[flag][2] = coordenadas[i][8];
-                        repetidos[flag][3] = coordenadas[i][0];
-                        flag++;
-                        console.log(coordenadas[i][1],i);
-                    }else{
-                        if(flag == 1){
-                            c++;
-                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                return function() {
-                                infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'></div><div class='centro' style='vertical-align:middle; text-align:center'><a href=# onclick='redirecciona()' style='margin:20px'>"+coordenadas[i][0]+"<br><a id='claveMapa'>"+coordenadas[i][8]+"</a>")+"</a></div>";
-                                infowindow.open(map, marker); 
-                                }
-                            })(marker, i));
-                        }else{
-                            c++;
-                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                return function() {
-                                infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><p>Esta ubicación contiene mas de una institución, da click en listar para visualizar<br></p><br><button onclick='listar(repetidos)'>Listar</button></div>");
-                                infowindow.open(map, marker); 
-                                }
-                            })(marker, i));    
-                        }//
-                        
-
-                        console.log("No esta repetido, continua",i);
-                        console.log(repetidos); //
-                        repetidos.splice(0,flag);
-                        flag=0;
-                        
-                        //rep[i] = new Array();
-                        //rep[i][0] = coor[i][0];
-                        //rep[i][1] = coor[i][1];
-                    }  
-                }
-                
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                    infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'></div><div class='centro' style='vertical-align:middle; text-align:center'><a href=# onclick='redirecciona()' style='margin:20px'>"+coordenadas[i][0]+"<br><a id='claveMapa'>"+coordenadas[i][8]+"</a>")+"</a></div>";
+                    infowindow.open(map, marker);
+                    }
+                })(marker, i));
             }
-            console.log(c);
             //Verificando si existe contenido
                 if(props.content){
                     var infoVentana = new google.maps.InfoWindow({
@@ -460,36 +385,6 @@
             geoCodeL();
             filtroD(parametro);
 
-        }
-        var stop = 0;
-        function listar(ar){
-            document.getElementById("app").style.visibility = "visible";
-            
-            if(stop>0){  
-            }else{
-                for(i = 0; i < ar.length; i++){
-                    var tr = document.createElement('tr');
-                    var td1 = document.createElement('td');
-                    var td2 = document.createElement('td');
-
-                    var a = document.createElement('a');
-                    var pLat = ar[i][2];
-                    a.href = "institucionesUbicacion/id/"+pLat.trimLeft();
-                    
-
-                    a.textContent = ar[i][2];
-                    td1.appendChild(a);
-                    td2.textContent = ar[i][3];
-                    tr.appendChild(a);
-                    tr.appendChild(td2);
-                    var app = document.querySelector('#mytable');
-                    app.appendChild(tr);  
-                    stop++;
-                }
-            }
-            
-            
-            
         }
         
         

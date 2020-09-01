@@ -147,8 +147,7 @@ class DatosTemporal(models.Model):
     localidad =   models.CharField(max_length=200)
     usuario_mod = models.CharField(max_length=50,blank=True,null=True)
     status = models.CharField(max_length=200)
-    latitud_temp = models.CharField(max_length=200, null=True) ##
-    longitud_temp = models.CharField(max_length=200, null=True ) ##
+
     modificando = models.BooleanField()
 
 class HistorialMod(models.Model):
@@ -165,8 +164,6 @@ class HistorialMod(models.Model):
     nombre_institucion_prev = models.CharField(max_length=200)
     municipio_prev = models.CharField(max_length=200)
     localidad_prev = models.CharField(max_length=200)
-    latitud_prev = models.CharField(max_length=200, null=True) ##
-    longitud_prev = models.CharField(max_length=200, null=True) ##
     status_prev = models.CharField(max_length=200)
     #
     clave_centrotrabajo_new = models.CharField(max_length=200)
@@ -175,8 +172,6 @@ class HistorialMod(models.Model):
     nombre_institucion_new = models.CharField(max_length=200)
     municipio_new = models.CharField(max_length=200)
     localidad_new = models.CharField(max_length=200)
-    latitud_new = models.CharField(max_length=200, null=True) ##
-    longitud_new = models.CharField(max_length=200, null=True) ##
     status_new = models.CharField(max_length=200)
 
 

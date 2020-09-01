@@ -1,5 +1,4 @@
 {% extends 'institucion/base.html' %} {% load static %} {% block content %}{% load index %}
-<script src="{% static 'js/admins/sinodales/modificarArchivos.js' %}" defer></script>
 <div class="container col-md-10 text-center">
     <h2 class="mt-3">Alta de Sinodales</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -53,15 +52,13 @@
             </table>
         </div>
     </div>
-    <div id="buttonContainer">
-        {% if archivos|length == lista_sinodales|length %}
-            <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> 
-        {% else %}
-            <p>Para poder continuar suba los archivos en formato PDF de todos los sinodales enlistados</p>
-            <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> 
-        {% endif %}
-            <a href="{% url 'SETyRS_solicitudes_sinodales' %}" class="btn btn-secondary mb-5">Postergar</a>
-    </div>
+    {% if archivos|length == lista_sinodales|length %}
+    <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> 
+    {% else %}
+    <p>Para poder continuar suba los archivos en formato PDF de todos los sinodales enlistados</p>
+    <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> 
+    {% endif %}
+    <a href="{% url 'SETyRS_solicitudes_sinodales' %}" class="btn btn-secondary mb-5">Postergar</a>
 
     <!-- Aviso Modal-->
     <div id="confirmacion" class="modal fade">
@@ -80,7 +77,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input id="btnContinuar" type="submit" class="btn btn-success" value="Aceptar">
+                        <input type="submit" class="btn btn-success" value="Aceptar">
                     </div>
                 </form>
             </div>

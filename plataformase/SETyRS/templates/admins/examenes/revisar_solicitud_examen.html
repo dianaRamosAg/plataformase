@@ -139,13 +139,13 @@
 <br>
 <div class="container text-center">
     <a href="{% url 'SETyRS_lista_solicitudes_examenes' %}" class="btn btn-primary">Regresar</a>
-        {% if solicitud.estatus == 'Aceptada' or solicitud.estatus == 'Rechazada' %}
-            <input type="button" class="btn btn-primary" value="Aceptar Solicitud" disabled>
-            <input type="button" class="btn btn-danger" value="Rechazar Solicitud" disabled>
-        {% else %}
-            <input type="button" class="btn btn-primary" value="Aceptar Solicitud" data-toggle="modal" data-target="#confirmacion">
-            <input type="button" class="btn btn-danger" value="Rechazar Solicitud" data-toggle="modal" data-target="#rechazar">
-        {% endif %}
+    {% if solicitud.estatus == 'Aceptada' or solicitud.estatus == 'Rechazada' %}
+    <input type="button" class="btn btn-primary" value="Aceptar Solicitud" disabled>
+    <input type="button" class="btn btn-danger" value="Rechazar Solicitud" disabled>
+    {% else %}
+    <input type="button" class="btn btn-primary" value="Aceptar Solicitud" data-toggle="modal" data-target="#confirmacion">
+    <input type="button" class="btn btn-danger" value="Rechazar Solicitud" data-toggle="modal" data-target="#rechazar">
+    {% endif %}
 </div>
 <br>
 <br>
