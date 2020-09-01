@@ -6,7 +6,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     #Para conservar los valores que ya tiene por defecto el modelo de usuarios.
     pass
-    first_name = models.TextField(blank=True)
+    first_name = models.TextField(  blank=True)
     curp_rfc = models.CharField(max_length=18, blank=True, null=True)#Guarda la CURP o el RFC del usuario
     calle = models.TextField(blank=True, null=True)#
     nointerior = models.IntegerField(blank=True, null=True,default=0)
@@ -52,4 +52,4 @@ class UsuarioInstitucion(models.Model):
     sector = models.TextField(blank=True, null=True)#Publico, Privado
     is_active = models.BooleanField(blank=True, null=True, default=True)#Es una institución activa
     nivel_educativo = models.CharField(max_length=1, blank=True, null=True)#1: Media superior, 2: Superior, 3: Ambos
-    modalidad = models.CharField(max_length=1, default='0',null=True) # 1: Si es telebachillerato, 0: No
+    modalidad = models.CharField(max_length=1, default='0',null=True) #1: Si es telebachillerato, 0:No

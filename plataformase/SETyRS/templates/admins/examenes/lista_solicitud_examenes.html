@@ -45,11 +45,7 @@
                 <td><a href="{% url 'SETyRS_revisar_solicitud_examen' s.id %}">{{s.id}}</a></td>
                 <td>{{s.user.first_name}}</td>
                 <td>{{s.estatus}}</td>
-                {% if s.nivel_educativo == 1%}
-                <td>Media Superior</td>
-                {% elif s.nivel_educativo == 2 %}
-                <td>Superior</td>
-                {% endif %}
+                <td>{{s.nivel_educativo}}</td>
                 <td>{{s.fecha}}</td>
             </tr>
             {% endfor %}

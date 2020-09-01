@@ -1,0 +1,389 @@
+{% extends 'SigApp/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<body>
+    {% block content %}
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Montserrat:500&display=swap');
+    .texto{
+        font-family: "Montserrat", sans-serif;
+    }       
+    .centro{
+        text-align: center;
+    }       
+    .centroItem{
+        align-items: center;
+    }
+    a{
+        color: black;
+    }
+    a:hover{
+        color:grey;
+    }
+    .dm-uploader {
+	    border: 0.25rem dashed grey;
+	    text-align: center;
+    }
+    .dm-uploader.active {
+	    border-color: grey;
+	     border-style: solid;
+    }
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;   
+        cursor: inherit;
+        display: block;
+    }
+    </style>
+
+    <script type="text/javascript">
+
+    var imagen1, imagen2, imagen3;
+
+
+
+        function contenidoDivImagen(event,idpanel){
+            var reader = new FileReader();
+            var panel = document.getElementById(idpanel);
+
+            reader.onload = function(){
+                if(reader.readyState == 2){
+                    var imagen = reader.result;
+                    panel.style.backgroundImage="url("+imagen+")";
+                    panel.style.backgroundSize="cover";
+
+                    switch(idpanel){
+                        case 'DragAndDrop1':
+                            imagen1 = imagen;
+                        case 'DragAndDrop2':
+                            imagen2 = imagen;
+                        case 'DragAndDrop3':
+                            imagen3 = imagen;
+                    }
+
+                    // if(idpanel=='DragAndDrop1'){imagen1=imagen;}
+                    //     else{
+                    //         if(idpanel=='DragAndDrop2'){imagen2=imagen;}
+                    //         else{
+                    //             if(idpanel=='DragAndDrop3'){imagen3=imagen;}}
+                    //         }
+                }
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+       
+
+    
+
+    </script>
+
+    <div class="container-fluid">
+        <!--Panel general (derecho)-->
+        <div class="row bg-light m-2">
+            <!--Nav bar izquierdo-->
+            <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 85vh; align-items:left;">
+                
+                {% comment %} <div class="row mt-4 ml-1">       
+                    <a href="/SigApp/miInstitucion/{{ Escuela.ClaveEscuela }}/{{id_dep}}/">{{ Escuela.NombreEscuela }}</a>
+                </div>
+
+                <div class="row mt-4 ml-1">       
+                    <a href="/SigApp/selectInstitucion2/{{ user.id }}/" style="font-weight:bold; margin-top:1%;">Regresar</a>
+                </div>
+                <div class="row mt-4 ml-1">
+                    <a href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/"hidden>Mis estadísticas</a> 
+                </div> {% endcomment %}
+
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
+                        Menú
+                    </a>
+                    <a href="/SigApp/miInstitucion/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" class="list-group-item list-group-item-action">Información general</a>
+                    <a href="/SigApp/modEstadistica/{{ Escuela.ClaveEscuela }}/{{id_dep}}/" class="list-group-item list-group-item-action">Información estadística</a>
+                    <a href="/SigApp/selectInstitucion2/{{ user.id }}/" class="list-group-item list-group-item-action " tabindex="-1" aria-disabled="true">Mis Instituciones</a>
+                </div>
+                
+
+            </div>
+            
+            <form method="post" id="form" name="form" enctype="multipart/form-data" class="col-8 bg-light mt-3" style="margin-left: 8%;">
+            <input style="visibility:hidden; font-size:1px;" type="text" name="clave" value="{{Escuela.ClaveEscuela}}">
+                {% csrf_token %}
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; ">
+                    <label style="font-size:20px; margin-left: -15%; text-align:center; margin-bottom: 8%; margin-top: 5%; ">
+                        Solicitar cambio de información sobre mi institución educativa:<br> 
+                        <b>{{ Escuela.NombreEscuela }}</b>
+                    </label>
+                </div>
+
+            
+
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; ">
+                    <div class="input-group mb-3 center">
+                        {% for message in messages %}
+                            <span onload="bloqueaMod()" class="badge badge-pill badge-danger" style="font-size: 14px; font-weight: normal; font-weight:bold; margin-bottom: 2%; " >{{ message }}</span> <br>
+                        {% endfor  %}
+                    </div>
+                </div>
+
+                
+                <!--#####################################################################################-->
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <span class="input-group-text"> Nombre de Institución </span>
+                    </div>
+                    <input required type="text" id="nombreIns" name="nombre" value="{{Escuela.NombreEscuela}}" class="form-control" placeholder="Nombre de Institución" aria-label="Nombre de Institución" aria-describedby="nombreIns" >
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="nombreIns" name="nombre"> Clave del centro de trabajo </span>
+                    </div>
+                    <input disabled required type="text" class="form-control" value="{{Escuela.ClaveEscuela}}" placeholder="Clave del centro de trabajo" aria-label="Clave del centro de trabajo" aria-describedby="clave"  >
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="estatus">Estatus</label>
+                    </div>
+                    <select class="custom-select" id="estatus" name="estatus">
+                        {% if Escuela.EstatusEscuela == 'ACTIVO'%}
+                            <option value="{{Escuela.EstatusEscuela}}">{{Escuela.EstatusEscuela}}</option>
+                            <option value="INACTIVO">INACTIVO</option>
+                        {% endif %}
+                        {% if Escuela.EstatusEscuela == 'INACTIVO'%}
+                            <option value="{{Escuela.EstatusEscuela}}">{{Escuela.EstatusEscuela}}</option>
+                            <option value="ACTIVO">ACTIVO</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="municipios">Municipio</label>
+                    </div>
+                    <select class="custom-select" id="municipio" name="municipio">
+                        <option value="{{Escuela.Municipio}}">{{Escuela.Municipio}}</option>
+                            {% for n in municipios %}
+                                <option value="{{n.Nombre}}">{{n.Nombre}}</option>
+                            {% endfor %}
+                    </select>
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="localidad">Localidad</label>
+                    </div>
+                    <select class="custom-select" id="localidad" name="localidad">
+                         <option value="{{Escuela.Localidad}}">{{Escuela.Localidad}}</option>
+                            {% for n in localidades %}
+                                <option value="{{n.Nombre}}">{{n.Nombre}}</option>
+                            {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <span class="input-group-text"> Domicilio </span>
+                    </div>
+                    <input required type="text" id="direccion" name="direccion" value="{{Escuela.Calle}}" class="form-control" placeholder="Domicilio" aria-label="Domicilio" aria-describedby="direccion">
+                </div>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-append">
+                        <span class="input-group-text"> Nombre del Director </span>
+                    </div>
+                    <input required type="text" id="director" name="director" value="{{Escuela.nombreDirector}}" class="form-control" placeholder="Director" aria-label="Director" aria-describedby="director">
+                </div><hr>
+                
+
+
+
+                <div class="container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 5%; ">
+
+               
+                    {% comment %} <div class="row">
+                        <div class="col-12 col-lg-5">
+                            <p  style="font-size: 18px; font-weight: normal;">Nombre
+                            <input class="centro" value="{{Escuela.NombreEscuela}}" id="nombreIns" name="nombre" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                            </p>
+                            
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <p style="font-size: 18px; font-weight: normal;">Clave centro de trabajo
+                            <input class="centro"  value="{{Escuela.ClaveEscuela}}" name="clave" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                            </p>
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-lg-5">
+                            <p style="font-size: 18px; font-weight: normal;">Municipio
+                            <select  class="form-control" name="municipio">
+                                <option value="{{Escuela.Municipio}}">{{Escuela.Municipio}}</option>
+
+                                {% for n in municipios %}
+                                    <option value="{{n.Nombre}}">{{n.Nombre}}</option>
+                                {% endfor %}
+                            </select>
+                            </p>
+                            
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <p style="font-size: 18px; font-weight: normal;">Localidad
+                            <select  class="form-control" name="localidad">
+                                <option value="{{Escuela.Localidad}}">{{Escuela.Localidad}}</option>
+
+                                {% for n in localidades %}
+                                    <option value="{{n.Nombre}}">{{n.Nombre}}</option>
+                                {% endfor %}
+                            </select>
+                            </p>
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Estatus
+                            <select  class="form-control" name="estatus">
+                                {% if Escuela.EstatusEscuela == 'ACTIVO'%}
+                                    <option value="{{Escuela.EstatusEscuela}}">{{Escuela.EstatusEscuela}}</option>
+                                    <option value="INACTIVO">INACTIVO</option>
+                                {% endif %}
+                                {% if Escuela.EstatusEscuela == 'INACTIVO'%}
+                                    <option value="{{Escuela.EstatusEscuela}}">{{Escuela.EstatusEscuela}}</option>
+                                    <option value="ACTIVO">ACTIVO</option>
+                                {% endif %}
+                            </select>    
+                            </p>  
+                        </div>
+                        <div class="col-12 col-sm-5">
+                            <p style="font-size: 18px; font-weight: normal;">Dirección
+                            <input class="centro"  value="{{Escuela.Calle}}" name="direccion" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-5 col-lg-4" style="margin-left: 25%">
+                        <hr>
+                            <p style="font-size: 18px; font-weight: normal;">Director de la Institución
+                            <input id="directorField" class="centro"  value="{{Escuela.nombreDirector}}" name="director" type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                            </p><br>
+
+                    </div> {% endcomment %}
+                    
+
+                    <div class="col-6 col-sm-10 mt-1";>
+                        <span class="badge badge-pill badge-warning" style="font-size: 15px; font-weight: normal; font-weight:bold; margin-top:1%; margin-bottom: 5%;">Imagenes de tu Institución</span>
+                    </div>
+                </div>
+                <div class="row" >
+                    <!--PRIMER UPLOADER -->
+                    {% if Escuela.ImagenNo1.url != None %}
+                        <div id="PrimeraImagenIns" class="col-md-6 col-sm-12 col-lg-4" style="margin-left: -3px" >         
+                            <div style="background-image: url({{Escuela.ImagenNo1.url}}); background-size: cover; border-radius: 16px;" id="DragAndDrop1" class="dm-uploader p-5">
+                                <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                                <div style="background-color: #757575" class="btn btn-primary btn-file">
+                                    <span>Buscar Archivo...</span>
+                                    <input onchange="contenidoDivImagen(event,'DragAndDrop1');" id="img1"  type="file" name="img1" title='Presione para agregar archivo' />
+                                </div>
+                            </div>  
+                        </div>
+                    {% else %}
+                        <div id="PrimeraImagenIns" class="col-md-6 col-sm-12 col-lg-4">         
+                            <div style="background-image: url({% static 'SigApp/se_bordado.png' %}{% static 'SigApp/noi.png' %}); background-size: cover; border-radius: 16px;" id="DragAndDrop1" class="dm-uploader p-5">
+                                <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                                <div style="background-color: #757575" class="btn btn-primary btn-file">
+                                    <span>Buscar Archivo...</span>
+                                    <input onchange="contenidoDivImagen(event,'DragAndDrop1');" id="img1"  type="file" name="img1" title='Presione para agregar archivo' />
+                                </div>
+                            </div>  
+                        </div>
+                    {% endif %}
+                    <!--FIN PRIMER UPLOADER -->
+                    <!--SEGUNDO UPLOADER-->
+                    {% if Escuela.ImagenNo2.url != None %}
+                        <div class="col-md-6 col-sm-12 col-lg-4">       
+                            <div style="background-image: url({{Escuela.ImagenNo2.url}}); background-size: cover; border-radius: 16px;" id="DragAndDrop2" class="dm-uploader p-5">
+                                <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                                    <div style="background-color: #757575" class="btn btn-primary btn-file">
+                                        <span>Buscar Archivo...</span>
+                                        <input onchange="contenidoDivImagen(event,'DragAndDrop2');" type="file" name="img2" id="id_ImagenNo2" title='Presione para agregar archivo' />
+                                    </div>
+                            </div>  
+                        </div>
+                    {% else %}
+                        <div class="col-md-6 col-sm-12 col-lg-4">       
+                            <div style="background-image: url({% static 'SigApp/noi.png'%}); background-size: cover; border-radius: 16px;" id="DragAndDrop2" class="dm-uploader p-5">
+                                <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                                    <div style="background-color: #757575" class="btn btn-primary btn-file">
+                                        <span>Buscar Archivo...</span>
+                                        <input onchange="contenidoDivImagen(event,'DragAndDrop2');" type="file" name="img2" id="id_ImagenNo2" title='Presione para agregar archivo' />
+                                    </div>
+                            </div>  
+                        </div>
+                    {% endif %}
+                    <!-- FIN SEGUNDO UPLOADER-->
+                    <!--TERCER UPLOADER-->
+                    {% if Escuela.ImagenNo3.url != None %}
+                        <div class="col-md-6 col-sm-12 col-lg-4">       
+                            <div style="background-image: url({{Escuela.ImagenNo3.url}}); background-size: cover; border-radius: 16px;" id="DragAndDrop3" class="dm-uploader p-5">
+                                <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                                    <div style="background-color: #757575" class="btn btn-primary btn-file">
+                                        <span>Buscar Archivo...</span>
+                                        <input onchange="contenidoDivImagen(event,'DragAndDrop3');" type="file" name="img3" id="id_ImagenNo3" title='Presione para agregar archivo' />
+                                    </div>
+                            </div>  
+                        </div>
+                    {% else %}
+                        <div class="col-md-6 col-sm-12 col-lg-4">       
+                            <div style="background-image: url({% static 'SigApp/noi.png'%}); background-size: cover; border-radius: 16px;" id="DragAndDrop3" class="dm-uploader p-5">
+                                <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
+                                <div style="background-color: #757575" class="btn btn-primary btn-file">
+                                    <span>Buscar Archivo...</span>
+                                    <input onchange="contenidoDivImagen(event,'DragAndDrop3');" type="file" name="img3" id="id_ImagenNo3" title='Presione para agregar archivo' />
+                                </div>
+                            </div>  
+                        </div>
+                    {% endif %}
+                    <!-- FIN TERCER UPLOADER-->
+                </div><hr>
+            
+                <div class="" style="text-align: center; padding: 2%; margin-left: %; margin-top: 3%; bottom: -10%;">
+                    {% csrf_token %}
+                    {% if modificando %}
+                        <input style="visibility:hidden;" onclick="confirmacion()" type="submit" class="btn btn-success btn-lg btn-block" id="btnSolicitar" value= "Solicitar modificación">
+                    {% else %}
+                        <input onclick="confirmacion()" type="button" class="btn btn-success btn-lg btn-block" id="btnSolicitar" value="Solicitar modificación">
+                    {% endif %}
+                </div>    
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    function bloqueaMod(){
+        //document.getElementById("btnSolicitar").disabled = true;
+        //alert("asd");
+        document.getElementById("btnSolicitar").style.visibility = "hidden";
+    }
+
+    function confirmacion(){
+      if (confirm('¿Estas seguro de ENVIAR esta modificación?')){ 
+        alert("Solicitud de modificación enviada. \n \nSe notificará vía por correo electronico el estado de su solicitud ");
+        document.form.submit()
+        //return true;
+      }
+    }
+
+</script>
+{% endblock %}
+</html>

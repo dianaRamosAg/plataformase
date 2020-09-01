@@ -29,7 +29,7 @@ urlpatterns = [
     #urls de app de login
     path('', include('login.urls')),
     #urls de app de TBC
-    path('TBC/', include('TBC.urls')),
+    #path('TBC/', include('TBC.urls')),
     #urls de app de RVOES
     path('inicio/', include('RVOES.urls')),
     #urls de app de SETyRS

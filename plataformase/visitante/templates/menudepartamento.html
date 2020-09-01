@@ -24,10 +24,10 @@
 		<link rel='stylesheet' id='elementor-post-148-css'  href="{% static '/css/post-148.css' %}" type='text/css' media='all' />
 
 	</head>
-	<body class="responsive page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
+	<body class="page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
 	<header id="main-header">
 		<a href="#" id="logo-header">
-			<div class="col-sm-2 col-xs-3 ">
+			<div class="col-sm-2 col-xs-4 ">
 				<a href="#"></a> <img src="{% static '/img/se.png'%}" width="230" height="80"/></a>
 			</div><!--/.col-sm-2-->
 		</a>
@@ -45,7 +45,7 @@
 				<li class="nav-item dropdown ml-auto">
 					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/us2.png' %}"/></a>
 					<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
-						<a href="{% url 'perfiluser'%}" class="dropdown-item">Configuración de cuenta</a>
+						<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
 						<div class="dropdown-divider"></div>
 						<a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
 					</div>
@@ -65,25 +65,6 @@
 <!------------------------------------------SISTEMAS------------------------------>
 		<section class="pricingCardGrid ">
 			<div class="pricingCardGrid__body row ">
-					<div class="pricingCardGrid__pricingCard">
-						<a class="pricingCard" href="/SigApp/" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
-							<div class="pricingCard__heading title--small" style="text-align: justify;">
-								Sistema de información geográfica (SIG).
-							</div>
-							<div class="pricingCard__pricing">
-								<div class="col-sm-3 col-xs-3">
-									<img src="{% static '/img/universidad.png'%}" width="200" height="200"/>
-								</div>
-							</div>
-							<span class="pricingCard__period" >
-								<p align="justify">Localización de instituciones educativas  de media superior y superior del estado de Nayarit.</p>
-							</span>
-							<div class="pricingCard__button">
-							<span class="button button--primary">
-								Acceder </span>
-							</div>
-							</a>
-						</div>
 				<div class="pricingCardGrid__pricingCard">
 					<a class="pricingCard" href="{% url 'SETyRS_admin_index' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
@@ -105,9 +86,7 @@
 					</a>
 				</div>
 				<div class="pricingCardGrid__pricingCard">
-					<!-- <a class="pricingCard" href="{% url 'admin' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"> -->
-						<a class="pricingCard" href="#" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
-					
+					<a class="pricingCard" href="{% url 'admin' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small">
 							Sistema de generación de turnos de RVOE
 						</div>
@@ -122,7 +101,7 @@
 						<br>
 						<div class="pricingCard__button">
 							<span class="button button--primary">
-								Próximamente
+								Acceder
 							</span>
 						</div>
 					</a>
@@ -130,10 +109,9 @@
 				{% if request.user.jefe == '1' %}
 					{% if request.user.departamento.id == 3 or request.user.departamento.id == 4 %}
 						<div class="pricingCardGrid__pricingCard">
-							<!--{% url 'docAnexos' %}-->
-							<a class="pricingCard" href="#" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+							<a class="pricingCard" href="{% url 'docAnexos' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 								<div class="pricingCard__heading title--small" style="text-align: justify;">
-									Documentos anexos
+									Añadir documentos anexos
 								</div>
 								<div class="pricingCard__pricing">
 									<div class="col-sm-4 col-xs-4">

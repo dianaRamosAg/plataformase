@@ -8,10 +8,8 @@ $(function () {
     });
   });
 
-
-
 function validar() {
-    var categoria = document.getElementById("sel").value;
+    var categoria = document.getElementById("selectCategoria").value;
     var secretario = document.getElementById("selectSecretario").value;
     var presidente = document.getElementById("selectPresidente").value;
     var vocal = document.getElementById("selectVocal").value;
@@ -19,7 +17,7 @@ function validar() {
     var hoy = new Date();
     var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
 
-    if (categoria == 'Seleccionar' || categoria == 'OTROS') {
+    if (categoria == 'Seleccionar') {
         return false;
     } else if (secretario == 'Seleccionar') {
         return false;
@@ -32,16 +30,4 @@ function validar() {
     } else return true;
 
     
-}
-
-function otrosOnChange(sel) {
-    if (sel.value=="OTROS"){
-         divC = document.getElementById("nCuenta");
-         divC.style.display = "";
-
-    }else{
-
-         divC = document.getElementById("nCuenta");
-         divC.style.display="none";
-    }
 }
