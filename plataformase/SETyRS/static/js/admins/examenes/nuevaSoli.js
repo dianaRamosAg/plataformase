@@ -1,12 +1,20 @@
-
-
 function cargarListeners() { 
     var btnNS = document.getElementById("avanzar");
     btnNS.addEventListener("click",creandoSoli,false);
     if(RIT == "False"){
-        $(window).on('load',function(){
-            $('#agregarDocumentoModal').modal('show');
+        $("#sel").on('change',function(){
+            if($("#sel").val() == "OTROS"){
+                $('#agregarDocumentoModal').modal('show');
+            }
         });
+
+        $("#documentoPendiente").on("change",function(){
+            $("#btnGuardar").removeAttr('disabled');
+        })
+
+        $('#agregarDocumentoModal').on('hidden.bs.modal', function () {
+            location.reload();
+        })
     }
 };
 

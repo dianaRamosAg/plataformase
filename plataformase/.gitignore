@@ -1,6 +1,14 @@
 /media/
 *.pyc
+*.idea
 
+<<<<<<< HEAD
 /migrations/*
 /__pycache__/*
 /env/
+=======
+*/migrations/*
+*__pycache__/*
+env/
+accounts/
+>>>>>>> 4009ecaa3a74ba86298df81f62ab87182ca400cd

@@ -37,17 +37,22 @@ def index(request):
 
 ''' Menu de instituciones'''
 def menuinstitucion(request,id):
-    inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
-    if inst.modalidad == '1':
-        # En caso de ser modalidad Telebachillerato
-        return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
-    else: 
-        return render(request,'menuinstitucion.html')
+    if request.user.tipo_usuario == '1':
+        inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
+        if inst.modalidad == '1': #En caso de ser TBC
+            return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
+        else:
+            return render(request,'menuinstitucion.html')
+    else:
+        return redirect('logout')
 
 
 
 def menuparticular(request):
-    return render(request,'menuparticular.html')
+    if request.user.tipo_usuario == '5':
+        return render(request,'menuparticular.html')
+    else:
+        return redirect('logout')
 
 def menuadmin(request):
     if request.user.tipo_usuario == '4':
@@ -57,13 +62,16 @@ def menuadmin(request):
         else:
              return render(request,'menuadmin.html')
     else:
-        return redirect('perfil')
+        return redirect('logout')
 
 def menudepartamento(request):
-    if request.user.departamento_id == '1':
-        return render(request,'menudepartamento_ce.html')
+    if request.user.tipo_usuario == '3':
+        if request.user.departamento_id == '1':
+            return render(request,'menudepartamento_ce.html')
+        else:
+            return render(request,'menudepartamento.html')
     else:
-        return render(request,'menudepartamento.html')
+        return redirect('logout')
 
 def control(request):
     return render(request,'menudepartamento_ce.html')
@@ -154,7 +162,14 @@ def regVisit(request):
         first_name = request.POST["first_name"]
         last_name = request.POST["last_name"]
         email = request.POST["email"]
+        #En caso de ya tener una solicitud del mismo correo
+        if VisitanteSC.objects.filter(email=email).exists():
+            return render(request,'solExistente.html')
+
         curp_rfc = request.POST["curp_rfc"]
+        #Si la CURP/RFC ya se encuentra registrado
+        if VisitanteSC.objects.filter(curp_rfc=curp_rfc).exists():
+            return render(request,'datosExistentes.html')
         calle = request.POST["calle"]
         password = make_password(request.POST["password"])
         noexterior = request.POST["noexterior"]
@@ -169,6 +184,9 @@ def regVisit(request):
         if tipo_usuario == '1':
             # Guardamos los datos de un centro de trabajo vinculado con la institución
             inst_cct = request.POST["cct"]
+            if VisitanteSC.objects.filter(cct=inst_cct).exists():
+                return render(request,'cctExistentes.html')
+            
             inst_nombredirector = request.POST["nombre_director"]
             sector = request.POST["sector"]
             nivel_educativo = request.POST["nivel_educativo"]
@@ -206,8 +224,9 @@ def notificacionsc(request):
 
 #Funcion que manda los datos del visitante que pidió cuenta, se valida y puede aceptarse o no.
 def validar(request,email):
-    vs=VisitanteSC.objects.get(email = email)
-    return render(request,'validar.html',{'VisitanteSC':vs})
+    if request.user.tipo_usuario == '4':
+        vs=VisitanteSC.objects.get(email = email)
+        return render(request,'validar.html',{'VisitanteSC':vs})
 
 
 def regUser(request, email):
@@ -257,6 +276,8 @@ def actualizarperfilusr(request):
     if request.method == 'POST':
         first_name = request.POST["first_name"]
         email = request.POST["email"]
+        if CustomUser.objects.filter(email=email).exists():
+            return render(request,'datosExistentes.html')
 
         if request.user.tipo_persona=='1':
             last_name = request.POST["last_name"]
