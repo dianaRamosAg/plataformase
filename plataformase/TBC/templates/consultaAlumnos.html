@@ -36,10 +36,23 @@
                                             <th scope="row" style="width: 27%;">{{ forloop.counter }}</th>
                                             <td style="width: 57.5%;">{{ al.nombre_alumno }}</td>
                                             <td style="width: 20%;">{{ al.num_matricula }}</td>
-                                            <td style=""><button class="btn btn-outline-info btn-sm" type="submit" onclick="seleccionaAlumno('{{ al.id_alumno }}', '{{ al.nombre_alumno }}', '{{ al.email | default_if_none:'' }}', '{{ al.tel_fijo | default_if_none:'' }}', '{{ al.tel_celular| default_if_none:'' }}', '{{ al.curp_alumno| default_if_none:'' }}', '{{ al.calle| default_if_none:'' }}', '{{ al.colonia| default_if_none:'' }}', '{{ al.num_int| default_if_none:'' }}', '{{ al.num_ext | default_if_none:'' }}', '{{ al.nombre_escuela| default_if_none:'' }}', '{{ al.cct| default_if_none:'' }}', '{{ al.num_matricula| default_if_none:'' }}' , '{{ al.periodo2 | default_if_none:'' }}' , '{{ al.promedio_final | default_if_none:'' }}', '{{ al.prom_general_1 | default_if_none:'' }}', '{{ al.promedio_general_2 | default_if_none:'' }}', '{{ al.promedio_general_3 | default_if_none:'' }}', '{{ al.promedio_general_4 | default_if_none:'' }}', '{{ al.promedio_general_5 | default_if_none:'' }}', '{{ al.promedio_general_6 | default_if_none:'' }}'  , '{{ al.semestre | default_if_none:'' }}'    ); "><i class="far fa-edit"></i></button></td>
+                                            <td style=""><button class="btn btn-outline-info btn-sm" type="submit" onclick="seleccionaAlumno('{{ al.id_alumno }}', '{{ al.nombre_alumno }}', '{{ al.email | default_if_none:'' }}', '{{ al.tel_fijo | default_if_none:'' }}', '{{ al.tel_celular| default_if_none:'' }}', '{{ al.curp_alumno| default_if_none:'' }}', '{{ al.nombre_escuela| default_if_none:'' }}', '{{ al.cct| default_if_none:'' }}', '{{ al.num_matricula| default_if_none:'' }}' , '{{ al.periodo2 | default_if_none:'' }}' , '{{ al.promedio_final | default_if_none:'' }}', '{{ al.prom_general_1 | default_if_none:'' }}', '{{ al.promedio_general_2 | default_if_none:'' }}', '{{ al.promedio_general_3 | default_if_none:'' }}', '{{ al.promedio_general_4 | default_if_none:'' }}', '{{ al.promedio_general_5 | default_if_none:'' }}', '{{ al.promedio_general_6 | default_if_none:'' }}'  , '{{ al.semestre | default_if_none:'' }}', '{{ al.tipo_secundaria | default_if_none:'' }}'    ); "><i class="far fa-edit"></i></button></td>
                                             {% if usuario.tipo_usuario == "1" %}
                                                 <td style=""><button class="btn btn-outline-danger btn-sm" onclick="confirmDialogDelete('{{ al.id_alumno }}')" style="cursor: pointer;"> <i class="far fa-trash-alt"></i> </button></td>
                                             {% endif %}
+                                            {% for ar in archivo %}
+                                                {% if ar.id_alumno == al.id_alumno %}
+                                                    {% if ar.tipo_archivo == 'Acta nacimiento' %}
+                                                        <td style="display: none;"><input class="inputsActa" id="inputActa" type="text" value="{{al.id_alumno}}{{ ar.url }}"></td>
+                                                    {% endif %}
+                                                    {% if ar.tipo_archivo == 'Curp' %}
+                                                        <td style="display: none;"><input class="inputsCurp" id="inputCurp" type="text" value="{{al.id_alumno}}{{ ar.url }}"></td>
+                                                    {% endif %}
+                                                    {% if ar.tipo_archivo == 'Certificado secundaria' %}
+                                                        <td style="display: none;"><input class="inputsCertificado" id="inputCertificado" type="text" value="{{al.id_alumno}}{{ ar.url }}"></td>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
                                         </tr>
                                         {% endfor %}
                                 </tbody>
@@ -109,7 +122,7 @@
         </div>
         <!--Columna derecha-->
         <div class="col-md-6 mt-3">
-            <form class="needs-validation" novalidate method="post">
+            <form class="needs-validation" novalidate method="post" enctype="multipart/form-data">
             {% csrf_token %}
                 <!--Tarjeta con formulario del alumno-->
                 <div class="container-flex mb-3" id="wwg-accordian">
@@ -122,21 +135,28 @@
                                 <div class="form-row">
                                     <input type="text" id="idAlumno" name="idAlumno" hidden>
                                     <div class="col-md-8 mb-3">
-                                        <label for="nombreAlumno">Nombre (s)</label>
+                                        <label for="nombreAlumno">Nombre completo</label>
                                         <input type="text" class="form-control border border-ligth" id="nombreAlumno" name="nombreAlumno" placeholder="Nombre" required value="{{ alumnoSel.nombre_alumno | default_if_none:'' }}">
                                         <div class="invalid-tooltip">
                                             Por favor introduzca el nombre
                                         </div>
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label for="email">Email</label>
-                                        <input type="email" class="form-control border border-ligth" id="email" name="email" placeholder="Email" required value="{{ alumnoSel.email | default_if_none:'' }}">
+                                        <label for="numMatricula">Matricula</label>
+                                        <input type="text" class="form-control border border-ligth" id="numMatricula" name="numMatricula" placeholder="Matricula" required value="{{ alumnoSel.num_matricula | default_if_none:'' }}">
                                         <div class="invalid-tooltip">
-                                            Introduzca su email
+                                            Por favor introduzca la matricula
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="curp">CURP</label>
+                                        <input type="text" class="form-control border border-ligth" id="curp" name="curp" placeholder="CURP" required value="{{ alumnoSel.curp_alumno | default_if_none:'' }}">
+                                        <div class="invalid-tooltip">
+                                            Introduzca la CURP
+                                        </div>
+                                    </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="telFijo">Teléfono fijo</label>
                                         <input type="number" class="form-control border border-ligth" id="telFijo" name="telFijo" placeholder="Teléfono fijo" required value="{{ alumnoSel.tel_fijo | default_if_none:'' }}">
@@ -151,44 +171,54 @@
                                             Introduzca el número de celular
                                         </div>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="curp">CURP</label>
-                                        <input type="text" class="form-control border border-ligth" id="curp" name="curp" placeholder="CURP" required value="{{ alumnoSel.curp_alumno | default_if_none:'' }}">
-                                        <div class="invalid-tooltip">
-                                            Introduzca la CURP
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
-                                        <label for="calle">Calle</label>
-                                        <input type="text" class="form-control border border-ligth" id="calle" name="calle" placeholder="Calle" required value="{{ alumnoSel.calle | default_if_none:'' }}">
-                                        <div class="invalid-tooltip">
-                                            Introduzca la calle
-                                        </div>
+                                        <label for="calle">Tipo de secundaria</label>
+                                        <select class="selectpicker" data-live-search="true" title="Seleccione..." data-width="100%" onchange="seleccionaSecundaria();" id="selectSecundaria">
+                                            <option>Telesecundaria</option>
+                                            <option>General</option>
+                                            <option>Técnica</option>
+                                            <option>INEA</option>
+                                        </select>
+                                        <input type="text" hidden name="tipo_secundaria" id="tipo_secundaria">                                          
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="colonia">Colonia</label>
-                                        <input type="text" class="form-control border border-ligth" id="colonia" name="colonia" placeholder="Colonia" required value="{{ alumnoSel.colonia | default_if_none:'' }}">
-                                        <div class="invalid-tooltip">
-                                            Introduzca la colonia
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="colonia">Acta de nacimiento</label>
                                         <div class="form-row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="numInt">Num int</label>
-                                                <input type="number" class="form-control border border-ligth" id="numInt" name="numInt" placeholder="Num int" required value="{{ alumnoSel.num_int | default_if_none:'' }}">
-                                                <div class="invalid-tooltip">
-                                                    Introduzca el num int
-                                                </div>
+                                            <div class="col-md-6">
+                                                <input type="file" name="acta" id="inputActaF" style="display: none;" />
+                                                <button id="btnActaArchivo" type="button" class="btn btn-outline-primary btn-block" onclick="document.getElementById('inputActaF').click();"><i class="fas fa-upload"></i></button>
+                                                <!-- <input type="button" value="Buscar..." class="btn btn-outline-primary btn-block" onclick="document.getElementById('inputActa').click();" /> -->
                                             </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="numExt">Num ext</label>
-                                                <input type="number" class="form-control border border-ligth" id="numExt" name="numExt" placeholder="Num ext" required value="{{ alumnoSel.num_ext | default_if_none:'' }}">
-                                                <div class="invalid-tooltip">
-                                                    Introduzca el num ext
-                                                </div>
+                                            <div class="col-md-6">
+                                                <a id="btnActa" type="button" class="btn btn-warning btn-block" style="color: white;" target="_blank"><i class="fas fa-eye"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 mb-3">
+                                        <label for="curpArchivo">CURP</label><br>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="file" name="curpArchivo" id="inputCURP" style="display: none;" />
+                                                <button id="btnCurpArchivo" type="button" class="btn btn-outline-primary btn-block" onclick="document.getElementById('inputCURP').click();"><i class="fas fa-upload"></i></button>
+                                                <!-- <input type="button" value="B" class="btn btn-outline-primary " onclick="document.getElementById('inputCURP').click();" /> -->
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a id="btnCurp" type="button" class="btn btn-warning btn-block" style="color: white;" target="_blank"><i class="fas fa-eye"></i></a>   
+                                            </div>
+                                        </div>                              
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="numExt">Certificado secundaria</label>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="file" name="certificado" id="inputCertificadoF" style="display: none;" />
+                                                <button id="btnCertificadoArchivo" type="button" class="btn btn-outline-primary btn-block" onclick="document.getElementById('inputCertificadoF').click();"><i class="fas fa-upload"></i></button>
+                                                <!-- <input type="button" value="Buscar..." class="btn btn-outline-primary btn-block" onclick="document.getElementById('inputCertificado').click();" /> -->
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a id="btnCertificado" type="button" class="btn btn-warning btn-block" style="color: whitesmoke;" target="_blank"><i class="fas fa-eye"></i></a>  
                                             </div>
                                         </div>
                                     </div>
@@ -214,11 +244,13 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-4 mb-3">
-                                                    <label for="numMatricula">Matricula</label>
-                                                    <input type="text" class="form-control border border-ligth" id="numMatricula" name="numMatricula" placeholder="Matricula" required value="{{ alumnoSel.num_matricula | default_if_none:'' }}">
+
+                                                    <label for="email">Email</label>
+                                                    <input type="email" class="form-control border border-ligth" id="email" name="email" placeholder="Email" required value="{{ alumnoSel.email | default_if_none:'' }}">
                                                     <div class="invalid-tooltip">
-                                                        Por favor introduzca la matricula
+                                                        Introduzca su email
                                                     </div>
+
                                                 </div>
                                                 <div class="col-md-8 mb-3">
                                                     <label for="password">Contraseña</label>
@@ -231,7 +263,7 @@
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                         <label for="semestre">Semestre</label>
-                                        <input type="text" class="form-control border border-ligth" id="semestre" name="semestre" placeholder="Semestre" required>
+                                        <input type="number" class="form-control border border-ligth" id="semestre" name="semestre" placeholder="Semestre" required value="{{ alumnoSel.semestre | default_if_none:'' }}">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="nombreEscuela">Nombre de la institución</label>
@@ -299,6 +331,11 @@
         </div>
     </div>
     <script>
+        function seleccionaSecundaria(){
+            var sel = document.getElementById('selectSecundaria')
+            var val = sel.options[sel.selectedIndex].value
+            document.getElementById('tipo_secundaria').value = val
+        }
         function filtraAlumno() {
         // Declare variables 
             var input, filter, table, tr, td, i;
@@ -320,9 +357,77 @@
             }
         }
 
-        function seleccionaAlumno(idAlumno, nombreAlumno, email, telFijo, telCelular, curp, calle, 
-        colonia, numInt, numExt, nombreEscuela, cct, numMatricula, fechaIngreso, promGeneral, prom_general_1, 
-        prom_general_2, prom_general_3, prom_general_4, prom_general_5, prom_general_6, semestre){
+        function seleccionaAlumno(idAlumno, nombreAlumno, email, telFijo, telCelular, curp, nombreEscuela, cct, numMatricula, fechaIngreso, promGeneral, prom_general_1, 
+        prom_general_2, prom_general_3, prom_general_4, prom_general_5, prom_general_6, semestre, tipo_secundaria){
+            inputs = document.getElementsByClassName('inputsActa');
+            inputsC = document.getElementsByClassName('inputsCurp');
+            inputsCS = document.getElementsByClassName('inputsCertificado');
+            bandera = false;
+            for(var i = 0; i < inputs.length; i++){
+                urlActa = inputs[i].value
+                urlCurp = inputsC[i].value
+                urlCertificado = inputsCS[i].value
+                idAlumnoArchivo = inputs[i].value.slice(0, 1);
+                if(idAlumno == idAlumnoArchivo){
+                    //Si hay archivo y se puede ver (blouear boton de subir)
+                    bandera = true;
+                    urlActa = urlActa.substring(1, urlActa.lenght);
+                    urlCurp = urlCurp.substring(1, urlCurp.lenght);
+                    urlCertificado = urlCertificado.substring(1, urlCertificado.lenght);
+
+                    document.getElementById('btnActa').target = "_blank";
+                    document.getElementById('btnActaArchivo').className = 'btn btn-outline-secondary btn-block'
+                    document.getElementById('btnActaArchivo').disabled = true;
+                    document.getElementById('btnActa').className = 'btn btn-warning btn-block'
+                    document.getElementById('btnActa').style.cursor = 'pointer'
+
+                    document.getElementById('btnCurp').target = "_blank";
+                    document.getElementById('btnCurpArchivo').className = 'btn btn-outline-secondary btn-block'
+                    document.getElementById('btnCurpArchivo').disabled = true;
+                    document.getElementById('btnCurp').className = 'btn btn-warning btn-block'
+                    document.getElementById('btnCurp').style.cursor = 'pointer'
+
+                    document.getElementById('btnCertificado').target = "_blank";
+                    document.getElementById('btnCertificadoArchivo').className = 'btn btn-outline-secondary btn-block'
+                    document.getElementById('btnCertificadoArchivo').disabled = true;
+                    document.getElementById('btnCertificado').className = 'btn btn-warning btn-block'
+                    document.getElementById('btnCertificado').style.cursor = 'pointer'
+
+                    //Dont touch this
+                    document.getElementById('btnActa').href = urlActa;
+                    document.getElementById('btnCurp').href = urlCurp;
+                    document.getElementById('btnCertificado').href = urlCertificado;
+                }
+                if(!bandera){
+                    //No hay un archivo y no se puede ver (bloquear el <a> de ver)
+                    document.getElementById('btnActa').href = '#';
+                    document.getElementById('btnActa').removeAttribute('target');
+                    document.getElementById('btnActaArchivo').className = 'btn btn-outline-primary btn-block'
+                    document.getElementById('btnActaArchivo').disabled = false;
+                    document.getElementById('btnActa').className = 'btn btn-secondary btn-block'
+                    document.getElementById('btnActa').style.cursor = 'default'
+
+
+                    document.getElementById('btnCurp').href = '#';
+                    document.getElementById('btnCurp').removeAttribute('target');
+                    document.getElementById('btnCurpArchivo').className = 'btn btn-outline-primary btn-block'
+                    document.getElementById('btnCurpArchivo').disabled = false;
+                    document.getElementById('btnCurp').className = 'btn btn-secondary btn-block'
+                    document.getElementById('btnCurp').style.cursor = 'default'
+
+
+
+                    document.getElementById('btnCertificado').href = '#';
+                    document.getElementById('btnCertificado').removeAttribute('target');
+                    document.getElementById('btnCertificadoArchivo').className = 'btn btn-outline-primary btn-block'
+                    document.getElementById('btnCertificadoArchivo').disabled = false;
+                    document.getElementById('btnCertificado').className = 'btn btn-secondary btn-block'
+                    document.getElementById('btnCertificado').style.cursor = 'default'
+                    
+
+                }
+            }
+            
             var x = document.getElementsByClassName('inputAlumno');
             for(i = 0; i < x.length; i++) {
                 x[i].value = idAlumno;
@@ -336,27 +441,30 @@
             var telFijoA = document.getElementById('telFijo');
             var telCelularA = document.getElementById('telCelular');
             var curpA = document.getElementById('curp');
-            var calleA = document.getElementById('calle');
-            var coloniaA = document.getElementById('colonia');
-            var numIntA = document.getElementById('numInt');
-            var numExtA = document.getElementById('numExt');
+            //var calleA = document.getElementById('calle');
+            //var coloniaA = document.getElementById('colonia');
+            //var numIntA = document.getElementById('numInt');
+            //var numExtA = document.getElementById('numExt');
             var nombreEscuelaA = document.getElementById('nombreEscuela');
             var cctA = document.getElementById('cct');
             var numMatriculaA = document.getElementById('numMatricula');
             var semestreA = document.getElementById('semestre');
+            var tipo_secundariaA = document.getElementById('tipo_secundaria');
             nombreA.value = nombreAlumno;
             emailA.value = email;
             telFijoA.value = telFijo;
             telCelularA.value = telCelular;
             curpA.value = curp;
-            calleA.value = calle;
-            coloniaA.value = colonia;
-            numIntA.value = numInt;
-            numExtA.value = numExt;
+            //calleA.value = calle;
+            //coloniaA.value = colonia;
+            //numIntA.value = numInt;
+            //numExtA.value = numExt;
             nombreEscuelaA.value = nombreEscuela;
             cctA.value = cct;
             numMatriculaA.value = numMatricula;
             semestreA.value = semestre;
+            tipo_secundariaA.value = tipo_secundaria;
+            $('#selectSecundaria').selectpicker('val', tipo_secundaria);
 
             //Asignación a los labels del resumen del alumno
             var nombreA_l = document.getElementById('l_nombre_alumno');
