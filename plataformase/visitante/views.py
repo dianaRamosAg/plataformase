@@ -38,9 +38,12 @@ def index(request):
 ''' Menu de instituciones'''
 def menuinstitucion(request,id):
     if request.user.tipo_usuario == '1':
-        inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
-        if inst.modalidad == '1': #En caso de ser TBC
-            return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
+        listinst = []
+        listinst= UsuarioInstitucion.objects.filter(id_usuariobase = id)
+        print(listinst)
+        for inst in listinst:
+            if inst.modalidad == '1': #En caso de ser TBC
+                return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
         else:
             return render(request,'menuinstitucion.html')
     else:
@@ -353,7 +356,7 @@ def GuardarFormatoPDF(request):
         formatoPDF.save()
         formatos = ConfiguracionPDF.objects.all()
         return render(request, 'configuracionpdf.html', {'formatos': formatos })
-     
+      
 def cct(request):
     if request.method == 'POST':
         cct = request.POST["cct"]
