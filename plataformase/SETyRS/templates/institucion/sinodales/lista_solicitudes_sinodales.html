@@ -40,7 +40,7 @@
                 <tr>
                     <td><a href="{% url 'SETyRS_detalle_solicitud_sinodal' solicitud.id %}">{{solicitud.id}}</a></td>
                     <td>{{solicitud.estatus}}</td>
-                    <td>Su solicitud será validada por el departamento</td>
+                    <td>{{solicitud.fase}}/3</td>
                     <td>{{solicitud.fecha}}</td>
                 </tr>
                 {% endfor %}
