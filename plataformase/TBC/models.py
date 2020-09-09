@@ -217,11 +217,15 @@ class Alumno(models.Model):
     email = models.EmailField(max_length=254, null=True) #models.CharField(max_length=150)
     tel_fijo = models.CharField(max_length=150, null=True)
     tel_celular = models.CharField(max_length=150, null=True)
-    calle = models.CharField(max_length=150, null=True)
-    colonia = models.CharField(max_length=150, null=True)
-    num_int = models.CharField(max_length=150, null=True)
-    num_ext = models.CharField(max_length=150, null=True)
+    calle = models.CharField(max_length=150, null=True) #TODO: Eliminar
+    colonia = models.CharField(max_length=150, null=True) #TODO: Eliminar
+    num_int = models.CharField(max_length=150, null=True) #TODO: Eliminar
+    num_ext = models.CharField(max_length=150, null=True) #TODO: Eliminar
     semestre = models.CharField(max_length=150)
+    tipo_secundaria = models.CharField(max_length=150, null=True)
+    acta_nacimiento = models.FileField(upload_to='Archivos/TBC', null=True)
+    curp_archivo = models.FileField(upload_to='Archivos/TBC', null=True)
+    certificado_secundaria = models.FileField(upload_to='Archivos/TBC', null=True)
 
 class Curso(models.Model):
     id_curso = models.IntegerField(primary_key= True)
@@ -232,14 +236,14 @@ class Curso(models.Model):
     creditos = models.IntegerField()
 
 class Docente_curso(models.Model):
-    id_dc = models.IntegerField(primary_key= True)
+    id_dc = models.AutoField(primary_key= True)
     #id_curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
     #id_docente = models.ForeignKey(Docente, on_delete=models.CASCADE)
     id_curso = models.IntegerField()
     id_docente = models.IntegerField()
 
 class Alumno_curso(models.Model):
-    id_ac = models.IntegerField(primary_key= True)
+    id_ac = models.AutoField(primary_key= True)
     id_dc = models.IntegerField()
     id_alumno = models.IntegerField()
     #TODO: Ver porqué no me elimina este registro al querer eliminar un alumno 
@@ -325,10 +329,10 @@ class Aprendizaje_esperado_modulo(models.Model):
 class Archivo(models.Model):
     id_archivo = models.IntegerField(primary_key= True)
     nombre_archivo = models.CharField(max_length=500)
-    archivo = models.CharField(max_length=500)
+    archivo = models.CharField(max_length=500, null=True)
     descripcion = models.CharField(max_length=500, null=True)
     tipo_archivo = models.CharField(max_length=100)
-    id_actividad = models.IntegerField()
+    id_actividad = models.IntegerField(null=True)
     url = models.CharField(max_length=500)
     id_alumno = models.IntegerField(null=True)
     id_docente = models.IntegerField(null=True)
@@ -345,6 +349,7 @@ class Notificacion_act_alumno(models.Model):
     id_alumno = models.IntegerField()
     status = models.IntegerField()
     id_notificacion = models.CharField(max_length=500)
+    id_dc = models.IntegerField()
 
 class Notificacion_act_docente(models.Model):
     id_notificacion_docente = models.AutoField(primary_key= True)
@@ -352,6 +357,8 @@ class Notificacion_act_docente(models.Model):
     status = models.IntegerField()
     id_notificacion = models.CharField(max_length=500)
     id_alumno = models.IntegerField()
+    id_dc = models.IntegerField()
+    tipo = models.IntegerField()
 
 class Notificacion_mod(models.Model):
     id_notificacion = models.AutoField(primary_key= True)
@@ -382,14 +389,20 @@ class Asistencia(models.Model):
 class Docente(models.Model):
     id_docente = models.IntegerField(primary_key= True)
     nombres_docente = models.CharField(max_length=150)
-    apellidos_docente = models.CharField(max_length=150)
+    apellidos_docente = models.CharField(max_length=150, null=True)
     edad_docente = models.IntegerField()
     email = models.CharField(max_length=150)
     clave_docente = models.CharField(max_length=150)
     cct = models.CharField(max_length=50) 
     curp_docente =  models.CharField(max_length=20)
     rfc_docente =  models.CharField(max_length=30)
-    tel_fijo = models.CharField(max_length=150)
+    tel_fijo = models.CharField(max_length=150, null=True)
     tel_cel = models.CharField(max_length=150)
     nombre_escuela = models.CharField(max_length=150)
-    areadisciplinar_docente = models.ForeignKey(Area_disciplinar, on_delete=models.CASCADE)
+    areadisciplinar_docente = models.ForeignKey(Area_disciplinar, on_delete=models.CASCADE, null=True)
+    domicilio = models.CharField(max_length=500, null=True)
+    num_empleado = models.CharField(max_length=150, null=True)
+    curriculum = models.FileField(upload_to='Archivos/TBC')
+    perfil_profesional = models.CharField(max_length=200, null=True)
+    maximo_grado = models.CharField(max_length=200, null=True)
+    localidad = models.CharField(max_length=200, null=True)

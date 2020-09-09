@@ -33,5 +33,6 @@ urlpatterns = [
    path('Modulos/update/propositoUnidad',updPropUnidad,name='updPropUnidad'),
    path('Modulos/update/archivo',updArchivo,name='updArchivo'),
    path('Modulos/update/getpropositoUnidad',getPropUnidad,name='getPropUnidad'),
+   path('relacionar-modulo', relacionarModulo, name="relacionarModulo"),
 
 ]
