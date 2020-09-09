@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Info Window With maxWidth</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4&callback=initMap"
+      defer
+      ></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+
+      "use strict";
+
+      function initMap() {
+        const uluru = {
+          lat: -25.363,
+          lng: 131.044
+        };
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: uluru
+        });
+        const contentString =
+          '<div id="content">' +
+            '<div id="siteNotice"></div>' +
+            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+            "<button onclick='listar(arre)'>Listar</button>"
+            '<div id="app"></div>' +
+          "</div>";
+        const infowindow = new google.maps.InfoWindow({
+          content: contentString,
+          maxWidth: 200
+        });
+        const marker = new google.maps.Marker({
+          position: uluru,
+          map,
+          title: "Uluru (Ayers Rock)"
+        });
+        marker.addListener("click", () => {
+          infowindow.open(map, marker);
+        });
+      }
+
+
+      var wizards = ["Hermione", "Neville", "Gandalf", "Radagast"];
+      var arre = [[123,111],[123,456],[700,323]];
+      
+      function listar(a){
+        // Create an unordered list
+        var list = document.createElement("tr");
+
+        // Create a list item for each wizard
+        // and append it to the list
+        a.forEach(function (wizard) {
+          var li = document.createElement("td");
+          li.textContent = wizard;
+          list.appendChild(li);
+        });
+
+        // Log
+        console.log(list);
+
+        // Inject into the DOM
+        var app = document.querySelector("#myTable");
+        app.appendChild(list);
+      }
+    </script>
+  </head>
+  <body>
+
+    <div id="map"></div>
+    <div id="app2"></div>
+
+
+    <!--
+    "<table>"+
+      "<tbody>"+
+        "<tr>"+
+          "<td><a href='' onclick='redirecciona()'>"+arre[0][0]+" , "+arre[0][1]+"<td>"+
+        "</tr>"+
+      "{% endfor %}"+
+      "</tbody>"+
+    "</table>"+
+    -->
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+      <table class="table table-bordered table-striped mb-0 " style="text-align: center; ">
+        <thead class="thead-dark">
+          <tr>
+            <th style="width:1%" scope="col">Clave Escuela</th>
+            <th style="width:1%" scope="col">Nombre Escuela</th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+          <!--
+          <tr>
+            <td><a href="/SigApp/mostrar_historialEst/{{ element.id }}/" style="color:dodgerblue">Ir</a></td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+    </div>
+
+  </body>
+</html>
+
+

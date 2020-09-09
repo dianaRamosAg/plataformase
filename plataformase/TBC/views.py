@@ -1316,4 +1316,8 @@ def relacionarModulo(request):
 
 	return render(request, 'relacionarModulo.html', {'usuario':usuarioLogueado, 'docente':Docentes, 'modulo':Modulos, 'alumno':Alumnos, 'docenteModulo':DocenteModulo }) 
 
+<<<<<<< HEAD
 #Fin
+=======
+#Fin
+>>>>>>> dd8b9999929a661e8105b05c304321e87e7cbd90
