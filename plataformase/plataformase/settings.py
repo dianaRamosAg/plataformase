@@ -21,10 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
+# ALLOWED_HOSTS = ['*','ssemssicyt','ssemssicyt.localhost']
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'SigApp',
     'sweetify',
     'xlwt',
+    # 'django_hosts',
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
@@ -56,9 +57,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'django_hosts.middleware.HostsRequestMiddleware',
+    # 'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'plataformase.urls'
+# ROOT_HOSTCONF = 'plataformase.hosts'
+# DEFAULT_HOST= 'www'
 
 TEMPLATES = [
     {
