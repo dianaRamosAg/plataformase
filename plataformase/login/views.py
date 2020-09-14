@@ -243,6 +243,10 @@ def perfil(request):
         #Usuario institución particular
         if request.user.tipo_usuario == '5':
             return redirect('menuparticular')
+        if request.user.tipo_usuario == '6':
+            return redirect('TBC:homepageTBC')
+        if request.user.tipo_usuario == '7':
+            return redirect('TBC:homepageTBC')
     else:#Si no hay sesión iniciada, le redirige al login
         return redirect('login')
 
