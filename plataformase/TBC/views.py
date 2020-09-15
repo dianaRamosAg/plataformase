@@ -67,7 +67,7 @@ def homePage(request):
 			print('')
 	try:
 		#Docentes = Docente.objects.get(id_docente = idDocente)
-		Docentes = Docente.objects.filter(nombre_escuela = usuarioLogueado.municipio)
+		Docentes = Docente.objects.filter(cct = usuarioLogueado.last_name)#TODO:Cambiar last_name 
 		NotificacionesDocente = Notificacion_mod.objects.all()
 		NotificacionesDocenteModulo = Notificacion_mod_docente.objects.filter(id_docente = idDocente)
 	except:
@@ -76,7 +76,7 @@ def homePage(request):
 		NotificacionesDocenteModulo = None
 	Cursos = Curso.objects.all()
 	Alumnos = Alumno.objects.all()
-	AlumnosI = Alumno.objects.filter(nombre_escuela = request.user.municipio)
+	AlumnosI = Alumno.objects.filter(cct = request.user.last_name)#TODO:Cambiar last_name 
 	
 
 	if request.user.tipo_usuario == "7":
@@ -1148,18 +1148,21 @@ def entregaAlumno(request, id, idAlumno):
 			#Ciclo para recorrer los archivos seleccionados y guardarlos (recursos)
 			for afile in request.FILES.getlist('recursoAlumno'):
 				myfile = afile
-				fs = FileSystemStorage("media/TBC/Alumno")
-				filename = fs.save(myfile.name, myfile)
-				uploaded_file_url = fs.url(filename)
+				#fs = FileSystemStorage("media/TBC/Alumno")
+				#filename = fs.save(myfile.name, myfile)
+				#uploaded_file_url = fs.url(filename)
 				nombreArchivos += myfile.name + '\n'
+
 				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 				field_name = 'id_archivo'
 				obj = Archivo.objects.last()
 				field_value = getattr(obj, field_name)
 				idArchivo = field_value + 1
+
 				descripcion = request.POST.getlist('descRecurso')
-				url = '/media/TBC/Alumno/'+myfile.name
+				url = '/TBC/archivos/'+myfile.name
 				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcion[c], tipo_archivo = 'Entrega', id_actividad = idActividad, url= url, id_alumno = idAlumno)
+				ArchivoNuevo.Archivo = myfile
 				ArchivoNuevo.save()
 				c += 1
 			comentario = request.POST['comentario']

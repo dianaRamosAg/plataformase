@@ -57,7 +57,7 @@
                     </div>
                     <div class="collapse show" id="docentes">
                         <div class="card-text p-3">
-                            <table class="table table-borderless table-hover" id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
+                            <table class="table table-borderless " id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
                                 <thead>
                                     <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">
                                     <th>#</th>
@@ -70,7 +70,7 @@
                                         {% csrf_token %}
                                             <tr>
                                                 <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
-                                                <td style="width: 73.5%;">{{ doc.nombres_docente }} {{ doc.apellidos_docente }}</td>
+                                                <td style="width: 75.8%;">{{ doc.nombres_docente }}</td>
                                                 <td>{{ doc.clave_docente }}</td>
                                             </tr>
                                         {% endfor %}
