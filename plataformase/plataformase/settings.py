@@ -23,7 +23,7 @@ SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*','ssemssicyt.nayarit.gob.mx']
 
 
 # Application definition
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'TBC',
     'SETyRS',
     'SigApp',
-    'sweetify'
+    'sweetify',
+    'xlwt',
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
@@ -97,13 +98,13 @@ else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-            'NAME'     : 'plataformaPP',
+            'NAME'     : 'plataforma',
             'USER'     : 'postgres',
             #'PASSWORD' : 'diana',
             'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
-            'PORT'    : '5432',
-            #'PORT'     : '3306',
+            #'PORT'    : '5432',
+            'PORT'     : '3306',
         }
     }
 
@@ -163,13 +164,14 @@ STATICFILES_DIRS = [
 ]
 
 # Bucket de google cloud plattform 
- 
+ #https://storage.googleapis.com/plataformase.appspot.com/Archivos/MedSuperior/RVOE.pdf
 if os.getenv('GAE_APPLICATION', None):
     DEFAULT_FILE_STORAGE = 'django_gcloud_storage.DjangoGCloudStorage'
     GCS_PROJECT = "plataformase"
     GCS_BUCKET = "plataformase.appspot.com"
     GCS_CREDENTIALS_FILE_PATH = "key.json"
-    MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
+    MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GCS_BUCKET)
+    #MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

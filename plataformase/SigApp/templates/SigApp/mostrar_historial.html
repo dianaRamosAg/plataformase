@@ -23,6 +23,10 @@
                 a:hover{
                     color:grey;
                 }
+                #map {
+                  height: 400px;  /* The height is 400 pixels */
+                  width: 100%;  /* The width is the width of the web page */
+                }
     </style>
     <div class="container-fluid">
       <!--Panel general (derecho)-->
@@ -47,8 +51,8 @@
           <p style="font-size:20px; margin-left: 150px;"><b>Aceptadas por:</b> {{ modificacion.usuario_dep }}<p>
                 
           <div class="table-responsive container centro col-2 col-lg-10 bg-light" style="margin-left: 15%; margin-top: 2%; margin-bottom: 5%; font-size:15px;">
-            {% if modificacion.tipo %}
-              <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover">
+              {% if modificacion.tipo %}
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col"></th>
@@ -56,46 +60,7 @@
                     <th colspan="2">Información Aceptada</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th>Institución</th>
-                    <td>{{ modificacion.nombre_institucion_prev }}</td>
-                    <td>{{ modificacion.nombre_institucion_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Clave</th>
-                    <td>{{ modificacion.clave_centrotrabajo_prev }}</td>
-                    <td>{{ modificacion.clave_centrotrabajo_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Municipio</th>
-                    <td>{{ modificacion.municipio_prev }}</td>
-                    <td>{{ modificacion.municipio_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Localidad</th>
-                    <td>{{ modificacion.localidad_prev }}</td>
-                    <td>{{ modificacion.localidad_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Estatus</th>
-                    <td>{{ modificacion.status_prev }}</td>
-                    <td>{{ modificacion.status_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Director</th>
-                    <td>{{ modificacion.director_prev }}</td>
-                    <td>{{ modificacion.director_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Dirección</th>
-                    <td>{{ modificacion.direccion_prev }}</td>
-                    <td>{{ modificacion.direccion_new }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            {% else %}
-              <table class="table table-bordered table-hover">
+              {% else %}
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col"></th>
@@ -103,55 +68,98 @@
                     <th colspan="2">Información Rechazada</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <th>Institución</th>
-                    <td>{{ modificacion.nombre_institucion_prev }}</td>
-                    <td>{{ modificacion.nombre_institucion_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Clave</th>
-                    <td>{{ modificacion.clave_centrotrabajo_prev }}</td>
-                    <td>{{ modificacion.clave_centrotrabajo_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Municipio</th>
-                    <td>{{ modificacion.municipio_prev }}</td>
-                    <td>{{ modificacion.municipio_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Localidad</th>
-                    <td>{{ modificacion.localidad_prev }}</td>
-                    <td>{{ modificacion.localidad_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Estatus</th>
-                    <td>{{ modificacion.status_prev }}</td>
-                    <td>{{ modificacion.status_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Director</th>
-                    <td>{{ modificacion.director_prev }}</td>
-                    <td>{{ modificacion.director_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Dirección</th>
-                    <td>{{ modificacion.direccion_prev }}</td>
-                    <td>{{ modificacion.direccion_new }}</td>
-                  </tr>
-                  <tr>
-                    <th>Comentarios</th>
-                    <td colspan="2">{{ modificacion.comentario }}</td>
-                    
-                  </tr>
-                </tbody>
-              </table>
-            {% endif %}
+              {% endif %}
+              <tbody>
+                <tr>
+                  <th>Institución</th>
+                  <td>{{ modificacion.nombre_institucion_prev }}</td>
+                  <td>{{ modificacion.nombre_institucion_new }}</td>
+                </tr>
+                <tr>
+                  <th>Clave</th>
+                  <td>{{ modificacion.clave_centrotrabajo_prev }}</td>
+                  <td>{{ modificacion.clave_centrotrabajo_new }}</td>
+                </tr>
+                <tr>
+                  <th>Municipio</th>
+                  <td>{{ modificacion.municipio_prev }}</td>
+                  <td>{{ modificacion.municipio_new }}</td>
+                </tr>
+                <tr>
+                  <th>Localidad</th>
+                  <td>{{ modificacion.localidad_prev }}</td>
+                  <td>{{ modificacion.localidad_new }}</td>
+                </tr>
+                <tr>
+                  <th>Estatus</th>
+                  <td>{{ modificacion.status_prev }}</td>
+                  <td>{{ modificacion.status_new }}</td>
+                </tr>
+                <tr>
+                  <th>Director</th>
+                  <td>{{ modificacion.director_prev }}</td>
+                  <td>{{ modificacion.director_new }}</td>
+                </tr>
+                <tr>
+                  <th>Dirección</th>
+                  <td>{{ modificacion.direccion_prev }}</td>
+                  <td>{{ modificacion.direccion_new }}</td>
+                </tr>
+              {% if modificacion.tipo == False %}
+                <tr>
+                  <th>Comentarios</th>
+                  <td colspan="2">{{ modificacion.comentario }}</td>
+                </tr>
+              {% endif %}
+              </tbody>
+            </table><hr>
+            <ul>
+              <li style="text-align: left;">Puede hacer "zoom" en el mapa para mejorar la vision de las localizaciones</li>
+            </ul>                    
+            <div id="map"></div><hr>
           </div>
+          <input type="text" id="latitud_prev" name="latitud_prev" value="{{ modificacion.latitud_prev }}" style="visibility: hidden;"></input>
+          <input type="text" id="longitud_prev" name="longitud_prev" value="{{ modificacion.longitud_prev }}" style="visibility: hidden;"></input>
+          <input type="text" id="latitud_new" name="latitud_new" value="{{ modificacion.latitud_new }}" style="visibility: hidden;"></input>
+          <input type="text" id="longitud_new" name="longitud_new" value="{{ modificacion.longitud_new }}" style="visibility: hidden;"></input>
         </div>
       </div>
     </div>
-  {% endblock %}
 </body>
 
+<script>
+
+  var lat1 = parseFloat(document.getElementById("latitud_prev").value);
+  var lng1 = parseFloat(document.getElementById("longitud_prev").value);
+  var lat2 = parseFloat(document.getElementById("latitud_new").value);
+  var lng2 = parseFloat(document.getElementById("longitud_new").value);
+
+  //var a = 21.808285000141616;
+  //var b = -105.20599021412804;
+
+  function initMap() {
+    var myLatlng = {lat: lat1, lng: lng1};
+    var myLatlngNew = {lat: lat2, lng: lng2}; 
+
+    var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 13, center: myLatlng});
+
+    // Create the initial InfoWindow.
+    var infoWindow = new google.maps.InfoWindow(
+        {content: 'Localización modificada', position: myLatlng});
+    infoWindow.open(map);
+
+    // Create the initial InfoWindow.
+    var infoWindow = new google.maps.InfoWindow(
+        {content: 'Localización solicitada', position: myLatlngNew});
+    infoWindow.open(map);
+
+  }
+</script>
+
+<script async defer 
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4&callback=initMap">
+</script>
+
+{% endblock %}
 </html>

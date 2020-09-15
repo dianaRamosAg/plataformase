@@ -2,9 +2,10 @@
 {% load static %}
 
 {% block content %}
+<script src="{% static 'js/admins/sinodales/nuevaSoli.js' %}"></script>
 <div class="container col-md-10 col-lg-6 text-center">
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
-    <form action="{% url 'SETyRS_crear_solicitud_sinodal' %}" method="POST">
+    <form id="enviarSolicitud" action="{% url 'SETyRS_crear_solicitud_sinodal' %}" method="POST">
         {% csrf_token %}
         <p class="text-justify">
             Bienvenido al modulo para la solicitud y autorización de registro de Sinodales. 
@@ -14,7 +15,9 @@
         <p class="text-center">
         Da clic en el siguiente botón para crear una <srong>nueva solicitud</srong> de registro de sinodales.
         </p>
-        <button type="submit" class="btn btn-primary mt-3">Nueva solicitud</button>
+        <div id="buttonContainer">
+            <button id="btnNuevaSoli" type="submit" class="btn btn-primary mt-3">Nueva solicitud</button>
+        </div>
     </form>
 </div>
 {% endblock %}

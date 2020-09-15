@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from login.models import CustomUser, UsuarioInstitucion
-from django.utils import timezone
 from .validators import validate_file_extension
 
 # Create your models here.
@@ -9,7 +8,7 @@ from .validators import validate_file_extension
 #--------------------------------------- Modelos de Institución ------------------------------------------------------------
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
-    categoria = models.IntegerField()
+    categoria = models.CharField(max_length=100,default='opcion vacia', blank=True)
     institucion = models.IntegerField(default=1)
     area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
@@ -22,8 +21,10 @@ class SolicitudExamen(models.Model):
     nivel_educativo = models.IntegerField(default=1)
     fecha_exa = models.DateField(default='2020-06-06')
     lugar_exa = models.CharField(max_length=50,default='Algun lugar')
+    hora_exa = models.CharField(max_length=10,default='12:00')
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_solicitud_examen'
 
 # Tabla de alumnos candidatos a graduarse registrados en las solicitudes de las instituciones
@@ -40,6 +41,7 @@ class Alumnos(models.Model):
         return self.nombre_alumno
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_alumnos'
 
 # Tabla de las solicitudes de sinodales
@@ -52,6 +54,7 @@ class SolicitudSinodal(models.Model):
     nivel_educativo = models.IntegerField(default=1)
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_solicitud_sinodal'
 
 # Tabla de sinodales registrados por las instituciones
@@ -70,6 +73,7 @@ class Sinodales(models.Model):
         return self.nombre_sinodal
     
     class Meta:
+        managed = False
         db_table = 'SETyRS_sinodales'
 
 # Tabla de documentos de los sinodales
@@ -80,6 +84,7 @@ class ArchivosSinodales(models.Model):
     solicitud = models.ForeignKey(SolicitudSinodal, on_delete=models.CASCADE,default=1)
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_documentos_sinodales'
 
 # Tabla de notificaciones de las instituciones       
@@ -92,6 +97,7 @@ class Notificaciones(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_notificaciones_institucion'
 
 # Tabla de documentos de los alumnos
@@ -105,6 +111,7 @@ class ArchivosAlumnos(models.Model):
     comprobante_exp = models.FileField(upload_to='SETyRS/archivos/alumnos', validators=[validate_file_extension], blank=True, null=True)
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_documentos_alumnos'
 
 #---------------------------------------- Modelos de administrador -------------------------------------------------------
@@ -118,6 +125,7 @@ class Historial_admins_examen(models.Model):
     nivel_educativo = models.IntegerField()
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_historial_examenes'
 
 # Tabla del historial de autorizacion de sinodales
@@ -131,6 +139,7 @@ class Historial_admins_sinodal(models.Model):
     nivel_educativo = models.IntegerField()
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_historial_sinodales'
 
 #Tabla de notificaciones de administradores
@@ -143,5 +152,14 @@ class NotificacionAdmin(models.Model):
     nivel_educativo = models.IntegerField(default=1)
 
     class Meta:
+        managed = False
         db_table = 'SETyRS_notificaciones_admin'
 
+#Tabla relacional centros de trabajo y reglamento interio de titulación
+class reglamento_interior_titulacion(models.Model):
+    CCT = models.CharField(max_length=30)
+    RIT = models.FileField(upload_to='SETyRS/archivos/reglamentos',validators=[validate_file_extension], blank=True, null=True)
+    
+    class Meta:
+
+        db_table = 'SETyRS_reglamento_interior_titulacion'

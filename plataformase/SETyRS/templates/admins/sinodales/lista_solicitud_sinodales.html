@@ -43,7 +43,13 @@
                 <td><a href="{% url 'SETyRS_revisar_solicitud_sinodal' s.id %}">{{s.id}}</a></td>
                 <td>{{s.institucion}}</td>
                 <td>{{s.estatus}}</td>
-                <td>{{s.nivel_educativo}}</td>
+                    {% if s.nivel_educativo == 1 %}
+                        <td>Media Superior</td>
+                        {% elif s.nivel_educativo == 2 %}
+                        <td>Superior</td>
+                        {% elif s.nivel_educativo == 3 %}
+                        <td>Aquí está el detalle</td>
+                    {% endif %}
                 <td>{{s.fecha}}</td>
             </tr>
             {% endfor %}
