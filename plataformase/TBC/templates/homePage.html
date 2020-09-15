@@ -70,7 +70,7 @@
                                         {% csrf_token %}
                                             <tr>
                                                 <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
-                                                <td style="width: 75.8%;">{{ doc.nombres_docente }} {{ doc.apellidos_docente }}</td>
+                                                <td style="width: 75.8%;">{{ doc.nombres_docente }}</td>
                                                 <td>{{ doc.clave_docente }}</td>
                                             </tr>
                                         {% endfor %}
