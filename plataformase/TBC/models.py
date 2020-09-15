@@ -329,7 +329,7 @@ class Aprendizaje_esperado_modulo(models.Model):
 class Archivo(models.Model):
     id_archivo = models.IntegerField(primary_key= True)
     nombre_archivo = models.CharField(max_length=500)
-    archivo = models.CharField(max_length=500, null=True)
+    archivo = models.FileField(upload_to='TBC/archivos', blank=True, null=True) #models.CharField(max_length=500, null=True)
     descripcion = models.CharField(max_length=500, null=True)
     tipo_archivo = models.CharField(max_length=100)
     id_actividad = models.IntegerField(null=True)
