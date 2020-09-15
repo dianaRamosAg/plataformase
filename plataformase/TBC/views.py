@@ -461,10 +461,11 @@ def consultaDocentes(request):
 				#Código para guardar los archivos [acta, curp, y certificado] en la carpeta TODO: Guardar en la tabla archivo tambien
 				try:
 					curriculum = request.FILES['curriculum']
-					fsCurriculum = FileSystemStorage("media/TBC/Datos/Docentes")
-					nameCurriculum = fsCurriculum.save(curriculum.name, curriculum)
-					urlCurriculum = fsCurriculum.url(nameCurriculum)
+					#fsCurriculum = FileSystemStorage("media/TBC/Datos/Docentes")
+					#nameCurriculum = fsCurriculum.save(curriculum.name, curriculum)
+					#urlCurriculum = fsCurriculum.url(nameCurriculum)
 					#aqui guardar el registro en la tabla de archivos
+					
 					#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 					try:
 						field_name = 'id_archivo'
@@ -473,8 +474,10 @@ def consultaDocentes(request):
 						idArchivo = field_value + 1
 					except:
 						idArchivo = 1
-					url = '/media/TBC/Datos/Docentes/'+curriculum.name
+					
+					url = 'TBC/Archivos/'+curriculum.name #'/media/TBC/Datos/Docentes/'+curriculum.name
 					nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = curriculum.name, tipo_archivo = 'Curriculum', url = url, id_docente = idDocente)
+					nuevoArchivo.archivo = curriculum
 					nuevoArchivo.save()
 				except:
 					print('')

@@ -402,7 +402,7 @@ class Docente(models.Model):
     areadisciplinar_docente = models.ForeignKey(Area_disciplinar, on_delete=models.CASCADE, null=True)
     domicilio = models.CharField(max_length=500, null=True)
     num_empleado = models.CharField(max_length=150, null=True)
-    curriculum = models.FileField(upload_to='Archivos/TBC')
+    curriculum = models.FileField(upload_to='TBC/Archivos', blank=True, null=True)
     perfil_profesional = models.CharField(max_length=200, null=True)
     maximo_grado = models.CharField(max_length=200, null=True)
     localidad = models.CharField(max_length=200, null=True)
