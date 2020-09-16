@@ -34,5 +34,6 @@ urlpatterns = [
    path('Modulos/update/archivo',updArchivo,name='updArchivo'),
    path('Modulos/update/getpropositoUnidad',getPropUnidad,name='getPropUnidad'),
    path('relacionar-modulo', relacionarModulo, name="relacionarModulo"),
+   path('material-aprendizaje/<slug:id>', catalogo_material_didactico, name="catalogo_material_didactico"),
 
 ]
