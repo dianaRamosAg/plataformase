@@ -101,14 +101,28 @@
                                     </tr>
                                 </thead>
                                 <tbody style="overflow-y: scroll; height: 200px; width: 95%; position: absolute;">
-                                        {% for al in alumnoI %}
-                                        {% csrf_token %}
-                                            <tr>
-                                                <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
-                                                <td style="width: 77%;">{{ al.nombre_alumno }}</td>
-                                                <td>{{ al.num_matricula }}</td>
-                                            </tr>
-                                        {% endfor %}
+                                        <!-- Para institución [1] -->
+                                        {% if usuario.tipo_usuario == "1" %}
+                                            {% for al in alumnoI %}
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                    <td style="width: 77%;">{{ al.nombre_alumno }}</td>
+                                                    <td>{{ al.num_matricula }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <!-- Para docente [6] -->
+                                        {% if usuario.tipo_usuario == "6" %}
+                                            {% for al in alumnoD %}
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                    <td style="width: 77%;">{{ al.nombre_alumno }}</td>
+                                                    <td>{{ al.num_matricula }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
                                 </tbody>
                             </table>
                             </div>
