@@ -494,7 +494,7 @@ def consultaDocentes(request):
 					except:
 						idArchivo = 1
 					
-					url = '/TBC/archivos/'+curriculum.name #'/media/TBC/Datos/Docentes/'+curriculum.name
+					url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+curriculum.name #'/media/TBC/Datos/Docentes/'+curriculum.name
 					nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = curriculum.name, tipo_archivo = 'Curriculum', url = url, id_docente = idDocente)
 					nuevoArchivo.archivo = curriculum
 					nuevoArchivo.save()
