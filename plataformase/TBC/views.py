@@ -173,7 +173,7 @@ def consultaAlumnos(request):
 				except:
 					idArchivo = 1
 				
-				url = 'TBC/Archivos/'+acta.name #'/media/TBC/Datos/Alumnos/'+acta.name
+				url = '/TBC/archivos/'+acta.name #'/media/TBC/Datos/Alumnos/'+acta.name
 				nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = acta.name, tipo_archivo = 'Acta nacimiento', url = url, id_alumno = idAlumno)
 				nuevoArchivo.archivo = acta
 				nuevoArchivo.save()
@@ -194,7 +194,7 @@ def consultaAlumnos(request):
 				except:
 					idArchivo = 1
 				
-				url =  'TBC/Archivos/'+curp.name #'/media/TBC/Datos/Alumnos/'+curp.name
+				url =  '/TBC/archivos/'+curp.name #'/media/TBC/Datos/Alumnos/'+curp.name
 				nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = curp.name, tipo_archivo = 'Curp', url = url, id_alumno = idAlumno)
 				nuevoArchivo.archivo = curp
 				nuevoArchivo.save()
@@ -215,7 +215,7 @@ def consultaAlumnos(request):
 				except:
 					idArchivo = 1
 				
-				url = 'TBC/Archivos/'+certificado.name #'/media/TBC/Datos/Alumnos/'+certificado.name
+				url = '/TBC/archivos/'+certificado.name #'/media/TBC/Datos/Alumnos/'+certificado.name
 				nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = certificado.name, tipo_archivo = 'Certificado secundaria', url = url, id_alumno = idAlumno)
 				nuevoArchivo.archivo = certificado
 				nuevoArchivo.save()
@@ -494,7 +494,7 @@ def consultaDocentes(request):
 					except:
 						idArchivo = 1
 					
-					url = 'TBC/Archivos/'+curriculum.name #'/media/TBC/Datos/Docentes/'+curriculum.name
+					url = '/TBC/archivos/'+curriculum.name #'/media/TBC/Datos/Docentes/'+curriculum.name
 					nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = curriculum.name, tipo_archivo = 'Curriculum', url = url, id_docente = idDocente)
 					nuevoArchivo.archivo = curriculum
 					nuevoArchivo.save()
@@ -629,11 +629,11 @@ def nuevaActividad(request):
 		objetivoActividad = request.POST['objetivoActividad']
 		#Ciclo para recorrer los archivos seleccionados y guardarlos (recursos)
 		for afile in request.FILES.getlist('recurso'):
-			myfile = afile
-			fs = FileSystemStorage("media/TBC/Docente/Recursos")
-			filename = fs.save(myfile.name, myfile)
-			uploaded_file_url = fs.url(filename)
-			nombreArchivos += myfile.name + '\n'
+			#myfile = afile
+			#fs = FileSystemStorage("media/TBC/Docente/Recursos")
+			#filename = fs.save(myfile.name, myfile)
+			#uploaded_file_url = fs.url(filename)
+			nombreArchivos += afile.name + '\n'
 			#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 			try:
 				field_name = 'id_archivo'
@@ -643,18 +643,19 @@ def nuevaActividad(request):
 			except:
 				idArchivo = 1
 			descripcion = request.POST.getlist('descRecurso')
-			url = '/media/TBC/Docente/Recursos/'+myfile.name
-			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+			url = '/TBC/archivos'+afile.name #'/media/TBC/Docente/Recursos/'+afile.name
+			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+			ArchivoNuevo.archivo = afile
 			ArchivoNuevo.save()
 			c += 1
 
 		#Ciclo para recorrer los archivos seleccionados y guardarlos (rubrica)
 		for afile in request.FILES.getlist('rubrica'):
-			myfile = afile
-			fs = FileSystemStorage("media/TBC/Docente/Rubricas")
-			filename = fs.save(myfile.name, myfile)
-			uploaded_file_url = fs.url(filename)
-			nombreRubrica += myfile.name + '\n'
+			#myfile = afile
+			#fs = FileSystemStorage("media/TBC/Docente/Rubricas")
+			#filename = fs.save(myfile.name, myfile)
+			#uploaded_file_url = fs.url(filename)
+			nombreRubrica += afile.name + '\n'
 			#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 			try:
 				field_name = 'id_archivo'
@@ -664,8 +665,9 @@ def nuevaActividad(request):
 			except:
 				idArchivo = 1
 			descripcionRubrica = request.POST.getlist('descRubrica')
-			url = '/media/TBC/Docente/Rubricas/'+myfile.name
-			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+			url = '/TBC/archivos/'+afile.name #'/media/TBC/Docente/Rubricas/'+afile.name
+			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+			ArchivoNuevo.archivo = afile
 			ArchivoNuevo.save()
 			cRub += 1
 		date_joined = datetime.now()
@@ -760,37 +762,39 @@ def actividadD(request, id):
 			#TODO: Realizar la actualización de archivos ya subidos
 			#Ciclo para recorrer los archivos seleccionados y guardarlos (recursos)
 			for afile in request.FILES.getlist('recurso'):
-				myfile = afile
-				fs = FileSystemStorage("media/TBC/Docente/Recursos")
-				filename = fs.save(myfile.name, myfile)
-				uploaded_file_url = fs.url(filename)
-				nombreArchivos += myfile.name + '\n'
+				#myfile = afile
+				#fs = FileSystemStorage("media/TBC/Docente/Recursos")
+				#filename = fs.save(myfile.name, myfile)
+				#uploaded_file_url = fs.url(filename)
+				nombreArchivos += afile.name + '\n'
 				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 				field_name = 'id_archivo'
 				obj = Archivo.objects.last()
 				field_value = getattr(obj, field_name)
 				idArchivo = field_value + 1
 				descripcion = request.POST.getlist('descRecurso')
-				url = '/media/TBC/Docente/Recursos/'+myfile.name
-				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+				url = '/TBC/archivos/'+afile.name #'/media/TBC/Docente/Recursos/'+afile.name
+				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+				ArchivoNuevo.archivo = afile
 				ArchivoNuevo.save()
 				c += 1
 
 			#Ciclo para recorrer los archivos seleccionados y guardarlos (rubrica)
 			for afile in request.FILES.getlist('rubrica'):
-				myfile = afile
-				fs = FileSystemStorage("media/TBC/Docente/Rubricas")
-				filename = fs.save(myfile.name, myfile)
-				uploaded_file_url = fs.url(filename)
-				nombreRubrica += myfile.name + '\n'
+				#myfile = afile
+				#fs = FileSystemStorage("media/TBC/Docente/Rubricas")
+				#filename = fs.save(myfile.name, myfile)
+				#uploaded_file_url = fs.url(filename)
+				nombreRubrica += afile.name + '\n'
 				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 				field_name = 'id_archivo'
 				obj = Archivo.objects.last()
 				field_value = getattr(obj, field_name)
 				idArchivo = field_value + 1
 				descripcionRubrica = request.POST.getlist('descRubrica')
-				url = '/media/TBC/Docente/Rubricas/'+myfile.name
-				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+				url = '/TBC/archivos/'+afile.name #'/media/TBC/Docente/Rubricas/'+afile.name
+				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+				ArchivoNuevo.archivo = afile
 				ArchivoNuevo.save()
 				cRub += 1
 				
@@ -1182,7 +1186,7 @@ def entregaAlumno(request, id, idAlumno):
 				idArchivo = field_value + 1
 
 				descripcion = request.POST.getlist('descRecurso')
-				url = 'TBC/Archivos/'+afile.name
+				url = '/TBC/archivos/'+afile.name
 				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcion[c], tipo_archivo = 'Entrega', id_actividad = idActividad, url= url, id_alumno = idAlumno)
 				ArchivoNuevo.archivo = afile
 				ArchivoNuevo.save()
