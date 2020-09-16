@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'baseTBC.html'%}
     {% load static %}
     {% block content%}
@@ -468,3 +469,282 @@
     	Ingresaron.render();
     </script>
     {% endblock %}
+=======
+{% extends 'baseTBC.html'%}
+    {% load static %}
+	{% block content%}
+    <title>Sistema TBC</title>
+    <div class="form-row p-3">
+        <div class="col-md-7">
+            <div class="container-flex m-auto p-3">
+                <div id="carousel-reciente" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-reciente" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-reciente" data-slide-to="1"></li>
+                        <li data-target="#carousel-reciente" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/lRDRueu9lgQ" allowfullscreen></iframe>
+                            </div>
+                            <!--<img class="d-block w-100" src="{% static 'img/alumnos3f.jpg' %}" alt="First slide">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 style="color: white;">Alumnos</h5>
+                                <p>Visualice e interactúe con los datos de los alumnos de la institución</p>
+                            </div>-->
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="{% static 'img/docente3f.jpg' %}" alt="Second slide">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 style="color: white;">Docentes</h5>
+                                <p>Visualice e interactúe con los datos de los docentes de la institución</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img class="d-block w-100" src="{% static 'img/escuela2f.jpg' %}" alt="Third slide">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5 style="color: white;">Instituciones</h5>
+                                <p>Visualice e interactúe con los datos de las instituciones</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<a class="carousel-control-prev" href="#carousel-home" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-home" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>-->
+                </div>
+            </div>
+            {% if usuario.tipo_usuario == "1" %}
+            <!--Inicio acordeon de docentes-->
+            <div class="col-md-12 mb-3"> <!-- style="margin-top: 5%;" -->
+                <div class="container-flex" id="wwg-accordian">
+                    <div class="card">
+                    <div class="card-header" id="docentes-heading" style="background-color: white;">
+                        <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#docentes" style="cursor:pointer;"><i class="fas fa-chalkboard-teacher"></i>&nbsp;Docentes</h5>
+                    </div>
+                    <div class="collapse show" id="docentes">
+                        <div class="card-text p-3">
+                            <table class="table table-borderless " id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
+                                <thead>
+                                    <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">
+                                    <th>#</th>
+                                    <th style="width: 65%;">Nombre</th>
+                                    <th>Clave</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="overflow-y: scroll; height: 200px; width: 95%; position: absolute;">
+                                        {% for doc in docente %}
+                                        {% csrf_token %}
+                                            <tr>
+                                                <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                <td style="width: 75.8%;">{{ doc.nombres_docente }}</td>
+                                                <td>{{ doc.clave_docente }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <!--Inicio acordeon de Alumnos-->
+            <div class="col-md-12 mb-3">
+                <div class="container-flex" id="wwg-accordian">
+                    <div class="card">
+                        <div class="card-header" id="alumnos-heading" style="background-color: white;">      
+                            <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#alumnos" style="cursor:pointer;"><i class="fas fa-users"></i>&nbsp;Alumnos</h5>
+                        </div>
+                        <div class="collapse show" id="alumnos">
+                            <div class="card-text p-3">
+                            <!--Lista que mostrará el resumen estadistico de cada docente-->
+                            <table class="table table-borderless table-hover" id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
+                                <thead>
+                                    <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">
+                                    <th>#</th>
+                                    <th style="width: 65%;">Nombre</th>
+                                    <th>Matrícula</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="overflow-y: scroll; height: 200px; width: 95%; position: absolute;">
+                                        <!-- Para institución [1] -->
+                                        {% if usuario.tipo_usuario == "1" %}
+                                            {% for al in alumnoI %}
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                    <td style="width: 77%;">{{ al.nombre_alumno }}</td>
+                                                    <td>{{ al.num_matricula }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <!-- Para docente [6] -->
+                                        {% if usuario.tipo_usuario == "6" %}
+                                            {% for al in alumnoD %}
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                    <td style="width: 77%;">{{ al.nombre_alumno }}</td>
+                                                    <td>{{ al.num_matricula }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Fin de la columna total del lado izquierdo de la pagina-->
+        <div class="col-md-5 mt-3">
+            <div class="container-flex mb-3" id="wwg-accordian">
+                <div class="card">
+                    <div class="card-header" id="notificaciones-heading" style="background-color: white;">      
+                        <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#notificaciones" style="cursor:pointer;"><i class="far fa-bell"></i>&nbsp;Notificaciones<span class="badge badge-pill badge-danger" style="margin-left: 2%; font-size: 80%; padding-top: 1.2%;">5</h5></span>
+                    </div>
+                    <div class="collapse show" id="notificaciones">
+                        <div class="card-text p-3">
+
+							{% for notificaciones in notificaciones %}
+								{% for notif in notificacion %}
+									{% if notif.id_docente == docente.id_docente %}
+										{% if notificaciones.id_notificacion == notif.id_notificacion %}
+											{% if notif.status == 0 and notificaciones.tipo == 1 %}
+												{% for cu in modulo %}
+													{% if cu.id_modulo == notificaciones.id_curso %}
+														<div class="alert alert-info" role="alert">
+															<div class="form-row">
+																<strong class="col-md-7">Asignación a módulo</strong>
+																<strong>&emsp;&emsp;&emsp;&nbsp;</strong>
+																<strong class="col-md-4">{{ notif.fecha_hora }}</strong>
+															</div>
+															Fue asignado al módulo de {{ cu.nombre_modulo }}
+														</div>
+													{% endif %}
+												{% endfor %}
+											{% endif %}
+										{% endif %}
+									{% endif %}
+								{% endfor %}
+							{% endfor %}
+							<!--Tercer alert-->
+							<div class="alert alert-warning" role="alert">
+  								<div class="form-row">
+  									<strong class="col-md-7">Certificación detenida</strong>
+  									<strong class="col-md-4">24 Abril 2020</strong>
+  									<strong>13:25</strong>
+  								</div>
+  								Hubo un problema al expedir el certificado para el alumno Ulises Alegría Salmerón. Revisar documentación o pago pendiente.
+							</div>
+							<!--Cuarto alert-->
+							<div class="alert alert-success" role="alert">
+  								<div class="form-row">
+  									<strong class="col-md-7">Actividad Evaluada</strong>
+  									<strong class="col-md-4">24 Abril 2020</strong>
+  									<strong>16:32</strong>
+  								</div>
+  								La actividad: Resumen ¿Qué es ética? , ha sido evaluado por el docente 
+							</div>
+							<!--Quinto alert-->
+							<div class="alert alert-success" role="alert">
+  								<div class="form-row">
+  									<strong class="col-md-7">Parcial Finalizado</strong>
+  									<strong class="col-md-4">24 Abril 2020</strong>
+  									<strong>16:32</strong>
+  								</div>
+  								El primer parcial ha concluido. Click para consultar su calificación
+							</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-flex h-40 mb-3" id="wwg-accordian">
+                <div class="card">
+                    <div class="card-header" id="actividadesrecientes-heading" style="background-color: white;">
+                        <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#actividades-recientes" style="cursor:pointer;"><i class="fas fa-tasks"></i>&nbsp;Estadisticas Alumnos</h5>
+                    </div>
+                    <div class="collapse show" id="actividades-recientes">
+                        <div class="card-text p-3">
+                            <div id="GeneroGeneral" style=" height: 300px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-flex h-40 mb-3" id="wwg-accordian">
+                <div class="card">
+                    <div class="card-header" id="ingresaronhoy-heading" style="background-color: white;">
+                        <h5 data-toggle="collapse" data-parent="#wwg-accordian" href="#ingresaron-hoy" style="cursor:pointer;"><i class="fas fa-tasks"></i>&nbsp;Uso de la plataforma</h5>
+                    </div>
+                    <div class="collapse show" id="ingresaron-hoy">
+                        <div class="card-text p-3">
+            				<div id="Iniciaron" style=" height: 300px; width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+		<!--Fin de la columna total derecha de la pagina-->
+    <script type="text/javascript">
+    	$(document).ready(function () {
+            $('video').on('play', function (e) {
+                setTimeout(function() {
+                $('.carousel').carousel('pause'); 
+                }, 500);
+            });
+            $('video').on('stop pause ended', function (e) {
+            $(".carousel").carousel();
+            });
+        }); 
+	
+    	var AM  = 45;
+        var AH  = 39;
+
+    	var GG = new CanvasJS.Chart("GeneroGeneral", {
+                animationEnabled: true,
+                title: {
+                    text: "Alumnos en el curso"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: AH, label: "Hombres: "},
+                        {y: AM, label: "Mujeres: ", color:"pink"}
+                    ]
+                }]
+            });
+    	GG.render();
+    	var AlumnosTotales = 84;
+    	var IngresaronHoy = 27;
+    	var Ingresaron = new CanvasJS.Chart("Iniciaron", {
+                animationEnabled: true,
+                title: {
+                    text: "Ingresaron a la plataforma hoy"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 240,
+                    yValueFormatString: "##0\"\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: [
+                        {y: IngresaronHoy, label: "Iniciaron sesión hoy: ", color: "green"},
+                        {y: AlumnosTotales-IngresaronHoy, label: "No iniciaron sesión hoy: ", color:"gray"}
+                    ]
+                }]
+            });
+    	Ingresaron.render();
+    </script>
+    {% endblock %}
+>>>>>>> 370d365d8a7b3fefc45a6d27db5fa546f398801e

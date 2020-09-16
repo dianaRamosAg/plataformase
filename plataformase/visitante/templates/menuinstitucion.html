@@ -31,7 +31,9 @@
 			<!-- / #logo-header -->
 			<nav >
 				<ul class="nav">
+					{% if UsuarioInstitucion.modalidad != '1' %}
 					<li><a href="{% url 'cct'%}" title="Lista de centros de trabajo pertenecientes a esta institución.También podrás añadir más centros de trabajo.">Centros de trabajo</a>
+					{% endif %}
 					<li><a href="#" style="pointer-events: none;">Bienvenido (a) : Institución, {{ user.first_name }} {{ user.last_name }}  {{ UsuarioInstitucion.cct }}</a>
 					<li class="nav-item dropdown ml-auto">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" title="Usuario"><img src="{% static '/img/us2.png' %}"/></a>

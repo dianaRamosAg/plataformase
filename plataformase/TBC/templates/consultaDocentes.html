@@ -34,7 +34,7 @@
                                         {% csrf_token %}
                                         <tr>
                                             <th scope="row" style="width: 27%;">{{ forloop.counter }}</th>
-                                            <td style="width: 54.5%;"> {{ doc.nombres_docente }} {{ doc.apellidos_docente }}</td>
+                                            <td style="width: 54.5%;"> {{ doc.nombres_docente }} </td>
                                             <td style="width: 20%;">{{ doc.num_empleado }}</td>
                                             <td><button class="btn btn-outline-info btn-sm" type="submit" onclick="seleccionaDocente('{{ doc.id_docente }}', '{{ doc.nombres_docente }}', '{{ doc.apellidos_docente | default_if_none:'' }}', '{{ doc.edad_docente | default_if_none:'' }}', '{{ doc.email | default_if_none:'' }}', '{{ doc.tel_fijo | default_if_none:'' }}', '{{ doc.tel_cel | default_if_none:'' }}', '{{ doc.curp_docente | default_if_none:'' }}', '{{ doc.rfc_docente | default_if_none:'' }}', '{{ doc.clave_docente | default_if_none:'' }}', '{{ doc.nombre_escuela | default_if_none:'' }}', '{{ doc.cct | default_if_none:'' }}' , '{{ doc.domicilio | default_if_none:'' }}', '{{ doc.num_empleado | default_if_none:'' }}', '{{ doc.perfil_profesional | default_if_none:'' }}', '{{ doc.maximo_grado | default_if_none:'' }}'   ); "><i class="far fa-edit"></i></button></td>
                                             <td><button class="btn btn-outline-danger btn-sm" onclick="confirmDialogDelete('{{ doc.id_docente }}')" style="cursor: pointer;"> <i class="far fa-trash-alt"></i> </button></td>

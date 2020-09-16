@@ -329,7 +329,7 @@ class Aprendizaje_esperado_modulo(models.Model):
 class Archivo(models.Model):
     id_archivo = models.IntegerField(primary_key= True)
     nombre_archivo = models.CharField(max_length=500)
-    archivo = models.CharField(max_length=500, null=True)
+    archivo = models.FileField(upload_to='TBC/archivos', blank=True, null=True) #models.CharField(max_length=500, null=True)
     descripcion = models.CharField(max_length=500, null=True)
     tipo_archivo = models.CharField(max_length=100)
     id_actividad = models.IntegerField(null=True)
@@ -402,7 +402,7 @@ class Docente(models.Model):
     areadisciplinar_docente = models.ForeignKey(Area_disciplinar, on_delete=models.CASCADE, null=True)
     domicilio = models.CharField(max_length=500, null=True)
     num_empleado = models.CharField(max_length=150, null=True)
-    curriculum = models.FileField(upload_to='Archivos/TBC')
+    curriculum = models.FileField(upload_to='TBC/Archivos', blank=True, null=True)
     perfil_profesional = models.CharField(max_length=200, null=True)
     maximo_grado = models.CharField(max_length=200, null=True)
     localidad = models.CharField(max_length=200, null=True)
