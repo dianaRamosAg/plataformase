@@ -10,6 +10,7 @@ from .validators import validate_file_extension
 class SolicitudExamen(models.Model):
     categoria = models.CharField(max_length=100,default='opcion vacia', blank=True)
     institucion = models.IntegerField(default=1)
+    CCT = models.CharField(max_length=30)
     area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
     id_secretario = models.IntegerField()
@@ -45,6 +46,7 @@ class Alumnos(models.Model):
 # Tabla de las solicitudes de sinodales
 class SolicitudSinodal(models.Model):
     estatus = models.IntegerField(default=1)
+    CCT = models.CharField(max_length=30)
     institucion = models.CharField(max_length=150)
     fase = models.IntegerField(default=1)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

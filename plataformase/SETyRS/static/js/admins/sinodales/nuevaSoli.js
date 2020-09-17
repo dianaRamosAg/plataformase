@@ -1,7 +1,22 @@
 
+
 function cargarListeners() { 
+    var selectcct = document.getElementById("select_cct");
     var btnNS = document.getElementById("btnNuevaSoli");
+
     btnNS.addEventListener("click",creandoSoli,false);
+    selectcct.addEventListener("change",activarbBtnNS,false);
+};
+
+function activarbBtnNS(){
+    var selectcct = document.getElementById("select_cct");
+    var btnNS = document.getElementById("btnNuevaSoli");
+    if (selectcct.value != 'Seleccione el centro de trabajo'){
+        btnNS.disabled=false;
+    }
+    else{
+        btnNS.disabled=true;
+    }
 };
 
 function creandoSoli(){
@@ -24,11 +39,8 @@ function creandoSoli(){
     divContainer.appendChild(creandoBoton);
 
     //Depués de haber agregado el botón, enviamos el form para crear la solicitud
-<<<<<<< HEAD
-=======
 
-    setTimeout(function(){ document.getElementById("enviarSolicitud").submit(); }, 2000);
->>>>>>> 4009ecaa3a74ba86298df81f62ab87182ca400cd
+    document.getElementById("enviarSolicitud").submit();
     
 };
 
