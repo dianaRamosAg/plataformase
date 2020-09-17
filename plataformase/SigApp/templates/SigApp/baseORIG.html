@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SIG - SEMSSICyT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie-edge">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <!-- <link rel="stylesheet" href= "./css/tail.select-default.css"/>  -->
+    
+    
+
+</head>
+<body>
+  <div class="container-fluid" style="background-color: #757575">
+    <div class="row">
+      <div>
+        <h2 class="d-none  d-lg-block" style="color:white; margin-top: 25px; font-size: 30px; margin-left: 60px ">Sistema de Información Geográfica - SSEMSSICyT</h2>
+        <h2 class="d-block d-lg-none "style="color:white; margin-top: 25px; font-size: 30px; margin-left: 50px "> SIG - SSEMSSICyT</h2>
+      </div>
+      <div class="col d-none  d-lg-block" style="margin-right:60px; text-align: right; margin-top: 10px; margin-bottom: 10px">
+        <img src="{% static 'SigApp/se_bordado.png' %}" alt="sepen" height="60">
+      </div>
+      <div class="col d-block d-lg-none" style="margin-right:20px; text-align: right; margin-top: 10px; margin-bottom: 10px;">
+        <img src="{% static 'SigApp/nayarit.png' %}" alt="escudonay" height="60">
+      </div>
+    </div>
+  </div>
+
+  <nav class=" navbar navbar-expand-lg navbar-light fixed" style="background-color: #BDBDBD; padding: 0%;padding-left: 5%; font-size: 75%;">
+    <!-- <a class="navbar-brand mr-5" href="#" style="margin-left:50px;">SEMSSICyT</a>-->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+   
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="texto navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link mr-5" href="/SigApp/">Inicio <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link mr-5" href="/SigApp/localizador">Mapa de instituciones</a>
+        </li>
+        {% if user.is_superuser is False and user.is_authenticated is False %}
+          <li class="nav-item">
+            <a class="nav-link mr-5" style="font-weight:bold;" href="{% url 'logout' %}">Iniciar sesión</a>
+          </li>
+        {% endif %}
+        {% comment %} {% if user.is_authenticated is False %}
+          <li>
+            <a class="nav-link" href="/SigApp/accounts/register">Postular mi Institución</a>
+          </li>
+        {% endif %} {% endcomment %}
+      </ul>
+      
+    <!--Opción del institución-->
+
+      {% comment %} <ul class="texto nav navbar-nav navbar-right">
+        {% if user.tipo_usuario == "1"%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Hola, {{ user.first_name }} {{ user.last_name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/SigApp/selectInstitucion2/{{ user.id }}/" style="font-size: 15px;">Mi institución</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'logout' %}" style="font-size: 15px; color:crimson;">Salir</a> 
+            </div>
+          </li>
+        {% endif %}
+      </ul>  {% endcomment %} 
+      {% comment %} <a class="dropdown-item" href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/" style="font-size: 15px;"  >Mis estadísticas</a> {% endcomment %}
+
+      <ul class="texto nav navbar-nav navbar-right">
+        {% if user.tipo_usuario == "1"%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
+              Hola, {{ user.first_name }} {{ user.last_name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% if numeroInstituciones == 0 %}
+                <a class="btn btn-primary" href="/SigApp/selectInstitucion2/{{ user.id }}/" style="font-size: 15px;">Mis instituciones</a> 
+              {% else %}
+                <a class="btn btn-primary" href="/SigApp/selectInstitucion2/{{ user.id }}/" style="font-size: 15px;">Mis instituciones <span class="badge badge-light">{{ numeroInstituciones }}</span>
+                  <span class="sr-only">numero de instituciones</span>
+                </a>
+              {% endif %}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'perfil' %}" style="font-size: 15px;">Ir a plataforma</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'logout' %}" style="font-size: 15px; color:crimson;">Salir</a>
+              {% comment %} <a class="dropdown-item" href="/SigApp/misEstadisticas/{{user.username.split|join:'-'}}/" style="font-size: 15px;"  >Mis estadísticas</a> {% endcomment %}
+            </div>
+          </li>
+        {% endif %}
+      </ul> 
+
+        
+      <!--Opción del superUser-->
+      <ul class="texto nav navbar-nav navbar-right">
+        {% if user.is_superuser %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
+              Hola, administrador
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/SigApp/perfilAdmin" style="font-size: 15px;">Mi perfil</a>
+              <a class="dropdown-item" href="/SigApp/modificacionesAdmin" style="font-size: 15px;">Modificaciones</a>
+              {% comment %} <a class="dropdown-item" href="/SigApp/registrosAdmin" style="font-size: 15px;">Registros</a> {% endcomment %}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'logout' %}" style="font-size: 15px; color:crimson;">Salir</a>
+            </div>
+          </li>
+        {% else %}
+          {% comment %} {% if user.is_superuser is False and user.is_authenticated is False %}
+            <li class="nav-item mr-5">
+            <a class="nav-link" href="/SigApp/accounts/login">Ingresar</a>
+            </li>
+          {% endif %} {% endcomment %}
+        {% endif %}
+      </ul> 
+      <!---->
+      <!--Opción del Departamento-->
+      <ul class="texto nav navbar-nav navbar-right">
+        {% if user.tipo_usuario == "3" or user.tipo_usuario == "2"%}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
+              Hola, Departamento {{ user.first_name }} {{ user.last_name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% comment %} <a class="dropdown-item" href="/SigApp/perfilAdmin" style="font-size: 15px;">Mi perfil</a> {% endcomment %}
+              {% if numeroModificaciones == 0 %}
+                <a class="btn btn-primary" href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/">Modificaciones </a>
+              {% else %}
+                <a class="btn btn-primary" href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/" style="font-size: 15px;">Modificaciones <span style="font-size: 15px;" class="badge badge-light">{{ numeroModificaciones }}</span>
+                <span class="sr-only">numero de modificaciones</span>
+              </a>
+              {% endif %}
+              <a class="dropdown-item" href="/SigApp/listado_historial/" style="font-size: 15px;">Historial (Gral)</a>
+              <a class="dropdown-item" href="/SigApp/listado_historialEst/" style="font-size: 15px;">Historial (Estad)</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'perfil' %}" style="font-size: 15px;">Ir a plataforma</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'logout' %}" style="font-size: 15px; color:crimson;">Cerrar sesion</a>
+            </div>
+          </li>
+
+          
+        {% endif %}
+      </ul> 
+      <!---->
+    </div>
+  </nav>
+  <!--Aquí va lo del bloque-->
+  {% block content %}
+  {% endblock %}
+</body>
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<!-- Popper Js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha256-CjSoeELFOcH0/uxWu6mC/Vlrc1AARqbm/jiiImDGV3s=" crossorigin="anonymous"></script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+
+<!-- <script src="./js/tail.select-full.min.js"></script> -->
+
+</html>
