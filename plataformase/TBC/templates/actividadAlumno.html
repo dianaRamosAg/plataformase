@@ -102,7 +102,7 @@
                                                     {% if dc.id_docente == act.id_docente and ac.id_dc == dc.id_dc %}
                                                         <tr>
                                                             <th style="width: 5%;" scope="row">{{ forloop.counter }}</th>
-                                                            <td style="padding-left: 88px; width: 45%;">{{ act.nombre_actividad }} </td>
+                                                            <td style="padding-left: 88px; width: 35%;">{{ act.nombre_actividad }} </td>
                                                             {% for cu in modulo %}
                                                                 {% if  act.id_curso == cu.id_modulo %}
                                                                     <td style="padding-left: 88px; width: 55%;"> {{ cu.nombre_modulo }}</td> 
