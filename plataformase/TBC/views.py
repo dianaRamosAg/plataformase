@@ -19,7 +19,7 @@ from django.contrib.auth.hashers import make_password
 
 # from django.apps import apps
 # CustomUser  = apps.get_model('login', CustomUser)
-from login.models import CustomUser
+from login.models import CustomUser, UsuarioInstitucion
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -28,6 +28,39 @@ global idDocente
 global idAlumnoI
 #idAlumnoI = 3409
 
+
+'''
+	Inicio de views de material didactico
+'''
+
+def catalogo_material_didactico(request,id):
+	if not request.user.is_authenticated:
+		return HttpResponseRedirect(reverse('login'))
+	else:
+		if request.user.tipo_usuario == '7':
+			alumno_institucion = Alumno.objects.get(email=request.user.email)
+			if alumno_institucion.cct != id:
+				return redirect ('/TBC')
+			else:
+				return render(request, 'material_didactico.html')
+		else:
+			if request.user.tipo_usuario == '6':
+				docente_institucion = Docente.objects.get(email=request.user.email)
+				if docente_institucion.cct != id:
+					return redirect('/TBC')
+				else:
+					return render(request, 'material_didactico.html')
+			else:
+				if request.user.tipo_usuario == '1':
+					institucion = UsuarioInstitucion.objects.get(id_usuariobase=request.user.id)
+					if 	institucion.cct != id:
+						return redirect('/TBC')
+					else:
+						return render(request, 'material_didactico.html')
+
+'''
+	Fin de views de material didactico
+'''
 
 '''
 Función de prueba TODO: Borrarla
