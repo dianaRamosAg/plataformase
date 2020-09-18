@@ -1,6 +1,8 @@
 var RIT = false;
+var CCT = "";
 
 $("#select_cct").on('change',function(){
+    CCT = $("#select_cct").children("option:selected").val();
     $.ajax({
         url: '/SETyRS/institucion/examenes/get/nivelCCT',
         data:
@@ -25,16 +27,21 @@ $("#select_cct").on('change',function(){
                else if(nivel == 1){
                 $("#select_nivel_educativo").append(new Option("Media Superior"),"1");
                }
-               getReglamento();
             }
            
     })
 });
 
-function getReglamento(){
+$("#sel").on("change",function(){
+    if($("#sel").children("option:selected").val() == "9" && CCT != "" ){
+        getReglamento(CCT);
+    }
+})
+
+function getReglamento(cct_selected){
     $.ajax({
         url: '/SETyRS/institucion/examenes/get/RIT',
-        data: { 'cct': $("#select_cct").children("option:selected").val()},
+        data: { 'cct': cct_selected},
         dataType: "json",
         success:function(response){
             if(JSON.parse(response).length == 0){

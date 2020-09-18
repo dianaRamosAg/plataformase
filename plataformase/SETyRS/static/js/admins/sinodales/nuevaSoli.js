@@ -3,7 +3,6 @@
 function cargarListeners() { 
     var selectcct = document.getElementById("select_cct");
     var btnNS = document.getElementById("btnNuevaSoli");
-
     btnNS.addEventListener("click",creandoSoli,false);
     selectcct.addEventListener("change",activarbBtnNS,false);
 };
@@ -18,6 +17,7 @@ function activarbBtnNS(){
         btnNS.disabled=true;
     }
 };
+
 
 function creandoSoli(){
     var btnNS = document.getElementById("btnNuevaSoli");

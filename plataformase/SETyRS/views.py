@@ -384,9 +384,7 @@ def index_institucion(request):
 # funcion que retorna la plantilla de nueva solicitud de sinodal
 def nueva_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        #datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id) AL HABER VARIOS CENTROS DE TRABAJO POR CADA ID DE INSTITUCÓN ESTA LINEA VA DAR ERROR POR USAR EL METODO GET
         centrosRegistrados = UsuarioInstitucion.objects.filter(id_usuariobase_id=request.user.id)
-        nivel = datos_escuela.nivel_educativo
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
         context = {'notificacion':notificacion,'notificaciones':num_notifi,'centrosRegistrados':centrosRegistrados}
