@@ -30,6 +30,7 @@ $("#select_cct").on('change',function(){
             }
            
     })
+    if($("#sel option:selected").val() == "9"){getReglamento(CCT)}
 });
 
 $("#sel").on("change",function(){
@@ -37,6 +38,7 @@ $("#sel").on("change",function(){
         getReglamento(CCT);
     }
 })
+
 
 function getReglamento(cct_selected){
     $.ajax({

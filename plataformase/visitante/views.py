@@ -38,9 +38,12 @@ def index(request):
 ''' Menu de instituciones'''
 def menuinstitucion(request,id):
     if request.user.tipo_usuario == '1':
-        inst= UsuarioInstitucion.objects.get(id_usuariobase_id = id)
-        if inst.modalidad == '1': #En caso de ser TBC
-            return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
+        listinst = []
+        listinst= UsuarioInstitucion.objects.filter(id_usuariobase = id)
+        print(listinst)
+        for inst in listinst:
+            if inst.modalidad == '1': #En caso de ser TBC
+                return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
         else:
             return render(request,'menuinstitucion.html')
     else:
@@ -65,7 +68,7 @@ def menuadmin(request):
         return redirect('logout')
 
 def menudepartamento(request):
-    if request.user.tipo_usuario == '3':
+    if request.user.tipo_usuario == '3' or request.user.tipo_usuario == '2':
         if request.user.departamento_id == '1':
             return render(request,'menudepartamento_ce.html')
         else:
@@ -160,15 +163,15 @@ def regVisit(request):
     if request.method == 'POST':
         import datetime
         first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
+        last_name = request.POST["last_name"] #comentada porque solo se pide persona moral
         email = request.POST["email"]
         #En caso de ya tener una solicitud del mismo correo
-        if VisitanteSC.objects.filter(email=email).exists():
+        if VisitanteSC.objects.filter(email=email).exists() or CustomUser.objects.filter(email=email).exists():
             return render(request,'solExistente.html')
 
         curp_rfc = request.POST["curp_rfc"]
         #Si la CURP/RFC ya se encuentra registrado
-        if VisitanteSC.objects.filter(curp_rfc=curp_rfc).exists():
+        if CustomUser.objects.filter(curp_rfc=curp_rfc).exists() or VisitanteSC.objects.filter(curp_rfc=curp_rfc).exists() :
             return render(request,'datosExistentes.html')
         calle = request.POST["calle"]
         password = make_password(request.POST["password"])
@@ -184,12 +187,12 @@ def regVisit(request):
         if tipo_usuario == '1':
             # Guardamos los datos de un centro de trabajo vinculado con la institución
             inst_cct = request.POST["cct"]
-            if VisitanteSC.objects.filter(cct=inst_cct).exists():
-                return render(request,'cctExistentes.html')
-            
-            inst_nombredirector = request.POST["nombre_director"]
-            sector = request.POST["sector"]
-            nivel_educativo = request.POST["nivel_educativo"]
+            if UsuarioInstitucion.objects.filter(cct=inst_cct).exists() or VisitanteSC.objects.filter(inst_cct=inst_cct).exists():
+                return render(request,'datosExistentes.html')
+            else:
+                inst_nombredirector = request.POST["nombre_director"]
+                sector = request.POST["sector"]
+                nivel_educativo = request.POST["nivel_educativo"]
             if nivel_educativo == 'Media Superior':
                 modalidad = request.POST["modalidad"]
             else:
@@ -201,7 +204,7 @@ def regVisit(request):
             nivel_educativo = None
             modalidad = None
            
-
+        # ,
         visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
                             email=email, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
@@ -272,12 +275,13 @@ def cancelarsolicitud(request,email2,email):
 
 #Actualizar datos de los usuarios
 def actualizarperfilusr(request):
-
+ 
     if request.method == 'POST':
         first_name = request.POST["first_name"]
         email = request.POST["email"]
-        if CustomUser.objects.filter(email=email).exists():
-            return render(request,'datosExistentes.html')
+        if email != request.user.email:
+            if CustomUser.objects.filter(email=email).exists() or CustomUser.objects.filter(username=email).exists():
+                return render(request,'datosExistentes.html')
 
         if request.user.tipo_persona=='1':
             last_name = request.POST["last_name"]
@@ -317,8 +321,11 @@ def actualizarperfilusr(request):
             dom_legal_part = None
 
         
-
+        
         curp_rfc = request.POST["curp_rfc"]
+        if curp_rfc != request.user.curp_rfc:
+            if CustomUser.objects.filter(curp_rfc=curp_rfc).exists():
+                return render(request,'datosExistentes.html')
         calle = request.POST["calle"]
         noexterior = request.POST["noexterior"]
         nointerior = request.POST["nointerior"]
@@ -349,7 +356,7 @@ def GuardarFormatoPDF(request):
         formatoPDF.save()
         formatos = ConfiguracionPDF.objects.all()
         return render(request, 'configuracionpdf.html', {'formatos': formatos })
-     
+      
 def cct(request):
     if request.method == 'POST':
         cct = request.POST["cct"]

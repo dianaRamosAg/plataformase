@@ -26,7 +26,7 @@
                                   <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">
                                     <th>#</th>
                                     <th>Nombre</th>
-                                    <th>Clave</th>
+                                    <th>No. empleado</th>
                                   </tr>
                                 </thead>
                                 <tbody style="overflow-y: scroll; height: 200px; width: 95%; position: absolute;">
@@ -34,10 +34,17 @@
                                         {% csrf_token %}
                                         <tr>
                                             <th scope="row" style="width: 27%;">{{ forloop.counter }}</th>
-                                            <td style="width: 54.5%;"> {{ doc.nombres_docente }} {{ doc.apellidos_docente }}</td>
-                                            <td style="width: 20%;">{{ doc.clave_docente }}</td>
-                                            <td><button class="btn btn-outline-info btn-sm" type="submit" onclick="seleccionaDocente('{{ doc.id_docente }}', '{{ doc.nombres_docente }}', '{{ doc.apellidos_docente | default_if_none:'' }}', '{{ doc.edad_docente | default_if_none:'' }}', '{{ doc.email | default_if_none:'' }}', '{{ doc.tel_fijo | default_if_none:'' }}', '{{ doc.tel_cel | default_if_none:'' }}', '{{ doc.curp_docente | default_if_none:'' }}', '{{ doc.rfc_docente | default_if_none:'' }}', '{{ doc.clave_docente | default_if_none:'' }}', '{{ doc.nombre_escuela | default_if_none:'' }}', '{{ doc.cct | default_if_none:'' }}'    ); "><i class="far fa-edit"></i></button></td>
+                                            <td style="width: 54.5%;"> {{ doc.nombres_docente }} </td>
+                                            <td style="width: 20%;">{{ doc.num_empleado }}</td>
+                                            <td><button class="btn btn-outline-info btn-sm" type="submit" onclick="seleccionaDocente('{{ doc.id_docente }}', '{{ doc.nombres_docente }}', '{{ doc.apellidos_docente | default_if_none:'' }}', '{{ doc.edad_docente | default_if_none:'' }}', '{{ doc.email | default_if_none:'' }}', '{{ doc.tel_fijo | default_if_none:'' }}', '{{ doc.tel_cel | default_if_none:'' }}', '{{ doc.curp_docente | default_if_none:'' }}', '{{ doc.rfc_docente | default_if_none:'' }}', '{{ doc.clave_docente | default_if_none:'' }}', '{{ doc.nombre_escuela | default_if_none:'' }}', '{{ doc.cct | default_if_none:'' }}' , '{{ doc.domicilio | default_if_none:'' }}', '{{ doc.num_empleado | default_if_none:'' }}', '{{ doc.perfil_profesional | default_if_none:'' }}', '{{ doc.maximo_grado | default_if_none:'' }}'   ); "><i class="far fa-edit"></i></button></td>
                                             <td><button class="btn btn-outline-danger btn-sm" onclick="confirmDialogDelete('{{ doc.id_docente }}')" style="cursor: pointer;"> <i class="far fa-trash-alt"></i> </button></td>
+                                            {% for ar in archivo %}
+                                                {% if ar.id_docente == doc.id_docente %}
+                                                    {% if ar.tipo_archivo == 'Curriculum' %}
+                                                        <td style="display: none;"><input class="inputsCurriculum" class="inputsCurriculum" id="inputCurriculum" type="text" value="{{doc.id_docente}}{{ ar.url }}"></td>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
                                         </tr>
                                         {% endfor %}
                                 </tbody>
@@ -91,7 +98,7 @@
         </div>
         <!--Columna derecha-->
         <div class="col-md-6 mt-3">
-            <form class="needs-validation" novalidate method="post">
+            <form class="needs-validation" novalidate method="post" enctype="multipart/form-data">
             {% csrf_token %}
                 <!--Tarjeta con formulario del alumno-->
                 <div class="container-flex mb-3" id="wwg-accordian">
@@ -103,14 +110,14 @@
                             <div class="card-text p-3">
                                 <div class="form-row">
                                     <input type="text" id="idDocente" name="idDocente" hidden>
-                                    <div class="col-md-4 mb-3">
-                                        <label for="nombresDocente">Nombres</label>
+                                    <div class="col-md-8 mb-3">
+                                        <label for="nombresDocente">Nombre</label>
                                         <input type="text" class="form-control border border-ligth" id="nombresDocente" name="nombresDocente" placeholder="Nombre" required >
                                         <div class="invalid-tooltip">
                                             Por favor introduzca el nombre
                                         </div>
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div hidden class="col-md-4 mb-3">
                                         <label for="apellidosDocente">Apellidos</label>
                                         <input type="text" class="form-control border border-ligth" id="apellidosDocente" name="apellidosDocente" placeholder="Apellidos" required >
                                         <div class="invalid-tooltip">
@@ -163,8 +170,50 @@
                                             Introduzca el RFC
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-md-4 mb-3">
+                                        <label for="domicilio">Domicilio</label>
+                                        <input type="text" class="form-control border border-ligth" id="domicilio" name="domicilio" placeholder="Domicilio" required >
+                                        <div class="invalid-tooltip">
+                                            Introduzca el domicilio
+                                        </div>
+                                    </div>
                                 </div>    
+                                <div class="form-row">
+                                    <div class="col-md-2 mb-3">
+                                        <label for="num_empleado">No. empleado</label>
+                                        <input type="text" class="form-control border border-ligth" id="num_empleado" name="num_empleado" placeholder="No. empleado" required >
+                                        <div class="invalid-tooltip">
+                                            Introduzca el domicilio
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="perfil_profesional">Perfil profesional</label>
+                                        <input type="text" class="form-control border border-ligth" id="perfil_profesional" name="perfil_profesional" placeholder="Perfil profesional" required >
+                                        <div class="invalid-tooltip">
+                                            Introduzca el domicilio
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="maximo_grado">Máximo grado de estudios</label>
+                                        <input type="text" class="form-control border border-ligth" id="maximo_grado" name="maximo_grado" placeholder="Máximo grado de estudios" required >
+                                        <div class="invalid-tooltip">
+                                            Introduzca el domicilio
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label for="colonia">Curriculum</label>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <input type="file" name="curriculum" id="inputCurriculumA" style="display: none;" />
+                                                <button id="btnArchivo" type="button" class="btn btn-outline-primary btn-block" onclick="document.getElementById('inputCurriculumA').click();"><i class="fas fa-upload"></i></button>
+                                                <!-- <input type="button" value="Buscar..." class="btn btn-outline-primary  btn-block" onclick="document.getElementById('inputCurriculum').click();" /> -->
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a id="btnCurriculum" disabled type="button" class="btn btn-warning btn-block" style="color: #F5F5F5;" target="_blank"><i class="fas fa-eye"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -285,8 +334,44 @@
             }
         }
 
-        function seleccionaDocente(idDocente, nombresDocente, apellidosDocente, edad, email, telFijo, telCelular, curp, rfc, clave, nombreEscuela, cct){
+        function prueba(){
+            alert('huevos')
+        }
+
+        function seleccionaDocente(idDocente, nombresDocente, apellidosDocente, edad, email, telFijo, telCelular, curp, rfc, clave, nombreEscuela, cct, domicilio, num_empleado, 
+        perfil_profesional, maximo_grado){
             
+            inputs = document.getElementsByClassName('inputsCurriculum');
+            bandera = false;
+            for(var i = 0; i < inputs.length; i++){
+                urlCurriculum = inputs[i].value
+                idDocenteArchivo = inputs[i].value.slice(0, 1);
+                if(idDocente == idDocenteArchivo){
+                    //Si hay archivo y se puede ver
+                    bandera = true;
+                    urlCurriculum = urlCurriculum.substring(1, urlCurriculum.lenght);
+                    document.getElementById('btnCurriculum').className = 'btn btn-warning btn-block'
+                    document.getElementById('btnCurriculum').target = "_blank";
+                    document.getElementById('btnCurriculum').href = urlCurriculum;
+                    document.getElementById('btnCurriculum').style.cursor = 'pointer'
+                    document.getElementById('btnArchivo').disabled = true;
+                    document.getElementById('btnArchivo').className = 'btn btn-outline-secondary btn-block'
+                }
+                if(!bandera){
+                    //No hay un archivo y no se puede ver
+                    
+                    document.getElementById('btnCurriculum').href = '#';
+                    document.getElementById('btnCurriculum').removeAttribute('target');
+                    document.getElementById('btnCurriculum').className = 'btn btn-secondary btn-block'
+                    document.getElementById('btnCurriculum').style.cursor = 'default'
+                    document.getElementById('btnArchivo').disabled = false;
+                    document.getElementById('btnArchivo').className = 'btn btn-outline-primary btn-block'
+                    
+                }
+            }
+
+
+            //-------------------------------
             var x = document.getElementsByClassName('inputDocente');
             for(i = 0; i < x.length; i++) {
                 x[i].value = idDocente;
@@ -306,6 +391,11 @@
             var claveA = document.getElementById('clave');
             var nombreEscuelaA = document.getElementById('nombreEscuela');
             var cctA = document.getElementById('cct');
+            var domicilioA = document.getElementById('domicilio');
+            var num_empleadoA = document.getElementById('num_empleado');
+            var perfil_profesionalA = document.getElementById('perfil_profesional');
+            var maximo_gradoA = document.getElementById('maximo_grado');
+
             nombresA.value = nombresDocente;
             apellidosA.value = apellidosDocente;
             edadA.value = edad;
@@ -317,6 +407,10 @@
             claveA.value = clave;
             nombreEscuelaA.value = nombreEscuela;
             cctA.value = cct;
+            domicilioA.value = domicilio;
+            num_empleadoA.value = num_empleado;
+            perfil_profesionalA.value = perfil_profesional;
+            maximo_gradoA.value = maximo_grado;
 
             //Asignación a los labels del resumen del alumno
             var nombresA_l = document.getElementById('l_nombre_docente');
@@ -325,12 +419,14 @@
             var emailA_l = document.getElementById('l_email');
             var num_celA_l = document.getElementById('l_num_cel');
             var cctA_l = document.getElementById('l_cct');
+
             nombresA_l.textContent = nombresDocente + ' ' + apellidosDocente;
             claveA_l.textContent = clave;
             rfcA_l.textContent = rfc;
             emailA_l.textContent = email;
             num_celA_l.textContent = telCelular;
             cctA_l.textContent = cct;
+            
         }
 
         function confirmDialog(){
