@@ -16,21 +16,21 @@
                             <div class="embed-responsive embed-responsive-16by9">
                                 <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/lRDRueu9lgQ" allowfullscreen></iframe>
                             </div>
-                            <!--<img class="d-block w-100" src="{% static 'IMG/alumnos3f.jpg' %}" alt="First slide">
+                            <!--<img class="d-block w-100" src="{% static 'img/alumnos3f.jpg' %}" alt="First slide">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5 style="color: white;">Alumnos</h5>
                                 <p>Visualice e interactúe con los datos de los alumnos de la institución</p>
                             </div>-->
                         </div>
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="{% static 'IMG/docente3f.jpg' %}" alt="Second slide">
+                            <img class="d-block w-100" src="{% static 'img/docente3f.jpg' %}" alt="Second slide">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5 style="color: white;">Docentes</h5>
                                 <p>Visualice e interactúe con los datos de los docentes de la institución</p>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="{% static 'IMG/escuela2f.jpg' %}" alt="Third slide">
+                            <img class="d-block w-100" src="{% static 'img/escuela2f.jpg' %}" alt="Third slide">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5 style="color: white;">Instituciones</h5>
                                 <p>Visualice e interactúe con los datos de las instituciones</p>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="collapse show" id="docentes">
                         <div class="card-text p-3">
-                            <table class="table table-borderless table-hover" id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
+                            <table class="table table-borderless " id="listaAlumnos" style="height: 250px; display: -moz-groupbox;">
                                 <thead>
                                     <tr style="width: 100%; display: inline-table; height:60px; table-layout: fixed;">
                                     <th>#</th>
@@ -70,7 +70,7 @@
                                         {% csrf_token %}
                                             <tr>
                                                 <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
-                                                <td style="width: 73.5%;">{{ doc.nombres_docente }} {{ doc.apellidos_docente }}</td>
+                                                <td style="width: 75.8%;">{{ doc.nombres_docente }}</td>
                                                 <td>{{ doc.clave_docente }}</td>
                                             </tr>
                                         {% endfor %}
@@ -101,14 +101,28 @@
                                     </tr>
                                 </thead>
                                 <tbody style="overflow-y: scroll; height: 200px; width: 95%; position: absolute;">
-                                        {% for al in alumnoI %}
-                                        {% csrf_token %}
-                                            <tr>
-                                                <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
-                                                <td style="width: 77%;">{{ al.nombre_alumno }}</td>
-                                                <td>{{ al.num_matricula }}</td>
-                                            </tr>
-                                        {% endfor %}
+                                        <!-- Para institución [1] -->
+                                        {% if usuario.tipo_usuario == "1" %}
+                                            {% for al in alumnoI %}
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                    <td style="width: 77%;">{{ al.nombre_alumno }}</td>
+                                                    <td>{{ al.num_matricula }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
+                                        <!-- Para docente [6] -->
+                                        {% if usuario.tipo_usuario == "6" %}
+                                            {% for al in alumnoD %}
+                                            {% csrf_token %}
+                                                <tr>
+                                                    <th scope="row" style="width: 10.9%;">{{ forloop.counter }}</th>
+                                                    <td style="width: 77%;">{{ al.nombre_alumno }}</td>
+                                                    <td>{{ al.num_matricula }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% endif %}
                                 </tbody>
                             </table>
                             </div>

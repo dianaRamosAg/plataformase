@@ -121,10 +121,10 @@
                   {% comment %} por favor la longitud de este texto debe ser minimo 25 caracteres {% endcomment %}
                 
                   <input onclick="a()" id="aceptar" type="button" class="btn btn-success btn-lg btn-block" value="Aceptar"></input>
-                  <input type="text" id="latitud_prev" name="latitud_prev" value="{{ latitud }}" style="visibility: hidden;"></input>
-                  <input type="text" id="longitud_prev" name="longitud_prev" value="{{ longitud }}" style="visibility: hidden;"></input>
-                  <input type="text" id="latitud_new" name="latitud_new" value="{{ latitudTE }}" style="visibility: hidden;"></input>
-                  <input type="text" id="longitud_new" name="longitud_new" value="{{ longitudTE }}" style="visibility: hidden;"></input>
+                  <input type="text" id="latitud_prev" name="latitud_prev" value="{{ latitud }}" style="visibility: ;"></input>
+                  <input type="text" id="longitud_prev" name="longitud_prev" value="{{ longitud }}" style="visibility: ;"></input>
+                  <input type="text" id="latitud_new" name="latitud_new" value="{{ latitudTE }}" style="visibility: ;"></input>
+                  <input type="text" id="longitud_new" name="longitud_new" value="{{ longitudTE }}" style="visibility: ;"></input>
 
                   
                 </div>
@@ -187,22 +187,28 @@
     var map = new google.maps.Map(
       document.getElementById('map'), {zoom: 13, center: myLatlng});
 
-    // Create the initial InfoWindow.
-    var infoWindow = new google.maps.InfoWindow(
+    if (lat1 == lat2){
+      var infoWindow = new google.maps.InfoWindow(
+        {content: 'La ubicación no ha cambiado', position: myLatlng});
+      infoWindow.open(map);
+
+    }else{
+      // Create the initial InfoWindow.
+      var infoWindow = new google.maps.InfoWindow(
         {content: 'Actual Localización', position: myLatlng});
-    infoWindow.open(map);
+      infoWindow.open(map);
 
-   var infoWindow = new google.maps.InfoWindow(
+      var infoWindow = new google.maps.InfoWindow(
         {content: 'Nueva Localización', position: myLatlngNew});
-    infoWindow.open(map);
+      infoWindow.open(map);
+    }
     
-
   }
 
 </script>
 
 <script async defer 
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTxSMcxMgxCcH1cSnayhlYFU6UU4AGTw4&callback=initMap">
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUYrfLnJZ9jbpBwBv7Bt9FL4DCaRZw1Eo&callback=initMap">
 </script>
 {% endblock %}
 </html>

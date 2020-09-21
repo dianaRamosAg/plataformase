@@ -124,7 +124,7 @@
         {% if user.is_superuser %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
-              Hola, administrador
+              Hola, Administrador
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/SigApp/perfilAdmin" style="font-size: 15px;">Mi perfil</a>
@@ -147,9 +147,16 @@
       <ul class="texto nav navbar-nav navbar-right">
         {% if user.tipo_usuario == "3" or user.tipo_usuario == "2"%}
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
-              Hola, Departamento {{ user.first_name }} {{ user.last_name }}
-            </a>
+            {% if user.departamento_id == 3 %}
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
+                Hola, Jefe de departamento Superior , {{ user.first_name }} {{ user.last_name }}
+              </a>
+            {% endif %}
+            {% if user.departamento_id == 4 %}
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-right: 7em;">
+                Hola, Jefe de departamento Media Superior , {{ user.first_name }} {{ user.last_name }}
+              </a>
+            {% endif %}
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               {% comment %} <a class="dropdown-item" href="/SigApp/perfilAdmin" style="font-size: 15px;">Mi perfil</a> {% endcomment %}
               {% if numeroModificaciones == 0 %}

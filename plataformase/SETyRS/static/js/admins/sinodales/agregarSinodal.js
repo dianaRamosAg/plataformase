@@ -24,7 +24,6 @@ function continuarSoli(){
 
     //Depués de haber agregado el botón, enviamos el form para crear la solicitud
 
-    setTimeout(function(){ console.log("continuar") }, 4000);
     
 };
 

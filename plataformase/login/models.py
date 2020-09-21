@@ -6,7 +6,7 @@ from django.db import models
 class CustomUser(AbstractUser):
     #Para conservar los valores que ya tiene por defecto el modelo de usuarios.
     pass
-    first_name = models.TextField(blank=True)
+    first_name = models.TextField(  blank=True)
     curp_rfc = models.CharField(max_length=18, blank=True, null=True)#Guarda la CURP o el RFC del usuario
     calle = models.TextField(blank=True, null=True)#
     nointerior = models.IntegerField(blank=True, null=True,default=0)

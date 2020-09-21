@@ -49,6 +49,8 @@ urlpatterns = [
     path('institucion/solicitud/examen_a_titulo/<int:id>/editar_documentos/', login_required(views.editar_documentos_alumno), name='SETyRS_editar_documentos_alumno'), #Metodo para editar los documentos de un sinodal
     path('institucion/solicitud/examen_a_titulo/<int:id>/enviar_solicitud', login_required(views.finalizar_solicitud_examen), name='SETyRS_finalizar_solicitud_examen'), #Metodo para finalizar la solicitud y "enviarla" al departamento correspondiente
     path('institucion/solicitudes/examenes_a_titulo', login_required(views.lista_solicitudes_examenes), name='SETyRS_solicitudes_examenes'), #Vista de solicitudes de sinodales realizadas
+    path('institucion/examenes/get/nivelCCT', login_required(views.get_nivel_CCT), name='SETyRS_get_nivel_CCT'),
+    path('institucion/examenes/get/RIT', login_required(views.get_reglamento_titulacion), name='SETyRS_get_RIT'),
     path('institucion/guardar_Reglamento/',login_required(views.guardar_Reglamento), name='SETyRS_guardar_Reglamento'), #Vista para actualizar el documento requerido para hacer solicitudes
      #urls de generacion del pdf
     path('institucion/solicitud/<int:id>/informe_aprobacion_solicitud',login_required(views.generar_pdf) ,name='SETyRS_generar_pdf'), # Metodo para generar el archivo pdf de la autorizacion de examenes a titulo

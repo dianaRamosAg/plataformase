@@ -11,6 +11,7 @@ from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
 from .render import Render
 from django.core.files.storage import FileSystemStorage
+from django.core import serializers
 # VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
 
 # el departamento de dirección es el unico que puede ver e interactuar con las solicitudes de ambos niveles educativos (superior y media superior)
@@ -383,11 +384,10 @@ def index_institucion(request):
 # funcion que retorna la plantilla de nueva solicitud de sinodal
 def nueva_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-        nivel = datos_escuela.nivel_educativo
+        centrosRegistrados = UsuarioInstitucion.objects.filter(id_usuariobase_id=request.user.id)
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
-        context = {'notificacion':notificacion,'notificaciones':num_notifi,'nivel':nivel}
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'centrosRegistrados':centrosRegistrados}
         return render(request, 'institucion/sinodales/nueva_solicitud.html', context)
     else:
         raise Http404("El usuario no tiene permiso de ver esta página")
@@ -469,13 +469,14 @@ def crear_solicitud_sinodal(request):
             user_id = request.user.id
             datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
             nivel = datos_escuela.nivel_educativo
+            centroTrabajo = request.POST["cct"]
             if nivel == "3":
                 print(request.POST.get("nivel"))
-                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
+                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             else:
                 print('NO ES MIXTA')
-                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
+                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             msg = 'Nueva solicitud de sinodales. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2, user_id=user_id)
@@ -633,17 +634,27 @@ def guardar_Reglamento(request):
     reglamento.save()
     return redirect('SETyRS_nueva_solicitud_examen')
 
+def get_reglamento_titulacion(request):
+    tieneReglamento = False
+    try:
+        RIT = reglamento_interior_titulacion.objects.filter(CCT=request.GET["cct"])
+    except ObjectDoesNotExist:
+        RIT= None
+    return JsonResponse(serializers.serialize("json",RIT),safe=False)
+
+
+def get_nivel_CCT(request):
+    datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+    niveles = serializers.serialize("json",UsuarioInstitucion.objects.filter(cct=request.GET['cct']))
+    return JsonResponse(niveles,safe=False)
+
 def nueva_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-        tieneReglamento = False
-        if reglamento_interior_titulacion.objects.filter(CCT=datos_escuela.cct):
-            tieneReglamento = True
-        nivel = datos_escuela.nivel_educativo
+        centrosRegistrados = UsuarioInstitucion.objects.filter(id_usuariobase_id=request.user.id)
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
         sinodales = Sinodales.objects.filter(user_id=request.user.id, estatus=2).order_by('nombre_sinodal')
-        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel,'institucion':datos_escuela,'RIT':tieneReglamento}
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales,'centrosRegistrados':centrosRegistrados}
         return render(request, 'institucion/sinodales/examenes/nueva_solicitud.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
@@ -729,6 +740,7 @@ def crear_solicitud_examen(request):
             categoria = request.POST["categoria"]
             presidente = request.POST["presidente"]
             secretario = request.POST["secretario"]
+            cct = request.POST["cct"]
             vocal = request.POST["vocal"]
             escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
             #if escuela.nivel_educativo == 3:
@@ -737,7 +749,7 @@ def crear_solicitud_examen(request):
             lugar_e = request.POST["Lugar_exa"]
             hora_e = request.POST["hora_exa"]
             solicitud = SolicitudExamen(categoria=categoria, id_presidente=presidente, id_secretario=secretario, id_vocal=vocal, 
-                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e)
+                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e,CCT=cct)
             solicitud.save()
             msg = 'Nueva solicitud de exámenes a titulo. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=1, user_id=request.user.id)
