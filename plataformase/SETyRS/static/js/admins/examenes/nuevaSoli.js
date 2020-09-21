@@ -15,17 +15,17 @@ $("#select_cct").on('change',function(){
                var nivel = centroTrabajo[0]["fields"]["nivel_educativo"];
 
                $("#select_nivel_educativo").empty();
-               $("#select_nivel_educativo").append(new Option("Seleccione nivel educativo"),"0");
+               $("#select_nivel_educativo").append(new Option("Seleccione nivel educativo",0));
 
                if(nivel == 3){
-                    $("#select_nivel_educativo").append(new Option("Media Superior"),"1");
-                    $("#select_nivel_educativo").append(new Option("Superior"),"2");
+                    $("#select_nivel_educativo").append(new Option("Media Superior",1));
+                    $("#select_nivel_educativo").append(new Option("Superior",2));
                }
                else if(nivel == 2){
-                $("#select_nivel_educativo").append(new Option("Superior"),"2");
+                $("#select_nivel_educativo").append(new Option("Superior",2));
                }
                else if(nivel == 1){
-                $("#select_nivel_educativo").append(new Option("Media Superior"),"1");
+                $("#select_nivel_educativo").append(new Option("Media Superior",1));
                }
             }
            

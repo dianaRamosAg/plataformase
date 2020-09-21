@@ -396,9 +396,9 @@ def nueva_solicitud_sinodal(request):
 #Recibe el id de la solicitud
 def detalle_solicitud_sinodal(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-        nivel = datos_escuela.nivel_educativo
         solicitud = get_object_or_404(SolicitudSinodal, pk=id)
+        datos_escuela = UsuarioInstitucion.objects.get(cct=solicitud.CCT)
+        nivel = datos_escuela.nivel_educativo
         if solicitud.user_id == request.user.id:
             notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
             num_notifi = contarNotificaciones(request.user.id)
@@ -467,15 +467,13 @@ def crear_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         if request.method == 'POST':
             user_id = request.user.id
-            datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-            nivel = datos_escuela.nivel_educativo
+            datos_escuela = UsuarioInstitucion.objects.get(cct=request.POST["cct"])
+            nivel = datos_escuela.nivel_educativo 
             centroTrabajo = request.POST["cct"]
             if nivel == "3":
-                print(request.POST.get("nivel"))
                 solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             else:
-                print('NO ES MIXTA')
                 solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             msg = 'Nueva solicitud de sinodales. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
@@ -495,18 +493,17 @@ def agregar_sinodal(request, id):
             curp=request.POST["curp"]
             rfc=request.POST["rfc"]
             grado=request.POST["grado_academico"]
-            datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-            nivel = datos_escuela.nivel_educativo
             sino_count = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name,estatus=2).count()
             comprobar_duplicidad = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name)
+            solicitud = SolicitudSinodal.objects.get(id=id)
+            nivel_sinodales = solicitud.nivel_educativo
             if comprobar_duplicidad and sino_count>=1:
             
                 error = 'Este sinodal ya existe en su registro'
                 messages.error(request, error)
                 return redirect('SETyRS_detalle_solicitud_sinodal',id)
             else:
-                datos_escuela = get_object_or_404(UsuarioInstitucion, id_usuariobase_id=request.user.id)
-                sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name,nivel_educativo=nivel)
+                sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name,nivel_educativo=nivel_sinodales)
                 sinodal.save()
                 return redirect('SETyRS_detalle_solicitud_sinodal',id)
     else:
@@ -644,7 +641,6 @@ def get_reglamento_titulacion(request):
 
 
 def get_nivel_CCT(request):
-    datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
     niveles = serializers.serialize("json",UsuarioInstitucion.objects.filter(cct=request.GET['cct']))
     return JsonResponse(niveles,safe=False)
 
@@ -742,14 +738,14 @@ def crear_solicitud_examen(request):
             secretario = request.POST["secretario"]
             cct = request.POST["cct"]
             vocal = request.POST["vocal"]
-            escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+            escuela = CustomUser.objects.get(id=request.user.id)
             #if escuela.nivel_educativo == 3:
             nivel_educativo = request.POST['nivel']
             fecha_e = request.POST["fecha_exa"]
             lugar_e = request.POST["Lugar_exa"]
             hora_e = request.POST["hora_exa"]
             solicitud = SolicitudExamen(categoria=categoria, id_presidente=presidente, id_secretario=secretario, id_vocal=vocal, 
-                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e,CCT=cct)
+                                        institucion=escuela.id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e,CCT=cct)
             solicitud.save()
             msg = 'Nueva solicitud de exámenes a titulo. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=1, user_id=request.user.id)
