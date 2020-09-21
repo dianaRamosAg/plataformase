@@ -398,6 +398,7 @@ def detalle_solicitud_sinodal(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         solicitud = get_object_or_404(SolicitudSinodal, pk=id)
         datos_escuela = UsuarioInstitucion.objects.get(cct=solicitud.CCT)
+        print(datos_escuela)
         nivel = datos_escuela.nivel_educativo
         if solicitud.user_id == request.user.id:
             notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
@@ -467,9 +468,9 @@ def crear_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         if request.method == 'POST':
             user_id = request.user.id
-            datos_escuela = UsuarioInstitucion.objects.get(cct=request.POST["cct"])
-            nivel = datos_escuela.nivel_educativo 
             centroTrabajo = request.POST["cct"]
+            datos_escuela = UsuarioInstitucion.objects.get(cct=centroTrabajo)
+            nivel = datos_escuela.nivel_educativo 
             if nivel == "3":
                 solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
@@ -885,7 +886,7 @@ def generar_pdf(request, id):
                 'solicitud': solicitud,
                 'alumnos':Alumnos.objects.filter(id_solicitud_id=id), 
                 'request': request,
-                'escuela': UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id),
+                'escuela': UsuarioInstitucion.objects.get(cct=solicitud.CCT),
                 'presidente': Sinodales.objects.get(id=solicitud.id_presidente),
                 'secretario': Sinodales.objects.get(id=solicitud.id_secretario),
                 'vocal': Sinodales.objects.get(id=solicitud.id_vocal),
