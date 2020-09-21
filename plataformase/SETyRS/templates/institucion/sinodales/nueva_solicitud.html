@@ -12,11 +12,15 @@
             En este apartado se podrá realizar una solicitud para la autorización del registro de sus sinodales,
             para ello, tendrá que agregar la información correspondiente que se le vaya solicitando.
         </p>
-        <p class="text-center">
-        Da clic en el siguiente botón para crear una <srong>nueva solicitud</srong> de registro de sinodales.
-        </p>
+            <label for="select_cct">¿Desde cual centro de trabajo se enviará la solicitud?</label>
+            <select name="cct" style="text-align-last: center; margin-left: 33%;" class="form-control col-lg-4 text-center" id="select_cct" required>
+                <option selected disabled hidden>Seleccione el centro de trabajo</option>
+                {% for centro in centrosRegistrados %}
+                    <option value="{{centro.cct}}">{{centro.cct}}</option>
+                {% endfor %}
+            </select>
         <div id="buttonContainer">
-            <button id="btnNuevaSoli" type="submit" class="btn btn-primary mt-3">Nueva solicitud</button>
+            <button id="btnNuevaSoli" disabled="true"; type="submit" class="btn btn-primary mt-3">Crear solicitud</button>
         </div>
     </form>
 </div>

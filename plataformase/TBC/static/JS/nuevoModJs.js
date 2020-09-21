@@ -636,7 +636,6 @@ function crearUnidad(){
                 dataType: "json",
                 enctype: 'multipart/form-data',
                 success:function(response){
-                    console.log(response);  
                 }
             })
         };

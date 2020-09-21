@@ -12,5 +12,6 @@ __pycache__
 /plataformase/TBC/__pycache__
 /plataformase/SigApp/__pycache__
 /plataformase/SETyRS/__pycache__
+/plataformase/SETyRS/migrations/
 .DS_Store
 /plataformase/visitante/__pycache__
