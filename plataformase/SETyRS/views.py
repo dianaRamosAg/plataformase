@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from .models import *
 from login.models import CustomUser
 from .forms import *
+from django.conf import settings
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
 from .render import Render
@@ -891,6 +892,7 @@ def generar_pdf(request, id):
                 'secretario': Sinodales.objects.get(id=solicitud.id_secretario),
                 'vocal': Sinodales.objects.get(id=solicitud.id_vocal),
                 'jefe': jefe,
+                'bucket': settings.MEDIA_URL
             }
             c = solicitud.categoria
             if c==1:
