@@ -471,7 +471,7 @@ def crear_solicitud_sinodal(request):
             centroTrabajo = request.POST["cct"]
             datos_escuela = UsuarioInstitucion.objects.get(cct=centroTrabajo)
             nivel = datos_escuela.nivel_educativo 
-            if nivel == "3":
+            if nivel == 3:
                 solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             else:
