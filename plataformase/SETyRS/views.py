@@ -895,23 +895,24 @@ def generar_pdf(request, id):
                 'bucket': settings.MEDIA_URL
             }
             c = solicitud.categoria
-            if c==1:
+            # Se hace la comparación en char porque la BD de producción tiene la columna categoria como varchar y no int
+            if c=='1':
                 solicitud.categoria = 'SEMINARIO DE TITULACION'
-            elif c==2:
+            elif c=='2':
                 solicitud.categoria = 'TESIS EXTERNA'
-            elif c==3:
+            elif c=='3':
                 solicitud.categoria = 'INFORME SOBRE SERVICIO SOCIAL'
-            elif c==4:
+            elif c=='4':
                 solicitud.categoria = 'ESTUDIOS DE POSGRADO'
-            elif c==5:
+            elif c=='5':
                 solicitud.categoria = 'EXAMEN GENERAL DE CONOCIMIENTOS'
-            elif c==6:
+            elif c=='6':
                 solicitud.categoria = 'EXAMEN CENEVAL'
-            elif c==7:
+            elif c=='7':
                 solicitud.categoria = 'ALTO RENDIMIENTO DE LICENCIATURA'
-            elif c==8:
+            elif c=='8':
                 solicitud.categoria = 'EXPERIENCIA PROFESIONAL'
-            elif c==9:
+            elif c=='9':
                 solicitud.categoria = 'OPCIÓN ESPECIFICADA POR LA INSTITUCIÓN'
             return Render.render('institucion/examenes/formato_aprobacion_solicitud.html', params)
         else:
