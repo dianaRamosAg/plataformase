@@ -909,6 +909,8 @@ def generar_pdf(request, id):
                 solicitud.categoria = 'ALTO RENDIMIENTO DE LICENCIATURA'
             elif c==8:
                 solicitud.categoria = 'EXPERIENCIA PROFESIONAL'
+            elif c==9:
+                solicitud.categoria = 'OPCIÓN ESPECIFICADA POR LA INSTITUCIÓN'
             return Render.render('institucion/examenes/formato_aprobacion_solicitud.html', params)
         else:
              raise Http404("El usuario no tiene permiso de ver esta página")
