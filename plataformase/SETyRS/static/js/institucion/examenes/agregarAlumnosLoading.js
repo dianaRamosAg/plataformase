@@ -1,10 +1,12 @@
 function cargarListeners() { 
     var btnC = document.getElementById("btnContinuar");
     btnC.addEventListener("click",continuarSoli,false);
+    console.log("están cocachis");
 };
 
+
+
 function continuarSoli(){
-    console.log("Entra a la funcion");
     var divContainer = document.getElementById("buttonContainer");
 
     divContainer.innerHTML ="";
@@ -20,11 +22,18 @@ function continuarSoli(){
     //agregamos el span al boton y el boton al div contenedor
     creandoBoton.appendChild(spanBoton);
     divContainer.appendChild(creandoBoton);
-
-    //Depués de haber agregado el botón, enviamos el form para crear la solicitud
-
-    setTimeout(function(){ console.log("continuar") }, 4000);
     
+    $('#confirmacion').modal('toggle');
+    $('#confirmacion').modal('show');
+
+    $('#confirmacion').on('hidden.bs.modal', function () {
+        location.reload();
+    })
+
+    $("#btnContinuarF").click(function(){
+        $(this).prop("disabled",true);
+        $("#FormGuardarAlumnos").submit();
+    })
 };
 
   document.addEventListener("DOMContentLoaded", cargarListeners, false);
