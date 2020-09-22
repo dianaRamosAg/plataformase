@@ -1,4 +1,5 @@
 {% load static %}
+{% get_media_prefix %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
             margin-right: 2cm;
             margin-top: 3cm;
             margin-bottom: 5cm;
-            background-image: url("../static/img/fondo_2020_bueno.jpg");
+            background-image: url("https://storage.googleapis.com/plataformase.appspot.com/Archivos/fondo.jpeg");
         }
         
         .table {
@@ -63,9 +64,9 @@
 <body>
     <div class="container">
 
-
+        <br>
         <div class="card">
-            <h1 align="left">OFICIO Electrónico SETyRS_{{solicitud.id}}</h1>
+            <h1 align="left">OFICIO Electrónico SETyRS: {{solicitud.id}}</h1>
             <h1 align="right">Tepic,Nayarit, a {{ solicitud.fecha }}<br> Asunto: Autorización de Examen</h1>
 
             <h1 align="left">{{escuela.nombredirector}}<br>DIRECTOR(a) DE {{request.user.first_name}}<br>CCT {{escuela.cct}}<br>P R E S E N T E.
@@ -108,19 +109,19 @@
         {% if jefe.departamento_id == 2 %}
         <h1 align="center"><b> EL DIRECTOR DE EDUCACIÓN MEDIA SUPERIOR Y SUPERIOR</b></h1>
         <div align="center">
-            <img src="../{{jefe.firma_digital.url}}" alt="se" height="120">
+            <img src="{{bucket}}{{jefe.firma_digital.url}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. VÍCTOR MANUEL ALVARADO JIMENEZ</b></h1>
         {% elif jefe.departamento_id == 3 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN SUPERIOR</b></h1>
         <div align="center">
-            <img src="../{{jefe.firma_digital.url}}" alt="se" height="120">
+            <img src="{{bucket}}{{jefe.firma_digital.url}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. WILLIAM JAVIER LOZANO MORA</b></h1>
         {% elif jefe.departamento_id == 4 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN MEDIA SUPERIOR</b></h1>
         <div align="center">
-            <img src="../{{jefe.firma_digital.url}}" alt="se" height="120">
+            <img src="{{bucket}}}{{jefe.firma_digital.url}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. JUAN HUMBERTO PINTADO</b></h1>
         {% endif %}
