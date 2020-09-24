@@ -23,7 +23,7 @@ from django.core import serializers
 # funcion que retorna el index del administrador con el contexto de acuerdo al departamento del usuario
 def index_admin(request):
     #si el usuario no pertenece a cualquiera de estos 3 departamentos, se mostrará el error 404
-    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4 or request.user.departamento_id==1:
         dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
         num_notifi = contarNotificacionesadmin(request.user.departamento_id) # cuenta las notificaciones que no han sido leidas y retorna el total
         if request.user.departamento_id == 2: #si el usuario pertenece al departamento DIRECCION
@@ -34,6 +34,9 @@ def index_admin(request):
 
         elif request.user.departamento_id == 4: #si el usuario pertenece al departamento MEDIA SUPERIOR
             notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha') #Recupera las notificaciones del administrador
+
+        elif request.user.departamento_id == 1: #si el usuario pertenece al departamento CONTROL ESCOLAR
+            notificacion = NotificacionAdmin.objects.filter(tipo_solicitud=1).order_by('-fecha') #Recupera las notificaciones del administrador
         
         context = {'departamento':dep,'notificacion':notificacion,'notificaciones':num_notifi}
         return render(request,'admins/index_admin.html', context)
@@ -235,7 +238,7 @@ def rechazar_sinodal(request, id):
 
 
 def lista_solicitudes_examenes_admin(request):
-    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4 or request.user.departamento_id==1:
         dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
         num_notifi = contarNotificaciones(request.user.departamento_id)
         if request.user.departamento_id==2:
@@ -249,6 +252,10 @@ def lista_solicitudes_examenes_admin(request):
         elif request.user.departamento_id==4:
             solicitudes = SolicitudExamen.objects.filter(fase=3,nivel_educativo=1).order_by('-id')
             notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+
+        elif request.user.departamento_id==1:
+            solicitudes = SolicitudExamen.objects.filter(fase=3,estatus=3).order_by('-id')
+            notificacion = None
         
         context = {'departamento':dep, 'solicitudes': solicitudes, 'notificacion':notificacion,'notificaciones':num_notifi}
         for s in solicitudes:
@@ -263,7 +270,7 @@ def lista_solicitudes_examenes_admin(request):
         raise Http404("El usuario no tiene permiso de ver esta página")
 
 def revisar_solicitud_examen(request, id):
-    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4 or request.user.departamento_id==1:
         solicitud = get_object_or_404(SolicitudExamen, pk=id)
         if solicitud.fase == 3:
             dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
@@ -293,6 +300,10 @@ def revisar_solicitud_examen(request, id):
             
             elif request.user.departamento_id == 4 and solicitud.nivel_educativo == 1:
                 notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+                context.update({'notificacion':notificacion})
+                return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
+            elif request.user.departamento_id == 1:
+                notificacion = None
                 context.update({'notificacion':notificacion})
                 return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
         else:
@@ -341,6 +352,13 @@ def aceptar_solicitud(request, id):
             solicitud.save()
             h_solicitud = Historial_admins_examen(user_id = request.user.id, solicitud_id = id,fecha=timezone.now(), estatus=True, nivel_educativo=solicitud.nivel_educativo)
             h_solicitud.save()
+            
+            #Aqui poner el codigo para enviar el correo de aceptación a Control Escolar
+            '''
+
+
+            
+            '''
             msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
             notificacion.save()

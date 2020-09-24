@@ -30,12 +30,12 @@
         <div class="col-md-2 text-center">
             <label for="cedula">Cedula</label>
             <br>
-            <input type="button" id="cedula" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{p.cedula}}')" value="Ver Archivo">
+            <input style="color: #007BFF; background-color: #1BCBB0;" type="button" id="cedula" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{p.cedula}}')" value="Ver Archivo">
         </div>
         <div class="col-md-3 text-center">
             <label for="curriculum">Curriculum</label>
             <br>
-            <input type="button" id="curriculum" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{p.curriculum}}')" value="Ver Archivo">
+            <input style="color: #007BFF; background-color: #1BCBB0;" type="button" id="curriculum" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{p.curriculum}}')" value="Ver Archivo">
         </div>
     </div>
     <br>
@@ -60,12 +60,12 @@
         <div class="col-md-2 text-center">
             <label for="cedula">Cedula</label>
             <br>
-            <input type="button" id="cedula" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{s.cedula}}')" value="Ver Archivo">
+            <input style="color: #007BFF; background-color: #1BCBB0;" type="button" id="cedula" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{s.cedula}}')" value="Ver Archivo">
         </div>
         <div class="col-md-3 text-center">
             <label for="curriculum">Curriculum</label>
             <br>
-            <input type="button" id="curriculum" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{s.curriculum}}')" value="Ver Archivo">
+            <input style="color: #007BFF; background-color: #1BCBB0;" type="button" id="curriculum" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{s.curriculum}}')" value="Ver Archivo">
         </div>
     </div>
     <br>
@@ -90,12 +90,12 @@
         <div class="col-md-2 text-center">
             <label for="cedula">Cedula</label>
             <br>
-            <input type="button" id="cedula" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{v.cedula}}')" value="Ver Archivo">
+            <input style="color: #007BFF; background-color: #1BCBB0;" type="button" id="cedula" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{v.cedula}}')" value="Ver Archivo">
         </div>
         <div class="col-md-3 text-center">
             <label for="curriculum">Curriculum</label>
             <br>
-            <input type="button" id="curriculum" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{v.curriculum}}')" value="Ver Archivo">
+            <input style="color: #007BFF; background-color: #1BCBB0;" type="button" id="curriculum" class="btn btn-primary" data-toggle="modal" data-target="#viewPDF" onclick="verArchivo('{{v.curriculum}}')" value="Ver Archivo">
         </div>
     </div>
 </div>
@@ -139,6 +139,7 @@
 <br>
 <div class="container text-center">
     <a href="{% url 'SETyRS_lista_solicitudes_examenes' %}" class="btn btn-primary">Regresar</a>
+    {% if user.tipo_usuario != '3' %}
         {% if solicitud.estatus == 'Aceptada' or solicitud.estatus == 'Rechazada' %}
             <input type="button" class="btn btn-primary" value="Aceptar Solicitud" disabled>
             <input type="button" class="btn btn-danger" value="Rechazar Solicitud" disabled>
@@ -146,6 +147,7 @@
             <input type="button" class="btn btn-primary" value="Aceptar Solicitud" data-toggle="modal" data-target="#confirmacion">
             <input type="button" class="btn btn-danger" value="Rechazar Solicitud" data-toggle="modal" data-target="#rechazar">
         {% endif %}
+    {% endif %}    
 </div>
 <br>
 <br>
