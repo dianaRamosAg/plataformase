@@ -145,7 +145,7 @@ class DatosTemporal(models.Model):
     nombre_institucion = models.CharField(max_length=200)
     municipio = models.CharField(max_length=200)
     localidad =   models.CharField(max_length=200)
-    usuario_mod = models.CharField(max_length=50,blank=True,null=True)
+    usuario_mod = models.CharField(max_length=150,blank=True,null=True)
     status = models.CharField(max_length=200)
     latitud_temp = models.CharField(max_length=200, null=True) ##
     longitud_temp = models.CharField(max_length=200, null=True ) ##
@@ -299,5 +299,5 @@ class DatosTemporalEstadistica(models.Model):
     ClaveCarrera_temp = models.CharField(max_length=30)
     Modalidad_temp = models.CharField(max_length=25)
     Periodos_temp = models.CharField(max_length=25)
-    usuario_mod = models.CharField(max_length=50, blank=True,null=True)
+    usuario_mod = models.CharField(max_length=150, blank=True,null=True)
     modificando = models.BooleanField()
