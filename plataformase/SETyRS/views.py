@@ -11,6 +11,7 @@ from django.conf import settings
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
 from .render import Render
+from django.core.mail import send_mail, EmailMessage
 from django.core.files.storage import FileSystemStorage
 from django.core import serializers
 # VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
@@ -354,11 +355,14 @@ def aceptar_solicitud(request, id):
             h_solicitud.save()
             
             #Aqui poner el codigo para enviar el correo de aceptación a Control Escolar
-            '''
+            email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','1.- La plataforma genera un número progresivo de autorización, ningún registro será el mismo.\n'+
+	        '2.- http://ssemssicyt.nayarit.gob.mx/ es el vínculo de la plataforma autorizado por el área de sistemas de Gobierno del Estado.\n'+
+	        '3.- Se genera acceso a la plataforma por Clave de Centro de Trabajo y RVOE autorizado para sus trámites.\n'+
+	        '4.- Todos los documentos que dan base a una autorización quedan resguardados en la plataforma para validación o consulta.\n'+
+	        '5.- Se le envía copia de todo lo que se autoriza a través de la plataforma al correo.\n'+'\n'+'La siguiente solicitud a examen ha sido aceptada: '+str(solicitud.id)+ '- https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['ulalegriasa@ittepic.edu.mx'])
+            email.send()
 
-
-            
-            '''
             msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
             notificacion.save()
