@@ -307,9 +307,15 @@
                                         <div class="col-md-3">
                                             <select class="selectpicker" data-live-search="true" data-width="100%" data-size="4" title="Materia"  id="selectMateriaH" onchange="seleccionMateriaH();" required>
                                                
-                                                        {% for cu in modulo %}
-                                                            <option value="{{ cu.id_modulo }}">{{ cu.nombre_modulo }}</option>
+                                                {% for doc in docente %}
+                                                    {% for mod in modulo %}
+                                                        {% for docmod in docenteCurso %}
+                                                            {% if docmod.id_curso == mod.id_modulo and docmod.id_docente == doc.id_docente %}
+                                                                <option value="{{ docmod.id_dc }}"> <strong>{{ mod.nombre_modulo }}</strong> -  {{ doc.nombres_docente }} </option>
+                                                            {% endif %}
                                                         {% endfor %}
+                                                    {% endfor %}
+                                                {% endfor %}
                                                     
                                             </select>
                                         </div>

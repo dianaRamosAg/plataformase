@@ -21,9 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*','ssemssicyt.nayarit.gob.mx']
+#DEBUG = True
+DEBUG = False
+ALLOWED_HOSTS = ['*','ssemssicyt.nayarit.gob.mx','www.ssemssicyt.nayarit.gob.mx','http://ssemssicyt.nayarit.gob.mx']
 
 
 # Application definition
@@ -104,8 +104,8 @@ else:
             #'PASSWORD' : 'diana',
             'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
-            'PORT'    : '5432',
-            #'PORT'     : '3306',
+            #'PORT'    : '5432',
+            'PORT'     : '3306',
         }
     }
 
@@ -181,7 +181,7 @@ else:
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'sigssemssicyt@gmail.com'
-EMAIL_HOST_PASSWORD = 'sigapp2019'
+EMAIL_HOST_PASSWORD = 'sigapp2020'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 

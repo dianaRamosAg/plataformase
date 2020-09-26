@@ -8,7 +8,7 @@ function updateNivelEducativo(){
         data: 
             {
                 idSoliSinod: idSolicitud,
-                nuevoNivel: selectNivelEducativo.value
+                nuevoNivel: $("#select_nivel_educativo option:selected").val()
             },
         type: 'POST',
         async: true,
@@ -21,5 +21,15 @@ function updateNivelEducativo(){
 function cargarListeners() { 
     var selectNivelEducativo = document.getElementById("select_nivel_educativo");
     selectNivelEducativo.addEventListener("change",updateNivelEducativo,false);
-  }
+
+     if(nivel == 3){
+        $("#select_nivel_educativo").empty();
+        $("#select_nivel_educativo").append(new Option("Seleccione nivel educativo",0));
+        $("#select_nivel_educativo").append(new Option("Media Superior",1));
+        $("#select_nivel_educativo").append(new Option("Superior",2));
+    }
+}
+        
+   
+  
 
