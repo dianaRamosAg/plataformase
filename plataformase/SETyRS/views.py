@@ -354,15 +354,15 @@ def aceptar_solicitud(request, id):
             h_solicitud = Historial_admins_examen(user_id = request.user.id, solicitud_id = id,fecha=timezone.now(), estatus=True, nivel_educativo=solicitud.nivel_educativo)
             h_solicitud.save()
             
-            #Aqui poner el codigo para enviar el correo de aceptación a Control Escolar
-            email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','1.- La plataforma genera un número progresivo de autorización, ningún registro será el mismo.\n'+
-	        '2.- http://ssemssicyt.nayarit.gob.mx/ es el vínculo de la plataforma autorizado por el área de sistemas de Gobierno del Estado.\n'+
-	        '3.- Se genera acceso a la plataforma por Clave de Centro de Trabajo y RVOE autorizado para sus trámites.\n'+
-	        '4.- Todos los documentos que dan base a una autorización quedan resguardados en la plataforma para validación o consulta.\n'+
-	        '5.- Se le envía copia de todo lo que se autoriza a través de la plataforma al correo.\n'+'\n'+'La siguiente solicitud a examen ha sido aceptada: '+str(solicitud.id)+ '- https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
-                             to=['ulalegriasa@ittepic.edu.mx'])
-            email.send()
-
+            #Aqui poner el codigo para enviar el correo de aceptación a control escolar,dirección y al departamento correspondiente
+            if solicitud.nivel_educativo == 1:
+                email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['ulalegriasa@ittepic.edu.mx','control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','superior@educacion.nayarit.gob.mx'])
+                email.send()
+            elif solicitud.nivel_educativo == 2:
+                email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['ulalegriasa@ittepic.edu.mx','control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','media.superior@educacion.nayarit.gob.mx'])
+                email.send()
             msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
             notificacion.save()
@@ -900,7 +900,7 @@ def finalizar_solicitud_examen(request, id):
         raise Http404('El usuario no tiene permiso de ver esta página')
 
 def generar_pdf(request, id):
-    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+    if  request.user.tipo_usuario=='1' or request.user.tipo_usuario=='2':  #and request.user.tipo_persona=='2':
         solicitud = get_object_or_404(SolicitudExamen, pk=id)
         if solicitud.estatus == 3:
             h = Historial_admins_examen.objects.get(solicitud_id=solicitud.id)

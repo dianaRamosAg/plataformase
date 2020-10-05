@@ -66,7 +66,7 @@
 
         <br>
         <div class="card">
-            <h1 align="left">OFICIO Electrónico SETyRS: {{solicitud.id}}</h1>
+            <h1 align="right">OFICIO Electrónico SETyRS: {{solicitud.id}}</h1>
             <h1 align="right">Tepic,Nayarit, a {{ solicitud.fecha }}<br> Asunto: Autorización de Examen</h1>
 
             <h1 align="left">{{escuela.nombredirector}}<br>DIRECTOR(a) DE {{request.user.first_name}}<br>CCT {{escuela.cct}}<br>P R E S E N T E.
@@ -85,7 +85,6 @@
                         <td>Nombre</td>
                         <td>CURP</td>
                         <td>Carrera</td>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -103,37 +102,85 @@
         </div>
         <p>Asimismo, me permito informarle que, a propuesta de la institución a su digno cargo, se autoriza la participación de <b>{{presidente.nombre_sinodal}}, {{secretario.nombre_sinodal}}, {{vocal.nombre_sinodal}} </b>como
             Presidente, Secretario, Vocal respectivamente del cuerpo de Sinodales en el mencionado examen.</p>
+        
+            <table class="table" width="100%" border="1" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <td>PRESIDENTE</td>
+                        <td>SECRETARIO</td>
+                        <td>VOCAL</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{presidente.nombre_sinodal}}</td>
+                        <td>{{secretario.nombre_sinodal}}</td>
+                        <td>{{vocal.nombre_sinodal}}</td>
+                    </tr>
+                </tbody>
+            </table>
 
         <p>Sin otro particular por el momento, reciba un afectuoso saludo de nuestra parte.</p>
         <h1 align="center"><b>A T E N T A M E N T E</b></h1>
+
         {% if jefe.departamento_id == 2 %}
         <h1 align="center"><b> EL DIRECTOR DE EDUCACIÓN MEDIA SUPERIOR Y SUPERIOR</b></h1>
         <div align="center">
             <img src="{{bucket}}{{jefe.firma_digital}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. VÍCTOR MANUEL ALVARADO JIMENEZ</b></h1>
+        <p>
+            Copias.- <br>
+            
+            Mtro. Martin Isaac Pérez Gómez. - Subsecretario de Educación Media Superior, Superior e Investigación Científica y Tecnológica. Para su conocimiento.<br>
+            
+            Lic. Maestro William Javier Lozano Mora. - Jefe de Departamento de Educación Superior. - Para el trámite que corresponda<br>
+            
+            Lic. Osvaldo Antonio Valencia Barragán. - Jefe del Departamento de Control Escolar y Estadística. Para el trámite que corresponda.<br>
+        </p>
+
         {% elif jefe.departamento_id == 3 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN SUPERIOR</b></h1>
         <div align="center">
             <img src="{{bucket}}{{jefe.firma_digital}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. WILLIAM JAVIER LOZANO MORA</b></h1>
+        <p>Copias.- <br> 	
+	
+            Lic. Victor Manuel Alvarado Jimenez.- Director de Educación Media Superior y Superior.- Para su conocimiento.<br> 
+                
+            Lic. Osvaldo Antonio Valencia Barragán. - Jefe del Departamento de Control Escolar y Estadística. Para el trámite que corresponda. <br>
+                
+        </p>
+
         {% elif jefe.departamento_id == 4 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN MEDIA SUPERIOR</b></h1>
         <div align="center">
             <img src="{{bucket}}}{{jefe.firma_digital}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. JUAN HUMBERTO PINTADO</b></h1>
+
+        <p>Copias.- <br> 	
+	
+            Lic. Victor Manuel Alvarado Jimenez.- Director de Educación Media Superior y Superior.- Para su conocimiento.<br> 
+                
+            Lic. Osvaldo Antonio Valencia Barragán. - Jefe del Departamento de Control Escolar y Estadística. Para el trámite que corresponda. <br>
+                
+        </p>
         {% endif %}
 
     </div>
     <footer>
-        <br>
         
-        <p align="center"> <font size=2><b>Direccion de Educacion Media Superior y Superior</b><br>SSEMSSICyT<br>Av. del Valle esq. Calle Florencia 85, Fracc. Ciudad del Valle<br>
-            Tepic, Nayarit. México C.P. 63157</font>
-        </p>
 
+        {% if jefe.departamento_id == 2 %}
+        <p align="center"> <font size=2><b>Direccion de Educacion Media Superior y Superior</b><br>SSEMSSICyT<br>Av. del Valle esq. Calle Florencia 85, Fracc. Ciudad del Valle<br>Tel 311 133 3484 y 311 133 3509<br>Correo direccionmediaysuperior@educacion.nayarit.gob.mx<br>Tepic, Nayarit. México C.P. 63157</font>
+        </p>
+        {% elif jefe.departamento_id == 3 %}
+            <p align="center"> <font size=2><b>Departamento de Educación Superior </b><br>SSEMSSICyT<br>Av. del Valle esq. Calle Florencia 85, Fracc. Ciudad del Valle<br>Tel 311 133 3484 y 311 133 3509<br>Correo media.superior@educacion.nayarit.gob.mx <br>Tepic, Nayarit. México C.P. 63157</font>
+        {% elif jefe.departamento_id == 4 %}
+            <p align="center"> <font size=2><b>Departamento de Educación Media Superior </b><br>SSEMSSICyT<br>Av. del Valle esq. Calle Florencia 85, Fracc. Ciudad del Valle<br>Tel 311 133 3484 y 311 133 3509<br>Correo media.superior@educacion.nayarit.gob.mx<br>Tepic, Nayarit. México C.P. 63157</font>
+        {% endif %}
     </footer>
 </body>
 </html>

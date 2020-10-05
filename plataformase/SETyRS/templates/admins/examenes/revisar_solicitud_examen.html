@@ -1,9 +1,22 @@
 {% extends 'admins/base.html' %} {% load static %} {% block content %}
 <div class="container col-md-10 text-center">
-    <h2 class="mt-3">Solicitud #{{solicitud.id}}</h2>
+    <h2 class="mt-3">Solicitud: {{solicitud.id}}</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
     <p><strong>Solicitud {{solicitud.estatus}}.</strong></p>
     <br>
+
+    {% if solicitud.estatus == 'Aceptada' %}
+        <p><strong>¡Exito!</strong></p>
+        <p>Puedes descargar el informe de aprobación de solicitud a continuación</p>
+        <a href="{% url 'SETyRS_generar_pdf' solicitud.id %}">
+            <span class="material-icons" style="font-size:55px;"> picture_as_pdf </span>
+            <br>
+            <u>Ver Informe</u>
+        </a>
+        <br>
+        <br>
+    {% endif %}
+
     <h4>RESUMEN</h4>
 </div>
 <div class="container">

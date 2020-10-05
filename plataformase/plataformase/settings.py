@@ -179,9 +179,12 @@ else:
 
 # Configuración para uso de correo 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'sigssemssicyt@gmail.com'
-EMAIL_HOST_PASSWORD = 'sigapp2020'
+EMAIL_HOST = 'outlook.office365.com'
+#EMAIL_HOST = 'smtp.educacion.nayarit.gob.mx'
+EMAIL_HOST_USER = 'plataforma.ssemssicyt@educacion.nayarit.gob.mx'
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'plataforma.ssemssicyt@educacion.nayarit.gob.mx'
+EMAIL_HOST_PASSWORD = '$Plat2020'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
