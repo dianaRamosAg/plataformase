@@ -1,12 +1,64 @@
-function cargarListeners() { 
-    var btnNS = document.getElementById("avanzar");
-    btnNS.addEventListener("click",creandoSoli,false);
-    if(RIT == "False"){
-        $("#sel").on('change',function(){
-            if($("#sel").val() == "OTROS"){
-                $('#agregarDocumentoModal').modal('show');
+var RIT = false;
+var CCT = "";
+
+$("#select_cct").on('change',function(){
+    CCT = $("#select_cct").children("option:selected").val();
+    $.ajax({
+        url: '/SETyRS/institucion/examenes/get/nivelCCT',
+        data:
+            {
+                'cct':$("#select_cct").children("option:selected").val(),
+            },
+            dataType: "json",
+            success:function(response){
+               var centroTrabajo = JSON.parse(response);
+               var nivel = centroTrabajo[0]["fields"]["nivel_educativo"];
+
+               $("#select_nivel_educativo").empty();
+               $("#select_nivel_educativo").append(new Option("Seleccione nivel educativo",0));
+
+               if(nivel == 3){
+                    $("#select_nivel_educativo").append(new Option("Media Superior",1));
+                    $("#select_nivel_educativo").append(new Option("Superior",2));
+               }
+               else if(nivel == 2){
+                $("#select_nivel_educativo").append(new Option("Superior",2));
+               }
+               else if(nivel == 1){
+                $("#select_nivel_educativo").append(new Option("Media Superior",1));
+               }
             }
-        });
+           
+    })
+    if($("#sel option:selected").val() == "9"){getReglamento(CCT)}
+});
+
+$("#sel").on("change",function(){
+    if($("#sel").children("option:selected").val() == "9" && CCT != "" ){
+        getReglamento(CCT);
+    }
+})
+
+
+function getReglamento(cct_selected){
+    $.ajax({
+        url: '/SETyRS/institucion/examenes/get/RIT',
+        data: { 'cct': cct_selected},
+        dataType: "json",
+        success:function(response){
+            if(JSON.parse(response).length == 0){
+                showModal();
+            }
+        }
+    })
+}
+
+function showModal(){
+            if($("#select_cct").children("option:selected").val() != "0"){
+                var cct = $("#select_cct").children("option:selected").val()
+                $('#agregarDocumentoModal').modal('show');
+                $("#centroTrabajo").val(cct);
+            }
 
         $("#documentoPendiente").on("change",function(){
             $("#btnGuardar").removeAttr('disabled');
@@ -16,6 +68,10 @@ function cargarListeners() {
             location.reload();
         })
     }
+
+function cargarListeners() { 
+    var btnNS = document.getElementById("avanzar");
+    btnNS.addEventListener("click",creandoSoli,false);
 };
 
 
