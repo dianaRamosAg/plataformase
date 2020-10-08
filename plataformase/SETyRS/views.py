@@ -900,7 +900,7 @@ def finalizar_solicitud_examen(request, id):
         raise Http404('El usuario no tiene permiso de ver esta página')
 
 def generar_pdf(request, id):
-    if  request.user.tipo_usuario=='1' or request.user.tipo_usuario=='2' or request.user.tipo_usuario=='3':  #and request.user.tipo_persona=='2':
+    if  request.user.tipo_usuario=='1' or request.user.tipo_usuario=='2' or (request.user.tipo_usuario == '3' and request.user.departamento_id == 1):  #and request.user.tipo_persona=='2':
         solicitud = get_object_or_404(SolicitudExamen, pk=id)
         if solicitud.estatus == 3:
             h = Historial_admins_examen.objects.get(solicitud_id=solicitud.id)
