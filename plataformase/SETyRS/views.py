@@ -15,7 +15,7 @@ from django.core.mail import send_mail, EmailMessage
 from django.core.files.storage import FileSystemStorage
 from django.core import serializers
 # VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
-
+#.
 # el departamento de dirección es el unico que puede ver e interactuar con las solicitudes de ambos niveles educativos (superior y media superior)
 #dirección: 2
 #superior: 3
