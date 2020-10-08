@@ -353,6 +353,10 @@
             {
                 document.getElementById('datos_inst').style.display = 'none';
             }
+            if (user.value =='3')
+            {
+                document.getElementById("alertJefe").style.display = 'none';
+            }
             if (user.value != '1' && user.value != '5'){
                 console.log("dif")
                 document.getElementById('id_dom_legal_part').removeAttribute("required");
@@ -392,8 +396,7 @@
                 document.getElementById("datos_inst").style.display = 'inline';
             }
             if(user.value == '3'){
-                
-                
+    
                 document.getElementById("alertJefe").style.display = 'none';
             }
            
@@ -431,7 +434,13 @@
         
     
         document.getElementById("alertJefe").style.display = 'none';
+
         function verificarJefes(){
+            var user = document.getElementById("id_tipo_usuario");
+            if(user.value == '3'){
+                document.getElementById("alertJefe").style.display = 'none';  
+            }
+            else {
             var a = {{ jefes|safe  }};
             var dep = document.getElementById("id_departamento");
             var sel = document.getElementById("alertJefe");
@@ -443,7 +452,7 @@
                     sel.style.display = 'none';
                 }
             }
-        }
+        }}
     
     </script>
 </body>

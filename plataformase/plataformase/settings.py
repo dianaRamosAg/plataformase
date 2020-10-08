@@ -21,8 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 ALLOWED_HOSTS = ['*','ssemssicyt.nayarit.gob.mx','www.ssemssicyt.nayarit.gob.mx','http://ssemssicyt.nayarit.gob.mx']
 
 
@@ -101,11 +101,11 @@ else:
             #'NAME'     : 'plattform',
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
-            #'PASSWORD' : 'diana',
-            'PASSWORD' : 'admin',
+            'PASSWORD' : 'diana',
+            #'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
-            #'PORT'    : '5432',
-            'PORT'     : '3306',
+            'PORT'    : '5432',
+            #'PORT'     : '3306',
         }
     }
 

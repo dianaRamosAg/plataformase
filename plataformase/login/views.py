@@ -107,8 +107,6 @@ def regUser(request):
                 marca_educativa = None
                 nombre_representante = None
                 dom_legal_part = None
-                
-
             #Sí el usuario es jefe de departamento (tipo_usuario:2)
             if tipo_usuario == '2':
                 #Definimos jefe como 1 (sí es jefe de departamento)
@@ -117,8 +115,7 @@ def regUser(request):
                 #Definimos jefe como 0 (no es jefe de departamento)
                 jefe = '0'
                 #No le asiganmos firma digital ya que no la necesita
-                firma_digital= None
-               
+                firma_digital= None       
                 #Si el tipo de usuario es institución(1) o administrador del sistema(4)
                 if tipo_usuario == '1' or tipo_usuario == '4' or tipo_usuario =='5':
                     firma_digital= None
@@ -142,6 +139,7 @@ def regUser(request):
                             folio_id=folio_id,nombre_representante=nombre_representante,
                             marca_educativa=marca_educativa)
             usr.save()
+            # Guarda los usuarios que son institución en tabla UsuarioInstitución
             if tipo_usuario == '1':
                 usrInst = UsuarioInstitucion(id_usuariobase=usr, cct = inst_cct,
                                              nombredirector = inst_nombredirector, sector=sector,
@@ -323,13 +321,6 @@ def actualizarusr(request):
 
         else:
                 return redirect('menuadmin')
-
-
-
-
-
-
-
 
 
 
