@@ -22,7 +22,7 @@ SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*','ssemssicyt.nayarit.gob.mx','www.ssemssicyt.nayarit.gob.mx','http://ssemssicyt.nayarit.gob.mx']
 
 
@@ -104,8 +104,8 @@ else:
             #'PASSWORD' : 'diana',
             'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
-            #'PORT'    : '5432',
-            'PORT'     : '3306',
+            'PORT'    : '5432',
+            #'PORT'     : '3306',
         }
     }
 
