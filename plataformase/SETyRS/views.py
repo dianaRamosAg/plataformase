@@ -357,11 +357,11 @@ def aceptar_solicitud(request, id):
             #Aqui poner el codigo para enviar el correo de aceptación a control escolar,dirección y al departamento correspondiente
             if solicitud.nivel_educativo == 1:
                 email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
-                             to=['ulalegriasa@ittepic.edu.mx','control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','superior@educacion.nayarit.gob.mx'])
+                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','superior@educacion.nayarit.gob.mx'])
                 email.send()
             elif solicitud.nivel_educativo == 2:
                 email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
-                             to=['ulalegriasa@ittepic.edu.mx','control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','media.superior@educacion.nayarit.gob.mx'])
+                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','media.superior@educacion.nayarit.gob.mx'])
                 email.send()
             msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
@@ -900,7 +900,7 @@ def finalizar_solicitud_examen(request, id):
         raise Http404('El usuario no tiene permiso de ver esta página')
 
 def generar_pdf(request, id):
-    if  request.user.tipo_usuario=='1' or request.user.tipo_usuario=='2':  #and request.user.tipo_persona=='2':
+    if  request.user.tipo_usuario=='1' or request.user.tipo_usuario=='2' or request.user.tipo_usuario=='3':  #and request.user.tipo_persona=='2':
         solicitud = get_object_or_404(SolicitudExamen, pk=id)
         if solicitud.estatus == 3:
             h = Historial_admins_examen.objects.get(solicitud_id=solicitud.id)
