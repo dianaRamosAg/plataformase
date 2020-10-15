@@ -353,15 +353,31 @@ def aceptar_solicitud(request, id):
             solicitud.save()
             h_solicitud = Historial_admins_examen(user_id = request.user.id, solicitud_id = id,fecha=timezone.now(), estatus=True, nivel_educativo=solicitud.nivel_educativo)
             h_solicitud.save()
+            jefe = CustomUser.objects.get(id=h_solicitud.user_id)
             
             #Aqui poner el codigo para enviar el correo de aceptación a control escolar,dirección y al departamento correspondiente
-            if solicitud.nivel_educativo == 1:
+
+            #Si dirección aceptó la solicitud entonces:
+            if jefe.departamento_id == 2:
+                #Si la solicitud fue de educación superior:
+                if solicitud.nivel_educativo == 1:
+                    email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['control.escolar@educacion.nayarit.gob.mx','martin.perez@educacion.nayarit.gob.mx','superior@educacion.nayarit.gob.mx'])
+                    email.send()
+                #Si la solicitud fue de educación media superior:
+                elif solicitud.nivel_educativo == 2:
+                    email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['control.escolar@educacion.nayarit.gob.mx','martin.perez@educacion.nayarit.gob.mx','media.superior@educacion.nayarit.gob.mx'])
+                    email.send()
+            #Si Superior aceptó la solicitud entonces:
+            elif jefe.departamento_id == 3:
                 email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
-                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','superior@educacion.nayarit.gob.mx'])
+                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx'])
                 email.send()
-            elif solicitud.nivel_educativo == 2:
+            #Si Media Superior aceptó la solicitud entonces:
+            elif jefe.departamento_id == 4:
                 email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
-                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx','media.superior@educacion.nayarit.gob.mx'])
+                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx'])
                 email.send()
             msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)

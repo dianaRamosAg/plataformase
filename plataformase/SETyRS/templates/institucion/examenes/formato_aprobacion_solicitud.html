@@ -120,6 +120,7 @@
                 </tbody>
             </table>
 
+        <p>De la misma forma, le informo que es facultad de esta Secretaría de vigilar y evaluar los servicios de Educación Media Superior y Superior en el Estado, por lo que podría acudir personal de esta, el día y hora señalados en su solicitud a tan importante acto académico.</p>
         <p>Sin otro particular por el momento, reciba un afectuoso saludo de nuestra parte.</p>
         <h1 align="center"><b>A T E N T A M E N T E</b></h1>
 
@@ -129,15 +130,28 @@
             <img src="{{bucket}}{{jefe.firma_digital}}" alt="se" height="120">
         </div>
         <h1 align="center"><b>LIC. VÍCTOR MANUEL ALVARADO JIMENEZ</b></h1>
+        {% if solicitud.nivel_educativo == 2 %}
         <p>
             Copias.- <br>
             
             Mtro. Martin Isaac Pérez Gómez. - Subsecretario de Educación Media Superior, Superior e Investigación Científica y Tecnológica. Para su conocimiento.<br>
             
-            Lic. Maestro William Javier Lozano Mora. - Jefe de Departamento de Educación Superior. - Para el trámite que corresponda<br>
+            Lic. Maestro William Javier Lozano Mora. - Jefe de Departamento de Educación Superior. - Para su conocimiento<br>
             
             Lic. Osvaldo Antonio Valencia Barragán. - Jefe del Departamento de Control Escolar y Estadística. Para el trámite que corresponda.<br>
         </p>
+        {% elif solicitud.nivel_educativo == 1 %}
+        <p>
+            Copias.- <br>
+            
+            Mtro. Martin Isaac Pérez Gómez. - Subsecretario de Educación Media Superior, Superior e Investigación Científica y Tecnológica. Para su conocimiento.<br>
+            
+            Lic. Juan Humberto Pintado. - Jefe de Departamento de Educación Media Superior. - Para su conocimiento<br>
+            
+            Lic. Osvaldo Antonio Valencia Barragán. - Jefe del Departamento de Control Escolar y Estadística. Para el trámite que corresponda.<br>
+        </p>
+        {% endif %}
+
 
         {% elif jefe.departamento_id == 3 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN SUPERIOR</b></h1>
