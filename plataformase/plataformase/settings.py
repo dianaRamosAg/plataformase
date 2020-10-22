@@ -91,27 +91,28 @@ if os.getenv('GAE_APPLICATION', None):
             'HOST'    : '/cloudsql/plataformase:us-west2:plataforma',
             'USER'    : 'postgres',
             'PASSWORD': 'admin',
-            'NAME'    : 'plataforma',
+            'NAME'    : 'bd',
         }
     }
+    #EN CASO DE QUE QUE PROYECTO SE EJECUTE EN LOCAL TOMA LOS SIG VALORES
 else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-            #'NAME'     : 'plattform',
             'NAME'     : 'plataforma',
             'USER'     : 'postgres',
-            #'PASSWORD' : 'diana',
             'PASSWORD' : 'admin',
             'HOST'     : 'localhost',
-            'PORT'    : '5432',
-            #'PORT'     : '3306',
+            #'PORT'    : '5432',
+            'PORT'     : '3306',
         }
     }
 
-#Conexión con   Proxy para cloud
-#cloud_sql_proxy.exe -instances="plataformase:us-west2:plataforma"=tcp:3306
+#Conexión con   Proxy para cloud WINDOWS
+#cloud_sql_proxy.exe -instances="nombre de la instancia"=tcp:3306
 
+#Conexion con Proxy para Linux
+#./cloud_sql_proxy -instances=myProject:us-central1:myInstance=tcp:3306 
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -187,4 +188,6 @@ DEFAULT_FROM_EMAIL = 'plataforma.ssemssicyt@educacion.nayarit.gob.mx'
 EMAIL_HOST_PASSWORD = '$Plat2020'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+
 
