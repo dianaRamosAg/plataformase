@@ -1,4 +1,4 @@
-{% extends 'SigApp/base.html' %}
+{% extends 'SigApp/nuevaBase.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -77,7 +77,7 @@
                     <input class="col-12 mb-2" id="localidad" style="text-align: center; font-size: 15px; padding: 2%;" value="{{escuela.Localidad}}" disabled></input>
                 </div>
 
-                <div class="row mb-3 " style"margin-bottom: 20px;">    
+                <div class="row mb-3 " style="margin-bottom: 20px;">    
                     <p class="col-12 mb-2" style="text-align: center; font-size: 15px; font-weight: bold;">Direccion</p>
                     <textarea class="col-12 mb-2" id="calle" style="text-align: center; font-size: 15px; padding: 2%;" value="{{escuela.Calle}}" disabled>{{escuela.Calle}} {{escuela.CodPostal}}</textarea>
                 </div>

@@ -16,6 +16,12 @@ from django.contrib import messages
 from django.db.models import Q
 from datetime import datetime
 
+def inicio(request):
+    return render (request, "SigApp/inicio.html")
+
+def nuevaBase(request):
+    return render (request, "SigApp/nuevaBase.html")
+
 # migracion excel bd : COPY "SigApp_localidad" ("Nombre","Clave_Municipio_id") FROM 'C:\4.csv' DELIMITER ',' CSV HEADER  encoding 'windows-1251';
 def index(request):
     GradosAcademicos = GradoAcademico.objects.all()
@@ -1718,6 +1724,8 @@ def solicitaModEstadistica(request, clave, claveE, id_dep):
 
 
     })
+
+     
 ''' 
 def solicitaModeEstadistica(request, clave,claveE, id_dep):
     
@@ -1794,5 +1802,7 @@ def solicitaModeEstadistica(request, clave,claveE, id_dep):
 
     }) '''
  
+
+
     
     

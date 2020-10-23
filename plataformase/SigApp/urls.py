@@ -1,13 +1,20 @@
 from django.urls import path, include
-from . import views
+from .import views
 from django.conf import settings
 from django.conf.urls.static import static
+
+
 
 app_name ='SigApp'
 #SigMovilFiltros/MEDIA-SUPERIOR/empty/PRIVADA/empty/
 urlpatterns = [
+
     path('',views.index, name='index'),
     path('index',views.index, name='index'),
+
+    path('nuevaBase', views.nuevaBase, name='nuevaBase'),
+    path('inicio', views.inicio, name='inicio'),
+
 
     path('instituciones/<id>/<slug:clave>',views.instituciones, name='instituciones'),  
     path('institucionesUbicacion/<id>/<slug:clave>',views.institucionesUbicacion, name='institucionesUbicacion'),  
@@ -47,7 +54,4 @@ urlpatterns = [
     
     path('SigMovil/<id>/<clave>',views.APIapp,name="SigMovil"),
     path('registrosAdmin',views.registrosAdmin, name='registrosAdmin'),
-] 
-
-
-
+]
