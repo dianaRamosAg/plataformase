@@ -82,19 +82,19 @@
                                 <label class="ml-2" for="id_tipo_usuario">Tipo de usuario:</label>
                                 <select class="custom-select col-3" name="tipo_usuario" id="id_tipo_usuario" onchange="funcion()">
                                     <option value="1" selected >Institución</option>
-                                    <option value="5">Particular</option>
+                                    <option value="5">Particular sin RVOE</option>
                                 </select>
                             </div>
                 
                             <div class="m-2 col-12 text-center">
                                 <label class="ml-1" for="id_tipo_persona">Tipo de persona:</label>
                                 <select class="custom-select col-3" name="tipo_persona" id="id_tipo_persona" onchange="pmoral()">
-                                    <option value="1" selected>Persona física</option>
-                                    <option value="2">Persona moral</option>
+                                    <option value="1" >Persona física</option>
+                                    <option value="2" selected>Persona moral</option>
                                 </select>
                                 <br>
                             </div><br><br><br><br><br><br><br>
-                        <button id="step-1-next" type="submit" class="btn btn-lg btn-primary nextBtn pull-right" >Siguiente</button>
+                        <button id="step-1-next" type="submit" class="btn btn-lg btn-primary nextBtn pull-right" onclick="pmoral()">Siguiente</button>
                         <br><br><br>
                     </div>
                 </div>

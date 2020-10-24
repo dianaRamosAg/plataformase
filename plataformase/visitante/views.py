@@ -258,7 +258,7 @@ def regUser(request, email):
                                          sector=usrV.sector, nivel_educativo=usrV.nivel_educativo,modalidad=usrV.modalidad)
             usrInst.save()
     VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
-    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT "+"http://ssemssicyt.nayarit.gob.mx/login/", to=[usrV.email])
     email.send()
     return redirect('usuarios')
 
@@ -383,3 +383,6 @@ def actualizarcct(request):
         
         UsuarioInstitucion.objects.filter(cct=cct).update(nombredirector=nombredirector,sector=sector,nivel_educativo=nivel_educativo)
     return redirect('cct')
+
+
+

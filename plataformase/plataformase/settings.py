@@ -23,7 +23,7 @@ SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 DEBUG = True
-ALLOWED_HOSTS = ['*','ssemssicyt.nayarit.gob.mx','www.ssemssicyt.nayarit.gob.mx','http://ssemssicyt.nayarit.gob.mx']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -91,7 +91,7 @@ if os.getenv('GAE_APPLICATION', None):
             'HOST'    : '/cloudsql/plataformase:us-west2:plataforma',
             'USER'    : 'postgres',
             'PASSWORD': 'admin',
-            'NAME'    : 'bd',
+            'NAME'    : 'plataforma',
         }
     }
     #EN CASO DE QUE QUE PROYECTO SE EJECUTE EN LOCAL TOMA LOS SIG VALORES
@@ -99,17 +99,17 @@ else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-            'NAME'     : 'plataforma',
+            'NAME'     : 'plattform',
             'USER'     : 'postgres',
-            'PASSWORD' : 'admin',
+            'PASSWORD' : 'diana',
             'HOST'     : 'localhost',
-            #'PORT'    : '5432',
-            'PORT'     : '3306',
+            'PORT'    : '5432',
+            #'PORT'     : '3306',
         }
     }
 
 #Conexión con   Proxy para cloud WINDOWS
-#cloud_sql_proxy.exe -instances="nombre de la instancia"=tcp:3306
+#cloud_sql_proxy.exe -instances="plataformase:us-west2:plataforma"=tcp:3306
 
 #Conexion con Proxy para Linux
 #./cloud_sql_proxy -instances=myProject:us-central1:myInstance=tcp:3306 
