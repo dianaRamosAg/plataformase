@@ -14,12 +14,12 @@ from django.utils import formats
 from django.core import serializers
 from django.http import JsonResponse
 from django.db.models import Q
-from django.utils import six 
+#from django.utils import six 
 from django.contrib.auth.hashers import make_password
 
 # from django.apps import apps
 # CustomUser  = apps.get_model('login', CustomUser)
-from login.models import CustomUser
+from login.models import CustomUser, UsuarioInstitucion
 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -28,6 +28,39 @@ global idDocente
 global idAlumnoI
 #idAlumnoI = 3409
 
+
+'''
+	Inicio de views de material didactico
+'''
+
+def catalogo_material_didactico(request,id):
+	if not request.user.is_authenticated:
+		return HttpResponseRedirect(reverse('login'))
+	else:
+		if request.user.tipo_usuario == '7':
+			alumno_institucion = Alumno.objects.get(email=request.user.email)
+			if alumno_institucion.cct != id:
+				return redirect ('/TBC')
+			else:
+				return render(request, 'material_didactico.html')
+		else:
+			if request.user.tipo_usuario == '6':
+				docente_institucion = Docente.objects.get(email=request.user.email)
+				if docente_institucion.cct != id:
+					return redirect('/TBC')
+				else:
+					return render(request, 'material_didactico.html')
+			else:
+				if request.user.tipo_usuario == '1':
+					institucion = UsuarioInstitucion.objects.get(id_usuariobase=request.user.id)
+					if 	institucion.cct != id:
+						return redirect('/TBC')
+					else:
+						return render(request, 'material_didactico.html')
+
+'''
+	Fin de views de material didactico
+'''
 
 '''
 Función de prueba TODO: Borrarla
@@ -67,29 +100,40 @@ def homePage(request):
 			print('')
 	try:
 		#Docentes = Docente.objects.get(id_docente = idDocente)
-		Docentes = Docente.objects.filter(nombre_escuela = usuarioLogueado.municipio)
+		Docentes = Docente.objects.filter(cct = usuarioLogueado.last_name)#TODO:Cambiar last_name 
 		NotificacionesDocente = Notificacion_mod.objects.all()
 		NotificacionesDocenteModulo = Notificacion_mod_docente.objects.filter(id_docente = idDocente)
 	except:
 		#Docentes = None
 		NotificacionesDocente = None
 		NotificacionesDocenteModulo = None
+		cctDocente = None
 	Cursos = Curso.objects.all()
 	Alumnos = Alumno.objects.all()
-	AlumnosI = Alumno.objects.filter(nombre_escuela = request.user.municipio)
+	AlumnosI = Alumno.objects.filter(cct = request.user.last_name)#TODO:Cambiar last_name 
+	#TODO: Sacar con el request.user.email (o sea del docente), enlazarlo con Docente y sacar su cct para hacer la consulta de abajo
+	try:
+		field_name = 'cct'
+		obj = Docente.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+		field_value = getattr(obj, field_name)
+		cctDocente = field_value
+	except:
+		print('')
+	AlumnosD = Alumno.objects.filter(cct = cctDocente)
 	
 
 	if request.user.tipo_usuario == "7":
 		return redirect('/TBC/actividad-alumno/'+str(idAlumnoI))
 
-	return render(request, 'homePage.html', {'usuario':usuarioLogueado, 'notificaciones': NotificacionesDocente, 'notificacion':NotificacionesDocenteModulo, 'docente':Docentes, 'curso':Cursos, 'alumno':Alumnos, 'alumnoI':AlumnosI })
+	return render(request, 'homePage.html', {'usuario':usuarioLogueado, 'notificaciones': NotificacionesDocente, 'notificacion':NotificacionesDocenteModulo, 'docente':Docentes, 'curso':Cursos, 'alumno':Alumnos, 'alumnoI':AlumnosI, 'alumnoD':AlumnosD })
 
 '''
 Función para consultar los alumnos y hacer actualización de estos
 '''
 def consultaAlumnos(request):
-	Alumnos = Alumno.objects.all()
+	Alumnos = Alumno.objects.filter(cct = request.user.last_name) #Alumno.objects.all()
 	Usuarios = CustomUser.objects.all()
+	Archivos = Archivo.objects.all()
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
@@ -123,15 +167,13 @@ def consultaAlumnos(request):
 		telFijo = request.POST['telFijo']
 		telCelular = request.POST['telCelular']
 		curp = request.POST['curp']
-		calle = request.POST['calle']
-		colonia = request.POST['colonia']
-		numInt = request.POST['numInt']
-		numExt = request.POST['numExt']
 		numMatricula = request.POST['numMatricula']
 		nombreEscuela = request.POST['nombreEscuela']
 		cct = request.POST['cct']
 		semestre = request.POST['semestre']
 		contrasena = make_password(request.POST['contrasena'])
+		tipo_secundaria = request.POST['tipo_secundaria']
+		
 		#Compara si el id está vacio para insertar nuevo reigstro
 		if idAlumno == '':
 			try:
@@ -142,22 +184,87 @@ def consultaAlumnos(request):
 			except:
 				idAlumno = 1
 			#try:
-			nuevoAlumno = Alumno(id_alumno = idAlumno, nombre_alumno = nombreAlumno, email = email, tel_fijo = telFijo, tel_celular = telCelular, curp_alumno = curp, calle = calle, colonia = colonia, num_int = numInt, num_ext = numExt,
-			num_matricula = numMatricula, nombre_escuela = nombreEscuela, cct = cct, semestre = semestre)
+			nuevoAlumno = Alumno(id_alumno = idAlumno, nombre_alumno = nombreAlumno, email = email, tel_fijo = telFijo, tel_celular = telCelular, curp_alumno = curp,
+			num_matricula = numMatricula, nombre_escuela = nombreEscuela, cct = cct, semestre = semestre, tipo_secundaria = tipo_secundaria)
 			nuevoAlumno.save()
-			nuevoAlumnoUser = CustomUser(password = contrasena, username = email, last_name = nombreAlumno, email = email, curp_rfc = curp, calle = calle, nointerior = numInt, noexterior = numExt,
-			municipio = nombreEscuela, colonia = colonia, celular = telCelular, tipo_usuario = 7, tipo_persona = 1)
+			nuevoAlumnoUser = CustomUser(password = contrasena, username = email, last_name = nombreAlumno, email = email, curp_rfc = curp,
+			municipio = nombreEscuela, celular = telCelular, tipo_usuario = 7, tipo_persona = 1)
+			#Código para guardar los archivos [acta, curp, y certificado] en la carpeta TODO: Guardar en la tabla archivo tambien
+			try:
+				acta = request.FILES['acta']
+				#fsActa = FileSystemStorage("media/TBC/Datos/Alumnos")
+				#nameActa = fsActa.save(acta.name, acta)
+				#urlActa = fsActa.url(nameActa)
+				#aqui guardar el registro en la tabla de archivos
+
+				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
+				try:
+					field_name = 'id_archivo'
+					obj = Archivo.objects.last()
+					field_value = getattr(obj, field_name)
+					idArchivo = field_value + 1
+				except:
+					idArchivo = 1
+				
+				url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+acta.name #'/media/TBC/Datos/Alumnos/'+acta.name
+				nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = acta.name, tipo_archivo = 'Acta nacimiento', url = url, id_alumno = idAlumno)
+				nuevoArchivo.archivo = acta
+				nuevoArchivo.save()
+			except:
+				print('')
+			try:
+				curp = request.FILES['curpArchivo']
+				#fsCurp = FileSystemStorage("media/TBC/Datos/Alumnos")
+				#nameCurp = fsCurp.save(curp.name, curp)
+				#urlCurp = fsCurp.url(nameCurp)
+				#aqui guardar el registro en la tabla de archivos
+
+				try:
+					field_name = 'id_archivo'
+					obj = Archivo.objects.last()
+					field_value = getattr(obj, field_name)
+					idArchivo = field_value + 1
+				except:
+					idArchivo = 1
+				
+				url =  'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+curp.name #'/media/TBC/Datos/Alumnos/'+curp.name
+				nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = curp.name, tipo_archivo = 'Curp', url = url, id_alumno = idAlumno)
+				nuevoArchivo.archivo = curp
+				nuevoArchivo.save()
+			except:
+				print('')
+			try:
+				certificado = request.FILES['certificado']
+				#fsCertificado = FileSystemStorage("media/TBC/Datos/Alumnos")
+				#nameCertificado = fsCertificado.save(certificado.name, certificado)
+				#urlCertificado = fsCertificado.url(nameCertificado)
+				#aqui guardar el registro en la tabla de archivos
+
+				try:
+					field_name = 'id_archivo'
+					obj = Archivo.objects.last()
+					field_value = getattr(obj, field_name)
+					idArchivo = field_value + 1
+				except:
+					idArchivo = 1
+				
+				url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+certificado.name #'/media/TBC/Datos/Alumnos/'+certificado.name
+				nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = certificado.name, tipo_archivo = 'Certificado secundaria', url = url, id_alumno = idAlumno)
+				nuevoArchivo.archivo = certificado
+				nuevoArchivo.save()
+			except:
+				print('')
 			nuevoAlumnoUser.save()
 			sweetify.success(request, 'Se insertó', text='El alumno fue registrado exitosamente', persistent='Ok', icon="success")
 			#except:
 			#	sweetify.error(request, 'No se insertó', text='Ocurrió un error', persistent='Ok', icon="error")
 		else:
 			#Se pretende actualizar un registro existente
-			Alumno.objects.filter(id_alumno = idAlumno).update(nombre_alumno = nombreAlumno, email = email, tel_fijo = telFijo, tel_celular = telCelular, curp_alumno = curp, calle = calle, colonia = colonia, num_int = numInt, num_ext = numExt,
-				num_matricula = numMatricula, nombre_escuela = nombreEscuela, cct = cct, semestre = semestre)
+			Alumno.objects.filter(id_alumno = idAlumno).update(nombre_alumno = nombreAlumno, email = email, tel_fijo = telFijo, tel_celular = telCelular, curp_alumno = curp,
+				num_matricula = numMatricula, nombre_escuela = nombreEscuela, cct = cct, semestre = semestre, tipo_secundaria = tipo_secundaria)
 			#CustomUser.objects.filter(email = email).update(password = contrasena)
 			sweetify.success(request, 'Se actualizó', text='El alumno fue actualizado exitosamente', persistent='Ok', icon="success")
-	return render(request, 'consultaAlumnos.html', {'usuario':usuarioLogueado, "alumno":Alumnos, })
+	return render(request, 'consultaAlumnos.html', {'usuario':usuarioLogueado, "alumno":Alumnos, 'archivo':Archivos})
 
 '''
 Función para eliminar un alumnos, dado un id (id como parámetro)
@@ -259,8 +366,8 @@ def paseLista(request):
 		Docentes = Docente.objects.filter(id_docente = idDocente)
 		DocenteCursos = Docente_curso.objects.filter(id_docente = idDocente)
 	except:
-		Docentes = None
-		DocenteCursos = None
+		Docentes = Docente.objects.all()
+		DocenteCursos = Docente_curso.objects.all()
 
 	if request.method == 'POST':
 		bandera = request.POST['bandera']
@@ -316,7 +423,6 @@ def paseLista(request):
 						retardo = False
 					else:
 						retardo = True
-
 					if not request.POST.get('Justificacion'+str(idx)):
 						justificacion = False
 					else:
@@ -337,7 +443,8 @@ def paseLista(request):
 Función para consultar y actualizar docentes
 '''
 def consultaDocentes(request):
-	Docentes = Docente.objects.all()
+	Docentes = Docente.objects.filter(cct = request.user.last_name) #Docente.objects.all()
+	Archivos = Archivo.objects.all()
 	if not request.user.is_authenticated:
 			return HttpResponseRedirect(reverse('login'))
 	usuarioLogueado = request.user
@@ -378,6 +485,12 @@ def consultaDocentes(request):
 		telCelular = request.POST['telCelular']
 		nombreEscuela = request.POST['nombreEscuela']
 
+		domicilio = request.POST['domicilio']
+		num_empleado = request.POST['num_empleado']
+		perfil_profesional = request.POST['perfil_profesional']
+		maximo_grado = request.POST['maximo_grado']
+		#curriculum = request.POST['curriculum']
+
 		contrasena = make_password(request.POST['contrasena'])
 		#Compara si el id está vacio para insertar nuevo reigstro
 		if idDocente == '':
@@ -390,21 +503,49 @@ def consultaDocentes(request):
 				idDocente = 1
 			try:
 				nuevoDocente = Docente(id_docente = idDocente, nombres_docente = nombresDocente, apellidos_docente = apellidosDocente, edad_docente = edad, email = email, 
-				clave_docente = clave_docente, cct = cct, curp_docente = curp_docente, rfc_docente = rfc, tel_fijo = telFijo, tel_cel = telCelular, nombre_escuela = nombreEscuela)
+				clave_docente = clave_docente, cct = cct, curp_docente = curp_docente, rfc_docente = rfc, tel_fijo = telFijo, tel_cel = telCelular, nombre_escuela = nombreEscuela,
+				domicilio = domicilio, num_empleado = num_empleado, perfil_profesional = perfil_profesional, maximo_grado = maximo_grado)
 				nuevoDocente.save()
 				nuevoDocenteU = CustomUser(password = contrasena, username = email, first_name = nombresDocente, last_name = apellidosDocente, email = email, curp_rfc = rfc, 
 				municipio = nombreEscuela, tipo_usuario = 6, tipo_persona = 1)
 				nuevoDocenteU.save()
+
+				#Código para guardar los archivos [acta, curp, y certificado] en la carpeta TODO: Guardar en la tabla archivo tambien
+				try:
+					curriculum = request.FILES['curriculum']
+					#fsCurriculum = FileSystemStorage("media/TBC/Datos/Docentes")
+					#nameCurriculum = fsCurriculum.save(curriculum.name, curriculum)
+					#urlCurriculum = fsCurriculum.url(nameCurriculum)
+					#aqui guardar el registro en la tabla de archivos
+					
+					#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
+					try:
+						field_name = 'id_archivo'
+						obj = Archivo.objects.last()
+						field_value = getattr(obj, field_name)
+						idArchivo = field_value + 1
+					except:
+						idArchivo = 1
+					
+					url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+curriculum.name #'/media/TBC/Datos/Docentes/'+curriculum.name
+					nuevoArchivo = Archivo(id_archivo = idArchivo, nombre_archivo = curriculum.name, tipo_archivo = 'Curriculum', url = url, id_docente = idDocente)
+					nuevoArchivo.archivo = curriculum
+					nuevoArchivo.save()
+				except:
+					print('')
+
 				sweetify.success(request, 'Se insertó', text='El docente fue registrado exitosamente', persistent='Ok', icon="success")
-			except:
+			except Exception as e:
+				print(e)
 				sweetify.error(request, 'No se insertó', text='Ocurrió un error', persistent='Ok', icon="error")
 		else:
 			#Se pretende actualizar un registro existente
 			Docente.objects.filter(id_docente = idDocente).update(id_docente = idDocente, nombres_docente = nombresDocente, apellidos_docente = apellidosDocente, edad_docente = edad, email = email, 
-				clave_docente = clave_docente, cct = cct, curp_docente = curp_docente, rfc_docente = rfc, tel_fijo = telFijo, tel_cel = telCelular, nombre_escuela = nombreEscuela)
-			CustomUser.objects.filter(email = email).update(password = contrasena)
+				clave_docente = clave_docente, cct = cct, curp_docente = curp_docente, rfc_docente = rfc, tel_fijo = telFijo, tel_cel = telCelular, nombre_escuela = nombreEscuela,
+				domicilio = domicilio, num_empleado = num_empleado, perfil_profesional = perfil_profesional, maximo_grado = maximo_grado)
+			#CustomUser.objects.filter(email = email).update(password = contrasena)
 			sweetify.success(request, 'Se actualizó', text='El docente fue actualizado exitosamente', persistent='Ok', icon="success")
-	return render(request, 'consultaDocentes.html', {'usuario':usuarioLogueado, "docente":Docentes, })
+	return render(request, 'consultaDocentes.html', {'usuario':usuarioLogueado, "docente":Docentes, 'archivo':Archivos, })
 
 '''
 Función para eliminar un docente dado su id (id como parámetro)
@@ -521,11 +662,11 @@ def nuevaActividad(request):
 		objetivoActividad = request.POST['objetivoActividad']
 		#Ciclo para recorrer los archivos seleccionados y guardarlos (recursos)
 		for afile in request.FILES.getlist('recurso'):
-			myfile = afile
-			fs = FileSystemStorage("media/TBC/Docente/Recursos")
-			filename = fs.save(myfile.name, myfile)
-			uploaded_file_url = fs.url(filename)
-			nombreArchivos += myfile.name + '\n'
+			#myfile = afile
+			#fs = FileSystemStorage("media/TBC/Docente/Recursos")
+			#filename = fs.save(myfile.name, myfile)
+			#uploaded_file_url = fs.url(filename)
+			nombreArchivos += afile.name + '\n'
 			#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 			try:
 				field_name = 'id_archivo'
@@ -535,18 +676,19 @@ def nuevaActividad(request):
 			except:
 				idArchivo = 1
 			descripcion = request.POST.getlist('descRecurso')
-			url = '/media/TBC/Docente/Recursos/'+myfile.name
-			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+			url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+afile.name #'/media/TBC/Docente/Recursos/'+afile.name
+			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+			ArchivoNuevo.archivo = afile
 			ArchivoNuevo.save()
 			c += 1
 
 		#Ciclo para recorrer los archivos seleccionados y guardarlos (rubrica)
 		for afile in request.FILES.getlist('rubrica'):
-			myfile = afile
-			fs = FileSystemStorage("media/TBC/Docente/Rubricas")
-			filename = fs.save(myfile.name, myfile)
-			uploaded_file_url = fs.url(filename)
-			nombreRubrica += myfile.name + '\n'
+			#myfile = afile
+			#fs = FileSystemStorage("media/TBC/Docente/Rubricas")
+			#filename = fs.save(myfile.name, myfile)
+			#uploaded_file_url = fs.url(filename)
+			nombreRubrica += afile.name + '\n'
 			#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 			try:
 				field_name = 'id_archivo'
@@ -556,8 +698,9 @@ def nuevaActividad(request):
 			except:
 				idArchivo = 1
 			descripcionRubrica = request.POST.getlist('descRubrica')
-			url = '/media/TBC/Docente/Rubricas/'+myfile.name
-			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+			url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+afile.name #'/media/TBC/Docente/Rubricas/'+afile.name
+			ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+			ArchivoNuevo.archivo = afile
 			ArchivoNuevo.save()
 			cRub += 1
 		date_joined = datetime.now()
@@ -591,7 +734,7 @@ def nuevaActividad(request):
 			field_value = getattr(o, field_name)
 			idAl = field_value
 			print(idNotif)
-			notifActAl = Notificacion_act_alumno(id_alumno = idAl, status = 0, id_notificacion = idNotif)
+			notifActAl = Notificacion_act_alumno(id_alumno = idAl, status = 0, id_notificacion = idNotif, id_dc = idDc)
 			notifActAl.save()
 		sweetify.success(request, 'Se insertó', text='La actividad fue registrado exitosamente', persistent='Ok', icon="success")
 		#except:
@@ -652,37 +795,39 @@ def actividadD(request, id):
 			#TODO: Realizar la actualización de archivos ya subidos
 			#Ciclo para recorrer los archivos seleccionados y guardarlos (recursos)
 			for afile in request.FILES.getlist('recurso'):
-				myfile = afile
-				fs = FileSystemStorage("media/TBC/Docente/Recursos")
-				filename = fs.save(myfile.name, myfile)
-				uploaded_file_url = fs.url(filename)
-				nombreArchivos += myfile.name + '\n'
+				#myfile = afile
+				#fs = FileSystemStorage("media/TBC/Docente/Recursos")
+				#filename = fs.save(myfile.name, myfile)
+				#uploaded_file_url = fs.url(filename)
+				nombreArchivos += afile.name + '\n'
 				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 				field_name = 'id_archivo'
 				obj = Archivo.objects.last()
 				field_value = getattr(obj, field_name)
 				idArchivo = field_value + 1
 				descripcion = request.POST.getlist('descRecurso')
-				url = '/media/TBC/Docente/Recursos/'+myfile.name
-				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+				url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+afile.name #'/media/TBC/Docente/Recursos/'+afile.name
+				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcion[c], tipo_archivo = 'Recurso', id_actividad = idActividad, url= url)
+				ArchivoNuevo.archivo = afile
 				ArchivoNuevo.save()
 				c += 1
 
 			#Ciclo para recorrer los archivos seleccionados y guardarlos (rubrica)
 			for afile in request.FILES.getlist('rubrica'):
-				myfile = afile
-				fs = FileSystemStorage("media/TBC/Docente/Rubricas")
-				filename = fs.save(myfile.name, myfile)
-				uploaded_file_url = fs.url(filename)
-				nombreRubrica += myfile.name + '\n'
+				#myfile = afile
+				#fs = FileSystemStorage("media/TBC/Docente/Rubricas")
+				#filename = fs.save(myfile.name, myfile)
+				#uploaded_file_url = fs.url(filename)
+				nombreRubrica += afile.name + '\n'
 				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 				field_name = 'id_archivo'
 				obj = Archivo.objects.last()
 				field_value = getattr(obj, field_name)
 				idArchivo = field_value + 1
 				descripcionRubrica = request.POST.getlist('descRubrica')
-				url = '/media/TBC/Docente/Rubricas/'+myfile.name
-				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+				url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+afile.name #'/media/TBC/Docente/Rubricas/'+afile.name
+				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcionRubrica[cRub], tipo_archivo = 'Rubrica', id_actividad = idActividad, url= url)
+				ArchivoNuevo.archivo = afile
 				ArchivoNuevo.save()
 				cRub += 1
 				
@@ -1061,19 +1206,22 @@ def entregaAlumno(request, id, idAlumno):
 			#TODO: Realizar la actualización de archivos ya subidos
 			#Ciclo para recorrer los archivos seleccionados y guardarlos (recursos)
 			for afile in request.FILES.getlist('recursoAlumno'):
-				myfile = afile
-				fs = FileSystemStorage("media/TBC/Alumno")
-				filename = fs.save(myfile.name, myfile)
-				uploaded_file_url = fs.url(filename)
-				nombreArchivos += myfile.name + '\n'
+				#myfile = afile
+				#fs = FileSystemStorage("media/TBC/Alumno")
+				#filename = fs.save(myfile.name, myfile)
+				#uploaded_file_url = fs.url(filename)
+				nombreArchivos += afile.name + '\n'
+
 				#Se obtiene el id del archivo actual para incrementar en 1 e insertarlo
 				field_name = 'id_archivo'
 				obj = Archivo.objects.last()
 				field_value = getattr(obj, field_name)
 				idArchivo = field_value + 1
+
 				descripcion = request.POST.getlist('descRecurso')
-				url = '/media/TBC/Alumno/'+myfile.name
-				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = myfile.name, descripcion = descripcion[c], tipo_archivo = 'Entrega', id_actividad = idActividad, url= url, id_alumno = idAlumno)
+				url = 'https://storage.googleapis.com/plataformase.appspot.com/TBC/archivos/'+afile.name
+				ArchivoNuevo = Archivo(id_archivo = idArchivo, nombre_archivo = afile.name, descripcion = descripcion[c], tipo_archivo = 'Entrega', id_actividad = idActividad, url= url, id_alumno = idAlumno)
+				ArchivoNuevo.archivo = afile
 				ArchivoNuevo.save()
 				c += 1
 			comentario = request.POST['comentario']
@@ -1104,7 +1252,7 @@ def entregaAlumno(request, id, idAlumno):
 				field_value = getattr(obj, field_name)
 				idNotif = field_value
 				print(idNotif)
-				nuevaNotifD = Notificacion_act_docente(id_docente = idDocente, status = 0, id_notificacion = idNotif, id_alumno = idAlumno)
+				nuevaNotifD = Notificacion_act_docente(id_docente = idDocente, status = 0, id_notificacion = idNotif, id_alumno = idAlumno, id_dc = idDc, tipo = 2)
 				
 			else:
 				notifAct = Notificacion_act(id_dc = idDc, id_actividad = id, mensaje = 'Nueva entrega', tipo = 2)
@@ -1116,7 +1264,7 @@ def entregaAlumno(request, id, idAlumno):
 				field_value = getattr(obj, field_name)
 				idNotif = field_value
 				print(idNotif)
-				nuevaNotifD = Notificacion_act_docente(id_docente = idDocente, status = 0, id_notificacion = idNotif, id_alumno = idAlumno)
+				nuevaNotifD = Notificacion_act_docente(id_docente = idDocente, status = 0, id_notificacion = idNotif, id_alumno = idAlumno, id_dc = idDc, tipo = 2)
 			
 			#Se actualiza la notificación de actividadNueva y ponerla en leída
 			#Se saca el id de la notificacion (tabla notif_act_alumno) correspondiente a actualizar con el id_dc y el id_actividad (tabla notifi_act)
@@ -1138,3 +1286,96 @@ def entregaAlumno(request, id, idAlumno):
 	return render(request, 'entregaAlumno.html', {'usuario':usuarioLogueado, 'actividad':ActividadDocente, 'docente':Docentes, 'alumno':Alumnos, 'entrega':Entregas , 'archivo':Archivos, 'curso':Cursos, 'modulo':Modulos })#'entregaA':Entrega}) 
 
 
+'''
+Función para relacionar un módulo con un docente y ese módulo-docente con un grupo de alumnos (por semestres)
+'''
+def relacionarModulo(request):
+	if not request.user.is_authenticated:
+			return HttpResponseRedirect(reverse('login'))
+	usuarioLogueado = request.user
+
+	#Si el usuario logeado es un docente tipo_usuario = 6, entonces se procede a asignar el idDocente correspondiente
+	if usuarioLogueado.tipo_usuario == '6':
+		try:
+			#Para sacar el idDocente de la tabla de tbc con base en el registro CustomUser
+			field_name = 'id_docente'
+			obj = Docente.objects.get(email = request.user.email) #TODO: Cambiar last_name ya que se la haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idDocente = field_value
+		except:
+			print('')
+	
+	#Si el usuario logeado es un alumno tipo_usuario = 7, entonces se procede a asignar el idAlumno correspondiente
+	if usuarioLogueado.tipo_usuario == '7':
+		try:
+			#Para sacar el idAlumno de la tabla de tbc con base en el registro de CustomUser
+			field_name = 'id_alumno'
+			obj = Alumno.objects.get(email = request.user.email) #TODO:Cambiar last_name ya que se le haya dado más espacio
+			field_value = getattr(obj, field_name)
+			idAlumnoI = field_value
+		except:
+			print('')
+	Docentes = Docente.objects.filter(cct = usuarioLogueado.last_name)
+	Alumnos = Alumno.objects.filter(cct = usuarioLogueado.last_name)
+	Modulos = Modulo.objects.all()
+	DocenteModulo = Docente_curso.objects.all()
+	# cct del logincustomuser = last_name print(usuarioLogueado.last_name) TODO: Cambiar a la relación que tenga Diana al dar de alta la institución
+	#Para relacionar un módulo con un docente
+	if request.method == 'POST':
+		bandera = request.POST['bandera']
+		#False para relacionar módulo con un docente
+		if bandera == 'False':
+			try:
+				idDocente = request.POST['docente']
+				idModulo = request.POST['modulo']
+				print('x', idModulo, idDocente)
+				try:
+					field_name = 'id_dc'
+					obj = Docente_curso.objects.last()
+					field_value = getattr(obj, field_name)
+					id_Dc = field_value + 1
+				except:
+					id_Dc = 1
+				nuevoDocenteMod = Docente_curso(id_dc = id_Dc, id_curso = idModulo, id_docente = idDocente)
+				nuevoDocenteMod.save()
+				sweetify.success(request, 'Relación realizada', text='El docente fue relacionado al módulo seleccionado', persistent='Ok', icon="success")
+			except Exception as e:
+				print(e)
+		elif bandera == 'True':
+			#True para relacionar alumnos con un modulo-docente
+			alumnosL = request.POST.getlist('nombreAlumnoTabla') or None
+			id_alumnoL = request.POST.getlist('id_alumnoL') or None
+			idDocMod = request.POST['docenteModulo']
+			idx = 0
+			for al in alumnosL:
+				if not request.POST.get('alumnoModulo'+str(idx)):
+					cursando = False
+				else:
+					cursando = True
+				#Se recorren los alumnos que están en la tabla ya obteniendo si está checkeado el checkbox o no
+				#print('id del curso: ', idDocMod)
+				#print(id_alumnoL[idx], ' - ', cursando)
+				#Se guarda en la tabla alumnoCurso
+				try:
+					field_name = 'id_ac'
+					obj = Alumno_curso.objects.last()
+					field_value = getattr(obj, field_name)
+					id_Ac = field_value + 1
+				except:
+					id_Ac = 1
+				#Insertar solo los que sean cursando = True
+				if cursando == True:
+					try:
+						nuevoAlCurso = Alumno_curso(id_ac = id_Ac, id_dc = idDocMod, id_alumno = id_alumnoL[idx] )
+						nuevoAlCurso.save()
+						print('insertao segun', id_alumnoL[idx])
+						sweetify.success(request, 'Relación realizada', text='Los alumnos fueron relacionado al módulo seleccionado', persistent='Ok', icon="success")
+					except:
+						sweetify.error(request, 'No se realizó la operación', text='Ocurrió un error', persistent='Ok', icon="error")
+				else:
+					print('')
+				idx += 1
+
+	return render(request, 'relacionarModulo.html', {'usuario':usuarioLogueado, 'docente':Docentes, 'modulo':Modulos, 'alumno':Alumnos, 'docenteModulo':DocenteModulo }) 
+
+#Fin

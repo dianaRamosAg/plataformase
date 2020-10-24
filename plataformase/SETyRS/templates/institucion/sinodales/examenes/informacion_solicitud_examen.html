@@ -1,0 +1,139 @@
+{% extends 'institucion/base.html' %} {% load static %} {% block content %}{% load index %}
+<div class="container col-md-10 text-center">
+    <h2 class="mt-3">Solicitud Enviada</h2>
+    <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    {% if solicitud.estatus != 'Pendiente' %}
+    <p><strong>Su solicitud a sido {{solicitud.estatus}}.</strong></p>
+    {% else %}
+    <p><strong>Solicitud {{solicitud.estatus}}. Se le notificará cuando su solicitud haya sido revisada.</strong></p>
+    {% endif %}
+
+    {% if solicitud.estatus == 'Aprobada' %}
+        <p><strong>¡Exito!</strong></p>
+        <p>Puedes descargar el informe de aprobación de solicitud a continuación</p>
+        <a href="{% url 'SETyRS_generar_pdf' solicitud.id %}">
+            <span class="material-icons" style="font-size:55px;"> picture_as_pdf </span>
+            <br>
+            <u>Ver Informe</u>
+        </a>
+        <br>
+        <br>
+    {% endif %}
+
+    {% if solicitud.estatus == 'Rechazada' %}
+    <div class="container">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Motivo de rechazo</h5>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{comentarios.comentarios}}</p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endif %}
+    <h4>RESUMEN</h4>
+</div>
+<div class="container">
+    <h5>Sinodales</h5>
+    <br>
+    <div class="form-group">
+        <label for="presidente">Presidente</label>
+        <input type="text" id="presidente" class="form-control" value="{{p.nombre_sinodal}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="secretario">Secretario</label>
+        <input type="text" id="secretario" class="form-control" value="{{s.nombre_sinodal}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="vocal">Vocal</label>
+        <input type="text" id="vocal" class="form-control" value="{{v.nombre_sinodal}}" readonly>
+    </div>
+</div>
+<br>
+
+<div class="container">
+    <h5>Lugar y fecha</h5>
+    <br>
+    <div class="form-group">
+        <label for="presidente">Lugar</label>
+        <input type="text" id="presidente" class="form-control" value="{{solicitud.lugar_exa}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="secretario">Fecha</label>
+        <input type="text" id="secretario" class="form-control" value="{{solicitud.fecha_exa}}" readonly>
+    </div>
+</div>
+<br>
+
+
+<div class="container">
+    <h5>Alumnos</h5>
+    <br>
+    <div class="table-responsive text-center">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">No. Certificado</th>
+                    <th scope="col">CURP</th>
+                    <th scope="col">Carrera</th>
+                    <th scope="col">Folio de pago</th>
+                    <th scope="col">Certificado de Egreso</th>
+                    <th scope="col">Servicio Social</th>
+                    <th scope="col">Inscripción Control Escolar</th>
+                    <th scope="col">Recibo de pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in lista_alumnos %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{a.nombre_alumno}}</td>
+                    <td>{{a.no_certificado}}</td>
+                    <td>{{a.CURP}}</td>
+                    <td>{{a.carrera}}</td>
+                    <td>{{a.folio_pago}}</td>
+                    {% doc archivos a.id as f %}
+                    <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{f.certi}}')"><u>Ver archivo</u></a></td>
+                    <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{f.cotejo}}')"><u>Ver archivo</u></a></td>
+                    <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{f.control}}')"><u>Ver archivo</u></a></td>
+                    <td><a href="#viewPDF" data-toggle="modal" onclick="verArchivo('{{f.recibo}}')"><u>Ver archivo</u></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="container text-center">
+    <a href="{% url 'SETyRS_solicitudes_examenes' %}" class="btn btn-primary">Regresar</a>
+</div>
+<br>
+<br>
+
+<div id="viewPDF" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: max-content;">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 5px 20px;">
+                <h4 class="modal-title">Visualizador de archivos</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <iframe id="PDFviewer" width="1000" height="540" type="application/pdf"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    function verArchivo(url) {
+        var pdf = document.getElementById('PDFviewer')
+        pdf.setAttribute("src", "{{MEDIA_URL}}" + url);
+	}
+</script>
+{% endblock %}

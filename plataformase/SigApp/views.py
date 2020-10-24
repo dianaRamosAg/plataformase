@@ -294,7 +294,7 @@ def localizarInst(request, clave):
         AreasIntereses = AreaInteres.objects.all()
         Municipios = Municipio.objects.all()
         Escuelas = EscuelaC.objects.all()
-        return render(request,'SigApp/mapa_instituciones2.html',{
+        return render(request,'SigApp/mapa_instituciones_clave.html',{
             "opcionesgrados": GradosAcademicos,
             "areaseducacion":AreasIntereses,
             "opcionesmunicipios": Municipios,
@@ -328,7 +328,10 @@ def localizador(request):
     Localidades = Localidad.objects.all()
     AreasIntereses = AreaInteres.objects.all()
     Municipios = Municipio.objects.all()
-    Escuelas = EscuelaC.objects.all()
+    Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
+
+    
+    
     return render(request,'SigApp/mapa_instituciones.html',{
         "opcionesgrados": GradosAcademicos,
         "areaseducacion":AreasIntereses,
@@ -361,6 +364,16 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
             municipio='BAHÍA DE BANDERAS'
         municipio=municipio.replace("-"," ")
     if localidad != 'empty':
+        if("1" in localidad):
+            localidad = localidad.replace('1','Á')
+        if("2" in localidad):
+            localidad = localidad.replace('2','É')
+        if("3" in localidad):
+            localidad = localidad.replace('3', 'Í')
+        if("4" in localidad):
+            localidad = localidad.replace('4', 'Ó')
+        if("5" in localidad):
+            localidad = localidad.replace('5', 'Ú')
         localidad=localidad.replace("-"," ") 
     if nivelacademico != 'empty':
         nivelacademico=nivelacademico.replace("-"," ")  
@@ -373,11 +386,12 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     if localidad != 'empty':
                         #Si hay una localidad seleccionada se filtará por localidad,Sector,Area de Interes y Nivel Academico
                         # Reemplazar filtro InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in=Subquery(DetalleCarrera.objects.filter(Clave_Carrera__areaInteres__Clave_Area=areainteres).values('Clave_Institucion'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Dominio=dominio).filter(Nivel=nivelacademico))                    
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Localidad=localidad).filter(Dominio=dominio).filter(Nivel=nivelacademico).filter(TipoServicio = areainteres))     
+                        #print('keeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')             
                     else:
                         #Si no se seleccionó una localidad se filtará por municipio,Sector,Area de Interes y Nivel Academico
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in=Subquery(DetalleCarrera.objects.filter(Clave_Carrera__areaInteres__Clave_Area=areainteres).values('Clave_Institucion'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Nivel=nivelacademico).filter(Dominio=dominio))                    
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Nivel=nivelacademico).filter(Dominio=dominio))                   
 
                 else:
                     #Si no hay municipio seleccionado, verificamos si hay una localidad seleccionada
@@ -418,11 +432,13 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     if localidad != 'empty':
                         #Si hay una localidad seleccionada se filtará por localidad,Sector y Nivel Academico (SIN AREA DE INTERES)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Dominio=dominio))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio = municipio).filter(Localidad=localidad).filter(Dominio = dominio).filter(Nivel=nivelacademico))
+                        #print('pero ke a pasaooooooooooooooooooooooooooooooooooooooooo')
                     else:
                         #Si no se seleccionó una localidad se filtará por municipio,Sector y Nivel Academico (SIN AREA DE INTERES)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))).filter(Dominio_Institucion=dominio))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Dominio=dominio).filter(Nivel=nivelacademico))
+                        #InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Dominio=dominio).filter(Nivel=nivelacademico))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio = municipio).filter(Dominio = dominio).filter(Nivel=nivelacademico))
                 else:
                     #Si no hay municipio seleccionado, verificamos si hay una localidad seleccionada
                     if localidad != 'empty':
@@ -511,13 +527,14 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     else:
                         #Si no se seleccionó una localidad se filtará por municipio,Sector y Nivel Academico (SIN AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Dominio=dominio).filter(Nivel=nivelacademico))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Nivel=nivelacademico))
+                        #print('terremoto pa tu colaaaaaaaaaaaaaaaaaaaa')
                 else:
                     #Si no hay municipio seleccionado, verificamos si hay una localidad seleccionada
                     if localidad != 'empty':
                         #Si no se seleccionó municipio pero una localidad fue seleccionada de manera directa, se filtrará por la localidad seleccionada y Nivel Academico (SIN AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))).filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Nivel=nivelacademico))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Nivel=nivelacademico))   
                     else:
                         #Si no se seleccionó Municipio y tampoco una localidad, se filtrarán las instituciones y Nivel Academico ( SIN MUNICIPIO O LOCALIDAD NI AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_Institucion__in = Subquery(RVOE.objects.filter(Clave_GradoAcademico__pk=nivelacademico).values('Clave_Institucion'))))
@@ -528,7 +545,7 @@ def updInst(request,municipio,localidad,nivelacademico,areainteres,dominio):
                     if localidad != 'empty':
                         #Si no hay un area de interes seleccionada y hay una localidad seleccionada se filtará por localidad y Sector(SIN NIVEL ACADEMICO , AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__pk=localidad).values('Clave_CentroTrabajo'))))
-                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Localidad=localidad).filter(Dominio=dominio))
+                        InstitucionesFiltradas = serializers.serialize("json",EscuelaC.objects.filter(Municipio=municipio).filter(Localidad = localidad))
                     else:
                         #Si no se seleccionó una localidad ni un area de interes pero si un municipio, se filtará por municipio y Sector (SIN NIVEL ACADEMICO, AREA DE INTERES,SECTOR)
                         #InstitucionesFiltradas = serializers.serialize("json",Institucion.objects.filter(Clave_CentroTrabajo__in=Subquery(UbicacionCentroTrabajo.objects.filter(Localidad__in=Subquery(Localidad.objects.filter(Clave_Municipio__pk=municipio).values('Clave_Localidad'))).values('Clave_CentroTrabajo'))))
@@ -736,6 +753,8 @@ def miInstitucion(request, id, id_dep):
         loca = request.POST['localidad']
         estatus = request.POST['estatus']
         dire = request.POST['direccion']
+        lat = request.POST['lat']
+        lng = request.POST['lng']
         usuario_mod = request.user.first_name +" "+ request.user.last_name
         email = EmailMessage('Solicitud para modificar información de la institución '+ Escuela.NombreEscuela,
                              'INFORMACIÓN ACTUAL: \n'
@@ -746,6 +765,10 @@ def miInstitucion(request, id, id_dep):
                              +'Localidad: '+Escuela.Localidad+'\n'
                              +'Estatus: '+Escuela.EstatusEscuela+'\n'
                              +'Dirección: '+Escuela.Calle+'\n'
+                             
+                             +'Latitud: '+Escuela.Latitud+'\n'
+                             +'Longitud: '+Escuela.Longitud+'\n'
+                             
 
 
                              +'\nINFORMACIÓN A ACTUALIZAR: \n'
@@ -755,10 +778,13 @@ def miInstitucion(request, id, id_dep):
                              +'Municipio: '+muni+'\n'
                              +'Localidad: '+loca+'\n'
                              +'Estatus: '+estatus+'\n'
-                             +'Dirección: '+dire+'\n',
+                             +'Dirección: '+dire+'\n'
+
+                             +'Latitud: '+lat+'\n'
+                             +'Longitud: '+lng+'\n',
                               to=['henry.ricoe@gmail.com'])
         #email.send()
-        nuevo = DatosTemporal(clave_centrotrabajo_temp=clave, direccion_temp = dire, director_temp=director,nombre_institucion=nombre2,municipio = muni, localidad = loca, status=estatus, usuario_mod=usuario_mod ,modificando = True)
+        nuevo = DatosTemporal(clave_centrotrabajo_temp=clave, direccion_temp = dire, director_temp=director,nombre_institucion=nombre2,municipio = muni, localidad = loca, status=estatus, usuario_mod=usuario_mod, latitud_temp=lat, longitud_temp=lng, modificando = True)
         nuevo.save()
 
         # if not request.FILES['img1']:
@@ -840,7 +866,7 @@ def miInstitucion(request, id, id_dep):
     localidades = Localidad.objects.filter()
     
 
-    return render(request,'SigApp/miInstitucionMODIFICANDO.html',{
+    return render(request,'SigApp/miInstitucion.html',{
         "Escuela":Escuela, 
         "modificando":modificando, 
         "municipios":municipios, 
@@ -952,6 +978,8 @@ def mostrarInstitucion(request, nombre):
     nombreI = nombre
     municipioI = Escuela.Municipio
     localidadI = Escuela.Localidad
+    latitudI = Escuela.Latitud #
+    longitudI = Escuela.Longitud #
     estatusI = Escuela.EstatusEscuela
     
     claveT = InstitucionT.clave_centrotrabajo_temp
@@ -959,7 +987,9 @@ def mostrarInstitucion(request, nombre):
     directorT = InstitucionT.director_temp
     nombreT = InstitucionT.nombre_institucion
     municipioT = InstitucionT.municipio
-    localidadT = InstitucionT.localidad
+    localidadT = InstitucionT.localidad 
+    latitudT = InstitucionT.latitud_temp ##
+    longitudT = InstitucionT.longitud_temp ##
     estatusT = InstitucionT.status
 
     #dep = Departamento.objects.get(id=request.user.departamento_id)
@@ -974,13 +1004,15 @@ def mostrarInstitucion(request, nombre):
             print("----> RECHAZADO")
 
             comentario = request.POST['razon']
-            Escuela.NombreEscuela = nombreT
+            ''' Escuela.NombreEscuela = nombreT
             Escuela.nombreDirector= directorT
             Escuela.ClaveEscuela = claveT
             Escuela.Municipio = municipioT
             Escuela.Localidad = localidadT
             Escuela.EstatusEscuela = estatusT
             Escuela.Calle = direccionT
+            Escuela.latitud = latitudT
+            Escuela.longitud = longitudT '''
             InstitucionT = False
             
             #Valores de historial
@@ -992,6 +1024,10 @@ def mostrarInstitucion(request, nombre):
             nombre_institucion_prev = nombreI
             municipio_prev = municipioI
             localidad_prev = localidadI
+
+            latitud_prev = latitudI ##
+            longitud_prev = longitudI ##
+
             estatus_prev = estatusI
             #
             clave_centrotrabajo_new = claveT
@@ -1000,6 +1036,10 @@ def mostrarInstitucion(request, nombre):
             nombre_institucion_new = nombreT
             municipio_new = municipioT
             localidad_new = localidadT
+
+            latitud_new = latitudT ##
+            longitud_new = longitudT ##
+
             estatus_new = estatusT
             
             nuevoHistorial = HistorialMod(fechamod = datetime.today(), 
@@ -1014,6 +1054,8 @@ def mostrarInstitucion(request, nombre):
                                         nombre_institucion_prev=nombre_institucion_prev, 
                                         municipio_prev = municipio_prev, 
                                         localidad_prev = localidad_prev,
+                                        latitud_prev = latitud_prev, ##
+                                        longitud_prev = longitud_prev, ##
                                         status_prev =estatus_prev,
 
                                         clave_centrotrabajo_new = clave_centrotrabajo_new, 
@@ -1022,6 +1064,8 @@ def mostrarInstitucion(request, nombre):
                                         nombre_institucion_new=nombre_institucion_new, 
                                         municipio_new = municipio_new, 
                                         localidad_new = localidad_new,
+                                        latitud_new = latitud_new, ##
+                                        longitud_new = longitud_new, ##
                                         status_new =estatus_new)
             nuevoHistorial.save()
             
@@ -1049,6 +1093,8 @@ def mostrarInstitucion(request, nombre):
             Escuela.Localidad = localidadT
             Escuela.EstatusEscuela = estatusT
             Escuela.Calle = direccionT
+            Escuela.Latitud = latitudT #
+            Escuela.Longitud = longitudT #
             InstitucionT = False
             
             #Valores de historial
@@ -1061,6 +1107,9 @@ def mostrarInstitucion(request, nombre):
             nombre_institucion_prev = nombreI
             municipio_prev = municipioI
             localidad_prev = localidadI
+            latitud_prev = latitudI ##
+            longitud_prev = longitudI ##
+
             estatus_prev = estatusI
             #
             clave_centrotrabajo_new = claveT
@@ -1069,6 +1118,9 @@ def mostrarInstitucion(request, nombre):
             nombre_institucion_new = nombreT
             municipio_new = municipioT
             localidad_new = localidadT
+            latitud_new = latitudT ##
+            longitud_new = longitudT ##
+            
             estatus_new = estatusT
             
             nuevoHistorial = HistorialMod(fechamod = datetime.today(), 
@@ -1083,6 +1135,8 @@ def mostrarInstitucion(request, nombre):
                                         nombre_institucion_prev=nombre_institucion_prev, 
                                         municipio_prev = municipio_prev, 
                                         localidad_prev = localidad_prev,
+                                        latitud_prev = latitud_prev, ##
+                                        longitud_prev = longitud_prev, ##
                                         status_prev =estatus_prev,
 
                                         clave_centrotrabajo_new = clave_centrotrabajo_new, 
@@ -1091,6 +1145,8 @@ def mostrarInstitucion(request, nombre):
                                         nombre_institucion_new=nombre_institucion_new, 
                                         municipio_new = municipio_new, 
                                         localidad_new = localidad_new,
+                                        latitud_new = latitud_new, ##
+                                        longitud_new = longitud_new, ##
                                         status_new =estatus_new)
             nuevoHistorial.save()
 
@@ -1120,6 +1176,8 @@ def mostrarInstitucion(request, nombre):
         "clave":claveI, 
         "municipio":municipioI,
         "localidad":localidadI,
+        "latitud":latitudI, ##
+        "longitud": longitudI, ##
         "estatus":estatusI,
         "direccion":direccionI,
         "nombreTE" : nombreT, 
@@ -1127,6 +1185,8 @@ def mostrarInstitucion(request, nombre):
         "claveTE":claveT, 
         "municipioTE":municipioT,
         "localidadTE":localidadT,
+        "latitudTE": latitudT, ##
+        "longitudTE": longitudT, ##
         "estatusTE":estatusT,
         "direccionTE":direccionT,
         "numeroModificaciones" : notificaiones(request.user.departamento_id), 

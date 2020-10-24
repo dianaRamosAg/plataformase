@@ -7,12 +7,15 @@ from django.http import JsonResponse
 from .models import *
 from login.models import CustomUser
 from .forms import *
+from django.conf import settings
 from RVOES.models import Departamento
 from login.models import UsuarioInstitucion
 from .render import Render
-
+from django.core.mail import send_mail, EmailMessage
+from django.core.files.storage import FileSystemStorage
+from django.core import serializers
 # VISTAS DEL ADMINISTRADOR SINODALES-----------------------------------------------------------------------------
-
+#.
 # el departamento de dirección es el unico que puede ver e interactuar con las solicitudes de ambos niveles educativos (superior y media superior)
 #dirección: 2
 #superior: 3
@@ -21,7 +24,7 @@ from .render import Render
 # funcion que retorna el index del administrador con el contexto de acuerdo al departamento del usuario
 def index_admin(request):
     #si el usuario no pertenece a cualquiera de estos 3 departamentos, se mostrará el error 404
-    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4 or request.user.departamento_id==1:
         dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
         num_notifi = contarNotificacionesadmin(request.user.departamento_id) # cuenta las notificaciones que no han sido leidas y retorna el total
         if request.user.departamento_id == 2: #si el usuario pertenece al departamento DIRECCION
@@ -32,6 +35,9 @@ def index_admin(request):
 
         elif request.user.departamento_id == 4: #si el usuario pertenece al departamento MEDIA SUPERIOR
             notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha') #Recupera las notificaciones del administrador
+
+        elif request.user.departamento_id == 1: #si el usuario pertenece al departamento CONTROL ESCOLAR
+            notificacion = NotificacionAdmin.objects.filter(tipo_solicitud=1).order_by('-fecha') #Recupera las notificaciones del administrador
         
         context = {'departamento':dep,'notificacion':notificacion,'notificaciones':num_notifi}
         return render(request,'admins/index_admin.html', context)
@@ -233,7 +239,7 @@ def rechazar_sinodal(request, id):
 
 
 def lista_solicitudes_examenes_admin(request):
-    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4 or request.user.departamento_id==1:
         dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
         num_notifi = contarNotificaciones(request.user.departamento_id)
         if request.user.departamento_id==2:
@@ -247,6 +253,10 @@ def lista_solicitudes_examenes_admin(request):
         elif request.user.departamento_id==4:
             solicitudes = SolicitudExamen.objects.filter(fase=3,nivel_educativo=1).order_by('-id')
             notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+
+        elif request.user.departamento_id==1:
+            solicitudes = SolicitudExamen.objects.filter(fase=3,estatus=3).order_by('-id')
+            notificacion = None
         
         context = {'departamento':dep, 'solicitudes': solicitudes, 'notificacion':notificacion,'notificaciones':num_notifi}
         for s in solicitudes:
@@ -261,7 +271,7 @@ def lista_solicitudes_examenes_admin(request):
         raise Http404("El usuario no tiene permiso de ver esta página")
 
 def revisar_solicitud_examen(request, id):
-    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4:
+    if request.user.departamento_id==2 or request.user.departamento_id==3 or request.user.departamento_id==4 or request.user.departamento_id==1:
         solicitud = get_object_or_404(SolicitudExamen, pk=id)
         if solicitud.fase == 3:
             dep = get_object_or_404(Departamento, pk=request.user.departamento_id)
@@ -291,6 +301,10 @@ def revisar_solicitud_examen(request, id):
             
             elif request.user.departamento_id == 4 and solicitud.nivel_educativo == 1:
                 notificacion = NotificacionAdmin.objects.filter(nivel_educativo=1).order_by('-fecha')
+                context.update({'notificacion':notificacion})
+                return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
+            elif request.user.departamento_id == 1:
+                notificacion = None
                 context.update({'notificacion':notificacion})
                 return render(request, 'admins/examenes/revisar_solicitud_examen.html', context)
         else:
@@ -339,6 +353,32 @@ def aceptar_solicitud(request, id):
             solicitud.save()
             h_solicitud = Historial_admins_examen(user_id = request.user.id, solicitud_id = id,fecha=timezone.now(), estatus=True, nivel_educativo=solicitud.nivel_educativo)
             h_solicitud.save()
+            jefe = CustomUser.objects.get(id=h_solicitud.user_id)
+            
+            #Aqui poner el codigo para enviar el correo de aceptación a control escolar,dirección y al departamento correspondiente
+
+            #Si dirección aceptó la solicitud entonces:
+            if jefe.departamento_id == 2:
+                #Si la solicitud fue de educación superior:
+                if solicitud.nivel_educativo == 1:
+                    email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['control.escolar@educacion.nayarit.gob.mx','martin.perez@educacion.nayarit.gob.mx','superior@educacion.nayarit.gob.mx'])
+                    email.send()
+                #Si la solicitud fue de educación media superior:
+                elif solicitud.nivel_educativo == 2:
+                    email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['control.escolar@educacion.nayarit.gob.mx','martin.perez@educacion.nayarit.gob.mx','media.superior@educacion.nayarit.gob.mx'])
+                    email.send()
+            #Si Superior aceptó la solicitud entonces:
+            elif jefe.departamento_id == 3:
+                email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx'])
+                email.send()
+            #Si Media Superior aceptó la solicitud entonces:
+            elif jefe.departamento_id == 4:
+                email = EmailMessage('Una nueva solicitud de examen ha sido aceptada en la plataforma','Una nueva solicitud de examen a titulo fue aceptada en la plataforma. Puede revisarla en el siguiente enlace:\n '+'https://ssemssicyt.nayarit.gob.mx/SETyRS/admin/solicitud/examen_a_titulo/'+str(solicitud.id)+'/',
+                             to=['control.escolar@educacion.nayarit.gob.mx','direccionmediaysuperior@educacion.nayarit.gob.mx'])
+                email.send()
             msg = 'Solicitud de examenes a titulo ¡APROBADA!. Folio: ' + str(id)
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=id,tipo_solicitud=1,user_id=solicitud.user_id)
             notificacion.save()
@@ -383,11 +423,10 @@ def index_institucion(request):
 # funcion que retorna la plantilla de nueva solicitud de sinodal
 def nueva_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-        nivel = datos_escuela.nivel_educativo
+        centrosRegistrados = UsuarioInstitucion.objects.filter(id_usuariobase_id=request.user.id)
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
-        context = {'notificacion':notificacion,'notificaciones':num_notifi,'nivel':nivel}
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'centrosRegistrados':centrosRegistrados}
         return render(request, 'institucion/sinodales/nueva_solicitud.html', context)
     else:
         raise Http404("El usuario no tiene permiso de ver esta página")
@@ -396,9 +435,10 @@ def nueva_solicitud_sinodal(request):
 #Recibe el id de la solicitud
 def detalle_solicitud_sinodal(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-        nivel = datos_escuela.nivel_educativo
         solicitud = get_object_or_404(SolicitudSinodal, pk=id)
+        datos_escuela = UsuarioInstitucion.objects.get(cct=solicitud.CCT)
+        print(datos_escuela)
+        nivel = datos_escuela.nivel_educativo
         if solicitud.user_id == request.user.id:
             notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
             num_notifi = contarNotificaciones(request.user.id)
@@ -467,15 +507,14 @@ def crear_solicitud_sinodal(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
         if request.method == 'POST':
             user_id = request.user.id
-            datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-            nivel = datos_escuela.nivel_educativo
-            if nivel == "3":
-                print(request.POST.get("nivel"))
-                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
+            centroTrabajo = request.POST["cct"]
+            datos_escuela = UsuarioInstitucion.objects.get(cct=centroTrabajo)
+            nivel = datos_escuela.nivel_educativo 
+            if nivel == 3:
+                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             else:
-                print('NO ES MIXTA')
-                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel)
+                solicitud = SolicitudSinodal(user_id=user_id, fecha=timezone.now(), institucion=request.user.first_name,nivel_educativo=nivel,CCT=centroTrabajo)
                 solicitud.save()
             msg = 'Nueva solicitud de sinodales. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=2, user_id=user_id)
@@ -494,18 +533,17 @@ def agregar_sinodal(request, id):
             curp=request.POST["curp"]
             rfc=request.POST["rfc"]
             grado=request.POST["grado_academico"]
-            datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-            nivel = datos_escuela.nivel_educativo
             sino_count = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name,estatus=2).count()
             comprobar_duplicidad = Sinodales.objects.filter(curp=curp, institucion=request.user.first_name)
+            solicitud = SolicitudSinodal.objects.get(id=id)
+            nivel_sinodales = solicitud.nivel_educativo
             if comprobar_duplicidad and sino_count>=1:
             
                 error = 'Este sinodal ya existe en su registro'
                 messages.error(request, error)
                 return redirect('SETyRS_detalle_solicitud_sinodal',id)
             else:
-                datos_escuela = get_object_or_404(UsuarioInstitucion, id_usuariobase_id=request.user.id)
-                sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name,nivel_educativo=nivel)
+                sinodal = Sinodales(nombre_sinodal=nombre, curp=curp, rfc=rfc,grado_academico=grado, id_solicitud_id=id, user_id=request.user.id, institucion=request.user.first_name,nivel_educativo=nivel_sinodales)
                 sinodal.save()
                 return redirect('SETyRS_detalle_solicitud_sinodal',id)
     else:
@@ -617,16 +655,43 @@ def leer_notificacion(request, id):
 
 #VISTAS DE LA INSTITUCION EXAMENES A TITULO ------------------------------------------------------------------------------------------------
 
+def guardar_Reglamento(request):
+    centro =request.POST.get("centroTrabajo")
+    #Obtenemos los files del POST
+    files = request.FILES
+    #Aislamos/separamos el archivo a guardar
+    myfile = files['documentoPendiente']
+    #Indicamos una ruta donde se almacenará el archivo
+    fs = FileSystemStorage("media/SETyRS/archivos/reglamentos")
+    #Hacemos el save del archivo indicando el nombre del archivo y el archivo como tal
+    filename = fs.save(myfile.name, myfile)
+
+    #Una vez guardamos el archivo en nuestro folder de media, guardamos la ruta del archivo en la bd
+    reglamento = reglamento_interior_titulacion(CCT=centro, RIT="media/SETyRS/archivos/reglamentos/"+myfile.name)
+    reglamento.save()
+    return redirect('SETyRS_nueva_solicitud_examen')
+
+def get_reglamento_titulacion(request):
+    tieneReglamento = False
+    try:
+        RIT = reglamento_interior_titulacion.objects.filter(CCT=request.GET["cct"])
+    except ObjectDoesNotExist:
+        RIT= None
+    return JsonResponse(serializers.serialize("json",RIT),safe=False)
+
+
+def get_nivel_CCT(request):
+    niveles = serializers.serialize("json",UsuarioInstitucion.objects.filter(cct=request.GET['cct']))
+    return JsonResponse(niveles,safe=False)
 
 def nueva_solicitud_examen(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
-        datos_escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
-        nivel = datos_escuela.nivel_educativo
+        centrosRegistrados = UsuarioInstitucion.objects.filter(id_usuariobase_id=request.user.id)
         notificacion = Notificaciones.objects.filter(user_id=request.user.id).order_by('-fecha')
         num_notifi = contarNotificaciones(request.user.id)
         sinodales = Sinodales.objects.filter(user_id=request.user.id, estatus=2).order_by('nombre_sinodal')
-        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales, 'nivel':nivel}
-        return render(request, 'institucion/examenes/nueva_solicitud.html', context)
+        context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales,'centrosRegistrados':centrosRegistrados}
+        return render(request, 'institucion/sinodales/examenes/nueva_solicitud.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
 
@@ -640,11 +705,11 @@ def detalle_solicitud_examen(request, id):
             context = {'lista_alumnos': lista_alumnos, 'solicitud':solicitud,
                        'notificacion':notificacion,'notificaciones':num_notifi}
             if solicitud.fase == 1:
-                return render(request, 'institucion/examenes/agregar_alumnos.html', context)
+                return render(request, 'institucion/sinodales/examenes/agregar_alumnos.html', context)
             elif solicitud.fase == 2:
                 archivos = ArchivosAlumnos.objects.filter(solicitud_id=id).order_by('id')
                 context.update({'archivos':archivos})
-                return render(request, 'institucion/examenes/agregar_documentos_alumnos.html', context)
+                return render(request, 'institucion/sinodales/examenes/agregar_documentos_alumnos.html', context)
             else:
                 if solicitud.estatus == 2:
                     solicitud.estatus = 'Pendiente'
@@ -659,7 +724,7 @@ def detalle_solicitud_examen(request, id):
                 secretario = get_object_or_404(Sinodales, pk=solicitud.id_secretario)
                 vocal =  get_object_or_404(Sinodales, pk=solicitud.id_vocal)
                 context.update({'p':presidente, 's':secretario, 'v':vocal, 'archivos':archivos})
-                return render(request, 'institucion/examenes/informacion_solicitud_examen.html', context)
+                return render(request, 'institucion/sinodales/examenes/informacion_solicitud_examen.html', context)
         else:
             raise Http404("El usuario no tiene permiso de ver esta página")
     else:
@@ -698,7 +763,7 @@ def lista_solicitudes_examenes(request):
                 s.estatus = 'Aprobada'
             elif e==4:
                 s.estatus = 'Rechazada'     
-        return render(request, 'institucion/examenes/lista_solicitudes_examenes.html', context)
+        return render(request, 'institucion/sinodales/examenes/lista_solicitudes_examenes.html', context)
     else:
         raise Http404('El usuario no tiene permiso de ver esta página')
 
@@ -711,15 +776,16 @@ def crear_solicitud_examen(request):
             categoria = request.POST["categoria"]
             presidente = request.POST["presidente"]
             secretario = request.POST["secretario"]
+            cct = request.POST["cct"]
             vocal = request.POST["vocal"]
-            escuela = UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id)
+            escuela = CustomUser.objects.get(id=request.user.id)
             #if escuela.nivel_educativo == 3:
             nivel_educativo = request.POST['nivel']
             fecha_e = request.POST["fecha_exa"]
             lugar_e = request.POST["Lugar_exa"]
             hora_e = request.POST["hora_exa"]
             solicitud = SolicitudExamen(categoria=categoria, id_presidente=presidente, id_secretario=secretario, id_vocal=vocal, 
-                                        institucion=escuela.id_usuariobase_id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e)
+                                        institucion=escuela.id, user_id=request.user.id, fecha=date.today(), nivel_educativo=nivel_educativo,fecha_exa=fecha_e,lugar_exa=lugar_e,hora_exa=hora_e,CCT=cct)
             solicitud.save()
             msg = 'Nueva solicitud de exámenes a titulo. Folio: ' + str(solicitud.id) + '. Estatus: Incompleta'
             notificacion = Notificaciones(descripcion=msg, fecha=timezone.now(), solicitud_id=solicitud.id, tipo_solicitud=1, user_id=request.user.id)
@@ -850,7 +916,7 @@ def finalizar_solicitud_examen(request, id):
         raise Http404('El usuario no tiene permiso de ver esta página')
 
 def generar_pdf(request, id):
-    if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
+    if  request.user.tipo_usuario=='1' or request.user.tipo_usuario=='2' or (request.user.tipo_usuario == '3' and request.user.departamento_id == 1):  #and request.user.tipo_persona=='2':
         solicitud = get_object_or_404(SolicitudExamen, pk=id)
         if solicitud.estatus == 3:
             h = Historial_admins_examen.objects.get(solicitud_id=solicitud.id)
@@ -859,29 +925,33 @@ def generar_pdf(request, id):
                 'solicitud': solicitud,
                 'alumnos':Alumnos.objects.filter(id_solicitud_id=id), 
                 'request': request,
-                'escuela': UsuarioInstitucion.objects.get(id_usuariobase_id=request.user.id),
+                'escuela': UsuarioInstitucion.objects.get(cct=solicitud.CCT),
                 'presidente': Sinodales.objects.get(id=solicitud.id_presidente),
                 'secretario': Sinodales.objects.get(id=solicitud.id_secretario),
                 'vocal': Sinodales.objects.get(id=solicitud.id_vocal),
                 'jefe': jefe,
+                'bucket': settings.MEDIA_URL
             }
             c = solicitud.categoria
-            if c==1:
+            # Se hace la comparación en char porque la BD de producción tiene la columna categoria como varchar y no int
+            if c=='1':
                 solicitud.categoria = 'SEMINARIO DE TITULACION'
-            elif c==2:
+            elif c=='2':
                 solicitud.categoria = 'TESIS EXTERNA'
-            elif c==3:
+            elif c=='3':
                 solicitud.categoria = 'INFORME SOBRE SERVICIO SOCIAL'
-            elif c==4:
+            elif c=='4':
                 solicitud.categoria = 'ESTUDIOS DE POSGRADO'
-            elif c==5:
+            elif c=='5':
                 solicitud.categoria = 'EXAMEN GENERAL DE CONOCIMIENTOS'
-            elif c==6:
+            elif c=='6':
                 solicitud.categoria = 'EXAMEN CENEVAL'
-            elif c==7:
+            elif c=='7':
                 solicitud.categoria = 'ALTO RENDIMIENTO DE LICENCIATURA'
-            elif c==8:
+            elif c=='8':
                 solicitud.categoria = 'EXPERIENCIA PROFESIONAL'
+            elif c=='9':
+                solicitud.categoria = 'OPCIÓN ESPECIFICADA POR LA INSTITUCIÓN'
             return Render.render('institucion/examenes/formato_aprobacion_solicitud.html', params)
         else:
              raise Http404("El usuario no tiene permiso de ver esta página")

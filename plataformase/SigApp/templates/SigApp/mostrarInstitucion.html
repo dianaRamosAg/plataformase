@@ -25,6 +25,10 @@
                 a:hover{
                     color:grey;
                 }
+                #map {
+                  height: 400px;  /* The height is 400 pixels */
+                  width: 100%;  /* The width is the width of the web page */
+                }
               </style>
     <div class="container-fluid">
         <!--Panel general (derecho)-->
@@ -91,7 +95,11 @@
                     <td>{{ direccionTE }}</td>
                   </tr>
                 </tbody>
-              </table>
+              </table><hr>
+              <ul>
+                <li style="text-align: left;">Puede hacer "zoom" en el mapa para mejorar la vision de las localizaciones</li>
+              </ul>                    
+              <div id="map" ></div><hr>
 
               <form method="post" id="form" name="form">
                 {% csrf_token %}
@@ -113,6 +121,11 @@
                   {% comment %} por favor la longitud de este texto debe ser minimo 25 caracteres {% endcomment %}
                 
                   <input onclick="a()" id="aceptar" type="button" class="btn btn-success btn-lg btn-block" value="Aceptar"></input>
+                  <input type="text" id="latitud_prev" name="latitud_prev" value="{{ latitud }}" style="visibility: hidden;"></input>
+                  <input type="text" id="longitud_prev" name="longitud_prev" value="{{ longitud }}" style="visibility: hidden;"></input>
+                  <input type="text" id="latitud_new" name="latitud_new" value="{{ latitudTE }}" style="visibility: hidden;"></input>
+                  <input type="text" id="longitud_new" name="longitud_new" value="{{ longitudTE }}" style="visibility: hidden;"></input>
+
                   
                 </div>
               </form>            
@@ -123,8 +136,7 @@
 </body>
 <script>
   
-  function a()
-  {
+  function a(){
     var a = document.forms["form"]["razon"].value;
     check = document.getElementById("defaultCheck1");
     if (check.checked){
@@ -156,8 +168,47 @@
       }
   }
 
-  
+  var lat1 = parseFloat(document.getElementById("latitud_prev").value);
+  var lng1 = parseFloat(document.getElementById("longitud_prev").value);
+  var lat2 = parseFloat(document.getElementById("latitud_new").value);
+  var lng2 = parseFloat(document.getElementById("longitud_new").value);
 
+  //var lat3 = parseFloat(document.getElementById("la").value);
+  //var lng3 = parseFloat(document.getElementById("lo").value);
+  //21.808285000141616
+  //-105.20599021412804
+
+  console.log(lat3); 
+
+  function initMap() {
+    var myLatlng = {lat: lat1, lng: lng1}; 
+    var myLatlngNew = {lat: lat2, lng: lng2}; 
+
+    var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 13, center: myLatlng});
+
+    if (lat1 == lat2){
+      var infoWindow = new google.maps.InfoWindow(
+        {content: 'La ubicación no ha cambiado', position: myLatlng});
+      infoWindow.open(map);
+
+    }else{
+      // Create the initial InfoWindow.
+      var infoWindow = new google.maps.InfoWindow(
+        {content: 'Actual Localización', position: myLatlng});
+      infoWindow.open(map);
+
+      var infoWindow = new google.maps.InfoWindow(
+        {content: 'Nueva Localización', position: myLatlngNew});
+      infoWindow.open(map);
+    }
+    
+  }
+
+</script>
+
+<script async defer 
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUYrfLnJZ9jbpBwBv7Bt9FL4DCaRZw1Eo&callback=initMap">
 </script>
 {% endblock %}
 </html>

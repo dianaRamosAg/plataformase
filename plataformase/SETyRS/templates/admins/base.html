@@ -43,10 +43,15 @@
                 Exámenes a Título
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if user.departamento_id != 1 %}
                 <a class="dropdown-item" href="{% url 'SETyRS_lista_solicitudes_examenes' %}">Solicitudes</a>
                 <a class="dropdown-item" href="{% url 'SETyRS_historial_examenes' %}">Historial de actividades</a>
+                {% else %}
+                  <a class="dropdown-item" href="{% url 'SETyRS_lista_solicitudes_examenes' %}">Solicitudes Aceptadas</a>
+                {% endif %}
               </div>
             </li>
+            {% if user.departamento_id != 1 %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle ml-3" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Sinodales
@@ -58,10 +63,12 @@
               </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link ml-3" href="">Documentos</a>
+              <a class="nav-link ml-3" href="">Documentos</a>
             </li>
+            {% endif %}
           </ul>
           <ul class="navbar-nav justify-content-end">
+            {% if user.departamento_id != 1 %}
             <li class="nav-item">
               <a class="nav-link ml-3" 
                  href="#notificaciones"
@@ -77,6 +84,7 @@
                   </span>
               </a>
             </li>
+            {% endif %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle ml-3" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{user.first_name}} {{user.last_name}} - {{departamento.nombre}}

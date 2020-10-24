@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from login.models import CustomUser, UsuarioInstitucion
-from django.utils import timezone
 from .validators import validate_file_extension
 
 # Create your models here.
@@ -9,8 +8,9 @@ from .validators import validate_file_extension
 #--------------------------------------- Modelos de Institución ------------------------------------------------------------
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
-    categoria = models.IntegerField()
+    categoria = models.CharField(max_length=100,default='opcion vacia', blank=True)
     institucion = models.IntegerField(default=1)
+    CCT = models.CharField(max_length=30)
     area_carrera = models.CharField(max_length=30, blank=True)
     id_presidente = models.IntegerField()
     id_secretario = models.IntegerField()
@@ -46,6 +46,7 @@ class Alumnos(models.Model):
 # Tabla de las solicitudes de sinodales
 class SolicitudSinodal(models.Model):
     estatus = models.IntegerField(default=1)
+    CCT = models.CharField(max_length=30)
     institucion = models.CharField(max_length=150)
     fase = models.IntegerField(default=1)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -146,3 +147,10 @@ class NotificacionAdmin(models.Model):
     class Meta:
         db_table = 'SETyRS_notificaciones_admin'
 
+#Tabla relacional centros de trabajo y reglamento interio de titulación
+class reglamento_interior_titulacion(models.Model):
+    CCT = models.CharField(max_length=30)
+    RIT = models.FileField(upload_to='SETyRS/archivos/reglamentos',validators=[validate_file_extension], blank=True, null=True)
+    
+    class Meta:
+        db_table = 'SETyRS_reglamento_interior_titulacion'
