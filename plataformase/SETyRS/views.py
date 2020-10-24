@@ -693,7 +693,10 @@ def nueva_solicitud_examen(request):
         context = {'notificacion':notificacion,'notificaciones':num_notifi,'sinodales':sinodales,'centrosRegistrados':centrosRegistrados}
         return render(request, 'institucion/sinodales/examenes/nueva_solicitud.html', context)
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def detalle_solicitud_examen(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -794,7 +797,10 @@ def crear_solicitud_examen(request):
         else:
             return redirect('SETyRS_nueva_solicitud_examen')
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def agregar_alumno(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -810,7 +816,10 @@ def agregar_alumno(request, id):
         else:
             return redirect('SETyRS_detalle_solicitud_examen', id)
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == 2 or request.user.tipo_usuario == s3:
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def editar_alumno(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -827,7 +836,10 @@ def editar_alumno(request):
         else:
             raise Http404('El usuario no tiene permiso de ver esta página')
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def eliminar_alumno(request):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -840,7 +852,10 @@ def eliminar_alumno(request):
         else:
             raise Http404('El usuario no tiene permiso de ver esta página')
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def agregar_documentos_alumno(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -852,7 +867,10 @@ def agregar_documentos_alumno(request, id):
         else:
             return redirect('SETyRS_detalle_solicitud_examen', id)
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def subir_documentos_alumno(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':
@@ -867,7 +885,10 @@ def subir_documentos_alumno(request, id):
         else:
             return redirect('SETyRS_detalle_solicitud_examen', id)
     else:
-        raise Http404('El usuario no tiene permiso de ver esta página')
+        if request.user.tipo_usuario == '2' or request.user.tipo_usuario == '3':
+            return redirect('SETyRS_admin_index')
+        else:
+            return redirect('SETyRS_institucion_index')
 
 def editar_documentos_alumno(request, id):
     if request.user.tipo_usuario=='1' and request.user.tipo_persona=='2':

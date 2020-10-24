@@ -343,3 +343,13 @@ def ActUsr(request,email):
             return redirect('perfil')
 
   
+def reporte(request):
+    nombreR = request.POST["nombreR"]
+    correo = request.POST["correo"]
+    asunto = request.POST["asunto"]
+    msg = request.POST["msg"]
+    em= "plataforma.ssemssicyt@educacion.nayarit.gob.mx"
+    email = EmailMessage(asunto,"Enviado por : "+nombreR+ "   "+correo+"\n"+ msg , to=[em])
+    email.send()
+
+    return redirect('perfil')
