@@ -14,7 +14,10 @@ urlpatterns = [
 
     path('nuevaBase', views.nuevaBase, name='nuevaBase'),
     path('inicio', views.inicio, name='inicio'),
-
+    path('actas_departamento', views.actas_departamento, name='actas_departamento'),
+    path('bandeja_quejas', views.bandeja_quejas, name='bandeja_quejas'),
+    path('historial_institucion', views.historial_institucion, name='historial_institucion'),
+    path('programar_superv', views.programar_superv, name='programar_superv'),
 
     path('instituciones/<id>/<slug:clave>',views.instituciones, name='instituciones'),  
     path('institucionesUbicacion/<id>/<slug:clave>',views.institucionesUbicacion, name='institucionesUbicacion'),  
