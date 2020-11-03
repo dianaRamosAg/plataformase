@@ -22,7 +22,7 @@ SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 
@@ -189,5 +189,6 @@ EMAIL_HOST_PASSWORD = '$Plat2020'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-
-
+#Contraseña correos
+#dirección : $dire2020
+#control esc : $control2020

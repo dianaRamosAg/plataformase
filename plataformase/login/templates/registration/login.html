@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
         <title>Plataforma SSEMSSICyT</title>
-        <link rel="icon" type="image/x-icon" href="{% static '/img/se.png' %}" />
+        <link rel="icon" type="image/x-icon" href="{% static '/login/logo SE-bco.png' %}" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
@@ -27,14 +27,13 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static '/img/se.png' %}"style="width:20%;height:20%;" /></a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
+                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static '/login/EducacionHorizontal.png' %}"style="width:20%;height:20%;" /></a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ml-auto">
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">SSEMSSICyT</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#portfolio">Servicios</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#contact">Contacto</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{% url 'menuvisitante'%}">Visitante</a></li>
-                       </ul>
+                        </ul>
                 </div>
             </div>
         </nav>
@@ -45,29 +44,30 @@
                 <div class="masthead-subheading">SSEMSSICyT</div>
                 <h5 class="my-3">Plataforma de servicios digitales.</h5>
                 <br><br>
-                <div class="container2 col-sm-7 " style="float:right;margin-top: -270px;margin-right: -100px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                <div class="container2 col-sm-7 " style="float:right;margin-top: -270px;margin-right: -110px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
                 ">
-                    <div class="d-flex justify-content-center h-100">
+                    <div class="d-flex justify-content-center h-100 pt-0">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Inicia sesión</h4>
+                               <div class="input-group form-group">
+                                <button type="submit" onclick="location.href='{% url 'menuvisitante'%}'" class="btn btn-dark btn-block btn-lg" value="consulta">Consultar Instituciones</button>
+                             </div>
                             </div>
                             <div class="card-body">
+                                <h5 class="justify-content-center" style="color: white;">Inicia sesión</h5>
                                 <form method="post">
                                     {% csrf_token %}
-
-                                    <div class="form-group">
+                                    <div class="form-group pt-0>
                                         <label for="exampleInputEmail1">Correo electrónico</label>
                                         <input type="text" style="background-color: white;" class="form-control " name="username" id="id_username" required   autocapitalize="off" >
                                          </div>
-                                    <div class="form-group">
+                                    <div class="form-group pt-0>
                                      <label for="exampleInputEmail1">Contraseña</label>
                                      <input type="password"  name="password" id="id_password" class="form-control  " required>
                                      </div>
                                      <div class="input-group form-group">
-                                        <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info btn-lg btn-block" value="Acceder">Acceder </button>
-						             </div>
-
+                                        <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info  btn-block" value="Acceder">Acceder </button>
+						             </div><br>
                                     {% if form.errors %}
                                     {% for field in form %}
                                         {% for error in field.errors %}
@@ -86,11 +86,11 @@
                                     {% endif %}
                                 </form>
                             </div>
-                            <br><br><br>
-                            <div class="card-footer">
-                                <div class="d-flex justify-content-center links">
+                            <br><br><br><br>
+                            <div class="card-footer"><br><br>
+                                <!-- <div class="d-flex justify-content-center links">
                                     <a href="{% url 'cuentavisitante'%}" class="visit" style="color: white;">Solicitar cuenta</a>
-                                </div>
+                                </div> -->
                                 <div class="d-flex justify-content-center">
                                     <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
                                 </div>
@@ -100,48 +100,60 @@
                            <br> <br>
             </div>
            </div> </div>
+           <br><br><br><br>
         </header>
+        <div class="text-center" ><br><br><br>
+            <h3 class="section-heading text-uppercase">Secretaría de Educación de Nayarit</h3>
+            <img  src="{% static '/login/logo SE.png'%}" alt="Logo SE" style="width: 18%; height: 18%; LINE-HEIGHT:50px; overflow: auto;"/>            
+      
+        </div>
         <!-- Services-->
-        <section class="page-section" id="services">
+        <section class="page-section pt-0" id="services"  >
             <div class="container">
                 <div class="text-center">
-                    <a class="portfolio-link" data-toggle="modal" href="#sub" style="color: black;"> 
-                   
-                    <h2 class="section-heading text-uppercase">SSEMSSICyT
-                        
-                    </h2></a>
-                    <h3 class="section-subheading text-muted">Subsecretaría de Educación Media Superior, Superior e Investigación Científica y Tecnológica de Nayarit.</h3>
-                    <small>Es la dependencia competente para establecer la normativa,
-                        requisitos, trámites y procedimientos administrativos a los que deberá sujetarse el otorgamiento, revocación, suspensión o retiro de la autorización o del reconocimiento de validez oficial de estudios a los planes y programas de estudio a los particulares que participen en el proceso educativo
-                        estatal de educación medio superior y superior, de conformidad a lo establecido a la legislación en la materia.</small>
-                </div>
+                    <hr><br>
+                    <h5 class="section-heading text-uppercase">Subsecretaría de Educación Media Superior, Superior e Investigación Científica y Tecnológica de Nayarit   
+                    </h5> <br>
+                    <p>Es la dependencia competente para establecer la normativa,
+                        requisitos, trámites y procedimientos administrativos a los que deberá sujetarse el otorgamiento, revocación, suspensión o retiro de la autorización o del Reconocimiento de Validez Oficial de Estudios (RVOE) a los planes y programas de estudio a los particulares que participen en el proceso educativo
+                        estatal de Educación Media Superior y Superior, de conformidad a lo establecido a la legislación en la materia.
+                    </p>
+                </div><br>
                 <div class="row text-center">
                     <div class="col-md-12 portafolio-item">
-                        <a class="portfolio-link" data-toggle="modal" href="#direccion" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-chalkboard-teacher fa-stack-1x fa-inverse"></i></span>
-                        </a>
-                            <h5 class="my-2">Dirección de Educación Media Superior y Superior</h5>
-
+                            <h5 class="my-2">Subsecretaría de Educación Media Superior, Superior <br> e Investigación Científica y Tecnológica de Nayarit</h5>
+                            <a class="portfolio-link" data-toggle="modal" href="#sub" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-building fa-stack-1x fa-inverse"></i></span>
+                            </a>
+                        </div>
+                   <br>
+                </div>
+                <br>
+                <div class="row text-center">
+                    <div class="col-md-12 portafolio-item">
+                       
+                            <h5 class="my-2" >Dirección de Educación Media Superior y Superior</h5>
+                            <a class="portfolio-link" data-toggle="modal" href="#direccion" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-chalkboard-teacher fa-stack-1x fa-inverse"></i></span>
+                            </a>
                          </div>
                    <br>
                 </div>
-
+<br>
                 <div class="row text-center"><br>
                     <div class="col-md-4 portafolio-item">
-                        <a class="portfolio-link" data-toggle="modal" href="#media" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-school fa-stack-1x fa-inverse"></i></span>
-                        </a>
-                            <h5 class="my-2">Departamento de Educación Media Superior</h5>
-
+                            <h5 class="my-2" >Departamento de Educación Media Superior</h5>
+                            <a class="portfolio-link" data-toggle="modal" href="#media" style="color: black;"> <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas  fa-school fa-stack-1x fa-inverse"></i></span>
+                            </a>
                          </div>
                     <div class="col-md-4 portafolio-item">
-                        <a class="portfolio-link" data-toggle="modal" href="#cyt" style="color: black;">  <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-laptop fa-stack-1x fa-inverse"></i></span>
-                       </a>
                             <h5 class="my-2">Departamento de Investigación Científica y Tecnológica</h5>
-                          </div>
+                            <a class="portfolio-link" data-toggle="modal" href="#cyt" style="color: black;">  <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-laptop fa-stack-1x fa-inverse"></i></span>
+                            </a>  
+                        </div>
                     <div class="col-md-4 portafolio-item">
+                        <h5 class="my-2" >Departamento de Educación Superior</h5>
                         <a class="portfolio-link" data-toggle="modal" href="#superior" style="color: black;"> 
-                        <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-university fa-stack-1x fa-inverse"></i></span>
-                        </a>
-                        <h5 class="my-2">Departamento de Educación Superior</h5>
+                            <span class="fa-stack fa-4x"><i class="fas fa-circle fa-stack-2x text-primary"></i><i class="fas fa-university fa-stack-1x fa-inverse"></i></span>
+                            </a>
                           </div>
                 </div>
             </div>
@@ -151,7 +163,7 @@
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Sistemas</h2>
-                    <h3 class="section-subheading text-muted">Actualmente SEMSSICyT se encuentra desarrollando sistemas digitales para la optimización de tiempo en respuesta a ciertos servicios proveídos por esta institución
+                    <h3 class="section-subheading text-muted">Actualmente SEMSSICyT se encuentra desarrollando Sistemas Digitales para la optimización de tiempo en respuesta a ciertos servicios proveídos por esta institución
                         .</h3>
                 </div>
                 <div class="row">
@@ -164,8 +176,8 @@
                                 <img class="img-fluid" src="{% static '/img/rvoe.jpeg'%}" alt=""
                             /></a>
                             <div class="portfolio-caption">
-                                <div class="portfolio-caption-heading">SRVOE</div>
-                                <div class="portfolio-caption-subheading text-muted">Sistema de generación de turnos de REVOE.</div>
+                                <div class="portfolio-caption-heading">SGTRVOE</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de Generación de Turnos de RVOE.</div>
                             </div>
                         </div>
                     </div>
@@ -179,7 +191,7 @@
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">SETyRS</div>
-                                <div class="portfolio-caption-subheading text-muted">Sistema de asignación de Exámenes a Título y Registro de Sinodales.</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de Exámenes a Título y Registro de Sinodales.</div>
                             </div>
                         </div>
                     </div>
@@ -193,7 +205,7 @@
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">STBC</div>
-                                <div class="portfolio-caption-subheading text-muted">Sistema de centros de telebachillerato comunitario.</div>
+                                <div class="portfolio-caption-subheading text-muted">Sistema de centros de Telebachillerato Comunitario.</div>
                             </div>
                         </div>
                     </div>
@@ -234,7 +246,7 @@
                             /></a>
                             <div class="portfolio-caption">
                                 <div class="portfolio-caption-heading">Blockchain</div>
-                                <div class="portfolio-caption-subheading text-muted"><br><br></div>
+                                <div class="portfolio-caption-subheading text-muted">Estampado de documentos con Blockchain<br></div>
                             </div>
                         </div>
                     </div>
@@ -244,56 +256,62 @@
 
 
         <!-- Contact-->
-        <section class="page-section" id="contact">
+        <section class="page-section" id="contact" style="background-color: white;">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Contacto</h2><br>
+                    <h2 class="section-heading text-uppercase" style="color: black;">Contacto</h2><br>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
-                        <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="{% static '/img/mapas-de-google.png'%}" alt="" style="width: 20%; height: 20%;" />
-                            <h4>Domicilio</h4>
-                            <p class="text-muted"> Avenida del Valle #85 Esq. Calle Florencia, Fraccionamiento Ciudad del Valle</span>
+                        <div class="text-center">
+                            <img class="mx-auto " src="{% static '/img/mapas-de-google.png'%}" alt="" style="width: 15%; height: 15%;" />
+                            
+                            <p class="text-muted"><br> Avenida del Valle #85 Esq. Calle Florencia, Fraccionamiento Ciudad del Valle</span>
                             </p>
                             </div>
                     </div>
 
                         <div class="col-lg-4">
-                            <div class="team-member">
-                                <img class="mx-auto" src="{% static '/img/telefono.png'%}" alt="" style="width: 20%; height: 20%;align-items: center; justify-content: center;" />
-                                <h4>Atención</h4>
-                                <p class="text-muted"> Teléfono : +52 , Horario : 9:00 am a 3:00 pm</span>
+                            <div class="text-center">
+                                <img class="mx-auto " src="{% static '/img/telefono.png'%}" alt="" style="width: 15%; height: 15%;align-items: center; justify-content: center;" />
+                                
+                                <p class="text-muted"><br> Tel. 311 1333484, 311 1333509, 311 1333566
+                                  Horario : 9:00 am a 3:00 pm</span>
+                               
                                 </p>
                                 </div>
                         </div>
 
+                    
                             <div class="col-lg-4">
-                                <div class="team-member">
-                                    <img class="mx-auto rounded-circle" src="{% static '/img/facebook.png'%}" alt="" style="width: 20%; height: 20%;" />
-                                    <h4>Atención</h4>
-                                    <p class="text-muted">Fb SSEMSSICyT</span>
-                                    </p>
+                                <div class="text-center">
+                                    <a data-toggle="modal" data-target="#modalContactForm">
+
+                                    <img class="mx-auto button " src="{% static '/login/email.png'%}" alt="" style="width: 15%; height: 15%;" />
+                                </a>
+                                    <p class="text-muted"><br>
+                                        Reportar cualquier error sobre la plataforma
+                                        plataforma.ssemssicyt@educacion.nayarit.gob.mx <br>
+                                        <br> <button class="btn btn-info" data-toggle="modal" data-target="#modalContactForm">Reportar errores</button>
+                                   </span>    
+                                </p>
                                     </div> 
                                     
                             </div>
-                            
                             </div>
                              <!--ROW-->
             </div>
 
         </section>
         <!-- Footer-->
-        <footer class="footer py-4">
+        <footer class="footer py-4" style="background-color: black;">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-lg-4 text-lg-left">Copyright © SSEMSSICyT 2020</div>
+                    <div class="col-lg-4 text-lg-left" style="color: white;">Copyright © SSEMSSICyT 2020</div>
                     <div class="col-lg-4 my-3 my-lg-0">
-                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-laptop"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-circle"></i></a>
+                        <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-laptop"></i></a><a class="btn btn-dark btn-social mx-2" href="https://www.facebook.com/ssemssicytnay/"><i class="fab fa-facebook-f"></i></a><a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-circle"></i></a>
                     </div>
-                    <div class="col-lg-4 text-lg-right">
-                        <a data-toggle="modal" data-target="#modalContactForm">Reportar errores</a>
-                    </div> 
+                    
                  
                 </div>
             </div>
@@ -343,7 +361,7 @@
       
             </div>
             <div class="modal-footer d-flex justify-content-center">
-              <button class="btn btn-info">Enviar</button>
+              <button class="btn btn-info" onclick="alert('Su reporte ha sido enviado, gracias!');">Enviar</button>
             </div>
         </form>
           </div>
@@ -387,7 +405,7 @@
             </div>
             <div class="modal-body">
               <p>Jefe de departamento Lic. Víctor Manuel Alvarado Jiménez</p>
-              <p>Correo electrónico : demsys@nayarit.gob.mx</p>
+              <p>Correo electrónico : direccionmediaysuperior@educacion.nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
               </div>
@@ -408,7 +426,7 @@
             </div>
             <div class="modal-body">
               <p>Jefe de departamento Mtro. Juan Humberto Pintado</p>
-              <p>Correo electrónico : mediasupSE@nayarit.gob.mx</p>
+              <p>Correo electrónico : media.superior@educacion.nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
              </div>
@@ -429,7 +447,7 @@
             </div>
             <div class="modal-body">
               <p>Jefe de departamento Mtro. William Javier Lozano Mora</p>
-              <p>Correo electrónico : superiorSE@nayarit.gob.mx</p>
+              <p>Correo electrónico : superior@educacion.nayarit.gob.mx</p>
             </div>
             <div class="modal-footer">
                </div>
@@ -450,7 +468,7 @@
             </div>
             <div class="modal-body">
               <p>Jefe de departamento Ing. Christopher Alan Estrada González</p>
-              <p>Correo electrónico : inv_cytSE@nayarit.gob.mx</p>
+              <p>Correo electrónico : deptoinvestigacionse@gmail.com</p>
             </div>
             <div class="modal-footer">
              </div>
