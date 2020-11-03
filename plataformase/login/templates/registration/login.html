@@ -49,25 +49,27 @@
                     <div class="d-flex justify-content-center h-100 pt-0">
                         <div class="card">
                             <div class="card-header">
-                               <div class="input-group form-group">
-                                <button type="submit" onclick="location.href='{% url 'menuvisitante'%}'" class="btn btn-dark btn-block btn-lg" value="consulta">Consultar Instituciones</button>
-                             </div>
+                                <h5 class="justify-content-center" style="color: white;">Inicia sesión</h5>
+                                
+                               
                             </div>
                             <div class="card-body">
-                                <h5 class="justify-content-center" style="color: white;">Inicia sesión</h5>
                                 <form method="post">
                                     {% csrf_token %}
-                                    <div class="form-group pt-0>
+                                    <div class="form-group">
                                         <label for="exampleInputEmail1">Correo electrónico</label>
                                         <input type="text" style="background-color: white;" class="form-control " name="username" id="id_username" required   autocapitalize="off" >
                                          </div>
-                                    <div class="form-group pt-0>
+                                    <div class="form-group">
                                      <label for="exampleInputEmail1">Contraseña</label>
                                      <input type="password"  name="password" id="id_password" class="form-control  " required>
                                      </div>
                                      <div class="input-group form-group">
-                                        <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info  btn-block" value="Acceder">Acceder </button>
-						             </div><br>
+                                        <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info  btn-block " value="Acceder">Acceder </button>
+                                    <br>
+                                    </div>
+                                    
+                                    <br>
                                     {% if form.errors %}
                                     {% for field in form %}
                                         {% for error in field.errors %}
@@ -86,18 +88,18 @@
                                     {% endif %}
                                 </form>
                             </div>
-                            <br><br><br><br>
-                            <div class="card-footer"><br><br>
-                                <!-- <div class="d-flex justify-content-center links">
-                                    <a href="{% url 'cuentavisitante'%}" class="visit" style="color: white;">Solicitar cuenta</a>
-                                </div> -->
+                           
+                            <div class="card-footer">
+                                <div class="input-group ">
+                                    <button type="submit" onclick="location.href='{% url 'menuvisitante'%}'" class="btn btn-block btn-success" value="consulta">Consultar Instituciones</button>
+                             <br>
                                 <div class="d-flex justify-content-center">
                                     <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
                                 </div>
 
                             </div>
                            </div>
-                           <br> <br>
+                           
             </div>
            </div> </div>
            <br><br><br><br>
