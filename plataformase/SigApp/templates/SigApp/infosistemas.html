@@ -1,0 +1,74 @@
+{% extends 'SigApp/nuevaBase.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Info Sistemas</title>
+		<!-- Bootstrap CSS -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+	</head>
+	<body>		
+        {% block content %}
+            {% if user.tipo_usuario == "1" or user.tipo_usuario == "2" %} 
+                <div class="container">
+                    <div class="rows">
+                        <div style="" >
+                            <div class="card-deck">
+                                <div class="border-light card">
+                                    <img class="card-img-top" class="d-block mx-auto w-50"  src="{% static 'SigApp/imgsupervision/localizacion.jpeg'%}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sistema de Información Geografica</h5>
+                                        <p class="card-text">Con este sistema le brindamos la opción de buscar instituciones privadas y publicas en el Estado de Nayarit.</p>                            
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <img class="card-img-top" src="{% static 'SigApp/imgsupervision/acta.png'%}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sistema de Supervisiones Digitales</h5>
+                                        <p class="card-text">Para su comodidad usted ya puede realizar las encuestas anuales de manera digital.</p>                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if user.tipo_usuario != "1"%}
+                {% if user.tipo_usuario != "2"%}
+                    {% if user.tipo_usuario != "3"%} 
+                        <div class="container">
+                            <div class="rows">
+                                <div style="" >
+                                    <div class="card-deck">
+                                        <div class="border-light card">
+                                            <img class="card-img-top" class="d-block mx-auto w-50"  src="{% static 'SigApp/imgsupervision/localizacion.jpeg'%}" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Sistema de Información Geografica</h5>
+                                                <p class="card-text">Con este sistema le brindamos la opción de buscar instituciones privadas y publicas en el Estado de Nayarit.</p>                            
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <img class="card-img-top" src="{% static 'SigApp/imgsupervision/quejas.jpg'%}" alt="Card image cap">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Quejas y Sugerencias</h5>
+                                                <p class="card-text">Como ciudadano usted tiene derecho a realizar denuncias anonimas sobre la institución de su interes.</p>                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            
+    </body>
+        {% endblock %}
+
+</html>

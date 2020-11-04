@@ -54,9 +54,9 @@
 
 <!------------------------------------------SISTEMAS------------------------------>
 		<section class="pricingCardGrid">
-			<div class="pricingCardGrid__body row">
+			<div class="pricingCardGrid__body row ">
 				<div class="pricingCardGrid__pricingCard">
-					<a class="pricingCard" href="/SigApp/" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
+					<a class="pricingCard" href="/SigApp/localizador" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
 							Sistema de información geográfica (SIG).
 						</div>
@@ -69,47 +69,66 @@
 							<p align="justify">Localización de instituciones educativas de media superior y superior del estado de Nayarit.</p>
 						</span>
 						<div class="pricingCard__button">
-						<span class="button button--primary">
-							Acceder </span>
-						</div>
-						</a>
-					</div>
-					
-				{% if UsuarioInstitucion.modalidad == '1' %}
-				<div class="pricingCardGrid__pricingCard" >
-					<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
-					<a class="pricingCard" title="Alumnos y docentes pueden llevar sus cursos semestrales de manera comoda y sencilla."
-					 href="/TBC/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
-						<div class="pricingCard__heading title--small" style="text-align: justify;">
-							Sistema automatizado de servicios escolares TBC.
-						</div>
-						<div class="pricingCard__pricing">
-							<div class="col-sm-4 col-xs-4">
-								<img src="{% static '/img/peole.png'%}"/>
-							</div>
-							<span class="pricingCard__period">
-								<p align="justify">Sistema de centros de telebachillerato comunitario.</p>
-							</span>
-						</div>
-						<div class="pricingCard__button">
 							<span class="button button--primary">
-								Próximamente
-							</span>
+								Acceder </span>
 						</div>
-						
 					</a>
 				</div>
-				{% endif %}
-						<div class="pricingCardGrid__pricingCard">
-						<a class="pricingCard" href="{% url 'SETyRS_institucion_index' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+				<div class="pricingCardGrid__pricingCard">
+					<a class="pricingCard" href="/SigApp/actasdesupervision" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
-						Solicitudes de Exámenes a Título y Registro de Sinodales </div>
+							Sistema de supervisiones digitales.
+						</div>
+						<div class="pricingCard__pricing">
+							<div class="col-sm-3 col-xs-3">
+								<img src="{% static '/img/revision.png'%}" width="200" height="200"/>
+							</div>
+						</div>
+						<span class="pricingCard__period" >
+							<p align="justify">Realiza la encuesta anual sobre la supervisión de su institución.</p>
+						</span>
+						<div class="pricingCard__button">
+							<span class="button button--primary">
+								Acceder </span>
+						</div>
+					</a>
+				</div>
+					
+				{% if UsuarioInstitucion.modalidad == '1' %}
+					<div class="pricingCardGrid__pricingCard" >
+						<!--a class="pricingCard" href="https://www.canva.com/q/pro-signup/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly"-->
+						<a class="pricingCard" title="Alumnos y docentes pueden llevar sus cursos semestrales de manera comoda y sencilla."
+						href="/TBC/" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+							<div class="pricingCard__heading title--small" style="text-align: justify;">
+								Sistema automatizado de servicios escolares TBC.
+							</div>
+							<div class="pricingCard__pricing">
+								<div class="col-sm-4 col-xs-4">
+									<img src="{% static '/img/peole.png'%}"/>
+								</div>
+								<span class="pricingCard__period">
+									<p align="justify">Sistema de centros de telebachillerato comunitario.</p>
+								</span>
+							</div>
+							<div class="pricingCard__button">
+								<span class="button button--primary">
+									Próximamente
+								</span>
+							</div>
+							
+						</a>
+					</div>
+				{% endif %}
+				<div class="pricingCardGrid__pricingCard">
+					<a class="pricingCard" href="{% url 'SETyRS_institucion_index' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+						<div class="pricingCard__heading title--small" style="text-align: justify;">
+							Solicitudes de Exámenes a Título y Registro de Sinodales </div>
 						<div class="pricingCard__pricing">
 							<div class="col-sm-4 col-xs-4">
 								<img src="{% static '/img/contrato.png'%}"/>
 							</div>
-						<span class="pricingCard__period">
-							<p align="justify">Sistema de autorización de exámenes a título y registro de sinodales.</p> </span>
+							<span class="pricingCard__period">
+								<p align="justify">Sistema de autorización de exámenes a título y registro de sinodales.</p> </span>
 						</div> 
 						<div class="pricingCard__button">
 							<span class="button button--primary">

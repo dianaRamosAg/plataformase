@@ -34,6 +34,16 @@ def historial_institucion(request):
 def programar_superv(request):
     return render (request, "SigApp/programar_superv.html")
 
+def infosistemas(request):
+    return render (request,"SigApp/infosistemas.html")
+
+def perfilinstitucion(request):
+    return render(request, "SigApp/perfilinstitucion.html")
+
+def actasdesupervision(request):
+    return render(request, "SigApp/actasdesupervision.html")
+
+
 # migracion excel bd : COPY "SigApp_localidad" ("Nombre","Clave_Municipio_id") FROM 'C:\4.csv' DELIMITER ',' CSV HEADER  encoding 'windows-1251';
 def index(request):
     GradosAcademicos = GradoAcademico.objects.all()

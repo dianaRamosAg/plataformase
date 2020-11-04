@@ -47,13 +47,13 @@
 							<ul class="list-unstyled components mb-5">	
 								{% if user.tipo_usuario == "1"%} 
 									<li>
-										<a href="#"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio</a>
+										<a href="/SigApp/infosistemas"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio</a>
 									</li>
 									<li>
-										<a href="#"><i class="fas fa-user"></i>&emsp;&nbsp;&nbsp;Perfil</a>
+										<a href="/SigApp/perfilinstitucion"><i class="fas fa-user"></i>&emsp;&nbsp;&nbsp;Perfil</a>
 									</li>
 									<li>
-										<a href="#"><i class="fas fa-file-alt"></i>&emsp;&nbsp;&nbsp;Actas de supervisión</a>
+										<a href="/SigApp/actasdesupervision"><i class="fas fa-file-alt"></i>&emsp;&nbsp;&nbsp;Actas de supervisión</a>
 									</li>
 									<li>
 										<a href="#collapseSIG" data-toggle="collapse" aria-controls="collapseSIG" aria-expanded="false"><i class="fas fa-map-marker-alt"></i> &emsp;&nbsp;&nbsp;SIG</a>
@@ -76,7 +76,7 @@
 									{% if user.tipo_usuario != "2" %}
 									{% if user.tipo_usuario != "1" %}
 									<li>
-										<a href="/SigApp/inicio"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio <span class="sr-only">(current)</span></a>
+										<a href="/SigApp/infosistemas"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio <span class="sr-only">(current)</span></a>
 									</li>
 									<li>
 										<a href="#"><i class="fas fa-envelope-open-text"></i>&emsp;&nbsp;&nbsp;Quejas</a>
@@ -102,7 +102,7 @@
 						<ul class="list-unstyled components mb-5">
 							{% if user.tipo_usuario == "3" or user.tipo_usuario == "2"%}
 								<li>
-									<a href="/SigApp/inicio"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio</a>
+									<a href="/SigApp/infosistemas"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio</a>
 								</li>
 								<li>
 									<a href="{% url 'perfiluser'%}"><i class="fas fa-user"></i>&emsp;&nbsp;&nbsp;Perfil</a>
