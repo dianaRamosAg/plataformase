@@ -1,0 +1,158 @@
+{% extends 'SigApp/nuevaBase.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="referrer" content="strict-origin" />
+
+	<!-- Minified Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Minified JS library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Minified Bootstrap JS -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+	<script src="js/bootstrap-datetimepicker.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+
+	<script type="text/javascript" src="/bower_components/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+  <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+	
+	<style>
+	.redondeado {
+	border-radius: 5px;
+	}
+	.btn-primary-spacing 
+	{ 
+	margin-right: 5px; 
+	margin-bottom: 5px !important; 
+	} 
+	.id-input::-webkit-input-placeholder { color: red; font-weight :bold; }
+
+	</style>
+</head>
+<body>
+	{% block content %}
+	<!--PANEL DESPLEGABLE-->
+	<div class="nav mt-2">
+    	<div class="panel-group nav-item dropdown">
+         	<div class="panel panel-default">
+				<div class="panel-heading">
+				<h4 class="panel-title  text-secondary" data-toggle="collapse" href="#collapse1" type="button" id="sidebarCollapse" class="btn btn-light">Programar supervisión <i class="fas fa-chevron-down"></i>
+				<hr width=150%  align="left" color="#A7ADA5"></h4>
+				</div>
+            	<div id="collapse1" class="panel-collapse collapse">
+					<div class="row">
+						<div id="inicio" class="panel-body col-xs-3 col-md-3" align="center">Seleccione la fecha de inicio</div>
+						<div id="fin" class="panel-body col-xs-3 col-md-3" align="center"> Seleccione la fecha de terminación</div>
+						<div id="fin" class="panel-body col-xs-3 col-md-3" align="center"> Seleccione destinatario</div>
+						<div id="fin" class="panel-body col-xs-3 col-md-3" align="center"> Seleccione la institución</div>
+					</div>
+			  		
+					<div class="row">
+						<div id="inicio" class="panel-body col-xs-3 col-md-3" align="center">
+						<div class="input-group date">
+							<div style="text-align:center; margin-left:20px; margin-top:10px">
+								<input type="date">
+									{{ example_form.my_date_field}}
+							</div>
+						</div>
+						</div>
+						<div id="fin" class="panel-body col-xs-3 col-md-3" align="center"> 
+						<div class="input-group date">
+							<div style="text-align:center; margin-left:30px; margin-top:10px">
+								<input type="date">
+									{{ example_form.my_date_field}}
+							</div>
+						</div>
+						</div>
+						<div id="fin" class="panel-body col-xs-3 col-md-3" align="center">
+							<select class="dropDown " onchange="filtroD('selectTipoS')" class="dropDown" TYPE=text id="selectTipoS" name="selectTipoS" size="1" style="width:80%; height:45px; text-align-last:center; font-weight: bold;">
+								<option class="opt" value="0">Selecionar...</option>
+								<option value="1" name="dominios">Todas las instituciones</option>
+								<option value="2" name="dominios">Individual</option>
+							</select> 
+						</div>
+						<div id="Individual"class="input-group panel-body col-xs-3 col-md-3" align="center"> 
+							<select class="dropDown" TYPE=text id="selectInstitucion" name="selectInstitucion" size="1" style="width:280px; text-align-last:center; font-weight: bold;" disabled>
+							<option class="opt" value="seleccion">Seleccione Institucion</option>
+							{% for element in opcionesinstituciones %}
+								<option value="{{element.ClaveEscuela}}">{{element.NombreEscuela}}</option>
+							{% endfor %}
+							</select> 
+						</div>
+							<script>
+							$("#selectTipoS").change(function(){
+								if($('#selectTipoS').val() == "2"){
+									$('#selectInstitucion').prop('disabled', false);
+								}else{
+									$('#selectInstitucion').prop('disabled', 'enable');
+								}
+							});
+							</script>		
+							<!--<script>
+						
+								$('#selectTipoS').change(function(){
+									var valor=$("#selectTipoS").val();
+									if(valor=="1"){
+										$('#selectInstitucion').removeAttr("enable");
+									}else{
+										$('#selectInstitucion').removeAttr('disabled');
+									}
+								})
+							
+							</script>-->
+
+			  			</div>
+					  <br><br><br>
+					  <div class="row">
+						<div id="finalizarbt" class="panel-body col-xs-1 col-md-12" align="center" >
+							<button  type="button" id="sidebarCollapse" class="btn btn-success btn-primary-spacing" margin-top="10px"> Finalizar</button> 
+						</div>
+					</div>
+               </div>
+           </div>
+    	</div>
+    </div>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
+   
+   
+    <!--TABLA DE SUPERVISIONES PROGRAMADAS-->
+	<br><br>
+	<h4 class="text-secondary">Supervisiones programadas </h4>
+	<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Destinatario</th>
+      <th scope="col">Fecha de inicio</th>
+      <th scope="col">Fecha de terminación</th>
+      <th scope="col">Forma</th>
+	  <th scope="col">Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Institución {{ user.first_name }} {{ user.last_name }}</th>
+      <td>20-09-2020</td>
+      <td> </td>
+      <td>Digital</td>
+	  <td><button  type="button" id="sidebarCollapse" class="btn btn-success"> Contestar </button> </td>
+    </tr>
+  
+  </tbody>
+</table>
+
+    {% endblock %}
+	
+
+</body>
+</html>
