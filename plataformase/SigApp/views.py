@@ -19,8 +19,28 @@ from datetime import datetime
 def inicio(request):
     return render (request, "SigApp/inicio.html")
 
+#def nuevaBase(request):
+ #  return render (request, "SigApp/nuevaBase.html")
+
 def nuevaBase(request):
-    return render (request, "SigApp/nuevaBase.html")
+    
+    #dep = id_dep
+    Escuela = EscuelaC.objects.all()
+
+
+
+    return render(request,'SigApp/nuevBase.html',{
+        "Escuela":Escuela,
+        })
+
+
+
+
+
+
+
+
+
 
 def actas_departamento(request):
     return render (request, "SigApp/actas_departamento.html")
@@ -37,11 +57,89 @@ def programar_superv(request):
 def infosistemas(request):
     return render (request,"SigApp/infosistemas.html")
 
-def perfilinstitucion(request):
-    return render(request, "SigApp/perfilinstitucion.html")
+#def perfilinstitucion(request):
+ #   return render(request, "SigApp/perfilinstitucion.html")
 
 def actasdesupervision(request):
     return render(request, "SigApp/actasdesupervision.html")
+
+
+
+
+def perfilinstitucion(request, id, claveescuela):
+    if (id == 'id'):
+            Instituciones = EscuelaC.objects.get(ClaveEscuela = claveescuela)
+            try:
+                estadisticaGral = estadisticosNuevo.objects.get(ClaveEscuela=claveescuela)
+            except estadisticosNuevo.DoesNotExist:
+                estadisticaGral = None
+
+            try:
+                rvoes = RVOES.objects.filter(ClaveEscuela=claveescuela)
+            except RVOES.DoesNotExist:
+                rvoes = None
+            
+           
+    else:
+        Instituciones = EscuelaC.objects.get(ClaveEscuela = claveescuela)
+        try:
+            estadisticaGral = estadisticosNuevo.objects.get(ClaveEscuela=claveescuela)
+        except estadisticosNuevo.DoesNotExist:
+                estadisticaGral = None
+
+        try:
+            rvoes = RVOES.objects.filter(ClaveEscuela=claveescuela)
+        except RVOES.DoesNotExist:
+            rvoes = None
+
+    return render(request,'SigApp/perfilinstitucion.html',{"institucion": Instituciones,"statsg": estadisticaGral,"RVOESF":rvoes,
+     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # migracion excel bd : COPY "SigApp_localidad" ("Nombre","Clave_Municipio_id") FROM 'C:\4.csv' DELIMITER ',' CSV HEADER  encoding 'windows-1251';
@@ -729,6 +827,48 @@ def detalle(request,idr,inst):
    
     
     return render(request,'SigApp/detalle_carreras.html',{"RVOE":RVOEF,"Institucion":InstitucionF})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def selectInstitucion(request,id):

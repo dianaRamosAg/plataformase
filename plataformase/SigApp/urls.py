@@ -13,6 +13,7 @@ urlpatterns = [
     path('index',views.index, name='index'),
 
     path('nuevaBase', views.nuevaBase, name='nuevaBase'),
+    
     path('inicio', views.inicio, name='inicio'),
     path('actas_departamento', views.actas_departamento, name='actas_departamento'),
     path('bandeja_quejas', views.bandeja_quejas, name='bandeja_quejas'),
@@ -20,8 +21,8 @@ urlpatterns = [
     path('programar_superv', views.programar_superv, name='programar_superv'),
 
     path('infosistemas',views.infosistemas,name='infosistemas'),
-    path('perfilinstitucion',views.perfilinstitucion,name='perfilinstitucion'),
-     path('actasdesupervision',views.actasdesupervision,name='actasdesupervision'),
+    path('perfilinstitucion/<id>/<claveescuela>/',views.perfilinstitucion,name='perfilinstitucion'),
+    path('actasdesupervision',views.actasdesupervision,name='actasdesupervision'),
 
 
     path('instituciones/<id>/<slug:clave>',views.instituciones, name='instituciones'),  

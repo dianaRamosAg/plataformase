@@ -23,24 +23,7 @@
             }   
         </style>
 
-        <script>
-
-        //$(document).ready(function() {
-        //$('.mdb-select').materialSelect();
-        //});
-    
-        //jQuery(window).load(function() {  
-    
-        //$('.carousel').carousel('pause');
-
-        //});
-
-        function detalleCarrera(rvoeConsulta){
-            var renglonClickeado = document.getElementById(rvoeConsulta);
-            var rvoe = renglonClickeado.children[0].id;
-            console.log(rvoe);
-            window.location="/SigApp/detalle/"+rvoe+"/{{institucion.ClaveEscuela}}";
-        };
+        <script type="text/javascript">
 
         </script>
         
@@ -87,103 +70,105 @@
                                     <p class="" style="">Nombre</p>
                                 </div>
                                 <div class="col" style="">          
-                                    <a class="btn btn-sm btn-secondary font-weight-light float-left" style="font-size:10px;" href="/SigApp/selectInstitucion2/{{ user.id }}/" ><i class="fas fa-edit"></i>Editar</a>
-                                    
+                                    <a class="btn btn-sm btn-secondary font-weight-light float-left" style="font-size:10px;" href="/SigApp/selectInstitucion2/{{ user.id }}/" ><i class="fas fa-edit"></i>Editar</a>                                    
                                 </div>                                
                             </div>   
     
                             <div class="row" style="">
                                 <div class="col" style="">
-                                <label>INSTITUTO TECNOLOGICO DE TEPIC</label>                                    
+                                    <label> {{institucion.NombreEscuela}}</label> 
                                 </div>
                             </div>   
 
                             <div class="row">
                                 <div class="col" style="">
                                     <p style="">Clave centro</p>
-                                    <label>18DIT0002Z</label>
+                                    <label>{{institucion.ClaveEscuela}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Status</p>
-                                    <label>ACTIVO</label>
+                                    <label>{{institucion.EstatusEscuela}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Sector</p>
-                                    <label>PÚBLICO</label>
+                                    <label>{{institucion.Dominio}}</label>
                                 </div>
                             </div>    
                             <div class="row">    
                                 <div class="col" style="">
                                     <p style="">Municipio</p>
-                                    <label>TEPIC</label>
+                                    <label>{{institucion.Municipio}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Localidad</p>
-                                    <label>AGUAMILPA</label>
+                                    <label>{{institucion.Localidad}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">C.P.</p>
-                                    <label>63175</label>
+                                    <label>{{institucion.CodPostal}}</label>
                                 </div>                        
                             </div>
                             <div class="row">                              
                                 <div class="col" style="">
                                     <p style="">Domicilio</p>
-                                    <label>AVENIDA TECNOLOGICO APDO. POSTAL 343</label>
+                                    <label>{{institucion.Calle}}</label>
                                 </div>                    
                             </div>
                             <div class="row">
                                 <div class="col" style="">
                                     <p style="">Director</p>
-                                    <label>ALBINO URIBE VÁZQUEZ</label>
-                                </div>
-                                <div class="col" style="">
-                                    <p style="">Correo</p>
-                                    <label>rarias@ittepic.educ.mx</label>
+                                    <label>{{institucion.nombreDirector}} {{institucion.ApellidoP_Director}} {{institucion.ApellidoM_Director}}</label>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col" style="">
+                                    <p style="">Correo</p>
+                                    <label>{{institucion.Email}}</label>
+                                </div>
+                            </div>
+
                             <br>
                             <br>
                             <div class="row">
                                 <div class="col" style="">
                                     <p style="">Total de Alumnos</p>
-                                    <label>4983</label>
+                                    <label>{{statsg.TotalAlumnos}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Alumnos Mujeres</p>
-                                    <label>1684</label>
+                                    <label>{{statsg.TotalMujeres}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Alumnos Hombres</p>
-                                    <label>3295</label>
+                                    <label>{{statsg.TotalHombres}}</label>
                                 </div>                        
                             </div>
                             <div class="row">
                                 <div class="col" style="">
                                     <p style="">Primer Año</p>
-                                    <label>1339</label>
+                                    <label>{{statsg.TotalPrimero}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Segundo Año</p>
-                                    <label>950</label>
+                                    <label>{{statsg.TotalSegundo}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Tercer Año</p>
-                                    <label>893</label>
+                                    <label>{{statsg.TotalTercero}}</label>
                                 </div>                        
                             </div>
                             <div class="row">
                                 <div class="col" style="">
                                     <p style="">Cuarto Año</p>
-                                    <label>750</label>
+                                    <label>{{statsg.TotalCuarto}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Quinto Año</p>
-                                    <label>753</label>
+                                    <label>{{statsg.TotalQuinto}}</label>
                                 </div>
                                 <div class="col" style="">
                                     <p style="">Sexto Año</p>
-                                    <label>306</label>
+                                    <label>{{statsg.TotalSexto}}</label>
                                 </div>                        
                             </div>
                         </div>
@@ -191,6 +176,7 @@
                 </div>
             </div>
         </div>
+        
 
     </body>
     {% endblock %}
