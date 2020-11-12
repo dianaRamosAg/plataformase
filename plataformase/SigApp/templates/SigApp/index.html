@@ -1,6 +1,8 @@
 {% extends 'SigApp/nuevaBase.html' %}
 {% load static %}
 <!DOCTYPE html>
+	<!-- Vista principal para cada uno de los usuarios del SIG, obtiene el listado
+		 de instituciones, ademas de la infromacion para cada filtro de busqueda    -->
 <html>
 <head>
 <body>
@@ -17,11 +19,24 @@
 	.centroItem{
 		align-items: center;
 		}
+	.cambiaColor{
+		border-style: solid;
+		border: red;
+	}
 	</style>
 
 	<script type="text/javascript">
+		function prueba(){
+			var selectM = document.getElementById('selectInstitucion')
+			$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
+		}
 
 		function infoInstitucion2(aInstitucion2){
+			//--
+			var sInstitucion = document.getElementById('selectInstitucion');
+			var valueInstitucion = sInstitucion.value;
+			//alert(valueInstitucion)
+			//--
 			var aInst = document.getElementById(aInstitucion2);
 			//var sInstitucion = document.getElementById('selectInstitucion');
 			var CCT = document.getElementById('inputCCT'); 
@@ -32,7 +47,17 @@
 				aInst.href = "/SigApp/localizarInst/"+CCT.value;
 				//aInst.href = "/SigApp/localizarInst/"+CCT.value+"/";	
 			}else{
-				alert("Introduce una Clave");	
+				if(valueInstitucion != 'seleccion'){
+					aInst.href = "/SigApp/localizarInst/"+valueInstitucion;
+				}else{
+					Swal.fire({
+						title: '¡Alto!',
+						text: 'Selecciona una institución',
+						icon: 'warning',
+						confirmButtonText: 'Ok'
+						})
+				}
+				
 			}												 
 		};
 
@@ -41,6 +66,7 @@
 			var sInstitucion = document.getElementById('selectInstitucion');
 			var CCT = document.getElementById('inputCCT'); 
 			var valueInstitucion = sInstitucion.value;
+			//cct = alert(valueInstitucion)
 			console.log(valueInstitucion);
 			if( CCT.value != ''){
 				console.log("/SigApp/instituciones/clave/"+CCT.value);
@@ -48,6 +74,14 @@
 			}else if (valueInstitucion != 'seleccion'){
 					aInst.href = "/SigApp/instituciones/id/"+valueInstitucion;
 					console.log("/SigApp/instituciones/id/"+valueInstitucion);
+			}
+			if(valueInstitucion == 'seleccion'){
+				Swal.fire({
+					title: '¡Alto!',
+					text: 'Selecciona una institución',
+					icon: 'warning',
+					confirmButtonText: 'Cool'
+					})
 			}											 
 		};
 	 
@@ -157,222 +191,188 @@
 									
 		}	
 
-function updInstituciones(selectOrigen){
-	var origen = '#'+selectOrigen;			
-	$(origen).change(function(){
-		var urlF = "/SigApp/updInstituciones/";
-		if(origen == '#selectMunicipio'){$('#selectLocalidad').val('seleccion');}
-		var municipioSeleccionado = $('#selectMunicipio').find(':selected').val();
-		var municipioF = municipioSeleccionado.replace(/\s/g, '-');
-		
-		if(municipioSeleccionado=='RUÍZ'){municipioF='RUIZ';}
-		if(municipioSeleccionado=='AHUACATLÁN'){municipioF='AHUACATLAN';}
-		if(municipioSeleccionado=='AMATLÁN DE CAÑAS'){municipioF='AMATLAN-DE-CANAS';}
-		if(municipioSeleccionado=='IXTLÁN DEL RÍO'){municipioF='IXTLAN-DEL-RIO';}
-		if(municipioSeleccionado=='SANTA MARÍA DEL ORO'){municipioF='SANTA-MARIA-DEL-ORO';}
-		if(municipioSeleccionado=='BAHÍA DE BANDERAS'){municipioF='BAHIA-DE-BANDERAS';}
-		
+		function updInstituciones(selectOrigen){
+			var origen = '#'+selectOrigen;			
+			$(origen).change(function(){
+				var urlF = "/SigApp/updInstituciones/";
+				if(origen == '#selectMunicipio'){$('#selectLocalidad').val('seleccion');}
+				var municipioSeleccionado = $('#selectMunicipio').find(':selected').val();
+				var municipioF = municipioSeleccionado.replace(/\s/g, '-');
+				
+				if(municipioSeleccionado=='RUÍZ'){municipioF='RUIZ';}
+				if(municipioSeleccionado=='AHUACATLÁN'){municipioF='AHUACATLAN';}
+				if(municipioSeleccionado=='AMATLÁN DE CAÑAS'){municipioF='AMATLAN-DE-CANAS';}
+				if(municipioSeleccionado=='IXTLÁN DEL RÍO'){municipioF='IXTLAN-DEL-RIO';}
+				if(municipioSeleccionado=='SANTA MARÍA DEL ORO'){municipioF='SANTA-MARIA-DEL-ORO';}
+				if(municipioSeleccionado=='BAHÍA DE BANDERAS'){municipioF='BAHIA-DE-BANDERAS';}
 
-
-		var localidadSeleccionado = $('#selectLocalidad').find(':selected').val();
-		var localidadSeleccionadoF = localidadSeleccionado.replace(/\s/g, '-');
-		if(localidadSeleccionadoF.includes('Á')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Á','a')}
-		if(localidadSeleccionadoF.includes('É')){localidadSeleccionadoF=localidadSeleccionadoF.replace('É','e')}
-		if(localidadSeleccionadoF.includes('Í')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Í','i')}
-		if(localidadSeleccionadoF.includes('Ó')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ó','o')}
-		if(localidadSeleccionadoF.includes('Ú')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ú','u')}
-
-		var nivelacademicoSeleccionado = $('#selectNA').find(':selected').val();
-		nivelacademicoSeleccionadoF = nivelacademicoSeleccionado.replace(' ','-')
-		var areainteresSeleccionado = $('#selectAI').find(':selected').val();
-		var dominioSeleccionado = $('#selectDominio').find(':selected').val();
-		if(!municipioSeleccionado.startsWith("seleccion")){urlF=urlF+municipioF+"/";}else{urlF=urlF+"empty/";}
-		if(!localidadSeleccionado.startsWith("seleccion")){urlF=urlF+localidadSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
-		if(!nivelacademicoSeleccionado.startsWith("seleccion")){urlF=urlF+nivelacademicoSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
-		if(!areainteresSeleccionado.startsWith("seleccion")){urlF=urlF+areainteresSeleccionado+"/";}else{urlF=urlF+"empty/";}
-		if(!dominioSeleccionado.startsWith("seleccion")){urlF=urlF+dominioSeleccionado+"/";}else{urlF=urlF+"empty/";}
-		console.log(urlF);
-		$.ajax({
-			url: urlF ,
-			method: 'GET',
-			dataType: "json",
-			success:function(jsonData){
-				var optionsInstituciones="";
-				$('#selectInstitucion').empty();
-				$('#selectInstitucion').append('<option value="seleccion"> Seleccione Institución </option>');
-				$.each(JSON.parse(jsonData),function(i,item){
-					optionsInstituciones+='<option value="'+item["pk"]+'">'+item["fields"]["NombreEscuela"]+'</option>';
-				});
-				$('#selectInstitucion').append(optionsInstituciones);
-				console.log(jsonData);				
-			}
-		})
-	});
-}
-	
+				var localidadSeleccionado = $('#selectLocalidad').find(':selected').val();
+				//alert(localidadSeleccionado)
+				var localidadSeleccionadoF = localidadSeleccionado.replace(/\s/g, '-');
+				if(localidadSeleccionadoF.includes('Á')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Á','1')}
+				if(localidadSeleccionadoF.includes('É')){localidadSeleccionadoF=localidadSeleccionadoF.replace('É','2')}
+				if(localidadSeleccionadoF.includes('Í')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Í','3')}
+				if(localidadSeleccionadoF.includes('Ó')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ó','4')}
+				if(localidadSeleccionadoF.includes('Ú')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ú','5')}
+				//alert(localidadSeleccionadoF)
+				var nivelacademicoSeleccionado = $('#selectNA').find(':selected').val();
+				nivelacademicoSeleccionadoF = nivelacademicoSeleccionado.replace(' ','-')
+				//alert(nivelacademicoSeleccionadoF)
+				var areainteresSeleccionado = $('#selectAI').find(':selected').val();
+				var dominioSeleccionado = $('#selectDominio').find(':selected').val();
+				if(!municipioSeleccionado.startsWith("seleccion")){urlF=urlF+municipioF+"/";}else{urlF=urlF+"empty/";}
+				if(!localidadSeleccionado.startsWith("seleccion")){urlF=urlF+localidadSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+				if(!nivelacademicoSeleccionado.startsWith("seleccion")){urlF=urlF+nivelacademicoSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+				if(!areainteresSeleccionado.startsWith("seleccion")){urlF=urlF+areainteresSeleccionado+"/";}else{urlF=urlF+"empty/";}
+				if(!dominioSeleccionado.startsWith("seleccion")){urlF=urlF+dominioSeleccionado+"/";}else{urlF=urlF+"empty/";}
+				console.log(urlF);
+				$.ajax({
+					url: urlF ,
+					method: 'GET',
+					dataType: "json",
+					success:function(jsonData){
+						var optionsInstituciones="";
+						$('#selectInstitucion').empty();
+						$('#selectInstitucion').append('<option value="seleccion"> Seleccione Institución </option>');
+						$.each(JSON.parse(jsonData),function(i,item){
+							optionsInstituciones+='<option value="'+item["pk"]+'">'+item["fields"]["NombreEscuela"]+'</option>';
+						});
+						$('#selectInstitucion').append(optionsInstituciones);
+						$("#selectInstitucion").selectpicker("refresh");
+						$("#selectInstitucion").selectpicker('render');
+						$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
+						setTimeout(() => {  $('#selectInstitucion').selectpicker('setStyle', ''); }, 500);
+						console.log(jsonData);			
+							
+					}
+				})
+			});
+		}
 	</script>
 
 	
 
-    <div class="container-fluid col-12 "  style="padding-top: 3%; background-image: url({% static 'SigApp/backgroundBlur.png' %}); padding-top: 5%; padding-bottom: 5%">
-		
+    <div class="container-fluid col-12"  style="background-image: url({% static 'SigApp/backgroundBlur.png' %}); padding-top: 5%; padding-bottom: 5%; height: 100hv;">
 		<div class="container-fluid col-xl-7 col-lg-9 col-md-9 col-sm-10 col-xs-10" style="background-color: #FFFFFF;  border: solid 2px #000000; padding-bottom: 2%;">
-		
 			<div class="row mt-3">				
 				<div class="centro texto col-12" style=" color: #707070; font-size: 158%;">
-					<p>INVESTIGA TU INSTITUCIÓN</p>
+					<p>Busca tu institución</p>
 				</div>
 			</div>
-
-			<div class="row mt-1">
-				<div class="centro col-12">
-					<label class="texto" data-toggle="tooltip" data-placement="right" title="Hola! Sí conoces la clave de institución haz una busqueda rapida en 'Ubicar'">Clave del Centro de Trabajo</label> 
+			<div class="row mb-1">
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<label class="texto">Por nombre de Institución</label> 
 				</div>
-
-				<div class="centro col-12">
-					<INPUT class="texto"  TYPE=text id="inputCCT" name="ClaveCentroTrabajo" value="" size="17" style="font-weight: bold; text-align: center;"/>	 					 
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<label class="texto" data-toggle="tooltip" data-placement="right" title="Hola! Sí conoces la clave de institución haz una busqueda rapida en 'Ubicar'">Por Clave del Centro de Trabajo</label> <br>
 				</div>
-
-				<div class="centro col-12">
+			</div>
+			<div class="row mb-1">
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<select class="selectpicker" data-live-search="true" id="selectInstitucion">
+						<option class="opt" value="seleccion">Seleccione institución</option>
+						{% for element in opcionesinstituciones %}
+							<option value="{{element.ClaveEscuela}}">{{ element.NombreEscuela }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<INPUT class="texto"  TYPE=text id="inputCCT" name="ClaveCentroTrabajo" value="" size="17" style="font-weight: bold; text-align: center;"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 mb-1 d-flex justify-content-center"></div>
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
 					{% for message in messages %}
-					<span class="badge badge-danger" style="margin-top: 20px; text-align: center;">{{ message }}</span> <br>
+						<span class="badge badge-danger" style="margin-top: 20px; text-align: center;">{{ message }}</span> <br>
 					{% endfor  %}
 				</div>
-				<!-- {% if messages %}
-    				<ul class="messages">
-        				{% for message in messages %}
-        					<li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        				{% endfor %}
-    				</ul>    
-				{% endif %} -->
-
 			</div>
-
 			<hr>
 
-			<div class="row">	
-				<div class="centro col-12">
-					<label class="texto">Sector Institución</label> 
+			<!-- Rows con 2 columnas [municipio, localidad]-->
+			<div class="row mb-1">
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<label class="texto">Municipio</label>
+				</div>
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<label class="texto">Localidad</label>
 				</div>
 			</div>
-			<!--*FIN ROW ETIQUETA AREA INTERES-->
-			<!--*ROW COMBO AREA INTERES-->
-			<div class="row">	
-				<div class="centro col-12">
-					<select class="dropDown" onclick="updInstituciones(this.id);" TYPE=text id="selectDominio" name="selectDominio" value="" size="1" style="text-align-last:center; font-weight: bold;" >
-						<option value="seleccione">Seleccione Sector de la Institución</option>
+
+			<div class="row mb-3">
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<select id="selectMunicipio" TYPE=text name="selectMunicipio" onchange="prueba()" onclick="populate(); updInstituciones(this.id);" size="1" style="text-align-last:center;  font-weight: bold;">
+						<option class="opt" value="seleccion">Seleccione municipio</option>
+						{% for element in opcionesmunicipios %}
+							<option value="{{element.Nombre}}">{{element.Nombre}}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<select id="selectLocalidad" TYPE=text name="selectLocalidad"  size="1"  onchange="prueba()" onclick="updInstituciones(this.id);" style="width:180px; text-align-last:center;  font-weight: bold;" >
+						<option class="opt" value="seleccion">Seleccione localidad</option>
+						{% for element in localidades %}
+							<option value="{{element.Nombre}}">{{element.Nombre}}</option>
+						{%endfor%}
+					</select>  
+				</div>
+			</div>
+
+			<!-- Row con dos columnas [nivel y área de interés] -->
+			<div class="row mb-1">
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<label class="texto">Sector de institución</label> 
+				</div>
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<label  class="texto">Nivel académico</label> 
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<select class="dropDown" onchange="prueba()" onclick="updInstituciones(this.id);" TYPE=text id="selectDominio" name="selectDominio" value="" size="1" style="text-align-last:center; font-weight: bold;" >
+						<option value="seleccione">Seleccione sector de la institución</option>
 							<option value="PUBLICO">Instituciones Públicas</option>
 							<option value="PRIVADO">Instituciones Privadas</option>
 					</select> 
+					
 				</div>
-			</div>
-			<!--*FIN COMBO ETIQUETA AREA INTERES-->
-
-			<!--*ROW ETIQUETA AREA INTERES-->
-			<div class="row">	
-				<div class="centro col-12">
-					<label class="texto">Área de Interes</label> 
-				</div>
-			</div>
-			<!--*FIN ROW ETIQUETA AREA INTERES-->
-			<!--*ROW COMBO AREA INTERES-->
-			<div class="row">	
-				<div class="centro col-12">
-					<select class="dropDown" onclick="updInstituciones(this.id);" TYPE=text id="selectAI" name="selectAI" value="" size="1" style="text-align-last:center; font-weight: bold;" >
-						<option value="seleccione">Seleccione Área de Interes</option>
+				<div class="col-md-6 mb-1 d-flex justify-content-center">
+					<select class= TYPE=text onchange="prueba()" onclick="updInstituciones(this.id);" id="selectNA" name="selectNA" value="" size="1" style="text-align-last:center;  font-weight: bold;" >
+						<option class="opt" value="seleccion">Seleccione nivel académico</option>
+						{% for element in opcionesgrados|slice:":2" %}
+							<option value="{{element.Descripcion}}">{{element.Descripcion}}</option>
+						{%endfor%}
+					</select>
+					 <!--Area de interés  -->
+					<select hidden class="dropDown" onclick="updInstituciones(this.id);" TYPE=text id="selectAI" name="selectAI" value="" size="1" style="text-align-last:center; font-weight: bold;" >
+						<option value="seleccione">Seleccione Área de interés</option>
 						{% for element in areaseducacion %}
 							<option value="{{element.Clave_Area}}">{{element.Descripcion}}</option>
 						{%endfor%}
 					</select> 
 				</div>
 			</div>
-			<!--*FIN COMBO ETIQUETA AREA INTERES-->
-			<!--*ROW ETIQUETA NIVEL EDUCATIVO-->
-			<div class="row">	
-				<div class="centro col-12">
-					<label class="texto">Nivel Academico</label> 
-				</div>
-			</div>
-			<!--*FIN ROW ETIQUETA NIVEL EDUCATIVO-->
-			<!--*ROW COMBO NIVEL EDUCATIVO-->
-			<div class="row">	
-				<div class="centro col-12">
-					<select class= TYPE=text onclick="updInstituciones(this.id);" id="selectNA" name="selectNA" value="" size="1" style="text-align-last:center;  font-weight: bold;" >
-						<option class="opt" value="seleccion">Seleccione Nivel Academico</option>
-						{% for element in opcionesgrados %}
-						<option value="{{element.Descripcion}}">{{element.Descripcion}}</option>
-						{%endfor%}
-					</select> 
-				</div>
-			</div>
-			<!--*FIN ROW COMBO NIVEL EDUCATIVO-->
 
-			<!--*ROW ETIQUETAS MUNICIPIO y LOCALIDAD-->
-			<div class="row">					
-				<div class="centro col-6"> 
-					<label class="texto">Municipio</label> 					
-				</div>
-				<div class="centro col-6"> 
-					<label class="texto">Localidad</label> 				
-				</div>
+			<div class="row mb-1">
+				<!-- <select  class="dropDown" TYPE=text id="selectInstitucion" name="selectInstitucion" value="" size="1" style="width:280px; text-align-last:center; font-weight: bold;" >
+					<option class="opt" value="seleccion">Seleccione Institucion</option>
+					{% for element in opcionesinstituciones %}
+						<option value="{{element.ClaveEscuela}}">{{element.NombreEscuela}}</option>
+					{% endfor %}
+				</select>  -->
 			</div>
-			<!--*FIN ROW ETIQUETAS MUNICIPIO y LOCALIDAD-->	
-
-			<!--*ROW COMBO MUNICIPIO y LOCALIDAD-->
-			<div class = "row">
-				<div class="centro col-6">												
-					<select id="selectMunicipio" TYPE=text name="selectMunicipio" onclick="populate(); updInstituciones(this.id);" size="1" style="text-align-last:center;  font-weight: bold;">
-						<option class="opt" value="seleccion">Seleccione Municipio</option>
-						{% for element in opcionesmunicipios %}
-							<option value="{{element.Nombre}}">{{element.Nombre}}</option>
-						{% endfor %}
-					</select>
-				</div>	
-				<div class="centro col-6">				
-					<select id="selectLocalidad" TYPE=text name="selectLocalidad"  size="1" onclick="updInstituciones(this.id);" style="width:180px; text-align-last:center;  font-weight: bold;" >
-						<option class="opt" value="seleccion">Seleccione Localidad</option>
-						{% for element in localidades %}
-							<option value="{{element.Nombre}}">{{element.Nombre}}</option>
-						{%endfor%}
-					</select>  
-				</div>									
-			</div>
-			<!--*FIN ROW COMBO MUNICIPIO y LOCALIDAD->
-	
-			<!-*ROW ETIQUETA NOMBRE INSTITUCIÓN-->
-			<div class="row">	
-				<div class="centro col-12">
-					<label class="texto">Nombre de Institución</label> 
-				</div>
-			</div>
-			<!--*FIN ROW ETIQUETA NOMBRE INSTITUCIÓN-->
-			<!--*ROW COMBO NOMBRE INSTITUCIÓN-->
-			<div class="row">	
-				<div class="centro col-12" >					
-					<select class="dropDown" TYPE=text id="selectInstitucion" name="selectInstitucion" value="" size="1" style="width:280px; text-align-last:center; font-weight: bold;" >
-						<option class="opt" value="seleccion">Seleccione Institucion</option>
-						{% for element in opcionesinstituciones %}
-							<option value="{{element.ClaveEscuela}}">{{element.NombreEscuela}}</option>
-						{% endfor %}
-					</select> 
-				</div>
-			</div>
-			<!--*FIN COMBO ETIQUETA NOMBRE INSTITUCIÓN-->
-			<br>
-			<!--* ROW BOTONES*-->
-			
-			<div class="row">
+			<!-- Botones -->
+			<div class="row mt-3">
 				<div class="centro col-6">
-					<a style="color: white;" class="btn btn-secondary w-75 " id="buscarInstitucion2" onclick="infoInstitucion2(this.id)" >Ubicar</a>
+					<a style="color: white; cursor: pointer;" class="btn btn-primary w-75 " id="buscarInstitucion2" onclick="infoInstitucion2(this.id)" >Ubicar en el mapa</a>
 				</div>
 				<div class="centro col-6">		
-					<a style="color: white;" class="btn btn-secondary w-75 " id="buscarInstitucion" onclick="infoInstitucion(this.id)" >Buscar</a>
+					<a style="color: white; cursor: pointer;" class="btn btn-success w-75 " id="buscarInstitucion" onclick="infoInstitucion(this.id)" >Consultar institución</a>
 				</div>
-			</div>
-				<!--*FIN DEL ROW DE BOTONES UBICAR E INFORMACIÓN*-->
-      	</div>
-		<!--*FIN DEL CONTAINER PARA EL FORMULARIO *-->
-
+			</div>		  
+		</div>
+    </div>
 </body>	
 {% endblock %}
 </html>

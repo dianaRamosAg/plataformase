@@ -12,7 +12,7 @@ urlpatterns = [
     path('',views.index, name='index'),
     path('index',views.index, name='index'),
 
-    path('nuevaBase', views.nuevaBase, name='nuevaBase'),
+    path('nuevaBase/<id>/', views.nuevaBase, name='nuevaBase'),
     
     path('inicio', views.inicio, name='inicio'),
     path('actas_departamento', views.actas_departamento, name='actas_departamento'),

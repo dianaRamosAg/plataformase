@@ -50,12 +50,14 @@
 										<a href="/SigApp/infosistemas"><i class="fas fa-home"></i>&emsp;&nbsp;&nbsp;Inicio</a>
 									</li>
 									<li>
-										<a href="/SigApp/perfilinstitucion/{{ user.id }}/{{Escuela.ClaveEscuela}}/"><i class="fas fa-user"></i>&emsp;&nbsp;&nbsp;Perfil </a>
+											<a href="/SigApp/perfilinstitucion/{{ user.id }}/{{inst.cct}}/"><i class="fas fa-user"></i>&emsp;&nbsp;&nbsp;Perfil </a>
+										
+									
 									</li>
 									<li>
 										<a href="/SigApp/actasdesupervision"><i class="fas fa-file-alt"></i>&emsp;&nbsp;&nbsp;Actas de supervisión</a>
 									</li>
-									<li>
+									<!--<li>
 										<a href="#collapseSIG" data-toggle="collapse" aria-controls="collapseSIG" aria-expanded="false"><i class="fas fa-map-marker-alt"></i> &emsp;&nbsp;&nbsp;SIG</a>
 									</li>
 										<ul class="collapse" id="collapseSIG" style="list-style: disc;">
@@ -66,6 +68,18 @@
 												<a class="nav-link mr-5" href="/SigApp/localizador"><i class="fas fa-map"></i> Mapa de instituciones</a>	
 											</li>
 										</ul>
+									-->	
+									<li>
+										<a href="/SigApp/localizador"><i class="fas fa-map-marker-alt"></i> &emsp;&nbsp;&nbsp;Mapa de instituciones</a>
+									</li>
+										<!--<ul class="collapse" id="collapseSIG" style="list-style: disc;">
+											<li>
+												<a class="nav-link mr-5" href="/SigApp/index"><i class="fas fa-search-location"></i> Buscar Instituciones</a>
+											</li>
+											<li>
+												<a class="nav-link mr-5" href="/SigApp/localizador"><i class="fas fa-map"></i> Mapa de instituciones</a>	
+											</li>
+										</ul>-->
 									<li>
 										<a class="nav-link mr-5"  href="{% url 'logout' %}" style="font-size: 15px; color:crimson;"><i class="fas fa-sign-out-alt" ></i>&emsp;&nbsp;&nbsp;Cerrar sesión</a>
 									</li>	
