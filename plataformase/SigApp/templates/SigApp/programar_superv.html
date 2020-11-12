@@ -4,28 +4,26 @@
 <html>
 <head>
     <meta name="referrer" content="strict-origin" />
+	
+	<!-- Minified JS library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+	<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
+	<!-- Minified Bootstrap JS -->
+	<script src="js/bootstrap-datetimepicker.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 	<!-- Minified Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<!-- Minified JS library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<!-- Minified Bootstrap JS -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 	<link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-	<script src="js/bootstrap-datetimepicker.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 
-
-
-	<script type="text/javascript" src="/bower_components/jquery/jquery.min.js"></script>
-  <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
-  <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-	
 	<style>
 	.redondeado {
 	border-radius: 5px;
@@ -81,20 +79,22 @@
 								<option value="2" name="dominios">Individual</option>
 							</select> 
 						</div>
-						<div id="Individual"class="input-group panel-body col-xs-3 col-md-3" align="center"> 
-							<select class="dropDown" TYPE=text id="selectInstitucion" name="selectInstitucion" size="1" style="width:280px; text-align-last:center; font-weight: bold;" disabled>
-							<option class="opt" value="seleccion">Seleccione Institucion</option>
-							{% for element in opcionesinstituciones %}
-								<option value="{{element.ClaveEscuela}}">{{element.NombreEscuela}}</option>
-							{% endfor %}
-							</select> 
+						<div id="Individual"class="input-group panel-body col-xs-3 col-md-3" align="center">  
+							<select class="selectpicker" data-live-search="true" id="selectInstitucion">
+						<option class="opt" value="seleccion" >Seleccione institución</option>
+						{% for element in opcionesinstituciones %}
+							<option value="{{element.ClaveEscuela}}" style="margin-right: 1em;">{{ element.NombreEscuela }}</option>
+						{% endfor %}
+					</select>
 						</div>
-							<script>
+							<script >
 							$("#selectTipoS").change(function(){
-								if($('#selectTipoS').val() == "2"){
-									$('#selectInstitucion').prop('disabled', false);
+								if($('#selectTipoS').val() == "1"){
+									$('.selectpicker').selectpicker('refresh');
+									$('#selectInstitucion').prop('disabled', false); // Deshabilita el select de institución individual 
 								}else{
-									$('#selectInstitucion').prop('disabled', 'enable');
+									$('.selectpicker').selectpicker('refresh');
+									$('#selectInstitucion').prop('disabled', 'disabled');
 								}
 							});
 							</script>		
@@ -150,6 +150,7 @@
   
   </tbody>
 </table>
+
 
     {% endblock %}
 	
