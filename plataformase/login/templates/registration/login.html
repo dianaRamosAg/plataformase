@@ -27,7 +27,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
             <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static '/login/EducacionHorizontal.png' %}"style="width:20%;height:20%;" /></a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
+                <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src="{% static '/login/EducacionHorizontal-BCO.png' %}"style="width:20%;height:20%;" /></a><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu<i class="fas fa-bars ml-1"></i></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav text-uppercase ml-auto">
                         <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#services">SSEMSSICyT</a></li>
@@ -44,28 +44,34 @@
                 <div class="masthead-subheading">SSEMSSICyT</div>
                 <h5 class="my-3">Plataforma de servicios digitales.</h5>
                 <br><br>
-                <div class="container2 col-sm-7 " style="float:right;margin-top: -270px;margin-right: -110px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-                ">
+                <div class="container2 col-sm-7 " style="float:right;margin-top: -270px;margin-right: -110px">
                     <div class="d-flex justify-content-center h-100 pt-0">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="justify-content-center" style="color: white;">Inicia sesión</h5>
-                                
-                               
+                                <h5 class="justify-content-center" style="color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Ingresar sin cuenta</h5>
+                            
+                                <button type="submit" onclick="location.href='{% url 'menuvisitante'%}'" class="btn btn-block  btn-info btn-lg" style = "font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" value="consulta" title="Si eres una institución y ya te encuentras registrada, Inicia sesión, en el apartado de abajo">Consultar Instituciones</button>
+                            
+
+                                <!-- <h5 class="justify-content-center" style="color: white;">Inicia sesión</h5>
+                                 -->
                             </div>
                             <div class="card-body">
+                                
+                                <h5 class="justify-content-center" style="color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Iniciar sesión</h5>
+                            
                                 <form method="post">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Correo electrónico</label>
-                                        <input type="text" style="background-color: white;" class="form-control " name="username" id="id_username" required   autocapitalize="off" >
+                                        <!-- <label for="exampleInputEmail1">Correo electrónico</label> -->
+                                        <input type="text" style="background-color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="form-control input-lg" name="username" id="id_username" autofocus required  placeholder="Correo electrónico" autocapitalize="off" >
                                          </div>
                                     <div class="form-group">
-                                     <label for="exampleInputEmail1">Contraseña</label>
-                                     <input type="password"  name="password" id="id_password" class="form-control  " required>
+                                     <!-- <label for="exampleInputEmail1">Contraseña</label> -->
+                                     <input type="password"  name="password" id="id_password" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" class="form-control input-lg " required placeholder="Contraseña">
                                      </div>
                                      <div class="input-group form-group">
-                                        <button type="submit" name="wp-submit" id="wp-submit" class="btn btn-info  btn-block " value="Acceder">Acceder </button>
+                                        <button type="submit" name="wp-submit" id="wp-submit" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif " class="btn btn-success  btn-block btn-lg" value="Acceder">Ingresar</button>
                                     <br>
                                     </div>
                                     
@@ -90,11 +96,11 @@
                             </div>
                            
                             <div class="card-footer">
-                                <div class="input-group ">
+                                <!-- <div class="input-group ">
                                     <button type="submit" onclick="location.href='{% url 'menuvisitante'%}'" class="btn btn-block btn-success" value="consulta">Consultar Instituciones</button>
-                             <br>
+                             <br> -->
                                 <div class="d-flex justify-content-center">
-                                    <a href="{% url 'password_reset' %}" style="color: black;">¿Olvidó contraseña?</a>
+                                    <a href="{% url 'password_reset' %}" style="color: black; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">¿Olvidó contraseña?</a>
                                 </div>
 
                             </div>
