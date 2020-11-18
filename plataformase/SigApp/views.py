@@ -19,13 +19,8 @@ from datetime import datetime
 def inicio(request):
     return render (request, "SigApp/inicio.html")
 
-def nuevaBase(request):
-   return render (request, "SigApp/nuevaBase.html")
-
-
-
-
-
+def nuevaBase(request): 
+    return render(request,'SigApp/nuevaBase.html')
 
 
 
@@ -439,7 +434,15 @@ def localizador(request):
     Municipios = Municipio.objects.all()
     Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
 
-    
+    usuario2 = request.user.id; #OBTENER ID_USUARIO
+    numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
+ 
+    #print(numInst2)
+ 
+    for c in numInst2:
+        Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
+        print(Escuelas2.ClaveEscuela)
+
     
     return render(request,'SigApp/mapa_instituciones.html',{
         "opcionesgrados": GradosAcademicos,
@@ -447,6 +450,7 @@ def localizador(request):
         "opcionesmunicipios": Municipios,
         "localidades": Localidades,
         "coordenadas": Escuelas,
+        "Escuela2Clave":Escuelas2
     })
 
 def updInfo(request,Ndirector,Ninstitucion):
