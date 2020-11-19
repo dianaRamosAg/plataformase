@@ -41,7 +41,7 @@
                     </li>
                 </ul>
             </div>
-            <form class="tab-content form-group" method="POST" action="../solicitudcuenta/" onsubmit="return validar()">
+            <form class="tab-content form-group" method="POST" action="../solicitudcuenta/" enctype="multipart/form-data" onsubmit="return validar()">
                 {% csrf_token %}
                 <div role="tabpanel" class="tab-pane active" id="step-1">
                     
@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="mr-2" for="id_email">Correo: </label>
-                                <input class="form-control col"  type="text" name="email" required id="id_email" placeholder="correo@dominio.com" onblur="verificar3()"pattern="[a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
+                                <input class="form-control col"  type="text" autofocus name="email" required id="id_email" placeholder="correo@dominio.com" onblur="verificar3()"pattern="[a-zA-Z0-9_-]+([.][a-zA-Z0-9_-]+)*@[a-zA-Z0-9_-]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}">
                                 <div class="row"><br>
                                     <div class="alert alert-warning col-md-4 "  role="alert" id="errore" style="width: 100%; float:left; display: none;">
                                     <small><strong> ¡Email no sigue el patrón!</strong>
@@ -134,7 +134,7 @@
                             <div class="col-md-6">
                             
                                 <div class="form-group">
-                                    <label class="ml-2 mr-2" for="id_municipio">Municipio *:</label>
+                                    <label class="ml-2" for="id_municipio">Municipio *:</label>
                                     <select  class="form-control col-2" name="municipio" id="id_municipio" required >
                                         <option disabled="" selected="" value="">Seleccione</option>
                                         <option value="Acaponeta"> Acaponeta </option>
@@ -177,7 +177,16 @@
                                        <input class="form-control ml-2 col-1" required type="number" name="codigopostal" placeholder="63000" id="id_codigopostal" minlength="5" maxlength="5">
                                    </div>
                                </div>
-                                
+                               <div class="form-group">
+                                <label class="ml-1 col-1" for="id_celular">Nombre de representante legal:</label>
+                                <input class="form-control ml-1 col-2" required type="text" name="representante" id="id_representante" >
+                                </div>
+                               <div class="form-group col-md-8">
+                               <label class="ml-2 col-1" for="id_ine_representante" id="lbl_ine" style="text-align: left; float:left">INE del representante legal (PNG):</label>
+                               <input id="id_ine_representante"  required type="file" class="col-9" name="ine_representante"  accept=".png">
+                              
+                            </div>
+
                                 <div class="col-md-12">
                                     <div class="form-group" id="datos_inst">
                                         <h3>Datos de institución</h3>*
@@ -211,6 +220,7 @@
                                                 </div>
                                     </div>
                                 </div>
+                                        
                             <button id="step-2-next" class="btn btn-lg btn-primary nextBtn pull-right" type="submit" onclick="if(document.getElementById('id_password2').value == '') {event.preventDefault(); alert('Faltan campos por llenar en la Parte 1');}">Enviar</button>
                                 <a href="{% url 'login'%}"class="btn btn-lg  btn-danger pull-right" >Salir</a>
                         </div>

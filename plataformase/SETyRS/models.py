@@ -8,7 +8,7 @@ from .validators import validate_file_extension
 #--------------------------------------- Modelos de Institución ------------------------------------------------------------
 # Tabla de las solicitudes de examenes a titulo
 class SolicitudExamen(models.Model):
-    categoria = models.CharField(max_length=150,default='opcion vacia', blank=True)
+    categoria = models.CharField(max_length=200,default='opcion vacia', blank=True)
     institucion = models.IntegerField(default=1)
     CCT = models.CharField(max_length=30)
     area_carrera = models.CharField(max_length=30, blank=True)
@@ -21,7 +21,7 @@ class SolicitudExamen(models.Model):
     fecha = models.DateField('fecha de publicacion')
     nivel_educativo = models.IntegerField(default=1)
     fecha_exa = models.DateField(default='2020-06-06')
-    lugar_exa = models.CharField(max_length=100,default='Algun lugar')
+    lugar_exa = models.CharField(max_length=200,default='Algun lugar')
     hora_exa = models.CharField(max_length=10,default='12:00')
 
     class Meta:
@@ -30,7 +30,7 @@ class SolicitudExamen(models.Model):
 # Tabla de alumnos candidatos a graduarse registrados en las solicitudes de las instituciones
 class Alumnos(models.Model):
     no_certificado = models.CharField(max_length=20)
-    nombre_alumno = models.CharField(max_length=150)
+    nombre_alumno = models.CharField(max_length=200)
     CURP = models.CharField(max_length=50)
     id_solicitud = models.ForeignKey(SolicitudExamen, on_delete=models.CASCADE)
     folio_pago = models.CharField(max_length=50,default='1234', blank=True)

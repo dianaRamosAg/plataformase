@@ -23,6 +23,8 @@ class VisitanteSC(models.Model):
     sector = models.TextField(blank=True, null=True)  # Publico, Privado
     nivel_educativo = models.CharField(max_length=1, blank=True, null=True)  # 1: Media superior, 2: Superior, 3: Ambos
     modalidad = models.CharField(max_length=1, default='0',null=True) #1: Si es telebachillerato, 0:No
+    ine_representante = models.FileField(upload_to ='ine_representante/', blank=True, null=True)
+    nombre_representante = models.TextField(blank=True, null=True)
     
 class ConfiguracionPDF(models.Model):
     nombre = models.TextField(blank=True, null=True)
