@@ -102,29 +102,12 @@
         </div>
         <p>Asimismo, me permito informarle que, a propuesta de la institución a su digno cargo, se autoriza la participación de <b>{{presidente.nombre_sinodal}}, {{secretario.nombre_sinodal}}, {{vocal.nombre_sinodal}} </b>como
             Presidente, Secretario, Vocal respectivamente del cuerpo de Sinodales en el mencionado examen.</p>
-        
-            <table class="table" width="100%" border="1" cellspacing="0" cellpadding="0">
-                <thead>
-                    <tr>
-                        <td>PRESIDENTE</td>
-                        <td>SECRETARIO</td>
-                        <td>VOCAL</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{presidente.nombre_sinodal}}</td>
-                        <td>{{secretario.nombre_sinodal}}</td>
-                        <td>{{vocal.nombre_sinodal}}</td>
-                    </tr>
-                </tbody>
-            </table>
 
         <p>De la misma forma, le informo que es facultad de esta Secretaría de vigilar y evaluar los servicios de Educación Media Superior y Superior en el Estado, por lo que podría acudir personal de esta, el día y hora señalados en su solicitud a tan importante acto académico.</p>
         <p>Sin otro particular por el momento, reciba un afectuoso saludo de nuestra parte.</p>
         <h1 align="center"><b>A T E N T A M E N T E</b></h1>
 
-        {% if jefe.departamento_id == 2 %}
+        {% if jefe.departamento_id == 2 && jefe.jefe == 1 %}
         <h1 align="center"><b> EL DIRECTOR DE EDUCACIÓN MEDIA SUPERIOR Y SUPERIOR</b></h1>
         <div align="center">
             <img src="{{bucket}}{{jefe.firma_digital}}" alt="se" height="120">
@@ -153,7 +136,7 @@
         {% endif %}
 
 
-        {% elif jefe.departamento_id == 3 %}
+        {% elif jefe.departamento_id == 3 && jefe.jefe == 1 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN SUPERIOR</b></h1>
         <div align="center">
             <img src="{{bucket}}{{jefe.firma_digital}}" alt="se" height="120">
@@ -167,7 +150,7 @@
                 
         </p>
 
-        {% elif jefe.departamento_id == 4 %}
+        {% elif jefe.departamento_id == 4 && jefe.jefe == 1 %}
         <h1 align="center"><b> EL JEFE DE EDUCACIÓN MEDIA SUPERIOR</b></h1>
         <div align="center">
             <img src="{{bucket}}}{{jefe.firma_digital}}" alt="se" height="120">
