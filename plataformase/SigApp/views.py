@@ -19,18 +19,8 @@ from datetime import datetime
 def inicio(request):
     return render (request, "SigApp/inicio.html")
 
-<<<<<<< HEAD
-def nuevaBase(request): 
-    return render(request,'SigApp/nuevaBase.html')
-
-
-
-
-
-=======
 def nuevaBase(request):
    return render (request, "SigApp/nuevaBase.html")
->>>>>>> 190f39c1a1829e1a0b84c9fbb0373d76754e4711
 
 def actas_departamento(request):
     return render (request, "SigApp/actas_departamento.html")
@@ -488,26 +478,73 @@ def localizador(request):
     Localidades = Localidad.objects.all()
     AreasIntereses = AreaInteres.objects.all()
     Municipios = Municipio.objects.all()
+    instituciones = EscuelaC.objects.all()
     Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
 
     usuario2 = request.user.id; #OBTENER ID_USUARIO
     numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
- 
+    nI=0
     #print(numInst2)
  
     for c in numInst2:
+        nI += 1
         Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
         print(Escuelas2.ClaveEscuela)
-
     
-    return render(request,'SigApp/mapa_instituciones.html',{
-        "opcionesgrados": GradosAcademicos,
-        "areaseducacion":AreasIntereses,
-        "opcionesmunicipios": Municipios,
-        "localidades": Localidades,
-        "coordenadas": Escuelas,
-        "Escuela2Clave":Escuelas2
-    })
+    if request.user.is_authenticated:
+        if request.user.departamento_id:
+
+            return render(request,'SigApp/mapa_instituciones.html',{
+                "opcionesinstituciones": instituciones,
+
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,
+                "localidades": Localidades,
+                "numeroInstituciones": nI,                
+                "coordenadas": Escuelas,
+                "numeroModificaciones": notificaiones(request.user.departamento_id),
+                "Escuela2Clave":Escuelas2,
+
+            })
+        else:
+            return render(request,'SigApp/mapa_instituciones.html',{
+                "opcionesinstituciones": instituciones,
+
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,
+                "localidades": Localidades,
+                "numeroInstituciones": nI,
+                "coordenadas": Escuelas,              
+                "Escuela2Clave":Escuelas2,
+            })
+    else: 
+        GradosAcademicos = GradoAcademico.objects.all()
+        instituciones = EscuelaC.objects.all()
+
+        Localidades = Localidad.objects.all()
+
+        AreasIntereses = AreaInteres.objects.all()
+        Municipios = Municipio.objects.all()
+        return render(request,'SigApp/mapa_instituciones.html',{
+            "opcionesinstituciones": instituciones,
+            "opcionesgrados": GradosAcademicos,
+            "areaseducacion":AreasIntereses,
+            "opcionesmunicipios": Municipios,            
+            "coordenadas": Escuelas,
+            "localidades": Localidades,
+
+        })
+
+    #return render(request,'SigApp/mapa_instituciones.html',{
+     #   "opcionesgrados": GradosAcademicos,
+      #  "areaseducacion":AreasIntereses,
+      #  "opcionesmunicipios": Municipios,
+       # "localidades": Localidades,
+        #"coordenadas": Escuelas,
+        #"Escuela2Clave":Escuelas2
+    #})
 
 def updInfo(request,Ndirector,Ninstitucion):
     nombre = Ninstitucion.replace("-"," ")

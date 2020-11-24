@@ -38,6 +38,83 @@
     </style>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+    
+    <script type="text/javascript">
+		function prueba(){
+			var selectM = document.getElementById('selectInstitucion')
+			$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
+		}
+
+		function infoInstitucion2(aInstitucion2){
+			//--
+			var sInstitucion = document.getElementById('selectInstitucion');
+			var valueInstitucion = sInstitucion.value;
+			//alert(valueInstitucion)
+			//--
+			var aInst = document.getElementById(aInstitucion2);
+			//var sInstitucion = document.getElementById('selectInstitucion');
+			var CCT = document.getElementById('inputCCT'); 
+			//var valueInstitucion = sInstitucion.value;
+			console.log(CCT);
+			if( CCT.value != ''){
+				console.log("/SigApp/localizarInst/"+CCT.value);
+				aInst.href = "/SigApp/localizarInst/"+CCT.value;
+				//aInst.href = "/SigApp/localizarInst/"+CCT.value+"/";	
+			}else{
+				if(valueInstitucion != 'seleccion'){
+					aInst.href = "/SigApp/localizarInst/"+valueInstitucion;
+				}else{
+					Swal.fire({
+						title: '¡Alto!',
+						text: 'Selecciona una institución',
+						icon: 'warning',
+						confirmButtonText: 'Ok'
+						})
+				}
+				
+			}												 
+		};
+
+		function infoInstitucion(aInstitucion){
+			var aInst = document.getElementById(aInstitucion);
+			var sInstitucion = document.getElementById('selectInstitucion');
+			var CCT = document.getElementById('inputCCT'); 
+			var valueInstitucion = sInstitucion.value;
+			//cct = alert(valueInstitucion)
+			console.log(valueInstitucion);
+			if( CCT.value != ''){
+				console.log("/SigApp/instituciones/clave/"+CCT.value);
+				aInst.href = "/SigApp/instituciones/clave/"+CCT.value;	
+			}else if (valueInstitucion != 'seleccion'){
+					aInst.href = "/SigApp/instituciones/id/"+valueInstitucion;
+					console.log("/SigApp/instituciones/id/"+valueInstitucion);
+			}
+			if(valueInstitucion == 'seleccion'){
+				Swal.fire({
+					title: '¡Alto!',
+					text: 'Selecciona una institución',
+					icon: 'warning',
+					confirmButtonText: 'Cool'
+					})
+			}											 
+		};
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     function populate(){
         $('#selectMunicipio').change(function(){
 		    var municipio = $('#selectMunicipio').find(":selected").val();
@@ -59,7 +136,66 @@
 					}
 			})		
 		});							
-	}		
+	}
+
+    function updInstituciones(selectOrigen){
+			var origen = '#'+selectOrigen;			
+			$(origen).change(function(){
+				var urlF = "/SigApp/updInstituciones/";
+				if(origen == '#selectMunicipio'){$('#selectLocalidad').val('seleccion');}
+				var municipioSeleccionado = $('#selectMunicipio').find(':selected').val();
+				var municipioF = municipioSeleccionado.replace(/\s/g, '-');
+				
+				if(municipioSeleccionado=='RUÍZ'){municipioF='RUIZ';}
+				if(municipioSeleccionado=='AHUACATLÁN'){municipioF='AHUACATLAN';}
+				if(municipioSeleccionado=='AMATLÁN DE CAÑAS'){municipioF='AMATLAN-DE-CANAS';}
+				if(municipioSeleccionado=='IXTLÁN DEL RÍO'){municipioF='IXTLAN-DEL-RIO';}
+				if(municipioSeleccionado=='SANTA MARÍA DEL ORO'){municipioF='SANTA-MARIA-DEL-ORO';}
+				if(municipioSeleccionado=='BAHÍA DE BANDERAS'){municipioF='BAHIA-DE-BANDERAS';}
+
+				var localidadSeleccionado = $('#selectLocalidad').find(':selected').val();
+				//alert(localidadSeleccionado)
+				var localidadSeleccionadoF = localidadSeleccionado.replace(/\s/g, '-');
+				if(localidadSeleccionadoF.includes('Á')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Á','1')}
+				if(localidadSeleccionadoF.includes('É')){localidadSeleccionadoF=localidadSeleccionadoF.replace('É','2')}
+				if(localidadSeleccionadoF.includes('Í')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Í','3')}
+				if(localidadSeleccionadoF.includes('Ó')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ó','4')}
+				if(localidadSeleccionadoF.includes('Ú')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ú','5')}
+				//alert(localidadSeleccionadoF)
+				var nivelacademicoSeleccionado = $('#selectNA').find(':selected').val();
+				nivelacademicoSeleccionadoF = nivelacademicoSeleccionado.replace(' ','-')
+				//alert(nivelacademicoSeleccionadoF)
+				var areainteresSeleccionado = $('#selectAI').find(':selected').val();
+				var dominioSeleccionado = $('#selectDominio').find(':selected').val();
+				if(!municipioSeleccionado.startsWith("seleccion")){urlF=urlF+municipioF+"/";}else{urlF=urlF+"empty/";}
+				if(!localidadSeleccionado.startsWith("seleccion")){urlF=urlF+localidadSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+				if(!nivelacademicoSeleccionado.startsWith("seleccion")){urlF=urlF+nivelacademicoSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+				if(!areainteresSeleccionado.startsWith("seleccion")){urlF=urlF+areainteresSeleccionado+"/";}else{urlF=urlF+"empty/";}
+				if(!dominioSeleccionado.startsWith("seleccion")){urlF=urlF+dominioSeleccionado+"/";}else{urlF=urlF+"empty/";}
+				console.log(urlF);
+				$.ajax({
+					url: urlF ,
+					method: 'GET',
+					dataType: "json",
+					success:function(jsonData){
+						var optionsInstituciones="";
+						$('#selectInstitucion').empty();
+						$('#selectInstitucion').append('<option value="seleccion"> Seleccione Institución </option>');
+						$.each(JSON.parse(jsonData),function(i,item){
+							optionsInstituciones+='<option value="'+item["pk"]+'">'+item["fields"]["NombreEscuela"]+'</option>';
+						});
+						$('#selectInstitucion').append(optionsInstituciones);
+						$("#selectInstitucion").selectpicker("refresh");
+						$("#selectInstitucion").selectpicker('render');
+						$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
+						setTimeout(() => {  $('#selectInstitucion').selectpicker('setStyle', ''); }, 500);
+						console.log(jsonData);			
+							
+					}
+				})
+			});
+		}
+
 </script>
 
 
@@ -71,8 +207,13 @@
                     <p class="col-12 mb-2" style="font-size: 15px;">Clave Centro de Trabajo</p>
                     <div class="centro col-12">
                         <div class="centro ">
-					        <INPUT class="form-control"  placeholder="#######"  Type=text id="inputCCT" name="ClaveCentroTrabajo" value="" size="17" style="font-weight: bold; background:#F0F0F0; text-align: center;">	 					 
-				        </div>
+                            <select class="selectpicker " data-live-search="true" id="selectInstitucion" >
+                                <option class="opt" value="seleccion" >Seleccione institución</option>
+                                {% for element in opcionesinstituciones %}
+                                    <option value="{{element.ClaveEscuela}}">{{ element.ClaveEscuela }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>     	
                 </div>
 
@@ -144,18 +285,19 @@
                 <div class="row mt-5">    
                     <p class="col-12 mb-2" style="font-size: 15px;">Nombre de Institución</p>
                     <div class="centro col-12">
-                        <select class="form-control" TYPE=text id="selectInstitucion" name="selectInstitucion" value="" size="1" style=" text-align-last:center; background:#F0F0F0;" >
-						<option class="opt" value="seleccion">Seleccione Institución</option>
-						{% for element in opcionesinstituciones %}
-							<option value="{{element.ClaveEscuela}}">{{element.NombreEscuela}}</option>
-						{% endfor %}
-					</select>
+                        <select class="selectpicker" data-live-search="true" id="selectInstitucion">
+						    <option class="opt" value="seleccion">Seleccione institución</option>
+						    {% for element in opcionesinstituciones %}
+							    <option value="{{element.ClaveEscuela}}">{{ element.NombreEscuela }}</option>
+						    {% endfor %}
+					    </select>
                     </div>
                 </div>
 
                 <div class="row mt-3 mb-3 p-3">
                     <button class="btn btn-block btn-info" onclick="restableceFiltros()">Restablecer</button>
-                </div> 
+                </div>
+                
 
                 <!--Para obtener datos de las instituciones y guardarlas en vectores-->
                 <div class="row mt-3">            
@@ -243,6 +385,7 @@
                     </div>
                 </div>
 
+
             </div>
             <div id="map" class="col-8 col-sm-9 col-md-9 col-lg-10 col-xl-9 "style="height:635px"></div>
         </div>
@@ -261,6 +404,9 @@
     </div>
     
     <script>
+
+
+
         var coordenadas = new Array();
         var backupC = new Array();
         var repetidos = new Array();
