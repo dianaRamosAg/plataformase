@@ -21,8 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qzsi@0hipda@da1y-#&^#p61t-jc5n(un8pe+7s3!-&4^*d&_v'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+#DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 
@@ -38,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'TBC',
+    'TBC',
     'SETyRS',
     'SigApp',
+    'sweetify',
+    'xlwt',
 ]
 # STATICFILES_DIRS = (
 #   os.path.join(BASE_DIR,"static"),
@@ -92,22 +94,30 @@ if os.getenv('GAE_APPLICATION', None):
             'NAME'    : 'plataforma',
         }
     }
+    #EN CASO DE QUE QUE PROYECTO SE EJECUTE EN LOCAL TOMA LOS SIG VALORES
 else:
     DATABASES = {
         'default': {
             'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-            'NAME'     : 'plataforma',
-            'USER'     : 'postgres',
-            #'PASSWORD' : 'diana',
-            'PASSWORD' : 'ricor',
+            'NAME'     : 'plattform',
+            #'USER'     : 'postgres',
+            'PASSWORD' : 'diana',
+            #'NAME'    : 'plataforma',
+            'USER'    : 'postgres',
+            #'PASSWORD': 'admin',
+           
             'HOST'     : 'localhost',
             'PORT'    : '5432',
             #'PORT'     : '3306',
+           
         }
     }
 
-    
+#Conexión con   Proxy para cloud WINDOWS
+#cloud_sql_proxy.exe -instances="plataformase:us-west2:plataforma"=tcp:3306
 
+#Conexion con Proxy para Linux
+#./cloud_sql_proxy -instances=myProject:us-central1:myInstance=tcp:3306 
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -160,30 +170,30 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'SETyRS/static'),
 ]
 
+# Bucket de google cloud plattform 
+ #https://storage.googleapis.com/plataformase.appspot.com/Archivos/MedSuperior/RVOE.pdf
 if os.getenv('GAE_APPLICATION', None):
     DEFAULT_FILE_STORAGE = 'django_gcloud_storage.DjangoGCloudStorage'
     GCS_PROJECT = "plataformase"
     GCS_BUCKET = "plataformase.appspot.com"
     GCS_CREDENTIALS_FILE_PATH = "key.json"
-    MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
+    MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GCS_BUCKET)
+    #MEDIA_URL = 'https://storage.cloud.google.com/{}/'.format(GCS_BUCKET)
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Configuración para uso de correo 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'sigssemssicyt@gmail.com'
-EMAIL_HOST_PASSWORD = 'sigapp2019'
+EMAIL_HOST = 'outlook.office365.com'
+#EMAIL_HOST = 'smtp.educacion.nayarit.gob.mx'
+EMAIL_HOST_USER = 'plataforma.ssemssicyt@educacion.nayarit.gob.mx'
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'plataforma.ssemssicyt@educacion.nayarit.gob.mx'
+EMAIL_HOST_PASSWORD = '$Plat2020'
 EMAIL_PORT = 587
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-# SENDGRID_API_KEY = os.getenv('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')
-
-# EMAIL_HOST = 'smtp.sendgrid.net'
-# EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "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")
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "dianalaura.lee@gmail.com") # this is the sendgrid email
+#Contraseña correos
+#dirección : $dire2020
+#control esc : $control2020

@@ -1,6 +1,9 @@
+
 /media/
 *.pyc
+*.idea
+*/migrations/*
+*__pycache__/*
+env/
+accounts/
 
-*/migrations/
-*/__pycache__/
-/env/

@@ -8,11 +8,11 @@
     <link rel='stylesheet'   href="{% static '/css/nav.css' %}" type='text/css' media='all' />
     <link href="{% static '/bootstrap.min.css' %}" rel="stylesheet" id="bootstrap-css">
 </head>
-<body>
+<body  class="responsive">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container">
-              <a href="{% url 'menuinstitucion' %}" class="navbar-brand"><img src="{% static 'img/se.png' %}" width="120" height="40" style="margin-top: -5px;"/></a>
+              <a href="{% url 'perfil' %}" class="navbar-brand"><img src="{% static 'img/EducacionHorizontal-BCO.png' %}" width="120" height="40" style="margin-top: -5px;"/></a>
               
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -26,7 +26,7 @@
                       <li class="nav-item dropdown"><a class="nav-link"  href="{% url 'signup' %}">Registrar Usuarios</a></li>
                       {% endif %}
                       {% if user.tipo_usuario != '4' %}
-                      <li class="nav-item dropdown"><a  class="nav-link" href="{% url 'menudepartamento' %}">Menú</a></li>
+                      <li class="nav-item dropdown"><a  class="nav-link" href="{% url 'perfil' %}">Menú</a></li>
                       {% endif %}
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,7 +48,7 @@
     <h2 align="center">Centros de Trabajo</h2>
     <small align="center" style="text-align: center; margin-left: 420px;">Lista de centros de trabajo pertenecientes a esta institución.También podrás añadir más centros de trabajo.</small>
 							<br><br><hr><br>
-    <div class="col-md-6" style="float: left;">
+    <div class="col-md-5" style="float: left; margin-left: 50px;">
         
         <form method="post">
             {% csrf_token %}
@@ -86,13 +86,13 @@
                     </select>
                 </div>
             </div>
-
-            <button type="submit" class="btn btn-primary text-center"  style="text-align: center;">Añadir</button>
+            <br>
+            <button type="submit" onclick="alert('¡ATENCIÓN!, Sus datos seran guardados');" class="btn btn-primary text-center col-8"  style="text-align: center; margin-left: 75px;">Añadir</button>
 
         </form>
     </div>
     
-        <div class="col-md-6" style="float: right; border-left:1px solid rgba(0, 0, 0, 0.288);" >
+        <div class="col-md-6" style="float: right; border-left:1px solid rgba(0, 0, 0, 0.288); margin-right: 50px;" >
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr class="bg-primary" >

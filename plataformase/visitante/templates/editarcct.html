@@ -30,7 +30,7 @@
     <link href="{% static '/css/demo.css' %}" rel="stylesheet" />
 </head>
 
-<body>
+<body  class="responsive">
 	<div class="image-container set-full-height" style="background-color: white;">
     
         <nav>
@@ -116,7 +116,7 @@
                                                         <option value="1"> Media Superior </option>
 	                                                	<option value="2"> Superior </option>
 														{%endif%}
-														{% if UsuarioInstitucion.nivel_educativo != 'Media Superior' and UsuarioInstitucion.nivel_educativo != 'Superior' and UsuarioInstitucion.nivel_educativo != 'Ambos' %}
+														{% if UsuarioInstitucion.nivel_educativo != '1' and UsuarioInstitucion.nivel_educativo != '2' and UsuarioInstitucion.nivel_educativo != '3' %}
                                                         <option value="1"> Media Superior </option>
 														<option value="2"> Superior </option>
 														<option value="3"> Ambos </option>

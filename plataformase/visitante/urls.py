@@ -1,13 +1,14 @@
 from django.urls import path
 from . import views
-from . import views
-
+from . import models
+from django.conf.urls import url
 #app_name="visitante"
 
 urlpatterns = [
+    url(r'^password/$', views.change_password, name='change_password'),
     path('', views.index, name='index'),
     path('notificacionsc/validar/signuprv/', views.regUser, name='signuprv'),
-    path('menuinstitucion/', views.menuinstitucion, name='menuinstitucion'),
+    path('menuinstitucion/<id>/',  views.menuinstitucion, name='menuinstitucion'),
     path('menuparticular/', views.menuparticular, name='menuparticular'),
     path('menuadmin/', views.menuadmin, name='menuadmin'),
     path('menudepartamento/', views.menudepartamento, name='menudepartamento'),

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class TbcConfig(AppConfig):
-    name = 'TBC'
+    name = 'TBC',

@@ -4,12 +4,14 @@
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
     <div class="container col-md-8">
         <div class="form-group">
+            {% if user.departamento_id != 1 %}
             <select class="form-control" id="select" onchange="buscarSolicitud()">
                 <option value="1">Todas</option>
                 <option value="2">Pendientes</option>
-                <option value="3">Aceptadas</option>
+                <option value="3">Aprobadas</option>
                 <option value="4">Rechazadas</option>
             </select>
+            {% endif %}
         </div>
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="checkBA" onclick="mostrarBA()">
@@ -45,7 +47,11 @@
                 <td><a href="{% url 'SETyRS_revisar_solicitud_examen' s.id %}">{{s.id}}</a></td>
                 <td>{{s.user.first_name}}</td>
                 <td>{{s.estatus}}</td>
-                <td>{{s.nivel_educativo}}</td>
+                {% if s.nivel_educativo == 1%}
+                <td>Media Superior</td>
+                {% elif s.nivel_educativo == 2 %}
+                <td>Superior</td>
+                {% endif %}
                 <td>{{s.fecha}}</td>
             </tr>
             {% endfor %}

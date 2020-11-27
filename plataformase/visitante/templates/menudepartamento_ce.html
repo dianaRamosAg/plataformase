@@ -23,11 +23,11 @@
 	<link rel='stylesheet' id='elementor-post-148-css'  href="{% static '/css/post-148.css' %}" type='text/css' media='all' />
 
 	</head>
-<body class="page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
+<body class=" responsive page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
 					<header id="main-header">
 						<a href="#" id="logo-header">
-							<div class="col-sm-2 col-xs-4 ">
-								<a href="#"></a> <img src="{% static '/img/se.png'%}" width="230" height="80"/></a>
+							<div class="col-sm-2 col-xs-3 ">
+								<a href="#"></a> <img src="{% static '/img/EducacionHorizontal-BCO.png'%}" width="230" height="80"/></a>
 							</div><!--/.col-sm-2-->
 					</a>
 						 <!-- / #logo-header -->
@@ -38,7 +38,7 @@
 									<li class="nav-item dropdown ml-auto">
 										<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> <img src="{% static '/img/us2.png' %}"/></a>
 										<div class="dropdown-menu dropdown-menu-right" style="color: black; background-color: black;">
-											<a href="{% url 'perfiluser'%}" class="dropdown-item">Perfil</a>
+											<a href="{% url 'perfiluser'%}" class="dropdown-item">Configuración de cuenta</a>
 											<div class="dropdown-divider"></div>
 											<a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
 										</div>
@@ -51,7 +51,7 @@
 					<br><br><br>
 					<div class="pricingCardGrid__header">
 						<h4 class="pricingCardGrid__heading">
-						Sistemas digitales </h4>
+						Servicios Digitales </h4>
 						</div>
 					<BR><br>
 
@@ -69,16 +69,37 @@
 								</div>
 							<span class="pricingCard__period">
 								<p align="justify">Sistema de Generación de turnos de RVOE.</p> </span>
-							</div>
+							</div><br>
 							<div class="pricingCard__button">
 							<span class="button button--primary">
 							Acceder </span>
 							</div>
 							</a>
 							</div>
+					
+<!------Panel de SETYRS, SOLO VER SOLICITUDES E INFORMES------->
+						<div class="pricingCardGrid__pricingCard">
+							<a class="pricingCard" href="{% url 'SETyRS_admin_index' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
+								<div class="pricingCard__heading title--small" style="text-align: justify;">
+									Solicitudes de Exámenes a Título y Registro de Sinodales
+								</div>
+								<div class="pricingCard__pricing">
+									<div class="col-sm-4 col-xs-4">
+										<img src="{% static '/img/contrato.png'%}" width="200" height="200"/>
+									</div>
+									<span class="pricingCard__period">
+										<p align="justify">Sistema de autorización de exámenes a título y registro de sinodales.</p>
+									</span>
+								</div>
+								<div class="pricingCard__button">
+									<span class="button button--primary">
+										Acceder
+									</span>
+								</div>
+							</a>
 						</div>
 						</section>
 										
 <script type='text/javascript' src="{% static '/js/bootstrap2.min.js' %}"></script>
-						</body>
+</body>
 </html>

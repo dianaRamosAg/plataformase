@@ -1,4 +1,5 @@
 {% extends 'institucion/base.html' %} {% load static %} {% block content %}{% load index %}
+<script src="{% static 'js/admins/sinodales/modificarArchivos.js' %}" defer></script>
 <div class="container col-md-10 text-center">
     <h2 class="mt-3">Alta de Sinodales</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -52,19 +53,21 @@
             </table>
         </div>
     </div>
-    {% if archivos|length == lista_sinodales|length %}
-    <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> 
-    {% else %}
-    <p>Para poder continuar suba los archivos en formato PDF de todos los sinodales enlistados</p>
-    <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> 
-    {% endif %}
-    <a href="{% url 'SETyRS_solicitudes_sinodales' %}" class="btn btn-secondary mb-5">Postergar</a>
+    <div id="buttonContainer">
+        {% if archivos|length == lista_sinodales|length %}
+            <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> 
+        {% else %}
+            <p>Para poder continuar suba los archivos en formato PDF de todos los sinodales enlistados</p>
+            <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> 
+        {% endif %}
+            <a href="{% url 'SETyRS_solicitudes_sinodales' %}" class="btn btn-secondary mb-5">Postergar</a>
+    </div>
 
     <!-- Aviso Modal-->
     <div id="confirmacion" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'SETyRS_finalizar_solicitud_sinodal' solicitud.id %}" method="POST">
+                <form id="agregarDocumentos" action="{% url 'SETyRS_finalizar_solicitud_sinodal' solicitud.id %}" method="POST">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h4 class="modal-title">Aviso!</h4>
@@ -77,7 +80,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input type="submit" class="btn btn-success" value="Aceptar">
+                        <input id="btnContinuar" type="submit" class="btn btn-success" value="Aceptar">
                     </div>
                 </form>
             </div>
@@ -85,10 +88,10 @@
     </div>
 
     <!-- Add Modal HTML -->
-    <div id="addDocs" class="modal fade">
+    <div id="addDocs" class="modal fade" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'SETyRS_subir_documentos_sinodal' solicitud.id %}" method="POST" enctype="multipart/form-data">
+                <form id="formGuardarDocs" action="{% url 'SETyRS_subir_documentos_sinodal' solicitud.id %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h4 class="modal-title">Agregar Archivos</h4>
@@ -111,8 +114,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input type="submit" class="btn btn-success" value="Guardar">
+                        <input id="btnCancelar_Guardar" type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input id="btnGuardar" type="submit" class="btn btn-success" value="Guardar" disabled>
                     </div>
                 </form>
             </div>
@@ -120,7 +123,7 @@
     </div>
 
     <!-- Edit Modal HTML -->
-    <div id="editDocs" class="modal fade">
+    <div id="editDocs" class="modal fade" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="{% url 'SETyRS_editar_documentos_sinodal' solicitud.id %}" method="POST" enctype="multipart/form-data">
@@ -157,7 +160,7 @@
     </div>
 
     <!-- Ver archivo Modal HTML -->
-    <div id="viewPDF" class="modal fade">
+    <div id="viewPDF" class="modal fade" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" style="max-width: max-content;">
             <div class="modal-content">
                 <div class="modal-header" style="padding: 5px 20px;">
@@ -171,7 +174,7 @@
 
     <!-- Error Modal -->
 	{% if messages %}
-	<div class="modal fade" tabindex="-1" role="dialog" id="error" data-backdrop="static">
+	<div class="modal fade" tabindex="-1" role="dialog" id="error" data-backdrop="static" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 		  <div class="modal-content">
 			<div class="modal-header">

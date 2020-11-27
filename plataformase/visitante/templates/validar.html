@@ -5,7 +5,7 @@
 {% if not user.is_authenticated %}
    <META HTTP-EQUIV="REFRESH" CONTENT="0;URL={% url 'login' %}">
 {% else %}
-<div class="container-fluid">
+<div class="container-fluid responsive">
     <br>
     <div class="container">
         <h3 class="text-center" >Información del solicitante '{{VisitanteSC.first_name}} {{VisitanteSC.last_name}}'</h3>
@@ -13,13 +13,12 @@
             <small id="passwordHelpInline" class="text-muted">Valide la siguiente información</small>
         </p>
         <hr>
-        
                 <form action="../../../signuprv/{{VisitanteSC.email}}" enctype="multipart/form-data" class="form-group col-xs-12 col-md-12" method="post" onsubmit="return validar()" >
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-6">
                         <fieldset>
-                            <p class="text-uppercase">Información de usuario</p>
+                            <p class="text-uppercase ml-2"> <b>Información de usuario</b> </p>
                             <div class="form-group">
                                 <label class="ml-2" for="tipo_persona" style="float: left;">Tipo de persona :</label>
                                 {% if VisitanteSC.tipo_persona == '1' %}
@@ -53,34 +52,35 @@
                             
                                 {% if VisitanteSC.tipo_usuario == '1' %}
                                     <div class="form-group" style="text-align:left;" id="datos_inst"  >
-                                        <p>Datos de institución</p><hr>
+                                        <p><b>Datos de institución</b></p><hr>
                                         <label class=" " for="cct" >Clave del centro de trabajo (CCT) :</label>
                                         <input type="text" name="cct"  id="cct" class="form-control col-10" readonly value="{{VisitanteSC.inst_cct}}" >
                                         <label class="" for="nombre_director" style="text-align: left;">Nombre de director:</label>
                                         <input type="text" readonly name="nombre_director" id="nombre_director" class="form-control col-10" value="{{VisitanteSC.inst_nombredirector}}" >
-                                        <label class="" for="sector" style="text-align: left;">Sector:</label>
-                                        <input type="text" readonly name="sector" id="sector" class="form-control col-8" value="{{VisitanteSC.sector}}" >
+                                        <br>
+                                        <div class=" form-group row">
+                                        <label class="ml-3" for="sector" style="text-align: left;">Sector:</label>
+                                        <input type="text" readonly name="sector" id="sector" class="form-control col-3" value="{{VisitanteSC.sector}}" >
                                         <label class="" for="nivel_educativo" style="text-align: left;">Nivel educativo:</label>
                                         {% if VisitanteSC.nivel_educativo == '1' %}
-                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-8" value="Media Superior" >
+                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-3" value="Media Superior" >
                                         {% endif %}
                                         {% if VisitanteSC.nivel_educativo == '2' %}
-                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-8" value="Superior" >
+                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-3" value="Superior" >
                                         {% endif %}
                                         {% if VisitanteSC.nivel_educativo == '3' %}
-                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-8" value="Ambos (Media Superior/Superior)" >
+                                            <input type="text" readonly name="nivel_educativo" id="nivel_educativo" class="form-control col-3" value="Ambos (Media Superior/Superior)" >
                                         {% endif %}
-                                        <br>
+                                    </div>
+                                        {% if VisitanteSC.modalidad == '1' %} <br>
                                         <label class="" for="id_modalidad" style="text-align: left;">Modalidad:</label>
-                                        {% if VisitanteSC.modalidad == '1' %}
                                         <input type="text" readonly name="modalidad" id="modalidad" class="form-control col-4" value="Telebachillerato" >
                                     {% endif %}
                                     {% if VisitanteSC.modalidad == '0' %}
-                                        <input type="text" readonly name="modalidad" id="modalidad" class="form-control col-4" value="No aplica" >
                                     {% endif %}
-                                    </div><br>
+                                    </div>
                                 {% endif %}
-                                <p>Dirección</p> <hr>
+                                <p><b>Dirección</b></p> <hr>
                                 <div class="row form-group" style="float: left;">
                                     
                                     <label class="ml-2" for="id_calle">Calle:</label>
@@ -104,26 +104,43 @@
                                     <label class="ml-2 mr-2" for="id_colonia">Colonia:</label>
                                     <input  readonly class="form-control ml-3 col-4" required type="text" name="colonia" id="id_colonia" value="{{VisitanteSC.colonia}}"><br>
                                 </div>
+
+
                             </div>
                         </fieldset>
                 </div>
                 
                 <div class="col-6" style="float: right;">
                     <fieldset>
-                        <p class="text-uppercase"> Información de inicio de sesión </p>
+                        <p class="text-uppercase ml-2"><b> Información de representante legal</b> </p>
+                        
+                        <div class="row col-12">
+                        <label style="text-align: left;" class="col-5">Nombre representante:</label>
+                        <input  readonly class="form-control col-7"  type="text" name="representante"required id="id_representante" value="{{VisitanteSC.email}}" >
+                        </div><br>
+                        <div align="center">
+                            <p>Copia de INE del representante legal</p>
+                            <img src="{{MEDIA_URL}}{{VisitanteSC.ine_representante}}" alt="se" height="120">
+                        </div>
+                       <br><br>
+                        <p class="text-uppercase ml-2"><b> Información de inicio de sesión</b> </p>
                         <div class="form-group" style="text-align: left;">
                             <div class="container-fluid form-group row " style="width: 100%; float:right;">
                                 <br>
                                 <label style="text-align: left;">Correo electrónico:</label>
-                                <input  readonly class="form-control col-6 ml-2"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
-                                <br><br>
-                                <div class="text-center col-md-12"><br>
-                                    <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-5 ">Regresar</a>
-                                    <button class="btn btn-primary col-5 ml-2"  style="float: right;"type="submit">Registrar</button>
-                                   <br>
-                                   <br> <a class="btn btn-danger col-10 mx-auto" data-target="#myModal3" data-toggle="modal">Cancelar solicitud</a>
-                                </div>
+                                <input  readonly class="form-control col-8 ml-2"  type="text" name="email"required id="id_email" value="{{VisitanteSC.email}}" onkeyup="PasarValor();">
+                                
                             </div>
+                            <br><br>
+                                <br><br>
+                            <div class="text-center col-12" style="border:lightgray; border-style: solid; border-width: 0.5;"><br><br>
+                                <a href="{% url 'notificacionsc'%}"class="btn btn-warning col-6">Regresar</a>
+                                <button class="btn btn-primary col-6"  style="float: right;"type="submit" onclick="alert('¡ATENCIÓN!, El usuario será registrado');">Registrar</button>
+                               <br>
+                               <br> <a class="btn btn-danger col-10 mx-auto" data-target="#myModal3" data-toggle="modal" onclick="alert('¡ATENCIÓN!, La solicitud será cancelada');">Cancelar solicitud</a>
+                            <br><br>
+                            </div>
+                            <br>
                         </div>
                     </fieldset>
                 </div>
@@ -143,7 +160,7 @@
           <h4 class="modal-title">Cancelar solicitud</h4>
         </div>
         <div class="modal-body">
-          <p>¡Cuidado!,Si cancela ya no aparecera en la lista de solicitudes</p>
+          <p>¡Cuidado!, Si cancela ya no aparecera en la lista de solicitudes</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger"  onclick="femail()"  data-dismiss="modal">Cancelar</button>
@@ -266,20 +283,7 @@ function femail(){
             // document.getElementById("acurp").setAttribute("href", "http://consultas.curp.gob.mx");
         }
     }
-    // document.getElementById("alertJefe").style.display = 'none';
-    // function verificarJefes(){
-    //     var a = {{ jefes | safe  }};
-    //     var dep = document.getElementById("id_departamento");
-    //     var sel = document.getElementById("alertJefe");
-    //     for(var i=0; i<a.length+1; i++){
-    //         if(dep.value == a[i]){
-    //             sel.style.display = 'inline';
-    //             i = a.length+1;
-    //         }else{
-    //             sel.style.display = 'none';
-    //         }
-    //     }
-    // }
+  
 
 </script>
 {% endblock %}

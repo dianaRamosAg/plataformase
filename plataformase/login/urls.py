@@ -16,6 +16,7 @@ urlpatterns = [
     path('root/', inicioRoot, name='root'),
     path('root/usuarios', usuarios, name='usuarios'),
     path('root/editar/<email>/',ActUsr, name='editar'),
+    path('enviarReporte/', reporte, name='enviarReporte'),  #Función para enviar reportes
     
 ]
  

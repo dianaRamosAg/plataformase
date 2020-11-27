@@ -2,13 +2,12 @@
 <!DOCTYPE html>
 <html lang="es-MX">
 	<head>
-		<meta charset="UTF-8">
-		
+	<meta charset="UTF-8">	
 	<meta name="viewport" content="width=[Pixeles del mínimo ancho para visualizar bien la web]" />
-			<title>iniciosistemas &#8211; plataformse</title>
-			<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-			<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-			<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	<title>Servicios &#8211; Visitante</title>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 	<link rel='dns-prefetch' href='//fonts.googleapis.com' />
 	<link rel='dns-prefetch' href='//s.w.org' />
 	<link rel="stylesheet" href="{% static '/css/h.css' %}" type='text/css' media='all' >
@@ -23,35 +22,31 @@
 	<link rel='stylesheet' id='elementor-post-148-css'  href="{% static '/css/post-148.css' %}" type='text/css' media='all' />
 	
 	</head>
-<body class="page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
+<body class=" responsive page-template page-template-elementor_canvas page page-id-183 wp-custom-logo elementor-default elementor-template-canvas elementor-kit-148 elementor-page elementor-page-183">
 					<header id="main-header">
 						<a href="#" id="logo-header">
-							<div class="col-sm-2 col-xs-4 ">
-								<a href="#"></a> <img src="{% static '/img/se.png'%}" width="230" height="80"/></a>					
+							<div class="col-sm-2 col-xs-3 ">
+								<a href="#"></a> <img src="{% static '/img/EducacionHorizontal-BCO.png'%}" width="230" height="80"/></a>					
 							</div><!--/.col-sm-2-->
 					</a>	
 						 <!-- / #logo-header -->
 						<nav >
-							<ul class="nav" style="background-color: white;">
-								<li><a href="{% url 'login'%}" style="color: black;">Inicio</a></li>
-								<li><a href="{% url 'cuentavisitante'%}" style="color: black;">Solicitar cuenta</a>
-								<li><a href="#" style="color: black;">Bienvenido Visitante </a>
-									<ul>
-										<li><a href="{% url 'login' %}" style="color: black;">Salir</a></li>
-									</ul></li>		
+							<ul class="nav">
+								<li><a href="{% url 'login'%}" style="color: rgb(255, 255, 255);">Regresar</a></li>
+		
 							</ul>
 						</nav><!-- / nav -->
 					</header><!-- / #main-header -->
 					<br><br><br>
 					<div class="pricingCardGrid__header">
 						<p class="pricingCardGrid__heading">
-						Accede a los sistemas disponibles para visitantes </p>
+						Accede a los servicios disponibles para visitantes </p>
 						</div>
 					<BR><br>
 
 <!------------------------------------------SISTEMAS------------------------------>
 
-	<section class="pricingCardGrid" style="float:none;">
+	<section class="pricingCardGrid responsive" style="float:none;">
 						<div class="pricingCardGrid__body row " style="width:100%;">
 						<div class="pricingCardGrid__pricingCard">
 						<a class="pricingCard" href="/SigApp/" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
@@ -63,13 +58,35 @@
 						</div>
 						</div>
 						<span class="pricingCard__period" >
-							<p align="justify">Localización de instituciones educativas  de media superior y superior del estado de Nayarit.</p> </span>
+							<p align="justify">Localización de instituciones educativas de Media Superior y Superior del Estado de Nayarit.</p>
+						</span>
 						<div class="pricingCard__button">
 						<span class="button button--primary">
 							Acceder </span>
 						</div>
 						</a>
 						</div>
+
+						<div class="pricingCardGrid__pricingCard">
+							<a class="pricingCard" href="{% url 'cuentavisitante'%}" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
+							<div class="pricingCard__heading title--small">
+							Solicitud de cuenta </div><br>
+							<div class="pricingCard__pricing">
+								<div class="col-sm-4 col-xs-4">
+								<img src="{% static '/img/uss.png'%}" width="180" height="180"/>
+							</div>
+							</div>
+							<span class="pricingCard__period" >
+								<p align="justify">Solicitar cuenta de acceso como Institución o nuevo usuario (sin RVOE) a la plataforma.</p>
+							</span>
+							<div class="pricingCard__button">
+							<span class="button button--primary">
+								Acceder </span>
+							</div>
+							</a>
+							</div>
+
+
 						</div>
 						
 						</section>

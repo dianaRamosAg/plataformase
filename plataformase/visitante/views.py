@@ -6,16 +6,56 @@ from RVOES.models import NotificacionRegistro
 from .models import VisitanteSC,ConfiguracionPDF
 from django.contrib.auth.hashers import make_password
 from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
+
+#Cambiar contraseña de usuario
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, '¡ Su contraseña ha sido actualizada !')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Por favor, corrigir el error')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form
+    })
+
+
 
 ''' Vistas que redireccionan respecto a permisos de usuario'''
 def index(request):
     return redirect('login')
 
-def menuinstitucion(request):
-    return render(request,'menuinstitucion.html')
+''' Menu de instituciones'''
+def menuinstitucion(request,id):
+    if request.user.tipo_usuario == '1':
+        listinst = []
+        listinst= UsuarioInstitucion.objects.filter(id_usuariobase = id)
+        print(listinst)
+        for inst in listinst:
+            if inst.modalidad == '1': #En caso de ser TBC
+                return render(request,'menuinstitucion.html',{'UsuarioInstitucion': inst})
+        else:
+            return render(request,'menuinstitucion.html')
+    else:
+        return redirect('logout')
+
+
 
 def menuparticular(request):
-    return render(request,'menuparticular.html')
+    if request.user.tipo_usuario == '5':
+        return render(request,'menuparticular.html')
+    else:
+        return redirect('logout')
 
 def menuadmin(request):
     if request.user.tipo_usuario == '4':
@@ -25,13 +65,16 @@ def menuadmin(request):
         else:
              return render(request,'menuadmin.html')
     else:
-        return redirect('perfil')
+        return redirect('logout')
 
 def menudepartamento(request):
-    if request.user.departamento_id == '1':
-        return render(request,'menudepartamento_ce.html')
+    if request.user.tipo_usuario == '3' or request.user.tipo_usuario == '2':
+        if request.user.departamento_id == '1':
+            return render(request,'menudepartamento_ce.html')
+        else:
+            return render(request,'menudepartamento.html')
     else:
-        return render(request,'menudepartamento.html')
+        return redirect('logout')
 
 def control(request):
     return render(request,'menudepartamento_ce.html')
@@ -120,9 +163,16 @@ def regVisit(request):
     if request.method == 'POST':
         import datetime
         first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
+        last_name = request.POST["last_name"] #comentada porque solo se pide persona moral
         email = request.POST["email"]
+        #En caso de ya tener una solicitud del mismo correo
+        if VisitanteSC.objects.filter(email=email).exists() or CustomUser.objects.filter(email=email).exists():
+            return render(request,'solExistente.html')
+
         curp_rfc = request.POST["curp_rfc"]
+        #Si la CURP/RFC ya se encuentra registrado
+        if CustomUser.objects.filter(curp_rfc=curp_rfc).exists() or VisitanteSC.objects.filter(curp_rfc=curp_rfc).exists() :
+            return render(request,'datosExistentes.html')
         calle = request.POST["calle"]
         password = make_password(request.POST["password"])
         noexterior = request.POST["noexterior"]
@@ -133,13 +183,18 @@ def regVisit(request):
         celular = request.POST["celular"]
         tipo_usuario = request.POST["tipo_usuario"]
         tipo_persona = request.POST["tipo_persona"]
+        nombre_representante = request.POST["representante"]
+        ine_representante = request.FILES["ine_representante"]
         # Si es tipo de usuario institución
         if tipo_usuario == '1':
             # Guardamos los datos de un centro de trabajo vinculado con la institución
             inst_cct = request.POST["cct"]
-            inst_nombredirector = request.POST["nombre_director"]
-            sector = request.POST["sector"]
-            nivel_educativo = request.POST["nivel_educativo"]
+            if UsuarioInstitucion.objects.filter(cct=inst_cct).exists() or VisitanteSC.objects.filter(inst_cct=inst_cct).exists():
+                return render(request,'datosExistentes.html')
+            else:
+                inst_nombredirector = request.POST["nombre_director"]
+                sector = request.POST["sector"]
+                nivel_educativo = request.POST["nivel_educativo"]
             if nivel_educativo == 'Media Superior':
                 modalidad = request.POST["modalidad"]
             else:
@@ -151,14 +206,15 @@ def regVisit(request):
             nivel_educativo = None
             modalidad = None
            
-
+        # ,
         visit = VisitanteSC(first_name=first_name,last_name=last_name, password=password,
                             email=email, curp_rfc=curp_rfc, calle=calle,
                             noexterior=noexterior, nointerior=nointerior, codigopostal=codigopostal,
                             municipio=municipio, colonia=colonia, celular=celular,
                             tipo_usuario=tipo_usuario,tipo_persona=tipo_persona,
                             inst_cct=inst_cct, inst_nombredirector=inst_nombredirector,
-                            sector=sector, nivel_educativo=nivel_educativo,modalidad=modalidad)
+                            sector=sector, nivel_educativo=nivel_educativo,modalidad=modalidad,nombre_representante= nombre_representante,
+                            ine_representante=ine_representante)
         
         visit.save()
     return redirect('solicitudenviada') #mandar pagina con mensaje de esperar
@@ -174,8 +230,9 @@ def notificacionsc(request):
 
 #Funcion que manda los datos del visitante que pidió cuenta, se valida y puede aceptarse o no.
 def validar(request,email):
-    vs=VisitanteSC.objects.get(email = email)
-    return render(request,'validar.html',{'VisitanteSC':vs})
+    if request.user.tipo_usuario == '4':
+        vs=VisitanteSC.objects.get(email = email)
+        return render(request,'validar.html',{'VisitanteSC':vs})
 
 
 def regUser(request, email):
@@ -194,11 +251,9 @@ def regUser(request, email):
                          curp_rfc=usrV.curp_rfc, calle=usrV.calle, noexterior=usrV.noexterior,
                          nointerior=usrV.nointerior, codigopostal=usrV.codigopostal,
                          municipio=usrV.municipio, colonia=usrV.colonia, celular=usrV.celular,
-                         tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona)
+                         tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona, nombre_representante=usrV.nombre_representante)
         usr.save()
-        email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
-        email.send()
-        
+
         #send_mail('Subject here', 'Here is the message.', 'sigssemssicyt@gmail.com', ['dianalaura.lee@gmail.com'], fail_silently=False)
         if usrV.tipo_usuario == '1':
             customUsr = CustomUser.objects.get(id=usr.id)
@@ -206,6 +261,8 @@ def regUser(request, email):
                                          sector=usrV.sector, nivel_educativo=usrV.nivel_educativo,modalidad=usrV.modalidad)
             usrInst.save()
     VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT "+"http://ssemssicyt.nayarit.gob.mx/login/", to=[usrV.email])
+    email.send()
     return redirect('usuarios')
 
 
@@ -214,21 +271,37 @@ def regUser(request, email):
 def cancelarsolicitud(request,email2,email):
     # vs=VisitanteSC.objects.get(email = email2)
     usrV = VisitanteSC.objects.get(email=email)
-    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta NO ha sido aceptada, Usuario: '+usrV.email+". Ante cuanlquier duda, comuniquese  a  SSEMSSYCyT", to=[usrV.email])
+    VisitanteSC.objects.filter(email=email2).delete()
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta NO ha sido aceptada, Usuario: '+usrV.email+". Ante cualquier duda, comuniquese  a  SSEMSSYCyT", to=[usrV.email])
     email.send()
-    VisitanteSC.objects.filter(email=email2,leida='0').update(leida='1')
     return redirect('notificacionsc')
 
 #Actualizar datos de los usuarios
 def actualizarperfilusr(request):
-
+ 
     if request.method == 'POST':
         first_name = request.POST["first_name"]
+        email = request.POST["email"]
+        if email != request.user.email:
+            if CustomUser.objects.filter(email=email).exists() or CustomUser.objects.filter(username=email).exists():
+                return render(request,'datosExistentes.html')
 
         if request.user.tipo_persona=='1':
             last_name = request.POST["last_name"]
         else:
             last_name=""
+
+        if request.user.tipo_usuario=='2':
+            email = request.POST["email"]
+            user = CustomUser.objects.get(email=email)
+            if request.FILES:
+                if 'firma_digital' in request.FILES:
+                    user.firma_digital.delete()
+                    user.firma_digital = request.FILES['firma_digital']
+                     
+            user.save()
+        else:
+            firma_digital= None
 
         if request.user.tipo_usuario =='1' or request.user.tipo_usuario =='5':
             identificacion = request.POST["identificacion"]
@@ -242,8 +315,7 @@ def actualizarperfilusr(request):
                 identificacion = request.POST["identificacion"]
                 folio_id = request.POST["folio_id"]
                 marca_educativa = request.POST["marca"] 
-               
-
+      
         if request.user.tipo_usuario !='1' and request.user.tipo_usuario !='5':
             identificacion = None
             folio_id = None
@@ -251,9 +323,12 @@ def actualizarperfilusr(request):
             nombre_representante = None
             dom_legal_part = None
 
-
-        email = request.POST["email"]
+        
+        
         curp_rfc = request.POST["curp_rfc"]
+        if curp_rfc != request.user.curp_rfc:
+            if CustomUser.objects.filter(curp_rfc=curp_rfc).exists():
+                return render(request,'datosExistentes.html')
         calle = request.POST["calle"]
         noexterior = request.POST["noexterior"]
         nointerior = request.POST["nointerior"]
@@ -261,11 +336,15 @@ def actualizarperfilusr(request):
         municipio = request.POST["municipio"]
         colonia = request.POST["colonia"]
         celular = request.POST["celular"]
+        idup = request.user.id
+        print("contraseña")
+
         
-        CustomUser.objects.filter(email=email).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
+
+        CustomUser.objects.filter(id=idup).update(curp_rfc=curp_rfc,calle=calle,noexterior=noexterior,nointerior=nointerior,
         codigopostal=codigopostal,municipio=municipio,colonia=colonia,celular=celular,first_name=first_name,last_name=last_name,
         identificacion=identificacion,folio_id=folio_id,marca_educativa=marca_educativa,nombre_representante=nombre_representante,
-        dom_legal_part=dom_legal_part)
+        dom_legal_part=dom_legal_part, username=email,email=email)
    
   
     return redirect('perfiluser') 
@@ -280,7 +359,7 @@ def GuardarFormatoPDF(request):
         formatoPDF.save()
         formatos = ConfiguracionPDF.objects.all()
         return render(request, 'configuracionpdf.html', {'formatos': formatos })
-     
+      
 def cct(request):
     if request.method == 'POST':
         cct = request.POST["cct"]
@@ -307,3 +386,6 @@ def actualizarcct(request):
         
         UsuarioInstitucion.objects.filter(cct=cct).update(nombredirector=nombredirector,sector=sector,nivel_educativo=nivel_educativo)
     return redirect('cct')
+
+
+

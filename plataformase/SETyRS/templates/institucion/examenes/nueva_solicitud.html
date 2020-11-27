@@ -1,10 +1,17 @@
-{% extends 'institucion/base.html' %} {% load static %} {% block content %}
+{% extends 'institucion/base.html' %} 
+{% load static %}
+{% block content %}
+<script>
+    var RIT = "{{RIT}}";
+</script>
+
 <div class="container col-md-10 text-center">
     <h2 class="mt-3">Nueva Solicitud de Exámen a Título</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
+    <script src="{% static 'js/admins/examenes/nuevaSoli.js' %}" defer></script>
     <p>*Recuerda que para poder realizar una solicitud tienes que tener al menos 3 sinodales registrados.
          Si aún no los tienes registralos <a href="{% url 'SETyRS_nueva_solicitud_sinodal' %}"><strong><u>aquí</u></strong></a></p>
-    <form action="{% url 'SETyRS_crear_solicitud_examen' %}" method="POST">
+    <form id="enviarSolicitud"  action="{% url 'SETyRS_crear_solicitud_examen' %}" method="POST">
         {% csrf_token %}
         <div class="container mb-3">
             <div class="container col-md-5 text-center">
@@ -32,38 +39,67 @@
                 <p>*Los sinodales deben ser 3 personas distintas</p>
             </div>
             <div class="col-md-2">
-                <label for="selectCategoria">OPCIÓN DE TITULACIÓN</label>
+                <label for="sel">OPCIÓN DE TITULACIÓN</label>
             </div>
             <div class="col-md-4">
-                <select class="form-control" name="categoria" id="selectCategoria">
+                <select class="form-control" name="categoria" id="sel" onChange="otrosOnChange(this)">
                     <option  selected hidden>Seleccionar</option>
-                    <option value="1">SEMINARIO DE TITULACION</option>
-                    <option value="2">TESIS EXTERNA</option>
-                    <option value="3">INFORME SOBRE SERVICIO SOCIAL</option>
-                    <option value="4">ESTUDIOS DE POSGRADO</option>
-                    <option value="5">EXAMEN GENERAL DE CONOCIMIENTOS</option>
-                    <option value="6">EXAMEN CENEVAL</option>
-                    <option value="7">ALTO RENDIMIENTO DE LICENCIATURA</option>
-                    <option value="8">EXPERIENCIA PROFESIONAL</option>
-                </select>
+                    <option value="SEMINARIO DE TITULACION">SEMINARIO DE TITULACION</option>
+                    <option value="TESIS EXTERNA">TESIS EXTERNA</option>
+                    <option value="INFORME SOBRE SERVICIO SOCIAL">INFORME SOBRE SERVICIO SOCIAL</option>
+                    <option value="ESTUDIOS DE POSGRADO">ESTUDIOS DE POSGRADO</option>
+                    <option value="EXAMEN GENERAL DE CONOCIMIENTOS">EXAMEN GENERAL DE CONOCIMIENTOS</option>
+                    <option value="EXAMEN CENEVAL">EXAMEN CENEVAL</option>
+                    <option value="ALTO RENDIMIENTO DE LICENCIATURA">ALTO RENDIMIENTO</option>
+                    <option value="EXPERIENCIA PROFESIONAL">EXPERIENCIA PROFESIONAL</option>
+                    <option value="OTROS">OTROS</option>
+                </select> 
+                
+                <div id="nCuenta" style="display:none;">
+                    Agregar opción: <input type="text" id="text"><input type="button" onclick="add();" value="Agregar" onkeyup="javascript:this.value=this.value.toUpperCase();" /><br/>
+                </div> 
+                <script type="text/javascript">
+                    function add(){
+                    var text = document.getElementById("text");
+                    var sel = document.getElementById("sel");
+                    
+                    var opt = document.createElement("option");
+                    
+                    opt.appendChild(document.createTextNode(text.value));
+                    opt.setAttribute("value", text.value);
+                    opt.setAttribute("selected", true);
+                    
+                    sel.appendChild(opt);
+                    divT = document.getElementById("text");
+                    divT.value="";
+                    divC = document.getElementById("nCuenta");
+                    divC.style.display="none";
+                    
+                    
+                    }
+                    
+                    function see(){
+                    alert(document.getElementById("sel").value);
+                    }
+                    </script>
+                
+                
+
             </div>
-            <div class="col-md-2">
-                <label>SECRETARIO</label>
-            </div>
-            <div class="col-md-4">
-                <select class="form-control" name="secretario" id="selectSecretario">
-                    <option  selected hidden>Seleccionar</option>
-                    {% if sinodales %}
-                        {% for s in sinodales %}
-                            <option value="{{s.id}}">{{s.nombre_sinodal}}  {{s.rfc}}</option>
-                        {% endfor %}
-                    {% else %}
-                        <option>No tiene sinodales registrados</option>
-                    {% endif %}
-                  </select>
-            </div>
+            
+
+
+            
+        </div>
+        <div class="row mb-4"> 
         </div>
         <div class="row mb-4">
+
+            
+
+
+
+
             <div class="col-md-2">
                 <label>PRESIDENTE</label>
             </div>
@@ -79,6 +115,27 @@
                     {% endif %}
               </select>
             </div>
+
+            <div class="col-md-2">
+                <label>SECRETARIO</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" name="secretario" id="selectSecretario">
+                    <option  selected hidden>Seleccionar</option>
+                    {% if sinodales %}
+                        {% for s in sinodales %}
+                            <option value="{{s.id}}">{{s.nombre_sinodal}}  {{s.rfc}}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option>No tiene sinodales registrados</option>
+                    {% endif %}
+                  </select>
+            </div>
+
+            
+        
+        </div>
+        <div class="row mb-4">
             <div class="col-md-2">
                 <label>VOCAL</label>
             </div>
@@ -94,15 +151,17 @@
                     {% endif %}
               </select>
             </div>
-        
+
+
         </div>
         <div class="row mb-4">
+
             <div class="col-md-2">
                 <label class="form-check-label col-2" for="date">Fecha de Examen</label>
                
             </div>
             <div class="col-md-4">
-                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" value="" required>
+                 <input type="date" class="form-control col" name="fecha_exa" id="fechaexa" onchange="buscar()" min="2020-11-27" value="" required>
             </div>
             
             <div class="col-md-2">
@@ -114,12 +173,61 @@
 
 
         </div>
-        <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
-        <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>
+
+        <div class="row mb-4">
+            
+            <div class="col-md-2">
+                <label class="form-check-label col-2" for="date">Hora</label>
+               
+            </div>
+            <div class="col-md-4">
+                 <input type="time" class="form-control col" name="hora_exa" id="horaexa" min="07:00" max="21:00" value="12:00" required>
+            </div>
+
+
+        </div>
+
+
+
+
+        <div id="buttonContainer" >
+            <button id="avanzar" type="submit" class="btn btn-primary mt-3" disabled>Avanzar</button>
+            <a href="{% url 'SETyRS_institucion_index' %}" class="btn btn-secondary mt-3">Cancelar</a>
+        </div>
     </form>
 </div>
 <br>
 <br>
 
+<!-- Agregar Documento Modal-->
+<div id="agregarDocumentoModal" class="modal hide fade in" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formRIT" action="{% url 'SETyRS_guardar_Reglamento' %}" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">						
+                    <h4 style="text-align: center;" class="modal-title">Su centro de trabajo tiene un documento pendiente por subir:<br> Reglamento interior de titulacion</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div style="text-align: center;" class="modal-body">
+                    <label>CENTRO DE TRABAJO</label><br>
+                    <input style="text-align: center;" type="text" class="form-control" data-editable="false" readonly value="{{institucion.cct}}" name="centroTrabajo">
+                    <br><br>
+                    <label>REGLAMENTO</label>
+                    <br>
+                    <div style="text-align: left;">
+                        <input id="documentoPendiente" name="documentoPendiente" type="file" class="file" data-show-preview="true">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                    <input type="submit" disabled="disabled" id="btnGuardar" class="btn btn-success" value="Guardar" disabled>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script src="{% static 'js/institucion/examenes/nueva_solicitud_examenes.js' %}"></script>
+<script src="{% static 'js/admins/examenes/nuevaSoli.js' %}" defer></script>
 {% endblock %}

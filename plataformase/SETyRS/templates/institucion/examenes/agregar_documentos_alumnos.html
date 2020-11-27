@@ -1,4 +1,5 @@
 {% extends 'institucion/base.html' %} {% load static %} {% block content %}{% load index %}
+<script src="{% static 'js/institucion/examenes/agregarDocumentosAlumnosLoading.js' %}"></script>
 <div class="container col-md-10 text-center">
     <h2 class="mt-3">Nueva Solicitud</h2>
     <img src="{% static 'img/gobierno_estado.png' %}" class="mb-3" alt="se" height="150">
@@ -55,11 +56,13 @@
             </table>
         </div>
     </div>
-    {% if archivos|length == lista_alumnos|length %}
-    <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> {% else %}
-    <p>Para poder continuar suba los archivos de todos los alumnos enlistados</p>
-    <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> {% endif %}
-    <a href="{% url 'SETyRS_solicitudes_examenes' %}" class="btn btn-secondary mb-5">Postergar</a>
+    <div id="buttonContainer">
+        {% if archivos|length == lista_alumnos|length %}
+            <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> {% else %}
+            <p>Para poder continuar suba los archivos de todos los alumnos enlistados</p>
+            <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> {% endif %}
+            <a href="{% url 'SETyRS_solicitudes_examenes' %}" class="btn btn-secondary mb-5">Postergar</a>
+    </div>
 
     <!-- Aviso Modal-->
     <div id="confirmacion" class="modal fade">
@@ -78,7 +81,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input type="submit" class="btn btn-success" value="Aceptar">
+                        <input id="btnContinuar" type="submit" class="btn btn-success" value="Aceptar">
                     </div>
                 </form>
             </div>
@@ -102,7 +105,7 @@
                         </div>
                         <div class="form-group mb-4">
                             <label><strong>Cotejo de liberación de servicio social</strong></label>
-                            <input type="file" class="form-control-file" name="servicio_social" accept="application/pdf" required>
+                            <input type="file" class="form-control-file" name="servicio_social" accept="application/pdf">
                         </div>
                         <div class="form-group mb-4">
                             <label><strong>Inscripción de control escolar (debe estar sellado por el área correspondiente al periodo de egreso)</strong></label>
