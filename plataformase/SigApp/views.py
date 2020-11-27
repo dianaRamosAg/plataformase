@@ -75,9 +75,8 @@ def index(request):
         })
 
 
-def notificaiones(depart):
-    
-    #depart = request.user.departamento_id; #OBTENER DE MODIFICACIONES EN INSTITUCIÓN
+def notificaiones(depart): 
+    # #OBTIENE EL NUMERO DE MODIFICACIONES EN INSTITUCIÓN TANTO INFO GENERAL Y ESTADISTICA
     
     dep = Departamento.objects.get(id=depart)
     tipDep= dep.nombre.upper()
@@ -216,7 +215,7 @@ def showModGral(id):
     return selectMod;
 
 def showModEst(id):
-    #############-MODIFICACION ESTADISTICA-#########################
+    #LISTA LAS MODIFICACIONES DE INF. ESTADISTICA TEMPORALES
 
     dep = Departamento.objects.get(id=id)
     tipDep= dep.nombre.upper()
@@ -275,7 +274,7 @@ def selecccion_municipio(request,mun):
     return JsonResponse(stackLocalidades,safe=False)
 
 def localizarInst(request, clave):
-    
+     #BUSCA UNA INSTITUCION POR CLAVE Y VALIDA SI ESTA ES VALIDA
     try:
         Escuela = EscuelaC.objects.get(ClaveEscuela = clave)
     except EscuelaC.DoesNotExist:
@@ -317,7 +316,7 @@ def localizarInst(request, clave):
 
 
 def localizador(request):
-    
+    #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES, ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
     GradosAcademicos = GradoAcademico.objects.all()
     Localidades = Localidad.objects.all()
     AreasIntereses = AreaInteres.objects.all()
@@ -662,7 +661,7 @@ def institucionesUbicacion(request, id, clave):
 
     
 
-def updInfoEstadistica(request,año,clave_ins):
+def updInfoEstadistica(request,año,clave_ins): #-----#
 
     tag = 0
 
@@ -696,14 +695,16 @@ def updInfoEstadistica(request,año,clave_ins):
 
 
 def detalle(request,idr,inst):
+   # OBTIENE INF. DEL RVOE Y DE LA INSTITUCIONES SELECCIONADA
+
     RVOEF = RVOES.objects.filter(ClaveCarrera = idr).get(ClaveEscuela=inst)
     InstitucionF = EscuelaC.objects.get(ClaveEscuela=inst)
    
-    
     return render(request,'SigApp/detalle_carreras.html',{"RVOE":RVOEF,"Institucion":InstitucionF})
 
 
 def selectInstitucion(request,id):
+    #LISTA LOS CENTROS DE TRABAJO DE ESTE PERFIL ADEMAS NOTIFICA AL USUARIO SI UNO DE ESTOS NO SE ENCUENTRA REGISTRADO.
 
     queryset = UsuarioInstitucion.objects.filter(id_usuariobase_id=id) #1
     clavect = []
@@ -725,7 +726,8 @@ def selectInstitucion(request,id):
 
 
 def miInstitucion(request, id, id_dep):
-    
+    # DEVUELVE LA INF. GENERAL DE LA INSTITUCION SELECCIONADA, ADEMAS SI RECIBE UNA PETICION 
+    # POST GUARDA LA INF. MODIFICADA COMO TEMPORAL Y ENVIA LA SOLICITUD PARA EL DEPARTAMENTO
     #dep = id_dep
     Escuela = EscuelaC.objects.get(ClaveEscuela=id)
 
@@ -850,8 +852,6 @@ def miInstitucion(request, id, id_dep):
             })
         
 
-
-
     elif modificando == True:
         messages.info(request, 'Ya existe una modificación en trámite, por favor espere a que sea atendida')
 
@@ -869,10 +869,11 @@ def miInstitucion(request, id, id_dep):
         })
 
 
-def perfilAdmin(request):
+def perfilAdmin(request): # --- #
     return render(request,'SigApp/perfilAdmin.html')
 
 def APIapp(request, id, clave):
+    # API DEVULEVE TODAS LAS INSTITUCIONES.
     if (id == 'id'):
         INF = EscuelaC.objects.filter(ClaveEscuela = clave)
         #Centro = CentroTrabajo.objects.filter(Clave_CentroTrabajo__in = Subquery(Institucion.objects.filter(Clave_Institucion=clave).values('Clave_CentroTrabajo')))
@@ -950,6 +951,8 @@ def APIappFiltros(request, mediasuperior,superior,privada,publica):
     return JsonResponse(data,safe=False) #,Ubicacion,NLocalidad,NMunicipio
 
 def modificacionesAdmin(request, id):
+    # LLAMA A LOS DEMAS METODOS PARA MOSTRAR LAS MODIFICAIONES DE INF. GENERAL,
+    # MODIFICACIONES  DE INF. ESTADISTICA Y EL NUMERO DE MODIFICAIONES DE AMBAS.
 
     return render(request,'SigApp/modificacionesAdmin.html',{
         "temporales" : showModGral(request.user.departamento_id),
@@ -958,6 +961,10 @@ def modificacionesAdmin(request, id):
     })
 
 def mostrarInstitucion(request, nombre):
+    # OBTIENE LA INFORMACION ACTUAL Y LA TEMPORAL PARA HACER UNA COMPARATIVA 
+    # SI RECIBE POST GUARDA LA NUEVA INFOMRACION, ELIMINA EL TEMPORAL, LOS REGISTRA EN EL HISTORIAL
+    # *CREA Y MANDA EL EMAIL*
+    # SI RECHAZA LA INF. ELIMINA EL TEMPORAL MANTIENE LA INFOMRACION ACTUAL Y REGSITRA EN HISTORIAL
 
     nombre = nombre.replace("-"," ")
     Escuela = EscuelaC.objects.get(NombreEscuela=nombre)
@@ -1188,7 +1195,10 @@ def mostrarInstitucion(request, nombre):
 
 
 def mostrarInstitucionEst(request, claveC, claveE):
-    
+    #OBTIENE LA INF. ESTADISTICA ACTUAL DEL RVOE, LA INF. TEMPORAL PARA COMPARAR
+    # SI ES ACEPTADA GUARDA LA INFORMACION, ELIMINA EL TEMPORAL Y REGSITRA EN HISTORIAL 
+    # SI ES RECHAZADA ELIMINA EL TEMPORAL REGISTRA EN HISTORIAL 
+
     rvoe = RVOES.objects.get(ClaveCarrera=claveC, ClaveEscuela_id=claveE)
     rvoe_temp = DatosTemporalEstadistica.objects.get(ClaveCarrera_temp=claveC, ClaveEscuela_temp=claveE)
     Escuela = EscuelaC.objects.get(ClaveEscuela=claveE)
@@ -1395,8 +1405,11 @@ def mostrarInstitucionEst(request, claveC, claveE):
         })
 
 
-#------------------- Historial 
+#------------------- Historial
 def listarHistorial(request):
+    # OBTIENE HISTORIAL DE INF. GENERAL, TANTO DE SU DEPARTAMENTO 
+    # COMO DE ALGUNO REGSITRADO CON AMBOS
+
     dep = Departamento.objects.get(id=request.user.departamento_id)
     tipDep= dep.nombre.upper()
     
@@ -1416,6 +1429,9 @@ def listarHistorial(request):
     })
 
 def listarHistorialEst(request):
+    # OBTIENE HISTORIAL DE INF. ESTADISTICA, TANTO DE SU DEPARTAMENTO 
+    # COMO DE ALGUNO REGSITRADO CON AMBOS
+
     dep = Departamento.objects.get(id=request.user.departamento_id)
     tipDep= dep.nombre.upper()
     
@@ -1435,6 +1451,7 @@ def listarHistorialEst(request):
     })
 
 def mostrarHistorial(request, id):
+    # OBTIENE EL HISTORIAL DE INF. GENERAL REQQUERIDO 
 
     modificacion = HistorialMod.objects.get(id=id)
     
@@ -1444,7 +1461,8 @@ def mostrarHistorial(request, id):
     })
     
 def mostrarHistorialEst(request, id):
-    
+    # OBTIENE EL HISTORIAL DE INF. ESTADISITCA REQUERIDO 
+
     modificacion = HistorialModEstadistica.objects.get(id=id)
 
     nombreEscuela = EscuelaC.objects.get(ClaveEscuela = modificacion.ClaveEscuela_new)
@@ -1457,14 +1475,14 @@ def mostrarHistorialEst(request, id):
     })
 #--------------------------------
 
-def registrosAdmin(request):
+def registrosAdmin(request): #----#
     registro = User.objects.all()
 
     return render(request,'SigApp/registrosAdmin.html',{
         "registros":registro
     })
 
-def mostrarRegistro(request, nombre):
+def mostrarRegistro(request, nombre): #---#
     registroI = User.objects.get(username = nombre)
     nombreU = registroI.username
     nombreI = registroI.first_name
@@ -1488,7 +1506,8 @@ def mostrarRegistro(request, nombre):
     })
 
 def modEstadistica(request, clave, id_dep):
-    
+    # OBTIENE EL TOTAL DE LA ESTADISTICA DE LOS RVOES, 
+    # LISTA CADA UNA DE LAS CARRERAS PARA MODIFICAR 
 
     # if request.method == 'POST':
     #     carrera = estadisticosNuevo.objects.get(ClaveEscuela = clave)
@@ -1622,6 +1641,8 @@ def modEstadistica(request, clave, id_dep):
 
 
 def solicitaModEstadistica(request, clave, claveE, id_dep):
+# OBTIENE LA INF. ESTADISTICA PARA MOSTRAR, 
+# SI RECIBE UNA PETICION POST, GUARDA LA INF. EN TEMPORAL 
 
     carrera = RVOES.objects.get(ClaveCarrera = clave, ClaveEscuela_id = claveE)
 

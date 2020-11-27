@@ -2,6 +2,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+<!-- Vista para modificar la institucion seleccionada, solo informacion general e imagenes (usuario Institucion) -->
+
 <body>
     {% block content %}
     <style>
@@ -207,7 +209,7 @@
                     <input required type="text" id="lat" name="lat" class="form-control" value="{{Escuela.Latitud}}" placeholder="Latitud" aria-label="Latitud" aria-describedby="Latitud"  >
                     
                     <div class="input-group-append">
-                        <span class="input-group-text"> Latitud </span>
+                        <span class="input-group-text"> Longitud </span>
                     </div>
                     <input required type="text" id="lng" name="lng" class="form-control" value="{{Escuela.Longitud}}" placeholder="Longitud" aria-label="Longitud" aria-describedby="Longitud"  >
                     
@@ -235,7 +237,7 @@
                         </div>
                     {% else %}
                         <div id="PrimeraImagenIns" class="col-md-6 col-sm-12 col-lg-4">         
-                            <div style="background-image: url({% static 'SigApp/se_bordado.png' %}{% static 'SigApp/noi.png' %}); background-size: cover; border-radius: 16px;" id="DragAndDrop1" class="dm-uploader p-5">
+                            <div style="background-image: url({% static 'SigApp/noi.png' %}); background-size: cover; border-radius: 16px;" id="DragAndDrop1" class="dm-uploader p-5">
                                 <h4 class="mb-5 mt-5 text-muted">Arrastre la imagen</h4>
                                 <div style="background-color: #757575" class="btn btn-primary btn-file">
                                     <span>Buscar Archivo...</span>
@@ -342,6 +344,7 @@
         infoWindow.close();
 
         // Create a new InfoWindow.
+        // Obtener lat, log para marcado por el usuario 
         infoWindow = new google.maps.InfoWindow({position: mapsMouseEvent.latLng});
         infoWindow.setContent(mapsMouseEvent.latLng.toString());
         infoWindow.open(map);
