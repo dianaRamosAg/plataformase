@@ -183,6 +183,8 @@ def regVisit(request):
         celular = request.POST["celular"]
         tipo_usuario = request.POST["tipo_usuario"]
         tipo_persona = request.POST["tipo_persona"]
+        nombre_representante = request.POST["representante"]
+        ine_representante = request.FILES["ine_representante"]
         # Si es tipo de usuario institución
         if tipo_usuario == '1':
             # Guardamos los datos de un centro de trabajo vinculado con la institución
@@ -211,7 +213,8 @@ def regVisit(request):
                             municipio=municipio, colonia=colonia, celular=celular,
                             tipo_usuario=tipo_usuario,tipo_persona=tipo_persona,
                             inst_cct=inst_cct, inst_nombredirector=inst_nombredirector,
-                            sector=sector, nivel_educativo=nivel_educativo,modalidad=modalidad)
+                            sector=sector, nivel_educativo=nivel_educativo,modalidad=modalidad,nombre_representante= nombre_representante,
+                            ine_representante=ine_representante)
         
         visit.save()
     return redirect('solicitudenviada') #mandar pagina con mensaje de esperar
@@ -248,7 +251,7 @@ def regUser(request, email):
                          curp_rfc=usrV.curp_rfc, calle=usrV.calle, noexterior=usrV.noexterior,
                          nointerior=usrV.nointerior, codigopostal=usrV.codigopostal,
                          municipio=usrV.municipio, colonia=usrV.colonia, celular=usrV.celular,
-                         tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona)
+                         tipo_usuario=usrV.tipo_usuario, tipo_persona=usrV.tipo_persona, nombre_representante=usrV.nombre_representante)
         usr.save()
 
         #send_mail('Subject here', 'Here is the message.', 'sigssemssicyt@gmail.com', ['dianalaura.lee@gmail.com'], fail_silently=False)
@@ -258,7 +261,7 @@ def regUser(request, email):
                                          sector=usrV.sector, nivel_educativo=usrV.nivel_educativo,modalidad=usrV.modalidad)
             usrInst.save()
     VisitanteSC.objects.filter(email=usrV.email, leida='0').update(leida='1')
-    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT", to=[usrV.email])
+    email = EmailMessage('CUENTA SSEMSYCyT', 'Su cuenta ha sido aceptada, Usuario: '+usrV.email+" a partir de este momento ya puede acceder a la Plataforma de SSEMSSYCyT "+"http://ssemssicyt.nayarit.gob.mx/login/", to=[usrV.email])
     email.send()
     return redirect('usuarios')
 
@@ -383,3 +386,6 @@ def actualizarcct(request):
         
         UsuarioInstitucion.objects.filter(cct=cct).update(nombredirector=nombredirector,sector=sector,nivel_educativo=nivel_educativo)
     return redirect('cct')
+
+
+

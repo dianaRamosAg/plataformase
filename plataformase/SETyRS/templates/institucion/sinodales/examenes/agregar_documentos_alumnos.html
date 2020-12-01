@@ -58,9 +58,9 @@
     </div>
     <div id="buttonContainer">
         {% if archivos|length == lista_alumnos|length %}
-            <input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion"> {% else %}
+            <input id="btnContinuar" class="btn btn-primary mb-5" type="button" value="Continuar"> {% else %}
             <p>Para poder continuar suba los archivos de todos los alumnos enlistados</p>
-            <input class="btn btn-primary mb-5" type="button" value="Continuar" disabled> {% endif %}
+            <input id="btnContinuar" class="btn btn-primary mb-5" type="button" value="Continuar" disabled> {% endif %}
             <a href="{% url 'SETyRS_solicitudes_examenes' %}" class="btn btn-secondary mb-5">Postergar</a>
     </div>
 
@@ -68,7 +68,7 @@
     <div id="confirmacion" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'SETyRS_finalizar_solicitud_examen' solicitud.id %}" method="POST">
+                <form id="FormGuardarAlumnosDocs" action="{% url 'SETyRS_finalizar_solicitud_examen' solicitud.id %}" method="POST">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h4 class="modal-title">Aviso!</h4>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input id="btnContinuar" type="submit" class="btn btn-success" value="Aceptar">
+                        <input id="btnContinuarF" type="submit" class="btn btn-success" value="Aceptar">
                     </div>
                 </form>
             </div>
@@ -89,10 +89,10 @@
     </div>
 
     <!-- Add docs Modal HTML -->
-    <div id="addDocs" class="modal fade">
+    <div id="addDocs" class="modal fade" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{% url 'SETyRS_subir_documentos_alumno' solicitud.id %}" method="POST" enctype="multipart/form-data">
+                <form id="guardarDocs" action="{% url 'SETyRS_subir_documentos_alumno' solicitud.id %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="modal-header">
                         <h4 class="modal-title">Agregar Archivos</h4>
@@ -101,24 +101,24 @@
                     <div class="modal-body">
                         <div class="form-group mb-4">
                             <label><strong>Certificado de egreso</strong></label>
-                            <input type="file" class="form-control-file" name="certificado_egreso" id="cert_egreso" accept="application/pdf" required>
+                            <input type="file" class="form-control-file" id="file_certificado_egreso" name="certificado_egreso" id="cert_egreso" accept="application/pdf" required>
                         </div>
                         <div class="form-group mb-4">
                             <label><strong>Cotejo de liberación de servicio social</strong></label>
-                            <input type="file" class="form-control-file" name="servicio_social" accept="application/pdf">
+                            <input type="file" class="form-control-file" id="file_servicio_social" name="servicio_social" accept="application/pdf">
                         </div>
                         <div class="form-group mb-4">
                             <label><strong>Inscripción de control escolar (debe estar sellado por el área correspondiente al periodo de egreso)</strong></label>
-                            <input type="file" class="form-control-file" name="inscripcion_ctrl_escolar" accept="application/pdf" required>
+                            <input type="file" class="form-control-file" id="file_inscripcion_ctrl_escolar" name="inscripcion_ctrl_escolar" accept="application/pdf" required>
                         </div>
                         <div class="form-group mb-4">
                             <label><strong>Recibo de pago de derechos (expedido por la secretaria de finanzas)</strong></label>
-                            <input type="file" class="form-control-file" name="recibo_pago" accept="application/pdf" required>
+                            <input type="file" class="form-control-file" id="file_recibo_pago" name="recibo_pago" accept="application/pdf" required>
                         </div>
                         <div class="form-group mb-4">
                             <label><strong>NOTA: El siguiente archivo subir solo si se trata de una carrera del tipo complementaria.</strong></label>
                             <label><strong>Comprobante de experiencia</strong></label>
-                            <input type="file" class="form-control-file" name="comprobante_exp" accept="application/pdf">
+                            <input type="file" class="form-control-file" id="file_comprobante_exp" name="comprobante_exp" accept="application/pdf">
                         </div>
             
                         <div class="form-group mb-4">
@@ -128,7 +128,7 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                        <input type="submit" class="btn btn-success" value="Guardar">
+                        <input id="btnGuardarDocs" type="submit" class="btn btn-success" value="Guardar" disabled>
                     </div>
                 </form>
             </div>
@@ -136,7 +136,7 @@
     </div>
 
     <!-- Edit Modal HTML -->
-    <div id="editDocs" class="modal fade">
+    <div id="editDocs" class="modal fade" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="{% url 'SETyRS_editar_documentos_alumno' solicitud.id %}" method="POST" enctype="multipart/form-data">
@@ -183,7 +183,7 @@
         </div>
     </div>
     <!-- Ver archivo Modal HTML -->
-    <div id="viewPDF" class="modal fade">
+    <div id="viewPDF" class="modal fade" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" style="max-width: max-content;">
             <div class="modal-content">
                 <div class="modal-header" style="padding: 5px 20px;">

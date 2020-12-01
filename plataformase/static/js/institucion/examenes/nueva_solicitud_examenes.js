@@ -13,6 +13,8 @@ $(function () {
 function validar() {
     var categoria = document.getElementById("sel").value;
     var secretario = document.getElementById("selectSecretario").value;
+    var nivel = document.getElementById("select_nivel_educativo").value;
+    var cct = document.getElementById("select_cct").value;
     var presidente = document.getElementById("selectPresidente").value;
     var vocal = document.getElementById("selectVocal").value;
     var fecha = document.getElementById("fechaexa").value;
@@ -29,13 +31,17 @@ function validar() {
         return false;
     }else if (secretario == presidente || secretario == vocal || presidente == vocal) {
         return false;
+    } else if(nivel == "0"){
+        return false;
+    }else if(cct == "0"){
+        return false;
     } else return true;
 
     
 }
 
 function otrosOnChange(sel) {
-    if (sel.value=="OTROS"){
+    if (sel.value=="9"){
          divC = document.getElementById("nCuenta");
          divC.style.display = "";
 

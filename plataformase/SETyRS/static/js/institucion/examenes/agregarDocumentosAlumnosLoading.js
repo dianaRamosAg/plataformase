@@ -2,9 +2,21 @@ function cargarListeners() {
     var btnC = document.getElementById("btnContinuar");
     btnC.addEventListener("click",continuarSoli,false);
 };
+$(function(){
+    $('[class="form-control-file"]').change(function(){
+        if($("#file_certificado_egreso").val() && $("#file_servicio_social").val() && $("#file_inscripcion_ctrl_escolar").val() && $("#file_recibo_pago").val() && $("#file_recibo_pago").val() && file_comprobante_exp ){
+            $("#btnGuardarDocs").prop("disabled",false);
+        }
+    })
+
+    $("#btnGuardarDocs").click(function(){
+        $(this).prop("disabled",true);
+        $("#guardarDocs").submit();
+    })
+})
+
 
 function continuarSoli(){
-    console.log("Entra a la funcion");
     var divContainer = document.getElementById("buttonContainer");
 
     divContainer.innerHTML ="";
@@ -21,9 +33,17 @@ function continuarSoli(){
     creandoBoton.appendChild(spanBoton);
     divContainer.appendChild(creandoBoton);
 
-    //Depués de haber agregado el botón, enviamos el form para crear la solicitud
+    $('#confirmacion').modal('toggle');
+    $('#confirmacion').modal('show');
 
-    setTimeout(function(){ console.log("continuar") }, 4000);
+    $('#confirmacion').on('hidden.bs.modal', function () {
+        location.reload();
+    })
+
+    $("#btnContinuarF").click(function(){
+        $(this).prop("disabled",true);
+        $("#FormGuardarAlumnosDocs").submit();
+    })
     
 };
 

@@ -1,11 +1,43 @@
+var btnGuardar = "";
 
 function cargarListeners() { 
-    var btnC = document.getElementById("btnContinuar");
-    btnC.addEventListener("click",continuarSoli,false);
+    var btnContinuar = document.getElementById("btnContinuar");
+    btnContinuar.addEventListener("click",continuarSoli,false);
+    btnGuardar = document.getElementById("btnGuardar");
 };
 
+
+
+
+//Listeners para evaluar que ambos archivos se hayan subido antes de activar el botón de guardar
+$("#id_curriculum").change(function(){
+    if($("#id_cedula").val()){
+        $("#btnGuardar").prop("disabled",false)
+    }
+})
+
+$("#id_cedula").change(function(){
+    if($("#id_curriculum").val()){
+        $("#btnGuardar").prop("disabled",false)
+    }
+})
+// Fin listeners archivos
+   
+
+//Listener btnGuardar para desactivar al dar click
+$("#btnGuardar").click(function(){
+    $(this).prop("disabled",true);
+    $("#formGuardarDocs").submit();
+})
+
+$("#btnContinuar").click(function(){
+    $(this).prop("disabled",true);
+    $("#agregarDocumentos").submit();
+})
+
+
+//Cambiamos el botón al presionarlo una vez
 function continuarSoli(){
-    console.log("Entra a la funcion");
     var divContainer = document.getElementById("buttonContainer");
 
     divContainer.innerHTML ="";
@@ -21,10 +53,6 @@ function continuarSoli(){
     //agregamos el span al boton y el boton al div contenedor
     creandoBoton.appendChild(spanBoton);
     divContainer.appendChild(creandoBoton);
-
-    //Depués de haber agregado el botón, enviamos el form para crear la solicitud
-
-    setTimeout(function(){ console.log("continuar") }, 4000);
     
 };
 

@@ -55,19 +55,19 @@
 		</div>
 		<div id="buttonContainer">
 			{% if lista_alumnos %}
-			<input class="btn btn-primary mb-5" type="button" value="Continuar" data-toggle="modal" data-target="#confirmacion">
+			<input id="btnContinuar" class="btn btn-primary mb-5" type="button" value="Continuar">
 			{% else %}
 			<p>Para continuar agregue al menos un alumno a la solicitud</p>
-			<input class="btn btn-primary mb-5" type="button" value="Continuar" disabled>
+			<input id="btnContinuar" class="btn btn-primary mb-5" type="button" value="Continuar" disabled>
 			{% endif %}
 			<a href="{% url 'SETyRS_solicitudes_examenes' %}" class="btn btn-secondary mb-5">Postergar</a>		
         </div>
 
 	<!-- Aviso Modal-->
-	<div id="confirmacion" class="modal fade">
+	<div id="confirmacion" class="modal fade" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="{% url 'SETyRS_agregar_documentos_alumno' solicitud.id %}" method="POST">
+				<form id="FormGuardarAlumnos" action="{% url 'SETyRS_agregar_documentos_alumno' solicitud.id %}" method="POST">
 					{% csrf_token %}
 					<div class="modal-header">
 						<h4 class="modal-title">Aviso!</h4>
@@ -81,7 +81,7 @@
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-						<input id="btnContinuar" type="submit" class="btn btn-success" value="Aceptar">
+						<input id="btnContinuarF" type="submit" class="btn btn-success" value="Aceptar">
 					</div>
 				</form>
 			</div>
@@ -89,7 +89,7 @@
 	</div>
 		
 	<!-- Add Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
+	<div id="addEmployeeModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="{% url 'SETyRS_agregar_alumno' solicitud.id %}" method="POST">
@@ -130,7 +130,7 @@
 	</div>
 
 	<!-- Delete Modal HTML -->
-	<div id="deleteEmployeeModal" class="modal fade">
+	<div id="deleteEmployeeModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<form action="{% url 'SETyRS_eliminar_alumno' %}" method="POST">
@@ -153,7 +153,7 @@
 		</div>
 
 	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
+	<div id="editEmployeeModal" class="modal fade" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form action="{% url 'SETyRS_editar_alumno' %}" method="POST">
