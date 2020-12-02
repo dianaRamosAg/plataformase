@@ -473,78 +473,167 @@ def localizarInst(request, clave):
 
 
 def localizador(request):
-    #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES, ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
-    GradosAcademicos = GradoAcademico.objects.all()
-    Localidades = Localidad.objects.all()
-    AreasIntereses = AreaInteres.objects.all()
-    Municipios = Municipio.objects.all()
-    instituciones = EscuelaC.objects.all()
-    Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
-
-    usuario2 = request.user.id; #OBTENER ID_USUARIO
-    numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
-    nI=0
-    #print(numInst2)
- 
-    for c in numInst2:
-        nI += 1
-        Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
-        print(Escuelas2.ClaveEscuela)
     
-    if request.user.is_authenticated:
-        if request.user.departamento_id:
+    
 
-            return render(request,'SigApp/mapa_instituciones.html',{
-                "opcionesinstituciones": instituciones,
-
-                "opcionesgrados": GradosAcademicos,
-                "areaseducacion":AreasIntereses,
-                "opcionesmunicipios": Municipios,
-                "localidades": Localidades,
-                "numeroInstituciones": nI,                
-                "coordenadas": Escuelas,
-                "numeroModificaciones": notificaiones(request.user.departamento_id),
-                "Escuela2Clave":Escuelas2,
-
-            })
-        else:
-            return render(request,'SigApp/mapa_instituciones.html',{
-                "opcionesinstituciones": instituciones,
-
-                "opcionesgrados": GradosAcademicos,
-                "areaseducacion":AreasIntereses,
-                "opcionesmunicipios": Municipios,
-                "localidades": Localidades,
-                "numeroInstituciones": nI,
-                "coordenadas": Escuelas,              
-                "Escuela2Clave":Escuelas2,
-            })
-    else: 
+    if request.method == 'POST':
+        
+        clave = request.POST['selectInstitucion']
+        print(clave)
+        EscuelaSeleccionada = EscuelaC.objects.get(ClaveEscuela = clave)
+        #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES , ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
         GradosAcademicos = GradoAcademico.objects.all()
-        instituciones = EscuelaC.objects.all()
-
         Localidades = Localidad.objects.all()
-
         AreasIntereses = AreaInteres.objects.all()
         Municipios = Municipio.objects.all()
-        return render(request,'SigApp/mapa_instituciones.html',{
-            "opcionesinstituciones": instituciones,
-            "opcionesgrados": GradosAcademicos,
-            "areaseducacion":AreasIntereses,
-            "opcionesmunicipios": Municipios,            
-            "coordenadas": Escuelas,
-            "localidades": Localidades,
+        instituciones = EscuelaC.objects.all()
+        Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
 
-        })
+        usuario2 = request.user.id; #OBTENER ID_USUARIO
+        numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
+        nI=0
+        #print(numInst2)
+        
+        for c in numInst2:
+            nI += 1
+            Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
+            print(Escuelas2.ClaveEscuela)
+        
+        if request.user.is_authenticated:
+            if request.user.departamento_id:
 
-    #return render(request,'SigApp/mapa_instituciones.html',{
-     #   "opcionesgrados": GradosAcademicos,
-      #  "areaseducacion":AreasIntereses,
-      #  "opcionesmunicipios": Municipios,
-       # "localidades": Localidades,
-        #"coordenadas": Escuelas,
-        #"Escuela2Clave":Escuelas2
-    #})
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+                    "escuelaseleccionada": EscuelaSeleccionada,
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,                
+                    "coordenadas": Escuelas,
+                    "numeroModificaciones": notificaiones(request.user.departamento_id),
+                    "Escuela2Clave":Escuelas2,
+                    
+
+                })
+            else:
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+                    "escuelaseleccionada": EscuelaSeleccionada,
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,
+                    "coordenadas": Escuelas,              
+                    "Escuela2Clave":Escuelas2,
+                })
+        else: 
+            GradosAcademicos = GradoAcademico.objects.all()
+            instituciones = EscuelaC.objects.all()
+
+            Localidades = Localidad.objects.all()
+
+            AreasIntereses = AreaInteres.objects.all()
+            Municipios = Municipio.objects.all()
+            return render(request,'SigApp/mapa_instituciones.html',{
+                "escuelaseleccionada": EscuelaSeleccionada,
+                "opcionesinstituciones": instituciones,
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,            
+                "coordenadas": Escuelas,
+                "localidades": Localidades,
+
+            })
+
+        #return render(request,'SigApp/mapa_instituciones.html',{
+        #   "opcionesgrados": GradosAcademicos,
+        #  "areaseducacion":AreasIntereses,
+        #  "opcionesmunicipios": Municipios,
+        # "localidades": Localidades,
+            #"coordenadas": Escuelas,
+            #"Escuela2Clave":Escuelas2
+        #})
+        
+        
+        
+        
+    else:        
+        #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES, ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
+        GradosAcademicos = GradoAcademico.objects.all()
+        Localidades = Localidad.objects.all()
+        AreasIntereses = AreaInteres.objects.all()
+        Municipios = Municipio.objects.all()
+        instituciones = EscuelaC.objects.all()
+        Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
+
+        usuario2 = request.user.id; #OBTENER ID_USUARIO
+        numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
+        nI=0
+        #print(numInst2)
+    
+        for c in numInst2:
+            nI += 1
+            Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
+            print(Escuelas2.ClaveEscuela)
+        
+        if request.user.is_authenticated:
+            if request.user.departamento_id:
+
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,                
+                    "coordenadas": Escuelas,
+                    "numeroModificaciones": notificaiones(request.user.departamento_id),
+                    "Escuela2Clave":Escuelas2,
+                    
+
+                })
+            else:
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,
+                    "coordenadas": Escuelas,              
+                    "Escuela2Clave":Escuelas2,
+                })
+        else: 
+            GradosAcademicos = GradoAcademico.objects.all()
+            instituciones = EscuelaC.objects.all()
+
+            Localidades = Localidad.objects.all()
+
+            AreasIntereses = AreaInteres.objects.all()
+            Municipios = Municipio.objects.all()
+            return render(request,'SigApp/mapa_instituciones.html',{
+                "opcionesinstituciones": instituciones,
+                
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,            
+                "coordenadas": Escuelas,
+                "localidades": Localidades,
+
+            })
+
+        #return render(request,'SigApp/mapa_instituciones.html',{
+        #   "opcionesgrados": GradosAcademicos,
+        #  "areaseducacion":AreasIntereses,
+        #  "opcionesmunicipios": Municipios,
+        # "localidades": Localidades,
+            #"coordenadas": Escuelas,
+            #"Escuela2Clave":Escuelas2
+        #})
 
 def updInfo(request,Ndirector,Ninstitucion):
     nombre = Ninstitucion.replace("-"," ")

@@ -37,13 +37,16 @@
             opacity: 23%;}
     </style>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
     
-    <script type="text/javascript">
+<script type="text/javascript">
 		function prueba(){
 			var selectM = document.getElementById('selectInstitucion')
 			$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
 		}
+    </script>
+<script>
+    
+    
 
 		function infoInstitucion2(aInstitucion2){
 			//--
@@ -98,8 +101,7 @@
 					})
 			}											 
 		};
-    
-
+        
 
 
 
@@ -199,6 +201,7 @@
 </script>
 
 
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-3" style="background-color: ;">
@@ -207,12 +210,18 @@
                     <p class="col-12 mb-2" style="font-size: 15px;">Clave Centro de Trabajo</p>
                     <div class="centro col-12">
                         <div class="centro ">
-                            <select class="selectpicker " data-live-search="true" id="selectInstitucion" >
-                                <option class="opt" value="seleccion" >Seleccione institución</option>
-                                {% for element in opcionesinstituciones %}
-                                    <option value="{{element.ClaveEscuela}}">{{ element.ClaveEscuela }}</option>
-                                {% endfor %}
-                            </select>
+                            <form method="post" id="form" name="form"  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <select class="selectpicker" method="post"   data-live-search="true" id="selectInstitucion" name="selectInstitucion" onchange="this.form.submit();">
+                                    <option class="opt" value="seleccion" >Seleccione institución</option>
+                                    {% for element in opcionesinstituciones %}
+                                        <option  value="{{element.ClaveEscuela}}" >{{ element.ClaveEscuela }}</option>                                       
+                                    {% endfor %}
+                                       
+                                </select>
+                                <button type="button" onclick="initMapa()" class="btn btn-primary">Ubicar</button>                               
+                            </form>
+                            
                         </div>
                     </div>     	
                 </div>
@@ -292,6 +301,7 @@
 						    {% endfor %}
 					    </select>
                     </div>
+                
                 </div>
 
                 <div class="row mt-3 mb-3 p-3">
@@ -349,7 +359,7 @@
 
                 <div class="row mt-3">
                     <div class="centro col-12">
-                        <select TYPE=text id="LocalidadC" name="LocalidadC" onclick=""  size="1" style="text-align-last:center; width: 80%" hidden>
+                        <select TYPE=text id="LocalidadC " name="LocalidadC" onclick=""  size="1" style="text-align-last:center; width: 80%" hidden>
                             {% for element in coordenadas %}
                             <option  name="LocalidadC" value="{{ element.Localidad }}"> {{ element.Localidad }} </option>
                             {% endfor %}
@@ -385,7 +395,13 @@
                     </div>
                 </div>
 
-
+            <input class="col-12 mb-2" name="latitud" id="latitud" style="font-size: 18px;" value="{{escuelaseleccionada.Latitud}}" ></input>
+            <input class="col-12 mb-2" id="longitud" style="font-size: 18px;" value="{{escuelaseleccionada.Longitud}}" ></input>
+            <input class="col-12 mb-2" id="clave" style="font-size: 18px;" value="{{escuelaseleccionada.ClaveEscuela}}" ></input>
+            <input class="col-12 mb-2" id="nombre" style="font-size: 18px;" value="{{escuelaseleccionada.NombreEscuela}}" ></input>
+            {% if latitud %}
+                document.initMapa();
+            {% endif %}
             </div>
             <div id="map" class="col-8 col-sm-9 col-md-9 col-lg-10 col-xl-9 "style="height:635px"></div>
         </div>
@@ -404,7 +420,81 @@
     </div>
     
     <script>
+        
+    </script>
 
+    <script>
+        async function selectChange(val) {
+            //Set the value of action in action attribute of form element.
+            //Submit the form
+            try{
+                let datosInstitucion = await $('#form').submit();
+                
+            }
+            catch (err) {
+                console.log('fallo',err);
+            }
+            
+        }
+        selectChange(val);
+        initMapa();
+        
+    </script>
+
+    <script>
+
+        function initMapa(){             
+
+            var lat = parseFloat(document.getElementById("latitud").value);
+            var lng = parseFloat(document.getElementById("longitud").value);
+
+            var nombre = document.getElementById("nombre").value;
+            var clave = document.getElementById("clave").value;
+            console.log(lat,lng, nombre,clave);
+            //Opciones del mapa
+            var options = {
+                 lat: lat , lng: lng };
+            //Mapa nuevo
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 13, center: options});
+            var infowindow = new google.maps.InfoWindow;
+             
+            var marker = new google.maps.Marker({
+                position: options,
+                map: map,
+            });
+
+            map.addListener('center_changed', function() {
+            // 3 seconds after the center of the map has changed, pan back to the
+            // marker.
+                window.setTimeout(function() {
+                    map.panTo(marker.getPosition());
+                }, 3000);
+            });
+
+            marker.addListener('click', function() {
+                map.setZoom(16);
+                map.setCenter(marker.getPosition());
+            });
+
+
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, options) {
+                return function() {
+                infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'></div><div class='centro' style='vertical-align:middle; text-align:center'><a href=# onclick='redirecciona()' style='margin:20px'>"+nombre+"<br><a id='claveMapa'>"+clave+"</a>")+"</a></div>";
+                infowindow.open(map, marker);
+                }
+            })(marker, options));
+        }
+        function redirecciona(){
+            var claveC = document.getElementById('claveMapa').innerHTML;
+        
+            window.location.href ="/SigApp/institucionesUbicacion/id/"+claveC;
+            
+        }
+
+
+        
 
 
         var coordenadas = new Array();
