@@ -1,13 +1,29 @@
 from django.urls import path, include
-from . import views
+from .import views
 from django.conf import settings
 from django.conf.urls.static import static
+
+
 
 app_name ='SigApp'
 #SigMovilFiltros/MEDIA-SUPERIOR/empty/PRIVADA/empty/
 urlpatterns = [
+
     path('',views.index, name='index'),
     path('index',views.index, name='index'),
+
+    path('nuevaBase/<id>/', views.nuevaBase, name='nuevaBase'),
+    
+    path('inicio', views.inicio, name='inicio'),
+    path('actas_departamento', views.actas_departamento, name='actas_departamento'),
+    path('bandeja_quejas', views.bandeja_quejas, name='bandeja_quejas'),
+    path('historial_institucion', views.historial_institucion, name='historial_institucion'),
+    path('programar_superv', views.programar_superv, name='programar_superv'),
+
+    path('infosistemas',views.infosistemas,name='infosistemas'),
+    path('perfilinstitucion/<id>/<claveescuela>/',views.perfilinstitucion,name='perfilinstitucion'),
+    path('actasdesupervision',views.actasdesupervision,name='actasdesupervision'),
+
 
     path('instituciones/<id>/<slug:clave>',views.instituciones, name='instituciones'),  
     path('institucionesUbicacion/<id>/<slug:clave>',views.institucionesUbicacion, name='institucionesUbicacion'),  
@@ -47,7 +63,4 @@ urlpatterns = [
     
     path('SigMovil/<id>/<clave>',views.APIapp,name="SigMovil"),
     path('registrosAdmin',views.registrosAdmin, name='registrosAdmin'),
-] 
-
-
-
+]

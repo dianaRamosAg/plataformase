@@ -16,6 +16,163 @@ from django.contrib import messages
 from django.db.models import Q
 from datetime import datetime
 
+def inicio(request):
+    return render (request, "SigApp/inicio.html")
+
+def nuevaBase(request):
+   return render (request, "SigApp/nuevaBase.html")
+
+def actas_departamento(request):
+    return render (request, "SigApp/actas_departamento.html")
+
+def bandeja_quejas(request):
+    return render (request, "SigApp/bandeja_quejas.html")
+
+def historial_institucion(request):
+    return render (request, "SigApp/historial_institucion.html")
+
+def programar_superv(request):
+    GradosAcademicos = GradoAcademico.objects.all()
+    instituciones = EscuelaC.objects.all()
+
+    Localidades = Localidad.objects.all()
+
+    AreasIntereses = AreaInteres.objects.all()
+    Municipios = Municipio.objects.all()
+
+    #-----------------------------------------------------------------------
+    usuario = request.user.id; #OBTENER NUMERO DE INSTITUCIONES
+    numInst = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario)
+    nI = 0
+    for i in numInst:
+        nI += 1
+    #-----------------------------------------------------------------------
+    if request.user.is_authenticated:
+        if request.user.departamento_id:
+
+            return render(request,'SigApp/programar_superv.html',{
+                "opcionesinstituciones": instituciones,
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,
+                "localidades": Localidades,
+                "numeroInstituciones": nI,
+                "numeroModificaciones": notificaiones(request.user.departamento_id),
+            })
+        else:
+            return render(request,'SigApp/programar_superv.html',{
+                "opcionesinstituciones": instituciones,
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,
+                "localidades": Localidades,
+                "numeroInstituciones": nI,
+            })
+    else: 
+        GradosAcademicos = GradoAcademico.objects.all()
+        instituciones = EscuelaC.objects.all()
+
+        Localidades = Localidad.objects.all()
+
+        AreasIntereses = AreaInteres.objects.all()
+        Municipios = Municipio.objects.all()
+        return render(request,'SigApp/programar_superv.html',{
+            "opcionesinstituciones": instituciones,
+            "opcionesgrados": GradosAcademicos,
+            "areaseducacion":AreasIntereses,
+            "opcionesmunicipios": Municipios,
+            "localidades": Localidades,
+        })
+
+
+def infosistemas(request):
+    return render (request,"SigApp/infosistemas.html")
+
+#def perfilinstitucion(request):
+ #   return render(request, "SigApp/perfilinstitucion.html")
+
+def actasdesupervision(request):
+    return render(request, "SigApp/actasdesupervision.html")
+
+
+
+
+def perfilinstitucion(request, id, claveescuela):
+    if (id == 'id'):
+            Instituciones = EscuelaC.objects.get(ClaveEscuela = claveescuela)
+            try:
+                estadisticaGral = estadisticosNuevo.objects.get(ClaveEscuela=claveescuela)
+            except estadisticosNuevo.DoesNotExist:
+                estadisticaGral = None
+
+            try:
+                rvoes = RVOES.objects.filter(ClaveEscuela=claveescuela)
+            except RVOES.DoesNotExist:
+                rvoes = None
+            
+           
+    else:
+        Instituciones = EscuelaC.objects.get(ClaveEscuela = claveescuela)
+        try:
+            estadisticaGral = estadisticosNuevo.objects.get(ClaveEscuela=claveescuela)
+        except estadisticosNuevo.DoesNotExist:
+                estadisticaGral = None
+
+        try:
+            rvoes = RVOES.objects.filter(ClaveEscuela=claveescuela)
+        except RVOES.DoesNotExist:
+            rvoes = None
+
+    return render(request,'SigApp/perfilinstitucion.html',{"institucion": Instituciones,"statsg": estadisticaGral,"RVOESF":rvoes,
+     })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # migracion excel bd : COPY "SigApp_localidad" ("Nombre","Clave_Municipio_id") FROM 'C:\4.csv' DELIMITER ',' CSV HEADER  encoding 'windows-1251';
 def index(request):
     GradosAcademicos = GradoAcademico.objects.all()
@@ -316,22 +473,167 @@ def localizarInst(request, clave):
 
 
 def localizador(request):
-    #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES, ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
-    GradosAcademicos = GradoAcademico.objects.all()
-    Localidades = Localidad.objects.all()
-    AreasIntereses = AreaInteres.objects.all()
-    Municipios = Municipio.objects.all()
-    Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
+    
+    
 
+    if request.method == 'POST':
+        
+        clave = request.POST['selectInstitucion']
+        print(clave)
+        EscuelaSeleccionada = EscuelaC.objects.get(ClaveEscuela = clave)
+        #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES , ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
+        GradosAcademicos = GradoAcademico.objects.all()
+        Localidades = Localidad.objects.all()
+        AreasIntereses = AreaInteres.objects.all()
+        Municipios = Municipio.objects.all()
+        instituciones = EscuelaC.objects.all()
+        Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
+
+        usuario2 = request.user.id; #OBTENER ID_USUARIO
+        numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
+        nI=0
+        #print(numInst2)
+        
+        for c in numInst2:
+            nI += 1
+            Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
+            print(Escuelas2.ClaveEscuela)
+        
+        if request.user.is_authenticated:
+            if request.user.departamento_id:
+
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+                    "escuelaseleccionada": EscuelaSeleccionada,
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,                
+                    "coordenadas": Escuelas,
+                    "numeroModificaciones": notificaiones(request.user.departamento_id),
+                    "Escuela2Clave":Escuelas2,
+                    
+
+                })
+            else:
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+                    "escuelaseleccionada": EscuelaSeleccionada,
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,
+                    "coordenadas": Escuelas,              
+                    "Escuela2Clave":Escuelas2,
+                })
+        else: 
+            GradosAcademicos = GradoAcademico.objects.all()
+            instituciones = EscuelaC.objects.all()
+
+            Localidades = Localidad.objects.all()
+
+            AreasIntereses = AreaInteres.objects.all()
+            Municipios = Municipio.objects.all()
+            return render(request,'SigApp/mapa_instituciones.html',{
+                "escuelaseleccionada": EscuelaSeleccionada,
+                "opcionesinstituciones": instituciones,
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,            
+                "coordenadas": Escuelas,
+                "localidades": Localidades,
+
+            })
+
+        #return render(request,'SigApp/mapa_instituciones.html',{
+        #   "opcionesgrados": GradosAcademicos,
+        #  "areaseducacion":AreasIntereses,
+        #  "opcionesmunicipios": Municipios,
+        # "localidades": Localidades,
+            #"coordenadas": Escuelas,
+            #"Escuela2Clave":Escuelas2
+        #})
+        
+        
+        
+        
+    else:        
+        #CARGA TODA LA INF. PARA LOS FILTOS DE MAPA DE INSTITUCIONES, ADEMAS DE ORDENAR TODAS LAS INSTITUCIONES
+        GradosAcademicos = GradoAcademico.objects.all()
+        Localidades = Localidad.objects.all()
+        AreasIntereses = AreaInteres.objects.all()
+        Municipios = Municipio.objects.all()
+        instituciones = EscuelaC.objects.all()
+        Escuelas = EscuelaC.objects.filter(EstatusEscuela = 'ACTIVO').order_by('-Latitud') #decendente
+
+        usuario2 = request.user.id; #OBTENER ID_USUARIO
+        numInst2 = UsuarioInstitucion.objects.filter(id_usuariobase_id=usuario2) # INSTITUCIONES DEL USUARIO 
+        nI=0
+        #print(numInst2)
     
-    
-    return render(request,'SigApp/mapa_instituciones.html',{
-        "opcionesgrados": GradosAcademicos,
-        "areaseducacion":AreasIntereses,
-        "opcionesmunicipios": Municipios,
-        "localidades": Localidades,
-        "coordenadas": Escuelas,
-    })
+        for c in numInst2:
+            nI += 1
+            Escuelas2 = EscuelaC.objects.get(ClaveEscuela=c.cct)
+            print(Escuelas2.ClaveEscuela)
+        
+        if request.user.is_authenticated:
+            if request.user.departamento_id:
+
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,                
+                    "coordenadas": Escuelas,
+                    "numeroModificaciones": notificaiones(request.user.departamento_id),
+                    "Escuela2Clave":Escuelas2,
+                    
+
+                })
+            else:
+                return render(request,'SigApp/mapa_instituciones.html',{
+                    "opcionesinstituciones": instituciones,
+
+                    "opcionesgrados": GradosAcademicos,
+                    "areaseducacion":AreasIntereses,
+                    "opcionesmunicipios": Municipios,
+                    "localidades": Localidades,
+                    "numeroInstituciones": nI,
+                    "coordenadas": Escuelas,              
+                    "Escuela2Clave":Escuelas2,
+                })
+        else: 
+            GradosAcademicos = GradoAcademico.objects.all()
+            instituciones = EscuelaC.objects.all()
+
+            Localidades = Localidad.objects.all()
+
+            AreasIntereses = AreaInteres.objects.all()
+            Municipios = Municipio.objects.all()
+            return render(request,'SigApp/mapa_instituciones.html',{
+                "opcionesinstituciones": instituciones,
+                
+                "opcionesgrados": GradosAcademicos,
+                "areaseducacion":AreasIntereses,
+                "opcionesmunicipios": Municipios,            
+                "coordenadas": Escuelas,
+                "localidades": Localidades,
+
+            })
+
+        #return render(request,'SigApp/mapa_instituciones.html',{
+        #   "opcionesgrados": GradosAcademicos,
+        #  "areaseducacion":AreasIntereses,
+        #  "opcionesmunicipios": Municipios,
+        # "localidades": Localidades,
+            #"coordenadas": Escuelas,
+            #"Escuela2Clave":Escuelas2
+        #})
 
 def updInfo(request,Ndirector,Ninstitucion):
     nombre = Ninstitucion.replace("-"," ")
@@ -701,6 +1003,48 @@ def detalle(request,idr,inst):
     InstitucionF = EscuelaC.objects.get(ClaveEscuela=inst)
    
     return render(request,'SigApp/detalle_carreras.html',{"RVOE":RVOEF,"Institucion":InstitucionF})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def selectInstitucion(request,id):
@@ -1799,11 +2143,12 @@ def solicitaModEstadistica(request, clave, claveE, id_dep):
 
 
     })
+
+     
 ''' 
 def solicitaModeEstadistica(request, clave,claveE, id_dep):
     
     carrera = RVOES.objects.get(ClaveCarrera = clave, ClaveEscuela_id = claveE)
-
      
     if request.method == 'POST':
             
@@ -1818,27 +2163,20 @@ def solicitaModeEstadistica(request, clave,claveE, id_dep):
         tipo = request.POST['tipo']
         periodo = request.POST['periodo']
         modalidad = request.POST['modalidad']
-
         carrera.TotalPrimero = TotalPri
         carrera.TotalSegundo = TotalSeg
         carrera.TotalTercero = TotalTer
         carrera.TotalCuarto = TotalCua
         carrera.TotalQuinto = TotalQui
         carrera.TotalSexto = TotalSexto
-
         
         carrera.save()
-
-
-
         Escuela = EscuelaC.objects.get(ClaveEscuela = claveE)
         escuelaEstadistica = estadisticosNuevo.objects.get(ClaveEscuela=claveE)
-
         try:
             escuelaEstadistica = estadisticosNuevo.objects.get(ClaveEscuela=claveE)
         except estadisticosNuevo.DoesNotExist:
             escuelaEstadistica = None
-
         try:
             rvoes = RVOES.objects.filter(ClaveEscuela=claveE)
         except RVOES.DoesNotExist:
@@ -1851,15 +2189,12 @@ def solicitaModeEstadistica(request, clave,claveE, id_dep):
             "rvoes": rvoes,
             "carrera": carrera,
         })
-
     Escuela = EscuelaC.objects.get(ClaveEscuela = claveE)
     escuelaEstadistica = estadisticosNuevo.objects.get(ClaveEscuela=claveE)
-
     try:
         escuelaEstadistica = estadisticosNuevo.objects.get(ClaveEscuela=claveE)
     except estadisticosNuevo.DoesNotExist:
         escuelaEstadistica = None
-
     try:
         rvoes = RVOES.objects.filter(ClaveEscuela=claveE)
     except RVOES.DoesNotExist:
@@ -1871,9 +2206,8 @@ def solicitaModeEstadistica(request, clave,claveE, id_dep):
          "id_dep":id_dep,  
          "rvoes": rvoes,
          "carrera": carrera,
-
-
     }) '''
  
-    
+
+
     

@@ -1,4 +1,4 @@
-{% extends 'SigApp/base.html' %}
+{% extends 'SigApp/nuevaBase.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -41,19 +41,7 @@
   <div class="container-fluid">
     <!--Panel general (derecho)-->
     <div class="row bg-light m-2">
-      <!--Nav bar izquierdo-->
-      <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
-        
-        <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action active disabled" style="margin-top:5%; ">
-              Menú
-          </a>
-          <a href="/SigApp/modificacionesAdmin/{{ user.departamento_id }}/" class="list-group-item list-group-item-action">Solicitudes de Modificación</a>
-          <a href="/SigApp/listado_historial/" class="list-group-item list-group-item-action">Historial (Gral)</a>
-          <a href="/SigApp/listado_historialEst/" class="list-group-item list-group-item-action">Historial (Estad)</a>
-        </div>
-        
-      </div>
+    
       {% if not historial %}
         <div class="col-9 col-sm-5 col-md-7 col-lg-7 col-xl-9" style="height: 40x;">
           <p style="font-size:20px; margin-bottom: 50px; margin-left: 35%; margin-top: 30%;">Sin modificaciones por el momento</p>

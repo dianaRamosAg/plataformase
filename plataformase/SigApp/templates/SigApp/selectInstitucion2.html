@@ -1,4 +1,4 @@
-{% extends 'SigApp/base.html' %}
+{% extends 'SigApp/nuevaBase.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -53,7 +53,7 @@
     <div class="container-fluid">
         <!--Panel general (derecho)-->
         <div class="row bg-light m-2">
-            <!--Nav bar izquierdo-->
+            <!--Nav bar izquierdo
             <div class="col-2 col-sm-3 col-md-3 col-lg-3 col-xl-2" style="background-color: white; height: 80vh;">
                 
                 <div class="list-group">
@@ -63,7 +63,7 @@
                     <a href="/SigApp/selectInstitucion2/{{ user.id }}/" class="list-group-item list-group-item-action " tabindex="-1" aria-disabled="true">Mis Instituciones</a>
                 </div>
                 
-            </div>
+            </div>-->
             {% if not clavect %}
                 <div class="col-9 col-sm-5 col-md-7 col-lg-7 col-xl-9" style="height: 40x;">
                     <p style="font-size:20px; margin-bottom: 50px; margin-left: 35%; margin-top: 30%;">Aun no cuentas con Centros de Trabajos</p>

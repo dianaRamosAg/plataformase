@@ -1,4 +1,4 @@
-{% extends 'SigApp/base.html' %}
+{% extends 'SigApp/nuevaBase.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -32,9 +32,91 @@
     .table-wrapper-scroll-y {
         display: block;
     }
+    .form-control::placeholder { 
+            color: green;
+            opacity: 23%;}
     </style>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+<script type="text/javascript">
+		function prueba(){
+			var selectM = document.getElementById('selectInstitucion')
+			$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
+		}
+    </script>
 <script>
+    
+    
+
+		function infoInstitucion2(aInstitucion2){
+			//--
+			var sInstitucion = document.getElementById('selectInstitucion');
+			var valueInstitucion = sInstitucion.value;
+			//alert(valueInstitucion)
+			//--
+			var aInst = document.getElementById(aInstitucion2);
+			//var sInstitucion = document.getElementById('selectInstitucion');
+			var CCT = document.getElementById('inputCCT'); 
+			//var valueInstitucion = sInstitucion.value;
+			console.log(CCT);
+			if( CCT.value != ''){
+				console.log("/SigApp/localizarInst/"+CCT.value);
+				aInst.href = "/SigApp/localizarInst/"+CCT.value;
+				//aInst.href = "/SigApp/localizarInst/"+CCT.value+"/";	
+			}else{
+				if(valueInstitucion != 'seleccion'){
+					aInst.href = "/SigApp/localizarInst/"+valueInstitucion;
+				}else{
+					Swal.fire({
+						title: '¡Alto!',
+						text: 'Selecciona una institución',
+						icon: 'warning',
+						confirmButtonText: 'Ok'
+						})
+				}
+				
+			}												 
+		};
+
+		function infoInstitucion(aInstitucion){
+			var aInst = document.getElementById(aInstitucion);
+			var sInstitucion = document.getElementById('selectInstitucion');
+			var CCT = document.getElementById('inputCCT'); 
+			var valueInstitucion = sInstitucion.value;
+			//cct = alert(valueInstitucion)
+			console.log(valueInstitucion);
+			if( CCT.value != ''){
+				console.log("/SigApp/instituciones/clave/"+CCT.value);
+				aInst.href = "/SigApp/instituciones/clave/"+CCT.value;	
+			}else if (valueInstitucion != 'seleccion'){
+					aInst.href = "/SigApp/instituciones/id/"+valueInstitucion;
+					console.log("/SigApp/instituciones/id/"+valueInstitucion);
+			}
+			if(valueInstitucion == 'seleccion'){
+				Swal.fire({
+					title: '¡Alto!',
+					text: 'Selecciona una institución',
+					icon: 'warning',
+					confirmButtonText: 'Cool'
+					})
+			}											 
+		};
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     function populate(){
         $('#selectMunicipio').change(function(){
 		    var municipio = $('#selectMunicipio').find(":selected").val();
@@ -56,18 +138,98 @@
 					}
 			})		
 		});							
-	}		
+	}
+
+    function updInstituciones(selectOrigen){
+			var origen = '#'+selectOrigen;			
+			$(origen).change(function(){
+				var urlF = "/SigApp/updInstituciones/";
+				if(origen == '#selectMunicipio'){$('#selectLocalidad').val('seleccion');}
+				var municipioSeleccionado = $('#selectMunicipio').find(':selected').val();
+				var municipioF = municipioSeleccionado.replace(/\s/g, '-');
+				
+				if(municipioSeleccionado=='RUÍZ'){municipioF='RUIZ';}
+				if(municipioSeleccionado=='AHUACATLÁN'){municipioF='AHUACATLAN';}
+				if(municipioSeleccionado=='AMATLÁN DE CAÑAS'){municipioF='AMATLAN-DE-CANAS';}
+				if(municipioSeleccionado=='IXTLÁN DEL RÍO'){municipioF='IXTLAN-DEL-RIO';}
+				if(municipioSeleccionado=='SANTA MARÍA DEL ORO'){municipioF='SANTA-MARIA-DEL-ORO';}
+				if(municipioSeleccionado=='BAHÍA DE BANDERAS'){municipioF='BAHIA-DE-BANDERAS';}
+
+				var localidadSeleccionado = $('#selectLocalidad').find(':selected').val();
+				//alert(localidadSeleccionado)
+				var localidadSeleccionadoF = localidadSeleccionado.replace(/\s/g, '-');
+				if(localidadSeleccionadoF.includes('Á')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Á','1')}
+				if(localidadSeleccionadoF.includes('É')){localidadSeleccionadoF=localidadSeleccionadoF.replace('É','2')}
+				if(localidadSeleccionadoF.includes('Í')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Í','3')}
+				if(localidadSeleccionadoF.includes('Ó')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ó','4')}
+				if(localidadSeleccionadoF.includes('Ú')){localidadSeleccionadoF=localidadSeleccionadoF.replace('Ú','5')}
+				//alert(localidadSeleccionadoF)
+				var nivelacademicoSeleccionado = $('#selectNA').find(':selected').val();
+				nivelacademicoSeleccionadoF = nivelacademicoSeleccionado.replace(' ','-')
+				//alert(nivelacademicoSeleccionadoF)
+				var areainteresSeleccionado = $('#selectAI').find(':selected').val();
+				var dominioSeleccionado = $('#selectDominio').find(':selected').val();
+				if(!municipioSeleccionado.startsWith("seleccion")){urlF=urlF+municipioF+"/";}else{urlF=urlF+"empty/";}
+				if(!localidadSeleccionado.startsWith("seleccion")){urlF=urlF+localidadSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+				if(!nivelacademicoSeleccionado.startsWith("seleccion")){urlF=urlF+nivelacademicoSeleccionadoF+"/";}else{urlF=urlF+"empty/";}
+				if(!areainteresSeleccionado.startsWith("seleccion")){urlF=urlF+areainteresSeleccionado+"/";}else{urlF=urlF+"empty/";}
+				if(!dominioSeleccionado.startsWith("seleccion")){urlF=urlF+dominioSeleccionado+"/";}else{urlF=urlF+"empty/";}
+				console.log(urlF);
+				$.ajax({
+					url: urlF ,
+					method: 'GET',
+					dataType: "json",
+					success:function(jsonData){
+						var optionsInstituciones="";
+						$('#selectInstitucion').empty();
+						$('#selectInstitucion').append('<option value="seleccion"> Seleccione Institución </option>');
+						$.each(JSON.parse(jsonData),function(i,item){
+							optionsInstituciones+='<option value="'+item["pk"]+'">'+item["fields"]["NombreEscuela"]+'</option>';
+						});
+						$('#selectInstitucion').append(optionsInstituciones);
+						$("#selectInstitucion").selectpicker("refresh");
+						$("#selectInstitucion").selectpicker('render');
+						$('#selectInstitucion').selectpicker('setStyle', 'btn-success');
+						setTimeout(() => {  $('#selectInstitucion').selectpicker('setStyle', ''); }, 500);
+						console.log(jsonData);			
+							
+					}
+				})
+			});
+		}
+
 </script>
+
 
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-2" style="background-color: gainsboro;">
+            <div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-3" style="background-color: ;">
 
-                <div class="row mt-3">            
-                    <p class="col-12 mb-2" style="font-size: 18px;">Municipio</p>
+                <div class="row ">            
+                    <p class="col-12 mb-2" style="font-size: 15px;">Clave Centro de Trabajo</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="filtroD('selectMunicipio')" TYPE=text id="selectMunicipio" name="selectMunicipio" onclick="populate();" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                        <div class="centro ">
+                            <form method="post" id="form" name="form"  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <select class="selectpicker" method="post"   data-live-search="true" id="selectInstitucion" name="selectInstitucion" onchange="this.form.submit();">
+                                    <option class="opt" value="seleccion" >Seleccione institución</option>
+                                    {% for element in opcionesinstituciones %}
+                                        <option  value="{{element.ClaveEscuela}}" >{{ element.ClaveEscuela }}</option>                                       
+                                    {% endfor %}
+                                       
+                                </select>
+                                <button type="button" onclick="initMapa()" class="btn btn-primary">Ubicar</button>                               
+                            </form>
+                            
+                        </div>
+                    </div>     	
+                </div>
+
+                <div class="row mt-2">            
+                    <p class="col-12 mb-2" style="font-size: 15px;">Municipio</p>
+                    <div class="centro col-12">
+                        <select class="form-control form-control-sm" onchange="filtroD('selectMunicipio')" TYPE=text id="selectMunicipio" name="selectMunicipio" onclick="populate();" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;background:#F0F0F0">
                             <option class="opt" value="seleccionar">Selecionar...</option>
                             <option class="opt" value="seleccioneI">TODOS</option>
                             {% for element in opcionesmunicipios %}
@@ -78,9 +240,9 @@
                 </div>
                 
                 <div class="row mt-5">
-                    <p class="col-12 mb-2" style="font-size: 18px;">Localidad</p>
+                    <p class="col-12 mb-2" style="font-size: 15px;">Localidad</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="filtroD('selectLocalidad')" TYPE=text id="selectLocalidad" name="selectLocalidad" value="" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;" >
+                        <select class="form-control form-control-sm" onchange="filtroD('selectLocalidad')" TYPE=text id="selectLocalidad" name="selectLocalidad" value="" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;background:#F0F0F0" >
                             <option class="opt" value="seleccionar" selected="selected">Selecionar...</option>
                             <option class="opt" value="seleccioneI">TODAS</option>
                             {% for element in localidades %}
@@ -92,9 +254,9 @@
 
 
                 <div class="row mt-5 mb-3">    
-                    <p class="col-12 mb-2" style="font-size: 18px;">Nivel Educativo</p>
+                    <p class="col-12 mb-2" style="font-size: 15px;">Nivel Educativo</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="filtroD('selectNivel')" class="dropDown" TYPE=text id="selectNivel" name="selectNivel" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                        <select class="form-control form-control-sm" onchange="filtroD('selectNivel')" class="dropDown" TYPE=text id="selectNivel" name="selectNivel" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;background:#F0F0F0">
                             <option class="opt" value="seleccionar">Selecionar...</option>
                             <option value="Todas" name="nivel">TODOS</option>
                             <option value="Media" name="nivel">MEDIA SUPERIOR</option>
@@ -104,9 +266,9 @@
                 </div>
                
                 <div class="row mt-5 mb-3">    
-                    <p class="col-12 mb-2" style="font-size: 18px;">Dominio</p>
+                    <p class="col-12 mb-2" style="font-size: 15px;">Dominio</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="filtroD('selectDominio')" class="dropDown" TYPE=text id="selectDominio" name="selectDominio" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                        <select class="form-control form-control-sm" onchange="filtroD('selectDominio')" class="dropDown" TYPE=text id="selectDominio" name="selectDominio" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;background:#F0F0F0">
                             <option class="opt" value="seleccionar">Selecionar...</option>
                             <option value="Todas" name="dominios">TODOS</option>
                             <option value="Pública" name="dominios">PÚBLICO</option>
@@ -116,9 +278,9 @@
                 </div>
                         
                 <div class="row mt-5">    
-                    <p class="col-12 mb-2" style="font-size: 18px;">Tipo servicio</p>
+                    <p class="col-12 mb-2" style="font-size: 15px;">Tipo servicio</p>
                     <div class="centro col-12">
-                        <select class="form-control form-control-sm" onchange="filtroD('selectTipoS')" class="dropDown" TYPE=text id="selectTipoS" name="selectTipoS" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;">
+                        <select class="form-control form-control-sm" onchange="filtroD('selectTipoS')" class="dropDown" TYPE=text id="selectTipoS" name="selectTipoS" size="1" style="text-align-last:center; width: 80%; position:absolute; left: 10%;background:#F0F0F0">
                             <option class="opt" value="seleccionar">Selecionar...</option>
                             <option value="Todas" name="dominios">TODOS</option>
                             <option value="Pública" name="dominios">BACHILLERATO GENERAL</option>
@@ -129,9 +291,23 @@
                     </div>
                 </div>
                 
-                <div class="row mt-5 mb-3 p-4">
+                <div class="row mt-5">    
+                    <p class="col-12 mb-2" style="font-size: 15px;">Nombre de Institución</p>
+                    <div class="centro col-12">
+                        <select class="selectpicker" data-live-search="true" id="selectInstitucion">
+						    <option class="opt" value="seleccion">Seleccione institución</option>
+						    {% for element in opcionesinstituciones %}
+							    <option value="{{element.ClaveEscuela}}">{{ element.NombreEscuela }}</option>
+						    {% endfor %}
+					    </select>
+                    </div>
+                
+                </div>
+
+                <div class="row mt-3 mb-3 p-3">
                     <button class="btn btn-block btn-info" onclick="restableceFiltros()">Restablecer</button>
-                </div> 
+                </div>
+                
 
                 <!--Para obtener datos de las instituciones y guardarlas en vectores-->
                 <div class="row mt-3">            
@@ -183,7 +359,7 @@
 
                 <div class="row mt-3">
                     <div class="centro col-12">
-                        <select TYPE=text id="LocalidadC" name="LocalidadC" onclick=""  size="1" style="text-align-last:center; width: 80%" hidden>
+                        <select TYPE=text id="LocalidadC " name="LocalidadC" onclick=""  size="1" style="text-align-last:center; width: 80%" hidden>
                             {% for element in coordenadas %}
                             <option  name="LocalidadC" value="{{ element.Localidad }}"> {{ element.Localidad }} </option>
                             {% endfor %}
@@ -219,8 +395,15 @@
                     </div>
                 </div>
 
+            <input class="col-12 mb-2" name="latitud" id="latitud" style="font-size: 18px;" value="{{escuelaseleccionada.Latitud}}" ></input>
+            <input class="col-12 mb-2" id="longitud" style="font-size: 18px;" value="{{escuelaseleccionada.Longitud}}" ></input>
+            <input class="col-12 mb-2" id="clave" style="font-size: 18px;" value="{{escuelaseleccionada.ClaveEscuela}}" ></input>
+            <input class="col-12 mb-2" id="nombre" style="font-size: 18px;" value="{{escuelaseleccionada.NombreEscuela}}" ></input>
+            {% if latitud %}
+                document.initMapa();
+            {% endif %}
             </div>
-            <div id="map" class="col-8 col-sm-9 col-md-9 col-lg-10 col-xl-10"></div>
+            <div id="map" class="col-8 col-sm-9 col-md-9 col-lg-10 col-xl-9 "style="height:635px"></div>
         </div>
 
         <div id="app" style="visibility:hidden;" class="table-wrapper-scroll-y my-custom-scrollbar">
@@ -237,6 +420,83 @@
     </div>
     
     <script>
+        
+    </script>
+
+    <script>
+        async function selectChange(val) {
+            //Set the value of action in action attribute of form element.
+            //Submit the form
+            try{
+                let datosInstitucion = await $('#form').submit();
+                
+            }
+            catch (err) {
+                console.log('fallo',err);
+            }
+            
+        }
+        selectChange(val);
+        initMapa();
+        
+    </script>
+
+    <script>
+
+        function initMapa(){             
+
+            var lat = parseFloat(document.getElementById("latitud").value);
+            var lng = parseFloat(document.getElementById("longitud").value);
+
+            var nombre = document.getElementById("nombre").value;
+            var clave = document.getElementById("clave").value;
+            console.log(lat,lng, nombre,clave);
+            //Opciones del mapa
+            var options = {
+                 lat: lat , lng: lng };
+            //Mapa nuevo
+            var map = new google.maps.Map(
+                document.getElementById('map'), {zoom: 13, center: options});
+            var infowindow = new google.maps.InfoWindow;
+             
+            var marker = new google.maps.Marker({
+                position: options,
+                map: map,
+            });
+
+            map.addListener('center_changed', function() {
+            // 3 seconds after the center of the map has changed, pan back to the
+            // marker.
+                window.setTimeout(function() {
+                    map.panTo(marker.getPosition());
+                }, 3000);
+            });
+
+            marker.addListener('click', function() {
+                map.setZoom(16);
+                map.setCenter(marker.getPosition());
+            });
+
+
+            
+            google.maps.event.addListener(marker, 'click', (function(marker, options) {
+                return function() {
+                infowindow.setContent("<div class='centro' style='vertical-align:middle; text-align:center'><img class='rounded' heiht = '200' width = '200' src = 'http://cdn.24.co.za/files/Cms/General/d/6847/c17d0c2399a54d39a9490b1b03769a99.jpg' align='center' style='margin-left:10px;'></div><div class='centro' style='vertical-align:middle; text-align:center'><a href=# onclick='redirecciona()' style='margin:20px'>"+nombre+"<br><a id='claveMapa'>"+clave+"</a>")+"</a></div>";
+                infowindow.open(map, marker);
+                }
+            })(marker, options));
+        }
+        function redirecciona(){
+            var claveC = document.getElementById('claveMapa').innerHTML;
+        
+            window.location.href ="/SigApp/institucionesUbicacion/id/"+claveC;
+            
+        }
+
+
+        
+
+
         var coordenadas = new Array();
         var backupC = new Array();
         var repetidos = new Array();

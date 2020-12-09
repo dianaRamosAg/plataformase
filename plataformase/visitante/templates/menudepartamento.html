@@ -66,7 +66,7 @@
 		<section class="pricingCardGrid ">
 			<div class="pricingCardGrid__body row ">
 					<div class="pricingCardGrid__pricingCard">
-						<a class="pricingCard" href="/SigApp/" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
+						<a class="pricingCard" href="/SigApp/localizador" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
 							<div class="pricingCard__heading title--small" style="text-align: justify;">
 								Sistema de información geográfica (SIG).
 							</div>
@@ -79,11 +79,30 @@
 								<p align="justify">Localización de instituciones educativas  de media superior y superior del estado de Nayarit.</p>
 							</span>
 							<div class="pricingCard__button">
-							<span class="button button--primary">
+								<span class="button button--primary">
 								Acceder </span>
 							</div>
-							</a>
-						</div>
+						</a>
+					</div>
+					<div class="pricingCardGrid__pricingCard">
+						<a class="pricingCard" href="/SigApp/actas_departamento" data-plan-type="monthly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_monthly">
+							<div class="pricingCard__heading title--small" style="text-align: justify;">
+								Sistema de supervisiones digitales.
+							</div>
+							<div class="pricingCard__pricing">
+								<div class="col-sm-3 col-xs-3">
+									<img src="{% static '/img/revision.png'%}" width="200" height="200"/>
+								</div>
+							</div>
+							<span class="pricingCard__period" >
+								<p align="justify">Realiza la encuesta anual sobre la supervisión de su institución.</p>
+							</span>
+							<div class="pricingCard__button">
+								<span class="button button--primary">
+								Acceder </span>
+							</div>
+						</a>
+					</div>
 				<div class="pricingCardGrid__pricingCard">
 					<a class="pricingCard" href="{% url 'SETyRS_admin_index' %}" data-plan-type="yearly" data-track-on="click" data-track-name="wp_global_signup_CTA_selected" data-track-section="pricing_card_yearly">
 						<div class="pricingCard__heading title--small" style="text-align: justify;">
