@@ -42,7 +42,7 @@ pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.19
 pylint==2.3.1
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 python-decouple==3.1
 pytz==2019.1
 reportlab==3.5.34
